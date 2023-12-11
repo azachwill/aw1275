@@ -1,0 +1,11 @@
+.hero-post-meta {
+    &__item {
+        line-height: 1 !important;
+
+        &:not(:last-of-type) {
+            border-right: 2px solid rgb(221 225 228 / 0.8);
+            margin-right: 10px;
+            padding-right: 10px;
+        }
+    }
+}

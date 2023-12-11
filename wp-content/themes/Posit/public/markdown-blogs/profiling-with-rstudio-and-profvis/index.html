@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2016-05-23">
+
+<title>Profiling with RStudio and profvis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Profiling with RStudio and profvis</h1>
+
+<p class="date">2016-05-23</p>
+</header>
+
+<p>“How can I make my code faster?” If you write R code, then you’ve probably asked yourself this question. A profiler is an important tool for doing this: it records how the computer spends its time, and once you know that, you can focus on the slow parts to make them faster.</p>
+<p>The <a href="https://www.rstudio.com/products/rstudio/download/preview/">preview releases</a> of RStudio now have integrated support for profiling R code and for visualizing profiling data. R itself has long had a built-in profiler, and now it’s easier than ever to use the profiler and interpret the results.</p>
+<p>To profile code with RStudio, select it in the editor, and then click on <strong>Profile -&gt; Profile Selected Line(s)</strong>. R will run that code with the profiler turned on, and then open up an interactive visualization.</p>
+<p><img src="https://rstudioblog.files.wordpress.com/2016/05/profile1.gif" class="img-fluid"></p>
+<p>In the visualization, there are two main parts: on top, there is the code with information about the amount of time spent executing each line, and on the bottom there is a <em>flame graph</em>, which shows R was doing over time. In the flame graph, the horizontal direction represents time, moving from left to right, and the vertical direction represents the <em>call stack</em>, which are the functions that are currently being called. (Each time a function calls another function, it goes on top of the stack, and when a function exits, it is removed from the stack.)</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2016/05/profile.png" class="img-fluid"></p>
+<p></p><figcaption>profile.png</figcaption><p></p>
+</figure>
+</div>
+<p>The <strong>Data</strong> tab contains a call tree, showing which function calls are most expensive:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2016/05/data1.png" class="img-fluid"></p>
+<p></p><figcaption>Profiling data pane</figcaption><p></p>
+</figure>
+</div>
+<p>Armed with this information, you’ll know what parts of your code to focus on to speed things up!</p>
+<p>The interactive profile visualizations are created with the <a href="https://rstudio.github.io/profvis/">profvis</a> package, which can be used separately from the RStudio IDE. If you use profvis outside of RStudio, the visualizations will open in a web browser.</p>
+<p>To learn more about interpreting profiling data, check out the <a href="https://rstudio.github.io/profvis/">profvis website</a>, which has interactive demos. You can also find out more about <a href="http://rstudio.github.io/profvis/rstudio.html">profiling with RStudio</a> there.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-05-06">
+<meta name="description" content="Successful package management strategies are usually a three-part plan with clearly delineated responsibilities between admins and data scientists.">
+
+<title>Low Friction Package Management in Three Parts</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Low Friction Package Management in Three Parts</h1>
+
+<p class="date">2021-05-06</p>
+</header>
+
+<p><sup>Photo by <a href="https://unsplash.com/@sxoxm?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Sven Mieke</a> on <a href="https://unsplash.com/s/photos/plan?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></sup></p>
+<p><em>This is the final post in a short series of blogs on package management.</em></p>
+<p><em>The <a href="https://blog.rstudio.com/2021/02/05/pkg-mgmt-prime-directive/" target="_blank">first post</a> explained the role of repositories and libraries.</em></p>
+<p><em>The <a href="https://blog.rstudio.com/2021/02/11/pkg-mgmt-pain/" target="_blank">second post</a> explored package management pain shows up in different organizations.</em></p>
+<p>As a Solutions Engineer at RStudio, I spend a lot of time helping data science teams figure out their package management needs.</p>
+<p>I often meet with IT/Admins frustrated with trying to provide data scientists with the packages they need while also maintaining stability and security. I also speak with data scientists discouraged and annoyed at how hard it is to gets the open source R and Python packages they need.</p>
+<p>The resulting cat-and-mouse games often end in <em>creative</em> detentes – idiosyncratic package management strategies that <em>kinda</em> work for everyone involved. On the other hand, organizations with secure, low-friction package management strategies seem to follow just a few patterns.</p>
+<blockquote>
+<p>“Happy <del>families</del> package management processes are all alike; every unhappy <del>family</del> package management process is unhappy in its own way.”</p>
+<p>-Leo Tolstoy, Anna Karenina (sorta)</p>
+</blockquote>
+<p>In this post, I’ll share the common components I see at organizations where IT/Admins and data scientists both contribute to a package environment that is secure, reproducible, and easy to use.</p>
+<h2 id="divvying-up-responsibility" class="anchored">Divvying Up Responsibility</h2>
+<p>While the details of package management differ widely from one organization to another, organizations with secure, low-friction package management processes usually exhibit a <strong>three-part framework</strong>, with clear ownership of each part.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="./pkg_mgmt_overview.svg" class="img-fluid"></p>
+<p></p><figcaption>Diagram of Package Management Flow Described Below</figcaption><p></p>
+</figure>
+</div>
+<p>One way this pattern can go awry is that admins, trying to be helpful, decide to take control of the package libraries themselves. We <a href="https://blog.rstudio.com/2021/02/05/pkg-mgmt-prime-directive/" target="_blank">previously explored</a> why admins controlling <em>repositories</em> and data scientists controlling <em>libraries</em> tends to be a much lower-friction way to manage package environments.</p>
+<h3 id="part-i-add-packages-to-repositories" class="anchored">Part I: Add packages to repositories</h3>
+<p>In most organizations with good package management processes, admins decide whether a private package repository is needed and, if so, what packages are in the organization’s shared package repositories.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Many organizations decide that a public package repository like CRAN, PyPI, or <a href="https://packagemanager.rstudio.com" target="_blank">public RStudio Package Manager</a> is sufficient.</p>
+<p>In other organizations, there may not be open access to the internet, packages might need to be validated before they can be used, or there might be heavy usage of internally-developed packages. In these cases, organizations configure an internal CRAN or PyPI mirror. <a href="https://www.rstudio.com/products/package-manager/" target="_blank">RStudio Package Manager</a> is RStudio’s professional product for this purpose.</p>
+<p>Data scientists and admins trying to choose the right configuration for their organization might want to consider the pain points explored in <a href="https://blog.rstudio.com/2021/02/11/pkg-mgmt-pain/" target="_blank">the previous post in this series</a> as well as the decision tree on the <a href="https://solutions.rstudio.com/data-science-admin/packages/" target="_blank">RStudio solutions site</a>.</p>
+<h3 id="part-ii-set-defaults-so-things-just-work" class="anchored">Part II: Set defaults so things “just work”</h3>
+<p>Once security concerns are satisfied, admins spend a lot of time making sure that data scientists can get to work as soon as they enter their data science environment. Admins want to ensure data scientists have all the packages they need.</p>
+<p>It often works well for admins to set default settings for users so package installs just work. Admins generally set appropriate default repositories and install required system libraries. Some admins additionally choose to install a “starter” package set for all users.</p>
+<p>More details on how to do all those things are on the <a href="https://solutions.rstudio.com/data-science-admin/packages/#2-set-rstudio-server-pro-defaults" target="_blank">RStudio Solutions site</a>.</p>
+<p>Many organizations choose to centralize all of their data scientists on <a href="https://www.rstudio.com/products/rstudio-server-pro/" target="_blank">RStudio Server Pro</a> to simplify the administration.</p>
+<h3 id="part-iii-use-and-capture-reproducible-project-environments" class="anchored">Part III: Use and capture reproducible project environments</h3>
+<p>The last step of the process is data scientists doing their work! If admins have successfully configured a repository and package defaults, this should be an extremely low-friction process for data scientists, even if they’re inside an air-gapped or validated environment.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="./pkg_installs.svg" class="img-fluid"></p>
+<p></p><figcaption>Installs go from repositories to libraries</figcaption><p></p>
+</figure>
+</div>
+<p>In the best case, data scientists use <a href="https://solutions.rstudio.com/data-science-admin/packages/#3-manage-libraries" target="_blank">project-level isolation</a> of packages using tools like renv and virtualenv to ensure project package libraries are isolated, reproducible, and shareable.</p>
+<h2 id="great-process-leads-to-great-outcomes" class="anchored">Great Process Leads to Great Outcomes</h2>
+<p>A three-part package management plan allows admins to be confident that their network is secure and that data scientists aren’t blocked trying to acquire the packages they need. Data scientists are also able to access and use the packages they need to do their work.</p>
+<p>Within the three-part structure, organizations’ package needs are as varied as the organizations themselves, and an <a href="https://blog.rstudio.com/2021/02/11/pkg-mgmt-pain/" target="_blank">an earlier blog post</a> explored why teams make different choices within this framework.</p>
+<p>If you think your organization could benefit from more information on package management, contact our <a href="https://rstudio.chilipiper.com/book/rst-demo" target="_blank">sales team</a> to learn more about how RStudio Package Manager and RStudio Server Pro work together to make it easy for admins to create safe, low-friction environment for data scientists to be productive.</p>
+<blockquote>
+<p><em>For more on this topic, please see the recording of our free webinar on <a href="https://www.rstudio.com/resources/webinars/managing-packages-for-open-source-data-science/" target="_blank">Managing Packages for Open-Source Data Science</a>.</em></p>
+</blockquote>
+
+<section class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1" role="doc-endnote"><p>Sometimes this package admin is a member of the IT or DevOps organization, and sometimes they’re a data scientist.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

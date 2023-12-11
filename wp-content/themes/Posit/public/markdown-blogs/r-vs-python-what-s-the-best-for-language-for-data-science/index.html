@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2019-12-17">
+<meta name="description" content="We will briefly examine the debates over R vs.&nbsp;Python, and then share">
+
+<title>R vs.&nbsp;Python: What’s the best language for Data Science?</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">R vs.&nbsp;Python: What’s the best language for Data Science?</h1>
+
+<p class="date">2019-12-17</p>
+</header>
+
+<p>This is a question that we at RStudio hear a lot. With the tremendous growth in both languages, and in the application of data science in general, there is a lot of interest and debate over which is the “best” language for data science.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudio.github.io/reticulate/images/reticulated_python.png" class="img-fluid"></p>
+<p></p><figcaption>R and Python</figcaption><p></p>
+</figure>
+</div>
+<p>From our founding, RStudio has been dedicated to a couple of key ideas: that it’s better for everyone if the tools used for data science are free and open, and that we love and support coding as the most powerful path to tackle data science. Coding gives current and aspiring data scientists superpowers to tackle the most complex problems, because code is flexible, reusable, inspectable, and reproducible.</p>
+<p>With that in mind, at RStudio we don’t judge which language you prefer. We just care that you feel enabled to do great data science. As RStudio’s Chief Data Scientist Hadley Wickham expressed in a <a href="https://qz.com/1661487/hadley-wickham-on-the-future-of-r-python-and-the-tidyverse/">recent interview with Dan Kopf</a>: <em>Use whatever makes you happy.</em></p>
+<p>We will talk more about the benefits of coding for data science in a future blog post, but in this post we will briefly examine the debates over R vs.&nbsp;Python, and then share why we believe R and Python can, should and do work beautifully together.</p>
+<h2 id="r-or-python-for-data-science" class="anchored">R or Python for Data Science?</h2>
+<p>There is a lot of heated discussion over the topic, but there are some great, thoughtful articles as well. Some suggest Python is preferable as a general-purpose programming language, while others suggest data science is better served by a dedicated language and toolchain. The origins and development arcs of the two languages are compared and contrasted, often to support differing conclusions.</p>
+<p>For individual data scientists, some common points to consider:</p>
+<ul>
+<li>Python is a great general programming language, with many libraries dedicated to data science.</li>
+<li>Many (if not most) general introductory programming courses start teaching with Python now.</li>
+<li>Python is the go-to language for many ETL and Machine Learning workflows.</li>
+<li>Many (if not most) introductory courses to statistics and data science teach R now.</li>
+<li>R has become the world’s largest repository of statistical knowledge with reference implementations for thousands, if not tens of thousands, of algorithms that have been vetted by experts. The documentation for many R packages includes links to the primary literature on the subject.</li>
+<li>R has a very low barrier to entry for doing exploratory analysis, and converting that work into a great report, dashboard, or API.</li>
+<li>R with RStudio is often considered the best place to do exploratory data analysis.</li>
+</ul>
+<p>For organizations with Data Science teams, some additional points to keep in mind:</p>
+<ul>
+<li>For some organizations, Python is easier to deploy, integrate and scale than R, because Python tooling already exists within the organization. On the other hand, we at RStudio have worked with thousands of data teams successfully solving these problems with our open-source and <a href="https://rstudio.com/products/team/">professional products</a>, including in multi-language environments.</li>
+<li>R has a great community of supportive data scientists from diverse backgrounds. For example, <a href="https://rladies.org/about-us/">R-Ladies</a> is a global organization dedicated to promoting gender diversity in the R Community.<br>
+</li>
+<li>Most interfaces for novel machine learning tools are first written and supported in Python, while many new methods in statistics are first written in R.</li>
+<li>Trying to enforce one language to the exclusion of the other, perhaps out of vague fears of complexity or costs to support both, risks excluding a huge potential pool of Data Scientist candidates either way.</li>
+<li>Advice on building Data Science teams often stresses the importance of having a diverse team bringing a variety of viewpoints and complementary skills to the table, to make it more likely to efficiently find the “best” solution for a given problem. In this vein, R users tend to come from a much more diverse range of domain expertise (ecology, economics, psychology, bioinformatics, policy analysis, etc.).</li>
+</ul>
+<p>Thus, the focus on “R or Python?” risks missing the advantages that having both can bring to individual data scientists and data science teams. Because of this, many of these articles end up with fairly nuanced conclusions, along the lines of “You need both” or “It depends.” A great example of this view can be found in the above-referenced interview with Hadley Wickham:</p>
+<p><em>Generally, there are a lot of people who talk about R versus Python like it’s a war that either R or Python is going to win. I think that is not helpful because it is not actually a battle. These things exist independently and are both awesome in different ways.</em></p>
+<h2 id="r-and-python-for-data-science" class="anchored">R and Python for Data Science!</h2>
+<p>And so the reality is that both languages are valuable, and both are here to stay. This is borne out by our experience. In talking to our customers, we’ve found that many Data Science teams today are bilingual, leveraging both R and Python in their work. In the spirit of Hadley’s <em>Use whatever makes you happy</em>, we’ve worked to make this sometime-rocky relationship a much happier one. We give individual Data Scientists, and the Data Science teams and organizations they are a part of, a smoother path to using both languages side by side, and to address the concerns around complexity or cost that IT teams might have about supporting both.</p>
+<p>For example:</p>
+<ul>
+<li>Our open source <a href="https://rstudio.github.io/reticulate/">reticulate</a> package and the RStudio IDE makes it easy to combine R and Python in a single data science project.</li>
+<li>Our <a href="https://rstudio.com/products/team/">professional products</a> make it easier to manage and collaborate across bilingual Data Science environments. E.g., RStudio Server Pro launches and manages Jupyter Notebooks and JupyterLab, and RStudio Connect makes it easy to share Jupyter Notebooks with stakeholders, alongside your work in R and your mixed R and Python projects.</li>
+<li>As a longer term investment in improving cross-language collaboration, we are incubating Ursa Labs, providing operational support and infrastructure for this industry-funded development group specializing in open source data science tools. Wes McKinney, the author of the pandas package for Python is the Director, and talks a lot with Hadley Wickham. The <a href="https://blog.rstudio.com/2018/04/19/arrow-and-beyond/">goal of the Ursa Labs project</a> is nothing less than creating a modern data science runtime environment that takes advantage of the computational advances of the last 20 years, and can be used from many languages, including R and Python.</li>
+</ul>
+<p>To learn more about how RStudio supports using R and Python on the same Data Science teams, check out our <a href="https://rstudio.com/solutions/r-and-python/">R and Python Love Story</a>, where we provide information and resources for Data Scientists, Data Science Leaders, and DevOps/IT Leaders grappling with mixed R &amp; Python environments. Or, you check out our recent <a href="https://resources.rstudio.com/webinars/r-and-python-a-data-science-love-story">R and Python Love Story Webinar</a>, where you can watch the recording or download the slides. In future blog posts, we will also talk more about what we’ve seen in real life Data Science teams using R and Python side by side.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

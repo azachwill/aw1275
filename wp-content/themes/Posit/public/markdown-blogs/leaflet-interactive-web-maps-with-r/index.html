@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2015-06-24">
+
+<title>posit-blogs - Leaflet: Interactive web maps with R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Leaflet: Interactive web maps with R</h1>
+
+<p class="date">2015-06-24</p>
+</header>
+
+<blockquote>
+<p class="body-md-regular body-sm-regular">
+Please note that the information presented in this post reflects the package as it stood when initially released, and may now be outdated. For the most up-to-date information, kindly refer to <a href="https://rstudio.github.io/leaflet/" class="uri">https://rstudio.github.io/leaflet/</a>.
+</p>
+</blockquote>
+<p>We are excited to announce that a new package <strong>leaflet</strong> has been released on CRAN. The R package <strong>leaflet</strong> is an interface to the JavaScript library <a href="http://leafletjs.com/">Leaflet</a> to create interactive web maps. It was developed on top of the <strong><a href="http://htmlwidgets.org">htmlwidgets</a></strong> framework, which means the maps can be rendered in R Markdown (v2) documents, Shiny apps, and RStudio IDE / the R console. Please see <a href="http://rstudio.github.io/leaflet" class="uri">http://rstudio.github.io/leaflet</a> for the full documentation. To install the package, run</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">'leaflet'</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We quietly introduced this package in December when we <a href="https://blog.rstudio.com/2014/12/18/htmlwidgets-javascript-data-visualization-for-r/">announced htmlwidgets</a>, but in the months since then we’ve added a lot of new features and launched a new set of <a href="http://rstudio.github.io/leaflet">documentation</a>. If you haven’t looked at leaflet lately, now is a great time to get reacquainted!</p>
+<h2 id="the-map-widget" class="anchored">The Map Widget</h2>
+<p>The basic usage of this package is that you create a map widget using the <code>leaflet()</code> function, and add layers to the map using the layer functions such as <code>addTiles()</code>, <code>addMarkers()</code>, and so on. Adding layers can be done through the pipe operator <code>%&gt;%</code> from <strong>magrittr</strong> (you are not required to use <code>%&gt;%</code>, though):</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(leaflet)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">leaflet</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addTiles</span>() <span class="sc">%&gt;%</span>  <span class="co"># Add default OpenStreetMap map tiles</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addMarkers</span>(<span class="at">lng=</span><span class="fl">174.768</span>, <span class="at">lat=</span><span class="sc">-</span><span class="fl">36.852</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">popup=</span><span class="st">"The birthplace of R"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>m  <span class="co"># Print the map</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/06/leaflet-basic.png" class="img-fluid"></p>
+<figcaption>leaflet-basic</figcaption>
+</figure>
+</div>
+<p>There are a variety of layers that you can add to a map widget, including:</p>
+<ul>
+<li><p>Map tiles</p></li>
+<li><p>Markers / Circle Markers</p></li>
+<li><p>Polygons / Rectangles</p></li>
+<li><p>Lines</p></li>
+<li><p>Popups</p></li>
+<li><p>GeoJSON / TopoJSON</p></li>
+<li><p>Raster Images</p></li>
+<li><p>Color Legends</p></li>
+<li><p>Layer Groups and Layer Control</p></li>
+</ul>
+<p>There are a sets of methods to manipulate the attributes of a map, such as <code>setView()</code> and <code>fitBounds()</code>, etc. You can find the details from the help page <code>?setView</code>.</p>
+<!-- more -->
+<p>The <code>leaflet()</code> function and all layer functions have a <code>data</code> argument that can take several types of spatial data objects, including matrices and data frames with latitude and longitude columns, spatial objects from the <strong>sp</strong> package (e.g.&nbsp;<code>SpatialPoints</code> and <code>SpatialPointsDataFrame</code>, etc), and the data frame returned from <code>maps::map()</code>. When you have got a data object in <code>leaflet()</code> or layer functions, you may use the formula interface to pass values of variables to function arguments.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">leaflet</span>(df) <span class="sc">%&gt;%</span> <span class="fu">addTiles</span>()</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>m <span class="sc">%&gt;%</span> <span class="fu">addCircleMarkers</span>(<span class="at">radius =</span> <span class="sc">~</span>size, <span class="at">color =</span> <span class="sc">~</span>color)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># this is more compact than radius = df$size, color = df$color</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2 id="basemaps" class="anchored">Basemaps</h2>
+<p>You can add basemaps to a map widget using map tiles. The default tiles provided by <code>addTiles()</code> are OpenStreetMap tiles, and you can easily add third-party tiles via <code>addProviderTiles()</code>. WMS (Web Map Service) tiles can be added via <code>addWMSTiles()</code>. You may use more than one tile layer on a map, too.</p>
+<h2 id="markers-and-popups" class="anchored">Markers and Popups</h2>
+<p>Icon markers and circle markers can be placed at the locations specified by latitudes/longitudes on a map via <code>addMarkers()</code> and <code>addCircleMarkers()</code>, respectively. You can change the default appearance of icon markers (dropped pins) and use custom icon images, and you can also customize the appearance of circle markers (radius, color, and so on). When there are a large number of markers on a map, you may cluster them into groups (each group containing multiple markers close to each other), and see individual markers as you zoom into the map. When you add a marker to a map, you can also bind a popup to it through the <code>popup</code> argument, so users can see more information after they click on the marker. It is possible to add popups separately without markers as well via <code>addPopups()</code>.</p>
+<h2 id="lines-and-shapes" class="anchored">Lines and Shapes</h2>
+<p>Polygons, polylines, circles, and rectangles can be added to the map through <code>addPolygons()</code>, <code>addPolylines()</code>, <code>addCircles()</code>, and <code>addRectangles()</code>. For example, you can create a choropleth map by adding polygons with different colors.</p>
+<h2 id="geojson-topojson" class="anchored">GeoJSON / TopoJSON</h2>
+<p>When your data is in the GeoJSON or TopoJSON format, you can add it to the map using <code>addGeoJSON()</code> and <code>addTopoJSON()</code>, respectively. The features in the JSON data can be styled via either the styles specified inside the data, or the arguments of the functions <code>addGeoJSON()</code>/<code>addTopoJSON()</code>.</p>
+<h2 id="raster-images" class="anchored">Raster Images</h2>
+<p>Two-dimensional <code>RasterLayer</code> objects (from the <a href="http://cran.r-project.org/package=raster"><strong>raster</strong> package</a>) can be turned into images and added to Leaflet maps using the <code>addRasterImage()</code> function. You can color the image through the colors argument that accepts a variety of color specifications.</p>
+<h2 id="shiny-integration" class="anchored">Shiny Integration</h2>
+<p>Like most Shiny output widgets, you just create a leaflet output element in the UI using <code>leafletOutput()</code>, and render the widget on the server side using <code>renderLeaflet()</code>, with a leaflet widget object passed to <code>renderLeaflet()</code>.</p>
+<p>After a widget is rendered in Shiny, you may modify it using the <code>leafletProxy()</code> object. All you need to do is replace <code>leaflet()</code> with <code>leafletProxy()</code>. For example, suppose the output ID of the map is <code>mymap</code>, and you have two numeric inputs <code>x</code> and <code>y</code> (specifying lng and lat) in the app, then you can add new markers to the map via:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">observe</span>({</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">leafletProxy</span>(<span class="st">"mymap"</span>) <span class="sc">%&gt;%</span> <span class="fu">addMarkers</span>(input<span class="sc">$</span>x, input<span class="sc">$</span>y)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you added layers with layer ID’s to a map, you will be able to remove certain layers according to the layer ID’s (e.g.&nbsp;<code>removeMarker()</code>). You can also clear entire layers (e.g.&nbsp;<code>clearMarkers()</code>).</p>
+<p>When interacting with a map or its layers, you can obtain some information about the interaction from the Shiny input object. For example, <code>input$mymap_shape_click</code> will be a list of the form <code>list(lat = lat, lng = lng, id = layerId)</code> after you click on a shape object (e.g.&nbsp;a marker or a circle) on the map.</p>
+<h2 id="color-palettes-and-legends" class="anchored">Color Palettes and Legends</h2>
+<p>We have provided four types of color palettes in this package: <code>colorNumeric()</code>, <code>colorBin()</code>, <code>colorQuantile()</code>, and <code>colorFactor()</code>. These palette functions return functions that can be applied to numeric or factor values to generate colors. If you have used one of these color palettes, you may also use <code>addLegend()</code> to add a color legend to the map.</p>
+<h2 id="layer-groups-and-layer-control" class="anchored">Layer Groups and Layer Control</h2>
+<p>Normally a layer function has an argument called group, which can be used to assign multiple layer elements into a group. Later you may use <code>addLayersControl()</code> to add a layer control to the map to show/hide groups.</p>
+<p>We hope you will enjoy using this package. Please let us know if you have any comments or questions when the R package documentation or the website <a href="http://rstudio.github.io/leaflet" class="uri">http://rstudio.github.io/leaflet</a> is not clear enough. You are welcome to <a href="https://github.com/rstudio/leaflet/issues">file bug reports / feature requests</a> to the Github repository or ask questions in the <a href="https://groups.google.com/forum/#!forum/shiny-discuss">shiny-discuss</a> mailing list.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+
+
+
+</body></html>

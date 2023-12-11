@@ -1,0 +1,22 @@
+{
+  "name": "wp-white-security/wsal-external-libraries",
+  "description": "Helper plugin to accompany WP Activity Log plugin to enable functionality that requires external libraries.",
+  "version": "1.0.2",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "WP White Security",
+      "email": "info@wpwhitesecurity.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "require": {
+    "php": ">=7.0",
+    "aws/aws-sdk-php": "^3.18"
+  },
+  "config": {
+    "platform-check": false
+  }
+}

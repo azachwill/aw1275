@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-12-08">
+<meta name="description" content="We are excited to announce new developments in Keras for R. Data scientists can use the most popular and powerful deep learning frameworks to guide data-driven decisions, all within R.">
+
+<title>Using Keras for Deep Learning With R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Using Keras for Deep Learning With R</h1>
+
+<p class="date">2021-12-08</p>
+</header>
+
+
+Photo by <a href="https://unsplash.com/@sallybrad2016?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Preethi Viswanathan</a> on <a href="https://unsplash.com/s/photos/neural-network?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a>
+
+<p>We are excited to announce new developments in <a href="https://blogs.rstudio.com/ai/posts/2021-11-18-keras-updates/" target="_blank">Keras for R</a>. Together with our current integration with <a href="https://torch.mlverse.org/" target="_blank">torch</a>, data scientists can use the most popular and powerful deep learning frameworks all within R.</p>
+<h2 id="expand-data-science-capabilities-with-deep-learning" class="anchored">Expand data science capabilities with deep learning</h2>
+<p>Data scientists use machine learning to create models that improve without explicit instructions. Deep learning is a subset of machine learning. It is particularly powerful in applications such as image recognition, natural language processing, and audio processing.</p>
+<p>Deep learning allows data scientists to create more accurate and efficient models, sometimes even outperforming human cognition. With improved machine learning capabilities, data scientists can provide better answers to their data questions.</p>
+<h2 id="add-essential-tools-to-your-toolkit" class="anchored">Add essential tools to your toolkit</h2>
+<p>Data scientists have done significant work to develop the deep learning sector. Among deep learning libraries, <a href="https://keras.io/" target="_blank">Keras</a> stands out for its productivity, flexibility, and user-friendly API. TensorFlow is a machine learning platform that is both extremely adaptable and well-suited for production. Together, users can use these libraries to train and deploy powerful deep learning models.</p>
+<p>The <a href="https://keras.rstudio.com/" target="_blank">Keras for R package</a> provides an R interface to Keras. With it, data scientists can leverage the power of Keras and Tensorflow in R.</p>
+<h2 id="train-neural-networks-with-easy-to-write-code" class="anchored">Train neural networks with easy-to-write code</h2>
+<p>Keras for R allows data scientists to run deep learning models in an R interface. They can write in their preferred programming language while taking full advantage of the deep learning methods and architecture.</p>
+<ul>
+<li><strong>The package provides familiar syntax.</strong> Users can write natural-feeling, idiomatic-looking code with Keras for R (including the pipe operator!). Take a look: the <a href="https://tensorflow.rstudio.com/tutorials/beginners/" target="_blank">image classification example</a> on the Tensorflow for R website uses code very familiar to those who use the tidyverse syntax.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/image1.gif" class="img-fluid"></p>
+<p></p><figcaption>Scrolling through a Tensorflow for R tutorial</figcaption><p></p>
+</figure>
+</div>
+<ul>
+<li><strong>The package supports users in translating Python code.</strong> Using <code>%py_class%</code>, data scientists can directly subclass Python objects, making it much easier to translate Python code found on the web.</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">NonNegative</span>(keras<span class="sc">$</span>constraints<span class="sc">$</span>Constraint) <span class="sc">%py_class%</span> {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"__call__"</span> <span class="sc">&amp;</span>lt;<span class="sc">-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    w <span class="sc">*</span> <span class="fu">k_cast</span>(w <span class="sc">&gt;=</span> <span class="dv">0</span>, <span class="fu">k_floatx</span>())</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>No need to switch between environments or languages — users can use Keras functionality all within R.</p>
+<h2 id="whats-next" class="anchored">What’s next?</h2>
+<p>We will continue developing Keras for R to help R users develop sophisticated deep learning models in R. Stay tuned for:</p>
+<ul>
+<li>A new version of <em>Deep Learning for R</em>, with updated functionality and architecture;</li>
+<li>More expansion of Keras for R’s extensive low-level refactoring and enhancements; and</li>
+<li>More detailed introductions to the powerful new features.</li>
+</ul>
+<p>Check out the “<a href="https://blogs.rstudio.com/ai/posts/2021-11-18-keras-updates/" target="_blank">Keras for R is Back!</a>” post to learn about the state of the ecosystem and the package’s new functionalities. Subscribe to the <a href="https://blogs.rstudio.com/ai/" target="_blank">RStudio AI Blog</a> for the latest news, insights, and examples of using AI-related technologies with R.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

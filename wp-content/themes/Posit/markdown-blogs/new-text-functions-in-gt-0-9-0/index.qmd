@@ -1,0 +1,239 @@
+---
+title: "The new family of `text_*()` functions in {gt} 0.9.0"
+date: '2023-06-28'
+slug: new-text-functions-in-gt-0-9-0
+tags:
+  - gt
+authors:
+  - Rich Iannone
+description: Description here
+alttext: Add alt text for header image.
+blogcategories:
+  - Open Source
+  - Products and Technology
+events: blog
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(gt)
+library(fontawesome)
+```
+
+In this, the sixth blog post on [gt](https://gt.rstudio.com/) `0.9.0`, we're going to introduce you to a new family of functions: the text transformation functions. There are four functions of the form `text_*()` that comprise this family. One has always been part of **gt** (the `text_transform()` function) but three are brand new. The newly-added functions now make this type of *post-processing* work a lot more easier.
+
+## What *is* a text transformation in **gt**?
+
+Before we get down to what's new, we probably ought to understand what text transformation means in **gt**. Let's focus on the body cells of a table, which might otherwise be known as *data* cells. When they enter into **gt** via the `gt()` function, they are unformatted. The package offers a variety of `fmt_*()` functions for formatting these values, whether they are numeric values, logical values, text, etc. The formatting functions constitute phase one of the pipeline.
+
+Next, in phase two, we have the substitution functions and they are of the form `sub_*()`. These are useful functions for dealing with common replacement tasks, and they utilize the underlying data behind a formatted value (e.g., the value `1` might be formatted to become `"one"` but the `sub_*()` functions still see that as the value `1`). You can think of these as secondary formatting functions, and they may handle specialized data presentation cases like replacing very large or very small values with specific text.
+
+Alright, this brings us to phase three (the final phase), and it's where the text transformation functions finally come in. The `text_*()` functions handle the cell data that are flattened into strings, and, importantly, they don't have access to the underlying data. Say a `1` value is formatted as `"one"`, then it undergoes substitution to become `"less than five"`; the `text_*()` functions will take that input as `"less than five"`. All of the text transformation functions operate on a vector of these formatted strings and return an equal-length vector of transformed strings. Even if there was no formatting or substitution done, **gt** will still automatically cast all of the body cell values as strings before entering this third phase.
+
+To recap:
+
+- Phase One: formatting with `fmt_*()` (input is original data values)
+- Phase Two: substitution with `sub_*()` (selected values are replaced; original data values are still accessed)
+- Phase Three: transformation with `text_*()` (input is string-based, original data values are disregarded)
+
+We can think of text transformation as post-processing because it comes at the end of this three-phrase pipeline (where the initial values no longer matter) and we are making arbitrary changes to the strings that will be presented. Alright, let's now look at all those new `text_*()` functions!
+
+## The new `text_replace()` function
+
+The `text_replace()` function provides a specialized interface for replacing text fragments in a manner similar to how `gsub()` works. You specify which cells are to be transformed with the `locations` argument (this takes in one or more `cells_*()` function calls). Once that is done, the remaining two values to supply are the regex pattern (`pattern`) and the replacement for all matched text (`replacement`).
+
+A simple example is in order. We're making a **gt** table from the `sza` dataset, and the formatting of the time values in the `tst` column to the `"fr-CA"` locale is close to what we want, but not quite. Luckily, we have `text_replace()` to fix up those time values to a more desirable form.
+
+```{r}
+sza |>
+  dplyr::filter(latitude == 40) |>
+  dplyr::select(-latitude) |>
+  dplyr::mutate(month = as.integer(month)) |>
+  tidyr::pivot_wider(names_from = month, values_from = sza) |>
+  dplyr::mutate(tst = paste0(substr(tst, 1, 2), ":", substr(tst, 3, 4))) |>
+  gt(locale = "fr-CA") |>
+  cols_width(
+    tst ~ px(75),
+    everything() ~ px(50)
+  ) |>
+  data_color(
+    columns = where(~is.numeric(.x)),
+    palette = c("yellow", "darkblue"),
+    domain = c(0, 90),
+    na_color = "darkblue" |> adjust_luminance(steps = -1)
+  ) |>
+  cols_label(
+    tst ~ "TSV"
+  ) |>
+  sub_missing(missing_text = "") |>
+  fmt_time(columns = tst, time_style = "Hm") |>
+  text_replace(
+    pattern = "(^0| )",
+    replacement = "",
+    locations = cells_body(columns = tst)
+  )
+```
+
+We needed to eliminate leading zero values and remove the internal spaces in the times. The pattern `"(^0| )"` targets those characters and using `replacement = ""` eliminates them! Now, a value like `"08 h 30"` becomes `"8h30"` and this presents much better.
+
+## The new `text_case_when()` function
+
+The `text_case_when()` function provides a useful interface for a case-by-case approach to replacing entire table cells. To use it you supply a sequence of two-sided formulas of the general form: `⁠<logical_stmt> ~ <new_text>`⁠. On the left hand side there should be a predicate statement that evaluates to a logical vector of length one (i.e., either `TRUE` or `FALSE`). To refer to the values undergoing transformation, you need to use the `x` variable.
+
+Example time! We'll use the `metro` dataset this time to create a **gt** table. For the `connect_rer` column (targeted in `.locations`), we perform counts of pattern matches with `stringr::str_count()` within `text_case_when()` and determine which cells have 1, 2, or 3 matched patterns. For each of these cases, we will provide descriptive replacement text. Here, we also use a `.default` value of `""` to replace the non-matched cases with an empty string.
+
+```{r}
+metro |>
+  dplyr::arrange(desc(passengers)) |>
+  dplyr::select(name, lines, connect_rer) |>
+  dplyr::slice_head(n = 10) |>
+  gt() |>
+  text_case_when(
+    stringr::str_count(x, pattern = "[ABCDE]") == 1 ~ "One connection.",
+    stringr::str_count(x, pattern = "[ABCDE]") == 2 ~ "Two connections.",
+    stringr::str_count(x, pattern = "[ABCDE]") == 3 ~ "Three connections.",
+    .default = "",
+    .locations = cells_body(columns = connect_rer)
+  ) |>
+  cols_label(
+    name = "Station",
+    lines = "Lines Serviced",
+    connect_rer = "RER Connections"
+  )
+```
+
+We get the appropriate replacement in the `connect_rer` column for each case that was defined in `text_case_when()`. Anything that was not matched now appears as an empty body cell.
+
+## The new `text_case_match()` function
+
+The `text_case_match()` function lets us replace table cells with an interface that behaves much like a switch statement. You supply a sequence of two-sided formulas of the general form: `⁠<vector_old_text> ~ <new_text>`⁠. In the left hand side (LHS) there should be a character vector containing strings to match on. The right hand side (RHS) should contain a single string (or something coercible to a length one character vector). By default, `text_case_match()` will try to match on entire strings and replace those strings.
+
+Let's use `towny` to create a fresh new **gt** table. We will transform the text in the `csd_type` column using two-sided formulas supplied to `text_case_match()`. We can replace matches on the LHS with Font Awesome icons furnished by the **fontawesome** R package:
+
+```{r}
+towny |>
+  dplyr::select(name, csd_type, population_2021) |>
+  dplyr::filter(csd_type %in% c("city", "town")) |>
+  dplyr::group_by(csd_type) |>
+  dplyr::arrange(desc(population_2021)) |>
+  dplyr::slice_head(n = 5) |>
+  dplyr::ungroup() |>
+  gt() |>
+  fmt_integer() |>
+  cols_label(
+    name = "City/Town",
+    csd_type = "",
+    population_2021 = "Population"
+  ) |>
+  text_case_match(
+    "city" ~ fontawesome::fa("city"),
+    "town" ~ fontawesome::fa("house-chimney")
+  )
+```
+
+A `"city"` gets one icon while a `"town"` gets another. What fun!
+
+By default, the LHS is matched against the entire string in any given cell. However, fragments of text can be replaced when using the `.replace = "partial"` option. Let's demonstrate how this option works through a **gt** table made with the `pizzaplace` dataset. In the `size` column, we can replace the `"S"`, `"M"`, and `"L"` letters with the `"small"`, `"medium"`, and `"large"` equivalent. We can also replace any instances of `"X"` with `"extra "`:
+
+```{r}
+pizzaplace |>
+  dplyr::mutate(size = factor(
+    size, levels = c("S", "M", "L", "XL", "XXL")
+  )) |>
+  dplyr::group_by(size) |>
+  dplyr::summarize(sales = sum(price)) |>
+  dplyr::ungroup() |>
+  gt() |>
+  fmt_currency() |>
+  text_case_match(
+    "S" ~ "small",
+    "M" ~ "medium",
+    "L" ~ "large",
+    "X" ~ "extra ",
+    .replace = "partial"
+  )
+```
+
+It may not be apparent, but the replacements will be in sequence order and changes are made immediately (i.e., the next case will work on the result of the prior case). Here's an example of that using the `row` column of the `exibble` dataset:
+
+```{r}
+exibble |>
+  dplyr::select(number = row) |>
+  dplyr::slice_head(n = 5) |>
+  gt() |>
+  text_case_match(
+    "row_" ~ "",
+    "1" ~ vec_fmt_percent(100, scale_values = FALSE),
+    as.character(2:3) ~ vec_fmt_number(2),
+    "4" ~ vec_fmt_index(4),
+    "5" ~ fontawesome::fa("5"),
+    .replace = "partial"
+  )
+```
+
+Once the leading `"row_"` text was removed (e.g., `"row_1"` became `"1"`), we could write cases based solely on the remaining string-based numbers.
+
+## The not-so-new `text_transform()` function
+
+The `text_transform()` function is not new, it's actually been part of the package since the beginning. Despite this, it is worth re-examining this function, which provides the most general interface of all the `⁠text_*()`⁠ functions available in this family. With `text_transform()`, you target the cells to undergo modification in the `locations` argument while also supplying a function to the `fn` argument. With that provided function, `text_transform()` will take the input `x` vector and return a transformed `x` of the same length. Using the construction `function(x) { .. }` for the function given to `fn` is recommended.
+
+Let's look at an example that uses the `sp500` dataset. We will transform the text in the `date` column using a function supplied to the `fn` argument. Note that the `x` in the `⁠fn = function (x)`⁠ part consists entirely of ISO 8601 date strings from the `date` column (these are acceptable as input to the `vec_fmt_date()` and `vec_fmt_datetime()` functions).
+
+```{r}
+sp500 |>
+  dplyr::slice_head(n = 10) |>
+  dplyr::select(date, open, close) |>
+  dplyr::arrange(-dplyr::row_number()) |>
+  gt() |>
+  fmt_currency() |>
+  text_transform(
+    fn = function(x) {
+      paste0(
+        "<strong>",
+        vec_fmt_date(x, date_style = "m_day_year"),
+        "</strong>",
+        "&mdash;W",
+        vec_fmt_datetime(x, format = "w")
+      )
+    },
+    locations = cells_body(columns = date)
+  ) |>
+  cols_label(
+    date = "Date and Week",
+    open = "Opening Price",
+    close = "Closing Price"
+  )
+```
+
+In the function defined for the `fn` argument, we got to use `x` twice: first to generate a date in a month-day-year format, and secondly to add a week number. The result is a combined date-and-week string that provides additional clarity to the presentation.
+
+Now let's use the `gtcars` dataset for our next `text_transform()` example. First, the numeric values in the `n` column will be formatted as spelled-out numbers with `fmt_spelled_num()`. The output values will indeed be spelled out but exclusively with lowercase letters. We actually want these words to begin with a capital letter and end with a period. Through the `fn` argument in `text_transform()`, we'll provide a custom function that uses `toTitleCase()` to operate on `x` (the numbers-as-text strings) within a `paste0()` so that a period can be placed after that transformed text.
+
+```{r}
+gtcars |>
+  dplyr::select(mfr, ctry_origin) |>
+  dplyr::filter(ctry_origin %in% c("Germany", "Italy", "Japan")) |>
+  dplyr::group_by(mfr, ctry_origin) |>
+  dplyr::count() |>
+  dplyr::ungroup() |>
+  dplyr::arrange(ctry_origin, desc(n)) |>
+  gt(rowname_col = "mfr", groupname_col = "ctry_origin") |>
+  cols_label(n = "No. of Entries") |>
+  tab_stub_indent(rows = everything(), indent = 2) |>
+  cols_align(align = "center", columns = n) |>
+  fmt_spelled_num() |>
+  text_transform(
+    fn = function(x) {
+      paste0(tools::toTitleCase(x), ".")
+    },
+    locations = cells_body(columns = n)
+  )
+```
+
+There are unlimited ways you can transform your text with `text_transform()`. With a little creativity, anything's possible! 
+
+## Conclusion
+
+We strive to improve the **gt** package so that it can work better for you. New functions are always a good thing and we hope you can make good use of these additions! If you encounter problems you can always [file an issue](https://github.com/rstudio/gt/issues) on GitHub. A good place to ask questions on GitHub is in the **gt** [Discussions page](https://github.com/rstudio/gt/discussions).
+
+If you can believe it, the **gt** package has its own Twitter account. It's at [@gt_package](https://twitter.com/gt_package), so follow us there for news and more. We also recommend joining the `gt_package` [*Discord server*](https://discord.gg/Ux7nrcXHVV). It is active, lots of fun, and you ought to drop by!

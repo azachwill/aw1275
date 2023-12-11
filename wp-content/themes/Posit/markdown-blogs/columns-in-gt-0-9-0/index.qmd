@@ -1,0 +1,228 @@
+---
+title: "Merging columns together and fixing up column labels in {gt} `0.9.0`"
+date: '2023-06-14'
+slug: columns-in-gt-0-9-0
+tags:
+  - gt
+authors:
+  - Rich Iannone
+description: DESCRIPTION HERE 
+alttext: Add alt text for header image.
+blogcategories:
+  - Open Source
+  - Products and Technology
+events: blog
+---
+
+The newest version of [gt](https://gt.rstudio.com/) (`0.9.0`) has many refinements to what was already there. Sure, new functions *were added*, but we also took the time to fix up many existing functions and make them better. This (fifth) blog post about **gt** `0.9.0` is concerned with two major enhancements to existing functionality: (1) merging column data together and (2) modifying column labels to make them more suitable for presentation.
+
+## Column merging via `cols_merge()`
+
+The `cols_merge()` function has been in the package since the first public release of **gt**. It's useful! What it does is take input from two or more columns and allows the contents to be merged into a single column, using a pattern that specifies the arrangement.
+
+Let's try using this function in an example; only then will it all make some sense. With a portion of the `metro` dataset, we'll format the numbers in the `latitude` and `longitude` columns, combine the data from both those columns into a single column (in this case, collapsing them into `latitude` column), and then clean up the column labels with `cols_label()`.
+
+```{r}
+library(gt)
+
+metro_merge <-
+  metro |>
+  dplyr::filter(grepl("3rd", location)) |>
+  dplyr::select(name, caption, latitude, longitude) |>
+  dplyr::slice_head(n = 10) |>
+  gt() |>
+  fmt_number(
+    columns = c(latitude, longitude),
+    decimals = 4
+  ) |>
+  cols_merge(
+    columns = c(latitude, longitude),
+    pattern = "({1}, {2})"
+  ) |>
+  cols_label(
+   name ~ "Station",
+   latitude ~ "Coordinates"
+  ) |>
+  cols_hide(columns = caption)
+
+metro_merge
+```
+
+A table that had three columns now has two. What's happening is that the formatted data from two columns is being combined in the `latitude` column (why that column? It's the first column cited in the `columns` argument of `cols_merge()`), and the remaining column (`longitude`) undergoes the useful process of being hidden. The `hide_columns` argument of `cols_merge()` lets you modify this default behavior.
+
+When merging column data, the thing **gt** will do is just put the values together, separated by a space character. Usually, this is not what you really want, so, a `pattern` specification can be used. In the above example, we used `pattern = "({1}, {2})"`. Breaking this down, the `"{1}"` is the first column cited in `columns`, and the `"{2}"` is the second of the two. The rest of that string is made up of string literals. What we get in the end is the latitude and longitude values separated by a comma and a space, and all of that surrounded by parentheses.
+
+This pattern syntax is great, so let's look at a bit more of that in a continuation of the above example. Station names in the `metro` dataset sometimes have a caption value. To combine the caption with the station name in a readable format, we can use `cols_merge()` with the pattern `"{1} ({2})"` (where `"{1}"` corresponds to the `name` column, and `"{2}"` is the `caption` column). This is sensible, but as noted, not every station has an associated caption, so `NA`s unfortunately make their way into the table output:
+
+```{r}
+metro_merge |>
+  cols_unhide(columns = caption) |>
+  cols_merge(
+    columns = c(name, caption),
+    pattern = "{1} ({2})"
+  )
+```
+
+This is a problem, but **gt** `0.9.0` now has a solution for it. We can now use `<<` `>>`⁠ to surround spans of text that will be removed if any of the contained `{n}` values yields a missing value. So if a particular station doesn't have a `caption` value (i.e., it is `NA`), we will want to remove not only the missing value but also the parentheses we used in our pattern. The pattern should then change from `"{1} ({2})"` to `"{1}<< ({2})>>"`. Let's try it out!
+
+```{r}
+metro_merge |>
+  cols_unhide(columns = caption) |>
+  cols_merge(
+    columns = c(name, caption),
+    pattern = "{1}<< ({2})>>"
+  )
+```
+
+So much better! The `cols_merge()` function is now a bit more powerful thanks to the enhanced `pattern` syntax and functionality. Please check out the help article accessible through `?cols_merge` for more details (particularly in the *How the `pattern` works* section). The syntax can even handle nested uses of `<<` `>>` for more complex `NA`-handling situations.
+
+## Fixing up column labels with `cols_label_with()`
+
+Column names do not often make for good column labels in tables for publication. Because of this, it's very common to apply new labels to columns in a **gt** table with `cols_label()`. But sometimes you're so close, you might want to replace underscores with spaces and put the separate words in title case. Using `cols_label()` to type out all the desired column labels can be such a drag. To make this situation better, **gt** `0.9.0` introduces the function called `cols_label_with()`. This new addition to the `cols_*()` family of functions lets you label columns using a function in its `fn` argument.
+
+Let's use `sp500` to create a new **gt** table. We want all of the column labels to be entirely capitalized versions of the default labels, but instead of using `cols_label()` and rewriting each label manually in capital letters, we will use `cols_label_with()` and instruct it to apply the `toupper()` function to all column labels.
+
+```{r}
+sp500 |>
+  dplyr::filter(date >= "2015-12-01" & date <= "2015-12-11") |>
+  dplyr::select(-c(adj_close, volume)) |>
+  gt() |>
+  cols_label_with(fn = toupper)
+```
+
+Let's have a look at another example, this time using a portion of the `countrypops` dataset. We can, if we prefer, apply multiple types of column label changes in sequence with multiple calls of `cols_label_with()`. Here, we use the `make_clean_names()` function from the **janitor** package and follow up with the removal of a numeral with `gsub()`.
+
+```{r}
+countrypops |>
+  dplyr::filter(year == 2021) |>
+  dplyr::filter(grepl("^C", country_code_3)) |>
+  dplyr::select(-country_code_2, -year) |>
+  head(8) |>
+  gt() |>
+  cols_move_to_start(columns = country_code_3) |>
+  fmt_integer(columns = population) |>
+  cols_label_with(
+    fn = ~ janitor::make_clean_names(., case = "title")
+  ) |>
+  cols_label_with(
+    fn = ~ gsub("[0-9]", "", .)
+  )
+```
+
+With the `sza` dataset, we can make a table where the column names are dates. The labels can be generated as month names in any language using `cols_label_with()` with `vec_fmt_datetime()` as the function given in `fn`.
+
+```{r}
+sza |>
+  dplyr::filter(latitude == 50) |>
+  dplyr::mutate(date = paste0(
+    "2000-",
+    formatC(
+      match(month, tolower(month.abb)),
+      width = 2,
+      flag = "0"
+    ),
+    "-01"
+  )) |>
+  dplyr::select(-c(latitude, month)) |>
+  tidyr::pivot_wider(names_from = date, values_from = sza) |>
+  gt(rowname_col = "tst") |>
+  sub_missing(missing_text = "") |>
+  cols_width(everything() ~ px(50)) |>
+  data_color(
+    palette = c("yellow", "darkblue"),
+    domain = c(0, 90),
+    na_color = "darkblue" |> adjust_luminance(steps = -1)
+  ) |>
+  tab_options(
+    table_body.hlines.style = "none",
+    table_body.border.bottom.color = "black",
+    column_labels.border.top.color = "black",
+    column_labels.border.bottom.color = "black",
+    stub.border.color = "black"
+  ) |>
+  cols_label_with(fn = function(x) {
+    vec_fmt_datetime(x, format = "MMM", locale = "de")
+    }
+  )
+```
+
+Here's one more **gt** table example with `cols_label_with()`, and this time, we just have to use the venerable `pizzaplace` dataset. There are ways to use one instance of `cols_label_with()` with multiple functions called on the column labels. We'll try that out here by providing an anonymous function (with the `function(x) { ... }` construction) that performs multiple mutations of `x` (the vector of column labels). In this example code, we're even going to use the `md()` helper function to signal to **gt** that the column label should be interpreted as Markdown text.
+
+```{r}
+pizzaplace |>
+  dplyr::mutate(month = substr(date, 6, 7)) |>
+  dplyr::group_by(month) |>
+  dplyr::summarize(pizze_vendute = dplyr::n()) |>
+  dplyr::ungroup() |>
+  dplyr::mutate(frazione_della_quota = pizze_vendute / 4000) |>
+  dplyr::mutate(date = paste0("2015/", month, "/01")) |>
+  dplyr::select(-month) |>
+  gt(rowname_col = "date") |>
+  fmt_date(date, date_style = "month", locale = "it") |>
+  fmt_percent(columns = frazione_della_quota) |>
+  fmt_integer(columns = pizze_vendute) |>
+  cols_width(everything() ~ px(100)) |>
+  cols_label_with(
+    fn = function(x) {
+      janitor::make_clean_names(x, case = "title") |>
+        toupper() |>
+        stringr::str_replace_all("^|$", "**") |>
+        md()
+    }
+  )
+```
+
+Bellissimo! We hope that the `cols_label_with()` is something you can use to avoid unnecessary repetition in your table-making code! Much more information can be found in the detailed help file for this function (use `?cols_label_with` to access).
+
+## An improved `cols_label()` function
+
+Aside from the new `cols_label_with()` function, we also took the time to make some targeted improvements to `cols_label()`. If you never really used it, what it does is allow for column labels to be modified. The basic model is that you provide the column names (i.e., those from the input data table) on the left and the column labels on the right.
+
+A new thing that was added is the inclusion of a `.fn` argument. This gives you the opportunity to supply a function that is to be called on each label provided. For example, you can use the `md()` helper function (which signals to **gt** that the labels are given as Markdown text) in `.fn` once instead of calling it on each and every label.
+
+```{r}
+metro |>
+  dplyr::select(name, lines, passengers, connect_other) |>
+  dplyr::arrange(desc(passengers)) |>
+  dplyr::slice_head(n = 10) |>
+  gt() |>
+  cols_hide(columns = passengers) |>
+  sub_missing(missing_text = "") |>
+  cols_label(
+    name = "Name of<br>Metro Station",
+    lines = "Metro<br>Lines",
+    connect_other = "Train<br>Services",
+    .fn = md
+  )
+```
+
+We have a new way of expressing column labels in `cols_label()`, and that is through the use of two-sided formulas (`⁠<LHS> ~ <RHS>` instead of `⁠<LHS> = <RHS>`). By using **tidyselect** expressions on the left side of the formulas, we can easily relabel multiple columns with common label text. Let's create an interesting **gt** table that exemplifies this (using the `towny` dataset):
+
+```{r}
+towny |>
+  dplyr::select(
+    name, ends_with("2001"), ends_with("2006"), matches("2001_2006")
+  ) |>
+  dplyr::filter(population_2001 > 100000) |>
+  dplyr::arrange(desc(pop_change_2001_2006_pct)) |>
+  dplyr::slice_head(n = 10) |>
+  gt() |>
+  fmt_integer() |>
+  fmt_percent(columns = matches("change"), decimals = 1) |>
+  tab_spanner(label = "Population", columns = starts_with("population")) |>
+  tab_spanner(label = "Density", columns = starts_with("density")) |>
+  cols_label(
+    ends_with("01") ~ "2001",
+    ends_with("06") ~ "2006",
+    matches("change") ~ md("Population Change,<br>2001 to 2006")
+  ) |>
+  cols_width(everything() ~ px(120))
+```
+
+Note that we cannot use an `=` sign in any of the expressions within `cols_label()` in the above example. Because the LHS is not a single-column name, we must use formula syntax (i.e., with the `~`). We are not limited to just using **tidyselect** expressions on the LHS. We can alternatively supply vectors of column names (and this is great for using repetitive labels across many columns).
+
+## Signing off
+
+We want to make things better in **gt** (always). If you identify points of friction that impede your own **gt** workflows, let us know! You can [file an issue](https://github.com/rstudio/gt/issues) on GitHub. Don't be shy about sharing ideas or asking questions. We are there for you on the **gt** [Discussions page](https://github.com/rstudio/gt/discussions).
+
+We occasionally share things on Twitter at [@gt_package](https://twitter.com/gt_package), so you should follow us there. Our `gt_package` [*Discord server*](https://discord.gg/Ux7nrcXHVV) is active and also lots of fun (drop by and show us your table creations in there!).

@@ -1,0 +1,67 @@
+#prototype-dynamic-cards {
+    background-color: #e5f0fc;
+}
+
+@media (max-width: 600px) {
+    .section-dynamic-cards {
+        padding-top: 60px;
+    }
+}
+
+/* Default */
+
+.standard-card {
+    .card-media {
+        height: 228px;
+    }
+}
+
+/* Solid 1 */
+
+.solid-card {
+    background-color: #213d4f;
+    color: #fff;
+
+    .description,
+    .subtitle {
+        color: #fff;
+    }
+
+    .card-media {
+        height: 60px;
+        margin-bottom: 32px;
+
+        &__image {
+            height: auto;
+            max-height: 100%;
+        }
+    }
+
+    .card-footer {
+        .link {
+            /* color: #fff; */
+            flex: 1 1 auto;
+
+            &:hover {
+                color: #fff;
+            }
+
+            svg {
+                path: rgb(161 183 204 / var(--tw-text-opacity));
+            }
+        }
+    }
+
+    .link {
+        & svg {
+            @apply ease-in-out duration-[150ms] translate-x-[2px];
+        }
+
+        path {
+        }
+    }
+
+    .arrow {
+        @apply translate-x-0 duration-300;
+    }
+}

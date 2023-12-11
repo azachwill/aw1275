@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2019-09-23">
+
+<title>RStudio Connect 1.7.8 - Put a pin in it!</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Connect 1.7.8 - Put a pin in it!</h1>
+
+<p class="date">2019-09-23</p>
+</header>
+
+<p>This release adds new workflows for data scientists and improved production settings for administrators. For data scientists, it used to be hard to use the same data or R objects in different content, and even harder to update those resources regularly. This release enables you to pin objects in Connect to solve these challenges. For administrators, we’ve reduced the most common sources of publishing failures and significantly improved error handling. All together, version 1.7.8 makes it even easier for data scientist teams to share and leverage their work with the enterprise.</p>
+<h2 id="updates-for-users" class="anchored">Updates for Users</h2>
+<h3 id="experimental-support-for-pins" class="anchored">Experimental Support for <a href="https://rstudio.github.io/pins">Pins</a></h3>
+<p></p>
+<p>The <a href="https://rstudio.github.io/pins"><code>pins</code></a> R package provides a way for R users to easily share resources using RStudio Connect. Your resources may be text files (CSV, JSON, etc.), R objects (<code>.Rds</code>, <code>.Rda</code>, etc.), or any other type of files you want to share. Sharing these files can be useful in many situations, for example:</p>
+<ol type="1">
+<li><p>Multiple pieces of content require the same data. Rather than copying that data, each piece of content references a single source of truth hosted on RStudio Connect.</p></li>
+<li><p>Content depends on processed datasets or model objects that need to be regularly updated. Rather than redeploying the content each time the information changes, use a pinned resource and update only the dataset or model. The update can be automated using a scheduled R Markdown document. Other deployed content will read the newest data on each run.</p></li>
+<li><p>You need to share resources that aren’t structured for traditional tools like databases. For example, models saved as R objects aren’t easy to store in a database. Rather than using email or file systems to share these R objects, use RStudio Connect to host these resources as pins.</p></li>
+</ol>
+<p>Refer to the <a href="https://docs.rstudio.com/connect/1.7.8/user/pins.html">RStudio Connect user guide</a> or the <a href="https://rstudio.github.io/pins/articles/boards-rsconnect.html">pins website</a> for more information.</p>
+<h3 id="example-apis-for-model-serving" class="anchored">Example APIs for Model Serving</h3>
+<script src="https://fast.wistia.com/embed/medias/dm8sl8nz5n.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_dm8sl8nz5n videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<p>RStudio Connect makes it easy for data scientists to share models written in R with other teams as RESTFul APIs. As part of the 1.7.8 release, we’ve expanded our documentation to help teams approach model management with the following examples:</p>
+<ol type="1">
+<li><p>The <a href="https://solutions.rstudio.com/model-management/overview/">end-to-end use</a> of RStudio Connect to train, deploy, monitor, and A/B test a model.</p></li>
+<li><p>Add <a href="https://solutions.rstudio.com/examples/rest-apis-overview/#log-details-about-api-requests-and-responses">additional logging</a> to API requests in order to track latency, performance, input parameters, and route popularity.</p></li>
+</ol>
+<h2 id="updates-for-administrators" class="anchored">Updates for Administrators</h2>
+<h3 id="deployment-error-logging" class="anchored">Deployment Error Logging</h3>
+<p></p>
+<p>We’ve overhauled the RStudio Connect deployment process for R code. RStudio Connect now captures errors and surfaces specific error codes and recommendations. All publishing methods see these improvements including push-button publishing, Git-backed deployment, or custom workflows using the Connect Server API.</p>
+<p>A glossary of the error codes and recommendations is available <a href="https://docs.rstudio.com/connect/1.7.8/user/publishing.html#error-codes">here</a>.</p>
+<h3 id="r-package-repositories" class="anchored">R Package Repositories</h3>
+<p>By default, RStudio Connect attempts to install R packages from the package repositories that were used in the development environment. In some cases, you may wish to specify different behavior and tell RStudio Connect where it should look for R packages:</p>
+<ul>
+<li>Your developers install packages from a public CRAN mirror, but your production server must use an internal CRAN mirror.<br>
+</li>
+<li>You use an isolated network for your production server, so RStudio Connect can not access the package repository used on the development network.<br>
+</li>
+<li>You want to use RStudio Package Manager’s package binaries in production.</li>
+</ul>
+<p>The <a href="https://docs.rstudio.com/connect/1.7.8/admin/getting-started.html#getting-started-rspm">Admin Guide</a> describes how to configure the package repositories RStudio Connect should use for R.</p>
+<h3 id="usage-scorecard-and-feedback" class="anchored">Usage Scorecard and Feedback</h3>
+<p></p>
+<p>Like you, we’re committed to expanding the influence of data science in the enterprise. A new usage scorecard on the Admin Dashboard’s Metrics page helps you understand how your team uses RStudio Connect and what additional capabilities may be available. We have made it easy for you to share this scorecard with RStudio, providing feedback that will help us further improve RStudio Connect.</p>
+<h2 id="deprecations-and-breaking-changes" class="anchored">Deprecations and Breaking Changes</h2>
+<ul>
+<li><p><strong>SECURITY:</strong> New Timeout Defaults - The <code>Authentication.Lifetime</code> and <code>Authentication.Inactivity</code> settings have new default values that are in line with industry best practices. These settings control how frequently a user must refresh their log in to RStudio Connect. The new default values are shorter ensuring users are authenticated more frequently.</p></li>
+<li><p><strong>BREAKING CHANGE:</strong> External Package Check - On start up, RStudio Connect now checks to ensure every R packages listed as external in the configuration file is available in every version of R on the system. Any missing packages will cause RStudio Connect to fail to start. This check prevents unexpected deployment and runtime failures for content. You can opt out of this check by setting <code>Packages.ExternalCheckIsFatal</code> to <code>false</code>.</p></li>
+<li><p><strong>BREAKING CHANGE:</strong> R Markdown Rendering Errors - R errors that occur during R Markdown rendering now stop the deployment process with an error. Previously, R errors would result in the error message being rendered as part of the document contents. The previous behavior can be restored by setting chunk options for the R code chunk in the Rmd file, e.g.&nbsp;<code>{r error=TRUE warning=TRUE}</code>.</p></li>
+<li><p><strong>PLATFORM SUPPORT:</strong> Trusty - RStudio Connect 1.7.8 is the last release that will support Ubuntu 14.04 Trusty. Please refer to the <a href="https://www.rstudio.com/about/platform-support/">RStudio Platform Support</a> policy for more information.</p></li>
+<li><p><strong>PLATFORM SUPPORT:</strong> REHL 8 - RStudio Connect 1.7.8 is the first release to support Red Hat Enterprise Linux 8. Refer to the <a href="https://docs.rstudio.com/connect/1.7.8/admin/getting-started.html#installation-redhat">RStudio Connect Admin Guide</a> for more information.</p></li>
+<li><p><strong>BREAKING CHANGE:</strong> These previously deprecated settings have been removed; see the <a href="https://docs.rstudio.com/connect/news/">release notes</a> for more details: <code>LoadBalancing.EnforceMinRsconnectVersion</code>, <code>Applications.ExplicitPublishing</code>, <code>Authorization.UsersListingMinRole</code>, and <code>Password.UserInfoEditableBy</code>.</p></li>
+<li><p><strong>DEPRECATIONS:</strong> The following settings have been deprecated and will be removed in the next release; see the <a href="https://docs.rstudio.com/connect/news/">release notes</a> for more details: <code>Applications.DisabledProtocols</code>, <code>OAuth2.AllowedDomains</code>, and <code>OAuth2.AllowedEmails</code>.</p></li>
+</ul>
+<p>Refer to the <a href="https://docs.rstudio.com/connect/news/">full release notes</a> for more information on all of the changes and bug fixes in this release.</p>
+<h2 id="upgrade-planning" class="anchored">Upgrade Planning</h2>
+<blockquote>
+<p>Please take special note of the breaking changes above, especially the new check for external packages. Aside from the deprecations and breaking changes above, there are no other special considerations and upgrading should require less than five minutes. If you are upgrading from an earlier version, be sure to consult the release notes for the intermediate releases, as well.</p>
+</blockquote>
+<h2 id="get-started-with-rstudio-connect" class="anchored">Get Started with RStudio Connect</h2>
+<p>If you haven’t yet had a chance to download and try <a href="https://rstudio.com/products/connect/">RStudio Connect</a>, we encourage you to do so. RStudio Connect is the best way to share all the work that you do in R (Shiny apps, R Markdown documents, plots, dashboards, Plumber APIs, etc.) with collaborators, colleagues, or customers.</p>
+<p>You can find more details or download a 45-day evaluation of the product at <a href="https://www.rstudio.com/products/connect/">https://www.rstudio.com/products/connect/</a>. Additional resources can be found below.</p>
+<ul>
+<li><a href="https://www.rstudio.com/products/connect/">RStudio Connect home page &amp; downloads</a></li>
+<li><a href="http://docs.rstudio.com/connect/admin/">RStudio Connect Administration Guide</a></li>
+<li><a href="http://docs.rstudio.com/connect/news/">Detailed news and changes between each version</a></li>
+<li><a href="https://www.rstudio.com/pricing/">Pricing</a></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

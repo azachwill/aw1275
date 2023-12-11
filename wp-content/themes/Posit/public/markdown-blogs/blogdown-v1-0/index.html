@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-01-18">
+<meta name="description" content="The blogdown package is now on CRAN. Read on for highlights from the version 1.0 release, including smoother workflows, new checking functions to guide you into the pit of success, the ability to pin Hugo versions, better organization of content files via page bundles, and the new Markdown mode for R Markdown posts.">
+
+<title>Announcing blogdown v1.0</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Announcing blogdown v1.0</h1>
+
+<p class="date">2021-01-18</p>
+</header>
+
+<p>The R Markdown team is happy to share that <strong>blogdown</strong> version 1.0 is now available on CRAN. <strong>blogdown</strong> was <a href="https://www.rstudio.com/blog/announcing-blogdown/">originally released</a> in the fall of 2017. The latest version of the package includes some significant improvements to the user experience, and some under-the-hood improvements that you’ll benefit from without even knowing!</p>
+<table>
+<colgroup>
+<col style="width: 100%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Latest release</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><img src="https://img.shields.io/badge/CRAN-1.0-brightgreen" class="img-fluid" alt="Last bookdown release 1.0 cran badge"></td>
+</tr>
+</tbody>
+</table>
+<p>You can install the latest version from CRAN:</p>
+<pre><code>install.packages("blogdown")</code></pre>
+<p>In this post, we’ll share some highlights from the latest release, but you might want to look at the <a href="https://github.com/rstudio/blogdown/blob/master/NEWS.md#changes-in-blogdown-version-10">release notes</a> for the full details.</p>
+<h2 id="workflows" class="anchored">Workflows</h2>
+<p>If you are already a <strong>blogdown</strong> user, you will notice some important changes in how the package works. Previously, <strong>blogdown</strong> did two things automatically for you if you had started serving your site as you worked:</p>
+<ol type="1">
+<li>Knitting R Markdown files upon save.</li>
+<li>Re-knitting already knitted R Markdown files, based on a timestamp filter.</li>
+</ol>
+<p>While both of these behaviors were sometimes helpful, we found that more often than not they were problematic for users. Based on user feedback, we have provided options to disable them. The second behavior is disabled by default now (more on this later). For the first behavior, you can set <a href="https://bookdown.org/yihui/blogdown/global-options.html">the global option</a> <code>options(blogdown.knit.on_save = FALSE)</code> to disable it. After that, you must knit an R Markdown post with intent to see your edits take effect (note that plain Markdown files with the extension <code>.md</code> do not need to be knitted).</p>
+<p>The really great news is that the “Knit” button now <em>works</em> for <strong>blogdown</strong> content in the RStudio IDE! Please feel free to retrain your fingers to knit.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://media.giphy.com/media/1463o17ejELYqs/giphy.gif" class="img-fluid"></p>
+<p></p><figcaption>Cary Grant knitting</figcaption><p></p>
+</figure>
+</div>
+<p>If you have not yet served your site (after using the “Serve Site” addin or <code>blogdown::serve_site()</code>), clicking on the “Knit” button will start the server automatically and produce the site preview for you.</p>
+<p>Also, the <code>public/</code> directory will no longer be generated when you serve the site. Where did it go? We are now using Hugo’s server, which means the website is not rendered to disk by default, but instead served directly from memory. The Hugo server is much faster, and also supports navigating to the output web page of which you are currently editing the source document.</p>
+<p>If you miss the <code>public/</code> folder and want it back, you’ll need to build the site explicitly via <code>blogdown::build_site()</code>, or if you use RStudio, press <code>Ctrl + Shift + B</code> or <code>Cmd + Shift + B</code> to build the website. This function no longer recompiles R Markdown files by default, because it may be expensive and often undesirable to compile <code>.Rmd</code> files that have been compiled before.</p>
+<p>If you do want to do that anyway, <code>build_site(build_rmd = TRUE)</code> will recompile <em>everything</em> (look out!). For easier control, this <code>build_rmd</code> argument can also take a function to filter the files to re-render when building the site. We have introduced 3 helpers functions (and you can use your own) with an alias each for ease of use:</p>
+<ul>
+<li><code>build_site(build_rmd = 'timestamp')</code> uses <code>filter_timestamp()</code> and will compare the timestamp of input and output files to decide which to render.</li>
+<li><code>build_site(build_rmd = 'newfile')</code> uses <code>filter_newfile()</code> and will render only files that have no output file yet.</li>
+<li><code>build_site(build_rmd = 'md5sum')</code> uses <code>filter_md5sum()</code> and will compare MD5 checksums of files to decide to render.</li>
+</ul>
+<p>See the help page <code>?blogdown::build_site</code> for more information.</p>
+<h2 id="checking-functions" class="anchored">Checking functions</h2>
+<p><strong>blogdown</strong> 1.0 comes with new <em>check</em> functions to help you diagnose and prevent build issues with your site. Checks will help you identify known issues and provide opinionated recommendations to guide you into the pit of success.</p>
+<p>There are 5 specific <code>check_*</code> functions:</p>
+<ul>
+<li><code>check_config()</code> checks the configuration file (<code>config.yaml</code> or <code>config.toml</code>).</li>
+<li><code>check_gitignore()</code> checks if necessary files are incorrectly ignored in GIT.</li>
+<li><code>check_hugo()</code> checks possible problems with the Hugo installation and version.</li>
+<li><code>check_netlify()</code> checks some important Netlify configuration <code>netlify.toml</code>.</li>
+<li><code>check_content()</code> checks for possible problems in the content files, like the validity of YAML metadata, some posts with future dates and draft posts, or R Markdown posts that have not been rendered.</li>
+</ul>
+<p>A final function, <code>check_site()</code>, will run all above <code>check_*()</code> functions at once. If you are a blogdown educator, you may go step-by-step with the checking functions to help students gain a mental model of all the moving pieces needed to build and deploy a site. For people familiar with GitHub, Netlify, and Hugo, you may want to just check everything with <code>blogdown::check_site()</code>.</p>
+<p>These functions will show you what is checked, why, and will assign you some <code>[TODO]</code> items that need your action.</p>
+<pre><code>------------------------------------------------------------
+○ A successful check looks like this.
+● [TODO] A check that needs your attention looks like this.
+| Let's check out your blogdown site!
+------------------------------------------------------------</code></pre>
+<p>We hope you’ll find the checks as helpful as <a href="https://github.com/rstudio/blogdown/issues/548">several</a> other <a href="https://github.com/rstudio/blogdown/issues/510">users</a> have. We’ll continue to incorporate more checks into these functions in the future. When in doubt, try <code>remotes::install_github('rstudio/blogdown')</code> and see if <code>blogdown::check_site()</code> uncovers any new problems.</p>
+<p>As an extra bonus, as we were working on better messaging for these <code>check_*()</code> functions, we also improved the new site experience when running <code>blogdown::new_site()</code>. <strong>blogdown</strong> will now output more user-friendly messages on what is going on during your new site setup. To follow a complete “code-through” of setting up a new site with the new <strong>blogdown</strong>, go look at <a href="https://alison.rbind.io/post/new-year-new-blogdown/" title="Up &amp; running with blogdown in 2021">Up &amp; running with blogdown in 2021</a> written by <a href="https://alison.rbind.io">Alison Hill</a>.</p>
+<h2 id="hugo-versioning-system" class="anchored">Hugo versioning system</h2>
+<p>Although <strong>blogdown</strong> also supports Jekyll and Hexo, most users power their websites with the Hugo static site generator. Hugo has a lot of pluses, one of which is that it gives you fast site builds. However, one minus we’ve found as experienced users over the past 3 years is that Hugo also changes fast—new functions are added and deprecated, and it can be difficult to keep track of if you have more than one Hugo site. This can lead to frustration trying to debug why a site that you could build last month will not build now.</p>
+<p><strong>blogdown</strong> now gives you a way to pin your website project to a specific Hugo version. Both <code>blogdown::install_hugo()</code> and <code>blogdown::check_site()</code> will tell you how. You may also use the following to find all your locally installed Hugo versions:</p>
+<pre><code>blogdown::find_hugo('all')</code></pre>
+<p>You’ll see the versions that you have available like this:</p>
+<pre><code>[1] "/Users/alison/Library/Application Support/Hugo/0.54.0/hugo"
+[2] "/Users/alison/Library/Application Support/Hugo/0.71.1/hugo"
+[3] "/Users/alison/Library/Application Support/Hugo/0.78.2/hugo"
+[4] "/Users/alison/Library/Application Support/Hugo/0.79.0/hugo"
+[5] "/usr/local/bin/hugo"  </code></pre>
+<p>From these available Hugo versions, if you’d like to pin a specific one to a particular project, you’ll use a project-level <code>.Rprofile</code> file. You may call this new helper function to create and fill the <code>.Rprofile</code> with recommended <strong>blogdown</strong> options:</p>
+<pre><code>blogdown::config_Rprofile()</code></pre>
+<p>Inside that file, to pin Hugo to the version, say, 0.79.0, you may set:</p>
+<pre><code>options(blogdown.hugo.version = "0.79.0")</code></pre>
+<p>Note that you must restart your R session for changes in your <code>.Rprofile</code> file to take effect. How could <code>check_site()</code> or <code>check_hugo()</code> help you do all this? Let’s check it out:</p>
+<pre><code>blogdown::check_hugo()</code></pre>
+<pre><code>― Checking Hugo
+| Checking Hugo version...
+○ Found 4 versions of Hugo. You are using Hugo 0.79.0.
+| Checking .Rprofile for Hugo version used by blogdown...
+| Hugo version not set in .Rprofile.
+● [TODO] Set options(blogdown.hugo.version = "0.79.0") in .Rprofile.
+● [TODO] Also run blogdown::check_netlify() to check for possible problems with Hugo and Netlify.
+― Check complete: Hugo</code></pre>
+<p>Now, as we hint above in a <code>[TODO]</code> item, after you’ve pinned a project-level Hugo version, you’ll want to ensure that your Hugo version used by Netlify to build your site also matches your local version. Again, the checking functions <code>check_netlify()</code> can help you here, but you may also use:</p>
+<pre><code>blogdown::config_netlify()</code></pre>
+<p>To open and edit that file with your updated Hugo version number. After doing that, if we checked this file, we’d see:</p>
+<pre><code>blogdown::check_netlify()</code></pre>
+<pre><code>― Checking netlify.toml...
+○ Found HUGO_VERSION = 0.79.0 in [build] context of netlify.toml.
+| Checking that Netlify &amp; local Hugo versions match...
+○ It's a match! Blogdown and Netlify are using the same Hugo version (0.79.0).
+| Checking that Netlify &amp; local Hugo publish directories match...
+○ Good to go - blogdown and Netlify are using the same publish directory: public
+― Check complete: netlify.toml</code></pre>
+<p>You may also want to periodically clean up your older Hugo versions that are no longer in use. To do this, use:</p>
+<pre><code>blogdown::remove_hugo()</code></pre>
+<p>In your console, you’ll see an interactive menu that allows you to choose which versions to remove like this:</p>
+<pre><code>--------------------------------------------------------------------------------
+5 Hugo versions found and listed below (#1 on the list is currently used). 
+Which version(s) would you like to remove?
+--------------------------------------------------------------------------------
+
+1:   /Users/alison/Library/Application Support/Hugo/0.54.0/hugo
+2:   /Users/alison/Library/Application Support/Hugo/0.71.1/hugo
+3:   /Users/alison/Library/Application Support/Hugo/0.78.2/hugo
+4:   /Users/alison/Library/Application Support/Hugo/0.79.0/hugo
+5:   /usr/local/bin/hugo
+
+Enter one or more numbers separated by spaces, or an empty line to cancel</code></pre>
+<p>If you want to update Hugo, you’ll need to install a new version now using <code>install_hugo()</code> and a specific version. By default, it will install the latest available version. Consequently, the previous <code>update_hugo()</code> function has been deprecated.</p>
+<h2 id="page-bundles" class="anchored">Page bundles</h2>
+<p>Hugo <a href="https://gohugo.io/news/0.32-relnotes/">version 0.32</a> introduced a new feature called “<a href="https://gohugo.io/content-management/page-bundles/">Page Bundles</a>,” as a more natural way to organize your content files. The main benefit of using page bundles instead of normal pages is that you can put resource files associated with the post (such as images and data files) inside the same directory as the post itself. This means you no longer have to put them under the <code>static/</code> directory, which has been quite confusing to Hugo users. Here is an example of two page bundles, both inside the <code>content/post</code> section:</p>
+<pre><code>.
+└── content
+    ├── post
+    │   ├── raindrops-on-roses
+    │   │   ├── index.md // That's your post content and Front Matter
+    │   │   └── assets
+    │   │       ├── rain.jpg
+    |   |       ├── roses.jpg
+    │   │       └── thorns.csv
+    │   └── whiskers-on-kittens
+    │       ├── index.md // That's your post content and Front Matter
+    │       └── assets
+    │           └── kittens.jpg
+    └── songs</code></pre>
+<p><strong>blogdown</strong> now works better with page bundles, like <code>raindrops-on-roses</code> and <code>whiskers-on-kittens</code> in the above example. The “Insert image” and “New post” add-ins work, and when you knit your posts or other R Markdown-based content, all figures and any other dependencies (like the <code>index_files/</code> and <code>index_cache/</code> folders) will be output to your page bundle instead of to a folder nested in the <code>static/</code> directory. Consequently, you should not ignore <code>"_files$"</code> in the <code>ignoreFiles</code> field in your site configuration file. This will also get flagged for you if you run <code>blogdown::check_site()</code>.</p>
+<p>If you prefer no bundles, you may set <code>options(blogdown.new_bundle = FALSE)</code> in your <code>.Rprofile</code> to get the old behavior back.</p>
+<p>Finally, if your pages have not been bundled up yet, we have provided a new helper function <code>bundle_site()</code> to help you convert normal pages to bundles:</p>
+<pre><code># make sure your project is either backed up or under version control
+blogdown::bundle_site(".", output = ".")</code></pre>
+<h2 id="better-support-for-markdown-format" class="anchored">Better support for Markdown format</h2>
+<p><strong>blogdown</strong> lets you work with three formats for your website content, each of which is processed and rendered slightly differently:</p>
+<table>
+<colgroup>
+<col style="width: 16%">
+<col style="width: 5%">
+<col style="width: 16%">
+<col style="width: 5%">
+<col style="width: 17%">
+<col style="width: 5%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>File format</th>
+<th></th>
+<th>Processed by</th>
+<th></th>
+<th>Output format</th>
+<th></th>
+<th>Additional processing by</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>.Rmd</code></td>
+<td>→</td>
+<td>Pandoc</td>
+<td>→</td>
+<td><code>.html</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>.Rmarkdown</code></td>
+<td>→</td>
+<td>Pandoc</td>
+<td>→</td>
+<td><code>.markdown</code></td>
+<td>→</td>
+<td>Hugo / Goldmark</td>
+</tr>
+<tr class="odd">
+<td><code>.md</code></td>
+<td>→</td>
+<td></td>
+<td>→</td>
+<td><code>.md</code></td>
+<td>→</td>
+<td>Hugo / Goldmark</td>
+</tr>
+</tbody>
+</table>
+<p>To learn more about these formats, you may read this <a href="https://bookdown.org/yihui/blogdown/output-format.html">blogdown book chapter</a>.</p>
+<p>Of course, you may always use <code>.md</code> for content that does not include any R code—this content will only be processed by Hugo’s Markdown renderer (the default now is Goldmark). Content written in <code>.Rmd</code> files will be rendered with Pandoc straight to <code>.html</code>, bypassing Hugo’s markdown renderer completely. However, some Hugo themes depend on Markdown files as input (not <code>.html</code>)—that is why the <code>.Rmarkdown</code> file extension has existed. <code>.Rmarkdown</code> files are rendered to <code>.markdown</code> using <strong>knitr</strong> and Pandoc, which will then be processed by Hugo Markdown renderer. This special file extension (unique to <strong>blogdown</strong>) means that the file will be processed by R before Hugo, allowing you to use R code, which a plain <code>.md</code> will not allow.</p>
+<p>With <strong>blogdown</strong> 1.0, the <code>.Rmarkdown</code> file format has become more fully featured, to help users take better advantage of some Hugo theme features and configuration options. <code>.Rmarkdown</code> files now support bibliographies and HTML widgets like a standard <code>.Rmd</code> document. This makes <code>.Rmarkdown</code> an interesting format to be used alone in <strong>blogdown</strong> projects. However, some users voiced a need to be able to simply keep the <code>.md</code> version of their <code>.Rmd</code> content, without needing to use the special <code>.Rmarkdown</code> file extension.</p>
+<p><strong>blogdown</strong> now offers a build method to render <code>.Rmd</code> files to <code>.md</code> instead of <code>.html</code>. This special <em>full markdown mode</em> can be activated by setting <code>options(blogdown.method = "markdown")</code> in your <code>.Rprofile</code>.</p>
+<p>We recommend this <code>"markdown"</code> mode to advanced users who have a high comfort level with Hugo, and want to use the full power of Goldmark (and understand the trade-offs of not using Pandoc for rendering here, e.g., not all Pandoc’s Markdown features are supported by Goldmark).</p>
+<h2 id="final-notes" class="anchored">Final notes</h2>
+<p>This version is a big milestone for <strong>blogdown</strong>, with a lot of changes and improvements. Some improvements may not even be noticeable, yet they are important. For example, Hugo requires you to install GIT and Go if you use themes that contain “Hugo modules,” but we don’t wish to turn <strong>blogdown</strong> users into Go developers, so we tried hard to get rid of the dependency on GIT and Go in this case. Similarly, multilingual sites are better supported under the hood now.</p>
+<p>Updates to the <strong>blogdown</strong> book (<a href="https://bookdown.org/yihui/blogdown/" class="uri">https://bookdown.org/yihui/blogdown/</a>) are also under way that will reflect the changes in Hugo, Hugo themes, and to <strong>blogdown</strong> itself since the initial package release. A friendly banner is now in place on every page in the online book to let you know that we are aware that the content there is currently out of date and will be updated shortly.</p>
+<p>We hope this new release will improve the quality of life for <strong>blogdown</strong> users, and possibly make the waters seem a little more friendly for hesitant future <strong>blogdown</strong> users to feel braver to wade in. The community of <strong>blogdown</strong> users is always supportive and helpful, so please do not hesitate to ask questions, offer help, or propose new ideas in <a href="https://community.rstudio.com/tag/blogdown" class="uri">https://community.rstudio.com/tag/blogdown</a>. We’d like to take this opportunity to express our heartfelt thanks to <a href="https://drmowinckels.io/blog/2020-05-25-changing-you-blogdown-workflow/">Athanasia Mowinckel</a>, <a href="https://masalmon.eu/2020/02/29/hugo-maintenance/">Maëlle Salmon</a>, <a href="https://clauswilke.com/blog/2020/09/08/a-blogdown-post-for-the-ages/">Claus Wilke</a>, <a href="https://yutani.rbind.io/post/2017-10-25-blogdown-custom/">Hiroaki Yutani</a>, <a href="https://sharleenw.rbind.io/2020/09/02/how-to-remake-a-blogdown-blog-from-scratch/">Sharleen Weatherley</a>, and many others who have shared their <strong>blogdown</strong> experience publicly (we may be slow to respond but we have been all ears). <strong>blogdown</strong> v1.0 wouldn’t be possible without this honest feedback.</p>
+<p>Finally, a big thanks to the other 75 contributors who helped with this release by discussing problems, proposing features, and contributing code in the <a href="https://github.com/rstudio/blogdown"><strong>blogdown</strong> repo on Github</a>:</p>
+<p><a href="https://github.com/amssljc">@amssljc</a>, <a href="https://github.com/andremrsantos">@andremrsantos</a>, <a href="https://github.com/andrewdarmond">@andrewdarmond</a>, <a href="https://github.com/andrewheiss">@andrewheiss</a>, <a href="https://github.com/anhhd">@anhhd</a>, <a href="https://github.com/anna-doizy">@anna-doizy</a>, <a href="https://github.com/asimumba">@asimumba</a>, <a href="https://github.com/atusy">@atusy</a>, <a href="https://github.com/b4D8">@b4D8</a>, <a href="https://github.com/bensoltoff">@bensoltoff</a>, <a href="https://github.com/Bijaelo">@Bijaelo</a>, <a href="https://github.com/brettkobo">@brettkobo</a>, <a href="https://github.com/bscott97">@bscott97</a>, <a href="https://github.com/c1au6i0">@c1au6i0</a>, <a href="https://github.com/chrisjake">@chrisjake</a>, <a href="https://github.com/danmrc">@danmrc</a>, <a href="https://github.com/dayabin">@dayabin</a>, <a href="https://github.com/defuneste">@defuneste</a>, <a href="https://github.com/DominiqueMakowski">@DominiqueMakowski</a>, <a href="https://github.com/dwiwad">@dwiwad</a>, <a href="https://github.com/ErickChacon">@ErickChacon</a>, <a href="https://github.com/erikriverson">@erikriverson</a>, <a href="https://github.com/eteitelbaum">@eteitelbaum</a>, <a href="https://github.com/f0nzie">@f0nzie</a>, <a href="https://github.com/frodriguezsmartclip">@frodriguezsmartclip</a>, <a href="https://github.com/giabaio">@giabaio</a>, <a href="https://github.com/gustavo-etal">@gustavo-etal</a>, <a href="https://github.com/irtools">@irtools</a>, <a href="https://github.com/jaggaroshu">@jaggaroshu</a>, <a href="https://github.com/Jansonboss">@Jansonboss</a>, <a href="https://github.com/jhuntergit">@jhuntergit</a>, <a href="https://github.com/jimmyday12">@jimmyday12</a>, <a href="https://github.com/jimrothstein">@jimrothstein</a>, <a href="https://github.com/jimvine">@jimvine</a>, <a href="https://github.com/joftius">@joftius</a>, <a href="https://github.com/jooyoungseo">@jooyoungseo</a>, <a href="https://github.com/JuneKay92">@JuneKay92</a>, <a href="https://github.com/kevinushey">@kevinushey</a>, <a href="https://github.com/lazappi">@lazappi</a>, <a href="https://github.com/Lion666">@Lion666</a>, <a href="https://github.com/llrs">@llrs</a>, <a href="https://github.com/luisotavio88">@luisotavio88</a>, <a href="https://github.com/meersel">@meersel</a>, <a href="https://github.com/melvidoni">@melvidoni</a>, <a href="https://github.com/mpaulacaldas">@mpaulacaldas</a>, <a href="https://github.com/mrkaye97">@mrkaye97</a>, <a href="https://github.com/nanxstats">@nanxstats</a>, <a href="https://github.com/nbwosm">@nbwosm</a>, <a href="https://github.com/nickcotter">@nickcotter</a>, <a href="https://github.com/nitingupta2">@nitingupta2</a>, <a href="https://github.com/pablobernabeu">@pablobernabeu</a>, <a href="https://github.com/pedrohbraga">@pedrohbraga</a>, <a href="https://github.com/petrbouchal">@petrbouchal</a>, <a href="https://github.com/RaymondBalise">@RaymondBalise</a>, <a href="https://github.com/rjfranssen">@rjfranssen</a>, <a href="https://github.com/Robinlovelace">@Robinlovelace</a>, <a href="https://github.com/rrachael">@rrachael</a>, <a href="https://github.com/ryanstraight">@ryanstraight</a>, <a href="https://github.com/setgree">@setgree</a>, <a href="https://github.com/ShirinG">@ShirinG</a>, <a href="https://github.com/ShixiangWang">@ShixiangWang</a>, <a href="https://github.com/solarchemist">@solarchemist</a>, <a href="https://github.com/SoniaNikiema">@SoniaNikiema</a>, <a href="https://github.com/tcwilkinson">@tcwilkinson</a>, <a href="https://github.com/Temurgugu">@Temurgugu</a>, <a href="https://github.com/thedivtagguy">@thedivtagguy</a>, <a href="https://github.com/TianyiShi2001">@TianyiShi2001</a>, <a href="https://github.com/TrungLeVn">@TrungLeVn</a>, <a href="https://github.com/werkstattcodes">@werkstattcodes</a>, <a href="https://github.com/wudustan">@wudustan</a>, <a href="https://github.com/xiaoa6435">@xiaoa6435</a>, <a href="https://github.com/yangepi">@yangepi</a>, <a href="https://github.com/yimingli">@yimingli</a>, and <a href="https://github.com/yogat3ch">@yogat3ch</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

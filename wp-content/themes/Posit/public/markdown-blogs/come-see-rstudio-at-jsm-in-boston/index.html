@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2014-08-01">
+
+<title>Come see RStudio at JSM in Boston</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Come see RStudio at JSM in Boston</h1>
+
+<p class="date">2014-08-01</p>
+</header>
+
+<p>The Joint Statistical Meetings (JSM) start this weekend! We wanted to let you know we’ll be there. Be sure to check out these sessions from RStudio and friends:</p>
+<p>Sunday, August 3</p>
+<ul>
+<li>4:00 PM: A Web Application for Efficient Analysis of Peptide Libraries: Eric Hare*+ and Timo Sieber and Heike Hofmann</li>
+<li>4:00 PM: Gravicom: A Web-Based Tool for Community Detection in Networks: Andrea Kaplan*+ and Heike Hofmann and Daniel Nordman</li>
+</ul>
+<p>Monday, August 4</p>
+<ul>
+<li>8:35 AM: Preparing Students for Big Data Using R and Rstudio: Randall Pruim</li>
+<li>8:55 AM: Thinking with Data in the Second Course: Nicholas J. Horton and Ben S. Baumer and Hadley Wickham</li>
+<li>8:55 AM: Doing Reproducible Research Unconsciously: Higher Standard, but Less Work: Yihui Xie</li>
+<li>10:30 AM: Interactive Web Application with Shiny: Bharat Bahadur</li>
+<li>2:00 PM: Interactive Web Application with Shiny: Bharat Bahadur</li>
+</ul>
+<p>Tuesday, August 5</p>
+<ul>
+<li>2:00PM: Give Me an Old Computer, a Blank DVD, and an Internet Connection and I’ll Give You World-Class Analytics: Ty Henkaline</li>
+</ul>
+<p>Wednesday, August 6</p>
+<ul>
+<li>10:35 Shiny: Easy Web Applications in R:Joseph Cheng</li>
+<li>11:00 AM: ggvis: Moving Toward a Grammar of Interactive Graphics: Hadley Wickham</li>
+</ul>
+<p>For even more talks on R we thought Joseph Rickert’s “Data Scientists and R Users Guide to the JSM” was excellent. Click here to see it. http://blog.revolutionanalytics.com/2014/07/a-data-scientists-and-r-users-guide-to-the-jsm.html</p>
+<p>While you’re at the conference, please come by our exhibition area (Booth #112) to say hello. J.J., Hadley and other members of the team will be there. We’ve got enough space to talk about your plans for R and how RStudio Server Pro and Shiny Server Pro can provide enterprise-ready support and scalability for your RStudio IDE and Shiny Server deployments.</p>
+<p>We hope to see you there!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

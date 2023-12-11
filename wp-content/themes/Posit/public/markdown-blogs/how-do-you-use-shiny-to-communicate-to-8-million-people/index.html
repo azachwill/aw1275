@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-09-14">
+<meta name="description" content="Georgia Institute of Technology faculty, scientists, GIS specialists, and graduate students share their experience launching a Shiny application that was used by over 8 million people around the world.">
+
+<title>How do you use Shiny to communicate to 8 million people?</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">How do you use Shiny to communicate to 8 million people?</h1>
+
+<p class="date">2021-09-14</p>
+</header>
+
+<a class="no-icon" href="https://www.youtube.com/watch?v=BmpnfLLrr4w" target="_blank"><img src="atlanta.gif" class="mb-0" alt="6 second video snippet of Atlanta, GA view of buildings from sky from GA Tech COVID app spotlight video" style="height:auto; width:100%;"></a>
+<div class="mb-4" data-align="right">
+<a href="https://www.youtube.com/watch?v=BmpnfLLrr4w." target="_blank">Full GA Tech Spotlight Video on YouTube</a>
+</div>
+<p>Data visualization is fundamentally an act of communication. While many discussions focus on the technical aspects of creating visualizations, communicating your insights in a clear, relevant and accessible way is essential.</p>
+<p>The Georgia Institute of Technology team shared some key lessons, based on their experience building the <a href="https://covid19risk.biosci.gatech.edu/" target="_blank">COVID-19 Event Risk Assessment Planning Tool.</a> These lessons apply to visualizations across many different industries and use cases, whether you are communicating to a handful of executives at your company or out to the world.</p>
+<ul>
+<li>Make sure that you <strong>have a specific question in mind.</strong> What is the question that your app will answer? Think about who your audience is going to be and what they would use this for. For the COVID-19 Event Risk Assessment Planning Tool this question was “what is the risk level of attending an event, given the event size and location?”<br>
+</li>
+<li><strong>View your audience through a lens of empathy.</strong> Think about metrics that people can really get a grip on and visualize. For example, the risk of attending a local event with 100 people in your own town vs.&nbsp;communicating this as cases per 100,000 people. If you want to communicate something that’s critical to the public, put it in the right terms.</li>
+<li><strong>Balance the straightforwardness</strong> of your visualization. You don’t have to anticipate every single question. With every feature or piece of information included, ask yourself if this supports your overall point?<br>
+</li>
+<li><strong>Keep the lines of communication open</strong> with your users. If you share a visualization, make sure that people have a clear way to contact you (email, Twitter, LinkedIn) with questions or feedback. Their team made an intentional effort to be available for local news particularly. They were responsive to the kinds of decisions people were making and adjusted the app to match their needs with event sizes for example.</li>
+</ul>
+<p>In July 2020, Georgia Institute of Technology faculty, scientists, GIS specialists, and graduate students launched a tool that provided real-time, localized information on the estimated risk of COVID-19 exposure by attending an event.</p>
+<blockquote>
+<p>“Over a year ago we had been concerned as early as March 2020 that there were generally underappreciated risks associated with attending even medium to small events. Given that cases were spreading, it was hard to figure out how many cases there really were. All these questions of whether or not the cases were being documented, (and we were fairly certain they were under ascertained, underdocumented) <strong>we wanted to translate that in some way to communicate that out to the world</strong> - individuals as well as decision makers”</p>
+</blockquote>
+<blockquote>
+<p>-Joshua Weitz PhD, Professor, Biological Sciences &amp; Physics, Georgia Institute of Technology</p>
+</blockquote>
+<p>Their team presented this risk out to the world through an interactive Shiny application, which allowed users to determine their own risk of encountering someone with COVID at an event in their given location.</p>
+<a style="display: block; text-align:center;" href="https://www.youtube.com/watch?v=BmpnfLLrr4w" target="_blank"><img src="https://videoapi-muybridge.vimeocdn.com/animated-thumbnails/image/c15a7557-1c62-4a25-a722-e9db5da399b3.gif?ClientID=vimeo-core-prod&amp;Date=1631289749&amp;Signature=e36ca981c7b4431445d8b10e71bf45322382df69" alt="gif of interacting with COVID-19 Event Risk Assessment Planning Tool map of US with risk level percentage shown in range of yellow to red" style=" max-height:100%; max-width:100%;"></a>
+<div data-align="right">
+<a href="https://www.youtube.com/watch?v=BmpnfLLrr4w." target="_blank">Full spotlight video</a> and &lt;a href=“https://covid19risk.biosci.gatech.edu/”, target=“_blank”&gt;COVID-19 Event Risk Assessment Planning Shiny App
+</div>
+<p>What if you were planning on having dinner at a restaurant with 20 people in Ontario, NY? A small wedding with 50 people in Teton, WY? Deciding to go back to your office?</p>
+<p>The narrative became personal to the individual user by answering their specific question in a direct metric that they could not only understand but share with others.</p>
+<p>In <a href="https://www.youtube.com/watch?v=BmpnfLLrr4w." target="_blank">talking with the GA Tech team</a>, it was clear that their empathetic perspective of the audience and communication-focus was crucial to successfully sharing their insights with event planners, policy makers, various news outlets and individuals - adding up to ultimately over <em>8 million</em> unique users around the world.</p>
+<p>Thank you so much to the team at GA Tech for sharing their story with me:</p>
+<ul>
+<li><strong>Joshua Weitz PhD</strong>, Professor, Biological Sciences &amp; Physics, Georgia Institute of Technology</li>
+<li><strong>Aroon Chande PhD</strong>, Scientific Advisor at the Applied Bioinformatics Laboratory</li>
+<li><strong>Clio Andris PhD</strong>, Assistant Professor, City and Regional Planning &amp; Interactive Computing, Georgia Institute of Technology</li>
+<li><strong>Stephen Beckett PhD</strong>, Research Scientist, Biological Sciences, Georgia Institute of Technology</li>
+<li><strong>Seolha Lee</strong>, Graduate Research Assistant, City and Regional Planning, Georgia Institute of Technology</li>
+<li><strong>Quan Nguyen</strong>, Undergraduate Research Assistant, Biological Sciences, Georgia Institute of Technology</li>
+</ul>
+<div data-align="center">
+<img src="GAtech.jpg" alt="snapshot of COVID-19 Event Risk Assessment Planning Tool shiny application, map of US with risk level percentage per county shown in range of yellow to red"><font size="2" skip="0pt">
+</font></div><font size="2" skip="0pt">
+<div data-align="right">
+Source: GA Tech,&lt;a href=“https://covid19risk.biosci.gatech.edu/”, target=“_blank”&gt; COVID-19 Event Risk Assessment Planning Tool
+</div>
+</font><p><font size="2" skip="0pt"></font></p>
+<p>I’ve included a few other helpful communication resources below:</p>
+<ul>
+<li><strong>John Burn-Murdoch</strong> | RStudio Conference Keynote | <a href="https://www.youtube.com/watch?v=L5_4kuoiiKU" target="_blank">Reporting on and visualising the pandemic</a></li>
+<li><strong>Sophie Beiers</strong> | RStudio Conference Talk | <a href="https://www.rstudio.com/resources/rstudioglobal-2021/trial-and-error-in-data-viz-at-the-aclu/" target="_blank">Trial and error in data vis at the ACLU</a><a></a></li><a>
+</a><li><a><strong>Charlotta Früchtenicht, Diego Saldana, Mark Baille, Marc Vandemeulebroecke</strong> | Webinar | </a><a href="https://www.rstudio.com/resources/webinars/effective-visualizations-for-data-driven-decisions/?_ga=2.39720929.395829809.1631126074-1690468391.1610381620" target="_blank">Effective Visualizations for Credible, Data-Driven Decision Making Presented by Novartis and Roche</a></li>
+<li><strong>Jason Milnes</strong> | Blog Post | <a href="https://blog.rstudio.com/2020/04/16/effective-visualizations-for-credible-data-driven-decision-making/" target="_blank">Effective Visualizations for Credible, Data-Driven Decision Making</a></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

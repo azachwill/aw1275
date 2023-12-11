@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-08-20">
+<meta name="description" content="The renv package helps create reproducible project environments that are critical for data science teams to deliver real, lasting value.">
+
+<title>Why Package &amp; Environment Management is Critical for Serious Data Science</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Why Package &amp; Environment Management is Critical for Serious Data Science</h1>
+
+<p class="date">2020-08-20</p>
+</header>
+
+<sup>
+<p style="text-align: right !important;margin-top: 0px;margin-bottom: 30px;">
+<i>Photo by <a style="color: #000000;" href="https://unsplash.com/@markusspiske">Markus Spiske</a> on <a style="color: #000000;" href="https://unsplash.com/photos/RWTUrJf7I5w">Unsplash</a></i>
+</p>
+<p></p>
+<div class="lt-gray-box">
+<p><em>This is a guest post from RStudio’s partner, <a href="https://www.procogia.com/" target="_blank" rel="noopener noreferrer">ProCogia</a></em></p>
+</div>
+<h3 id="the-rapid-advancement-of-r-presents-a-challenge-to-reproducibility" class="anchored">The rapid advancement of R presents a challenge to reproducibility</h3>
+<p>Thanks to our vibrant and engaged community, R is continually evolving as successful open source software. It’s exciting to have frequent releases and refinements to our favorite tools, but this also can present challenges to maintaining the <a href="https://blog.rstudio.com/2020/05/19/driving-real-lasting-value-with-serious-data-science/" target="_blank" rel="noopener noreferrer">integrity and reproducibility</a> of our work. When new tools and packages are released, useRs like to tinker and stay on the cutting edge, but we don’t want our experimental playground to break our important workflows. We like to collaborate, but when package versions collide, this can lead to problems ranging from error messages and frustration to silent bugs and unexpected code behavior.</p>
+<p>For other stakeholders in the wider organization, these frequent updates present related challenges. For data science leaders, they may struggle with how to make sure their team has access to the latest methods, while still consistently delivering reproducible results to the rest of the organization. For IT and DevOps, they may feel inundated with requests to constantly update, validate, and maintain production systems delivering data science applications.</p>
+<h3 id="the-renv-package-helps-create-reproducible-project-environments" class="anchored">The <code>renv</code> package helps create reproducible project environments</h3>
+<p>To address these sorts of challenges, users of other programming languages are likely familiar with virtual environments and project management tools, but analogous best practices have not seen widespread adoption within the R community. Enter <code>renv</code>, a new package for reproducible environments in R that:</p>
+<ul>
+<li>Is simple to use in new or existing projects, and</li>
+<li>Doesn’t interrupt existing workflows</li>
+</ul>
+<p>I recently co-hosted a <a href="https://garciamikep.github.io/useR-webinar/#1" target="_blank" rel="noopener noreferrer">webinar</a> on upgrading to R 4.0 and package management with <code>renv</code>. In preparation, my co-host and I worked on the same set of RMarkdown-based <code>xaringan</code> slides, and shared our code on GitHub. Ironically, we hadn’t checked to make sure we were using the same version of R, nor did we use any package management tool to ensure consistent package versions. Surely we didn’t need any fancy tools for such a simple set of slides? Wrong! The night before our presentation, I compiled the slides and discovered the formatting was completely mangled. The next morning we decided to practice what we were about to preach, and incorporated <code>renv</code> into the project and switched to using R 4.0. Presto, the slides compiled perfectly.</p>
+<p>This formatting issue was easy to detect, and although the mangled slides were not exactly professional looking, it was a relatively harmless bug. Not all bugs are. An environment management tool such as <code>renv</code> is essential to keeping exploratory and side projects isolated from sensitive or business-critical work, and ensuring reproducibility and accuracy.</p>
+<p>Incorporating <code>renv</code> into either a new or existing project is straightforward:</p>
+<ol type="1">
+<li>Initialize the project environment with a single function call. <code>renv</code> will automatically detect your package dependencies, or you can choose to start with a blank slate.</li>
+<li>Continue your workflow as normal, occasionally taking a snapshot (again, just one function call) to update the project environment to reflect any packages that have been added or removed.</li>
+<li>If something goes wrong, you can revert to an earlier state of the project with a single function call.</li>
+</ol>
+<h3 id="advantages-of-using-the-renv-package" class="anchored">Advantages of using the <code>renv</code> package</h3>
+<p>The <code>renv</code> package is compatible with almost anywhere your team gets their packages (CRAN, Github, <a href="https://rstudio.com/products/package-manager/" target="_blank" rel="noopener noreferrer">RStudio Package Manager</a>, the <a href="https://blog.rstudio.com/2020/07/01/announcing-public-package-manager/" target="_blank" rel="noopener noreferrer">recently introduced RStudio Public Package Manager</a>, GitHub, BioConductor, GitLab, BitBucket, custom local packages…). For teams familiar with Python, the workflow will feel familiar, and <code>renv</code> also integrates with <code>pipenv</code> and <code>reticulate</code> for multilingual projects.</p>
+<p>Ultimately, why would I recommend <code>renv</code> over other options?</p>
+<ul>
+<li>Disk space. <code>renv</code> doesn’t re-install the same version of a package if already installed for another project.<br>
+</li>
+<li><code>renv</code> improves upon deficiencies in Packrat, a previously existing package manager for R.<br>
+</li>
+<li><code>renv</code> is highly compatible with various ways to source and manage your packages.</li>
+</ul>
+<hr>
+<p><strong>About ProCogia:</strong></p>
+<p><a href="https://www.procogia.com/" target="_blank" rel="noopener noreferrer"><img src="procogia-logo.png" alt="ProCogia logo" align="left"></a>An RStudio <a href="https://rstudio.com/certified-partners/" target="_blank" rel="noopener noreferrer">Full Service Partner</a>, <a href="https://procogia.com/" target="_blank" rel="noopener noreferrer">ProCogia</a> is based out of Seattle, Washington. Our consulting capability extends to building, deploying, and supporting scalable data science solutions for our clients. We are passionate about developing data-driven solutions that provide highly informed answers to your most critical questions.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</sup></body></html>

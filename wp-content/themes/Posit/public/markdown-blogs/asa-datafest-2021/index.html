@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-05-20">
+
+<title>ASA DataFest 2021</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">ASA DataFest 2021</h1>
+
+<p class="date">2021-05-20</p>
+</header>
+
+<p>The <a href="https://ww2.amstat.org/education/datafest" target="_blank">American Statistical Association (ASA) DataFest</a> is a celebration of data in which teams of undergraduates work around the clock to find and share meaning in a large, rich, and complex data set. The teams that impress the judges win prizes, and the event is a great opportunity for them to gain some data analysis experience. As part of our <a href="https://www.rstudio.com/about/what-makes-rstudio-different/" target="_blank">mission</a> to support open source data science, RStudio was proud to help sponsor this event, and provide <a href="https://rstudio.cloud/" target="_blank">RStudio Cloud</a> as a platform to help enable collaboration within the teams</p>
+<p>ASA DataFest 2021 season just wrapped up, and like all things this year, DataFest was virtual. Despite the challenges of organising a virtual community event, we had 30 sites from six countries host an event this year, many with participation from multiple universities. Over 2,500 students participated in DataFest over an eight-week period between March and May 2021. You can find out about the participating institutions <a href="https://ww2.amstat.org/education/datafest/participants.cfm" target="_blank">here</a>.</p>
+<h2 id="the-challenge" class="anchored">The challenge</h2>
+<p>For this year’s challenge ASA DataFest partnered with <a href="https://www.rmpds.org/" target="_blank">The Rocky Mountain Poison &amp; Drug Safety (RMPDS)</a>. RMPDS is a leader in public health protection serving the public since 1956 with innovative research in toxicity, progressive solutions in case management, emergency services and regulatory compliance. RMPDS also runs a large survey on drug misuse, and data from this survey conducted in the United States, the United Kingdom, Canada, and Germany formed the basis of this year’s DataFest challenge. Teams were tasked with discovering and identifying patterns of drug use, with particular attention paid to identifying misuse of prescription drugs. These could include patterns that might describe demographic profiles within a given category of drug or combinations of drugs that frequently appear together.</p>
+<p>The dataset was challenging to work with for a variety of reasons. First, many undergraduate curricula don’t address working with surveys with weights so students had to choose between the following options:</p>
+<ul>
+<li>Incorporating the weights into their analysis and being able to make generalizable conclusions.</li>
+<li>Omitting that feature of the data due to lack of experience with working with survey data and be very careful about the scope of their inference.</li>
+</ul>
+<p>The weighted samples also made country comparisons challenging without the use of proper survey analysis techniques, so many teams opted for analyzing data from a single country (often the country where they were located). On the upside, this allowed them to bring in what they might know about drug use in their countries as an outside data source and do a more localized analysis.</p>
+<h2 id="running-a-virtual-datafest" class="anchored">Running a virtual DataFest</h2>
+<p>In 2020, COVID-19 lockdown restrictions came just at the beginning of the DataFest season and many organizers either ran a modified virtual version of the event or had to abandon it altogether, since pivoting to virtual in such a short timespan with little preparation felt daunting. This year, after a full year of teaching virtually, faculty had a much better sense of what works and what doesn’t when it comes to running virtual events.</p>
+<p>Just about all sites used some form of virtual communication tool like Slack, MS Teams, or Discord. Many sites made use of Zoom, especially for the kickoff event and the awards ceremony, though the idea of keeping folks on Zoom for the full 48-hour duration of the event wasn’t appetizing to anyone. At The University of Edinburgh (for our joint event with Heriot-Watt) we used GatherTown for co-working and communication throughout the event, which worked better than we could have hoped for, and the students loved it!</p>
+<p>Of course, good tech alone doesn’t build a virtual community. The key players in the success of DataFest each year (whether it’s in person or online) are the volunteer mentors – postgraduate students, faculty, industry data professionals – who devote their weekend to check in with the students, help them get over hurdles, and act as a sounding board for their ideas. Recreating effective mentoring interactions online is no small feat, but spatial tools like GatherTown coupled with the willingness of mentors to check in with students regularly helped us achieve that goal.</p>
+<h2 id="rstudio-cloud-at-asa-datafest" class="anchored">RStudio Cloud at ASA DataFest</h2>
+<p>DataFest was founded in UCLA in 2011, and since then, just about each year RStudio has provided sponsorship for various DataFest events, including sending over the much coveted hex stickers to sites!</p>
+<p>This year, since the event was virtual, hex sticker drops didn’t quite fit, but a new challenge was making sure all participants had access to the computing resources needed for the event, which is where RStudio Cloud came in!</p>
+<p>We set up an ASA DataFest organization on RStudio Cloud, and within the organization, created workspaces for each host site who requested one. This meant the organizers for the host site got admin access to the workspace and could use it however they wanted. Many organisers used this to also distribute the data – they placed the data in a base project in the Cloud workspace, which means any projects created in the workspace came with the data as well.</p>
+<p>Since ASA DataFest is tool/language agnostic, not all computing was done in RStudio Cloud, but students who chose to use R for their analysis appreciated the easy access!</p>
+<h2 id="asa-datafest-2021-in-action" class="anchored">ASA DataFest 2021 in action</h2>
+<p>Below are links to a few of the DataFest events from this year where you can find more out about some of the individual events and watch recordings of student presentations.</p>
+<ul>
+<li><a href="https://westveld-statsci.com/new-blog/2021/5/14/asa-datafest-2021-the-australian-national-university" target="_blank">Australian National University</a> - Canberra, Australia.</li>
+<li><a href="https://web.colby.edu/datascience/datafest-2021/" target="_blank">Colby College</a> with participation also from Bates College, Bowdoin College, and College of the Atlantic - Waterville, ME.</li>
+<li><a href="https://www2.stat.duke.edu/datafest/winners.html" target="_blank">Duke University</a>, with participation also from Appalachian State University, North Carolina State University, North Carolina A&amp;T University, University of North Carolina Greensboro, and University of North Carolina Chapel Hill - Durham, NC.</li>
+<li><a href="https://datamine.purdue.edu/datafest.html" target="_blank">Purdue University</a> - West Lafayette, IN.</li>
+<li><a href="http://dslab.stat.metu.edu.tr/datafest/" target="_blank">Orta Doğu Teknik Üniversitesi (Middle East Technical University</a> - Ankara, Turkey.</li>
+<li><a href="http://datafest.stat.ucla.edu/competition/2021-asa-datafesttm-results/" target="_blank">UCLA</a>, with participation also from Pomona College, University of California Riverside, and University of Southern California - Los Angeles, CA.</li>
+<li><a href="https://datafest-edi.github.io/web/df2021/" target="_blank">University of Edinburgh</a>, with participation also from Heriot Watt - Edinburgh, UK.</li>
+<li><a href="https://datafest.stat.missouri.edu/datafest2021/result.html" target="_blank">University of Missouri</a> - Columbia, MO.</li>
+<li><a href="https://datafestnd.weebly.com/datafest-2021.html" target="_blank">University of Notre Dame</a> - Notre Dame, IN.</li>
+</ul>
+<h2 id="interested-in-datafest" class="anchored">Interested in DataFest?</h2>
+<p>If you’re a faculty member interested in hosting your own DataFest or participating in a nearby event in 2022, see <a href="https://ww2.amstat.org/education/datafest/contact.cfm" target="_blank">here</a> for instructions for signing up for our mailing list.</p>
+<p>If you’re an undergraduate student interested in participating in DataFest, and your school has not held an event before, reach out to a faculty member with the above information. Student interest would be a great motivator for taking on the task of organising an event or, at a minimum, reaching out to an organiser at a nearby institution to join forces.</p>
+<h2 id="interested-in-teaching-your-own-class-or-workshop-using-r" class="anchored">Interested in teaching your own class or workshop using R?</h2>
+<p>RStudio Cloud is a lightweight, cloud-based solution that allows anyone to do, share, teach and learn data science online. There’s nothing to configure and no dedicated hardware, installation or annual purchase contract required.</p>
+<p>We offer a free plan for casual, individual use, and we offer paid premium plans for professionals, instructors, researchers and organizations. Learn more at <a href="https://www.rstudio.com/products/cloud/" class="uri">https://www.rstudio.com/products/cloud/</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

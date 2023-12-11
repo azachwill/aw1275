@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2015-08-17">
+
+<title>Secure HTTPS Connections for R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Secure HTTPS Connections for R</h1>
+
+<p class="date">2015-08-17</p>
+</header>
+
+<p>Traditionally, the mechanisms for obtaining R and related software have used standard HTTP connections. This isn’t ideal though, as without a secure (HTTPS) connection there is less assurance that you are downloading code from a legitimate source rather than from another server posing as one.</p>
+<p>Recently there have been a number of changes that make it easier to use HTTPS for installing R, RStudio, and packages from CRAN:</p>
+<ol type="1">
+<li><p>Downloads of R from the main CRAN website now use HTTPS;</p></li>
+<li><p>Downloads of RStudio from our website now use HTTPS; and</p></li>
+<li><p>It is now possible to install packages from CRAN over HTTPS.</p></li>
+</ol>
+<p>There are a number of ways to ensure that installation of packages from CRAN are performed using HTTPS. The <a href="https://cran.rstudio.com/">most recent version of R</a> (v3.2.2) makes this the default behavior. The <a href="https://www.rstudio.com/products/rstudio/download/">most recent version of RStudio</a> (v0.99.473) also attempts to configure secure downloads from CRAN by default (even for older versions of R). Finally, any version of R or RStudio can use secure HTTPS downloads by making some configuration changes as described in the <a href="https://support.rstudio.com/hc/en-us/articles/206827897">Secure Package Downloads for R</a> article in our Knowledge Base.</p>
+<h2 id="configuring-secure-connections-to-cran" class="anchored">Configuring Secure Connections to CRAN</h2>
+<p>While the simplest way to ensure secure connections to CRAN is to run the updated versions mentioned above, it’s important to note that it is <strong>not necessary to upgrade R or RStudio</strong> to achieve this end. Rather, two configuration changes can be made:</p>
+<ol type="1">
+<li><p>The R <code>download.file.method</code> option needs to specify a method that is capable of HTTPS; and</p></li>
+<li><p>The CRAN mirror you are using must be capable of HTTPS connections (not all of them are).</p></li>
+</ol>
+<p>The specifics of the required changes for various products, platforms, and versions of R are described in-depth in the <a href="https://support.rstudio.com/hc/en-us/articles/206827897">Secure Package Downloads for R</a> article in our Knowledge Base.</p>
+<h2 id="recommendations-for-rstudio-users" class="anchored">Recommendations for RStudio Users</h2>
+<p>We’ve made several changes to RStudio IDE to ensure that HTTPS connections are used throughout the product:</p>
+<ol type="1">
+<li><p>The default <code>download.file.method</code> option is set to an HTTPS compatible method (with a warning displayed if a secure method can’t be set);</p></li>
+<li><p>The configured CRAN mirror is tested for HTTPS compatibility and a warning is displayed if the mirror doesn’t support HTTPS;</p></li>
+<li><p>HTTPS is used for user selection of a non-default CRAN mirror;</p></li>
+<li><p>HTTPS is used for in-product documentation links;</p></li>
+<li><p>HTTPS is used when checking for updated versions of RStudio (applies to desktop version only); and</p></li>
+<li><p>HTTPS is used when downloading <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> (applies to desktop version only).</p></li>
+</ol>
+<p>If you are running RStudio on the desktop we strongly recommend that you <a href="https://www.rstudio.com/products/rstudio/download/">update to the latest version</a> (v0.99.473).</p>
+<h2 id="recommendations-for-server-administrators" class="anchored">Recommendations for Server Administrators</h2>
+<p>If you are running RStudio Server it’s possible to make the most important security enhancements by changing your configuration rather than updating to a new version. The <a href="https://support.rstudio.com/hc/en-us/articles/206827897">Secure Package Downloads for R</a> article in our Knowledge Base provides documentation on how do this.</p>
+<p>In this case in-product documentation links and user selection of a non-default CRAN mirror will continue to use HTTP rather than HTTPS however these are less pressing concerns than CRAN package installation. If you’d like these functions to also be performed over HTTPS then you should upgrade your server to the <a href="https://www.rstudio.com/products/rstudio/download/">latest version</a> of RStudio.</p>
+<p>If you are running Shiny Server we recommend that you modify your configuration to support HTTPS package downloads as described in the <a href="https://support.rstudio.com/hc/en-us/articles/206827897">Secure Package Downloads for R</a> article.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-05-06">
+
+<title>sparklyr 1.2: Foreach, Spark 3.0 and Databricks Connect</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">sparklyr 1.2: Foreach, Spark 3.0 and Databricks Connect</h1>
+
+<p class="date">2020-05-06</p>
+</header>
+
+<p>A new version of <a href="https://sparklyr.ai"><code>sparklyr</code></a> is now available on CRAN! In this <code>sparklyr 1.2</code> release, the following new improvements have emerged into spotlight:</p>
+<ul>
+<li>A <code>registerDoSpark()</code> method to create a <a href="#foreach"><code>foreach</code></a> parallel backend powered by Spark that enables hundreds of existing R packages to run in Spark.</li>
+<li>Support for <a href="#databricks-connect">Databricks Connect</a>, allowing <code>sparklyr</code> to connect to remote Databricks clusters.</li>
+<li>Improved support for Spark <a href="#structures">structures</a> when collecting and querying their nested attributes with <code>dplyr</code>.</li>
+</ul>
+<p>A number of inter-op issues observed with <code>sparklyr</code> and the Spark 3.0 preview were also addressed recently, in hope that by the time Spark 3.0 officially graces us with its presence, <code>sparklyr</code> will be fully ready to work with it. Most notably, key features such as <code>spark_submit()</code>, <code>sdf_bind_rows()</code>, and standalone connections are now finally working with Spark 3.0 preview.</p>
+<p>To install <code>sparklyr</code> 1.2 from CRAN run,</p>
+<p><code>{{r echo=TRUE, eval=FALSE}} install.packages("sparklyr")</code></p>
+<p>The full list of changes are available in the <code>sparklyr</code> <a href="https://github.com/sparklyr/sparklyr/blob/master/NEWS.md">NEWS</a> file.</p>
+<h2 id="foreach" class="anchored">Foreach</h2>
+<p>The <a href="https://CRAN.R-project.org/package=foreach"><code>foreach</code></a> package provides the <code>%dopar%</code> operator to iterate over elements in a collection in parallel. Using <code>sparklyr</code> 1.2, you can now register Spark as a backend using <code>registerDoSpark()</code> and then easily iterate over R objects using Spark:</p>
+<p><code>{{r echo=TRUE, eval=FALSE}} library(sparklyr) library(foreach) sc &lt;- spark_connect(master = "local", version = "2.4") registerDoSpark(sc) foreach(i = 1:3, .combine = 'c') %dopar% {   sqrt(i) }</code></p>
+<pre><code>[1] 1.000000 1.414214 1.732051</code></pre>
+<p>Since many R packages are based on <code>foreach</code> to perform parallel computation, we can now make use of all those great packages in Spark as well!</p>
+<p>For instance, we can use <a href="https://tidymodels.github.io/parsnip/"><code>parsnip</code></a> and the <a href="https://tidymodels.github.io/tune/"><code>tune</code></a> package with data from <a href="https://CRAN.R-project.org/package=mlbench"><code>mlbench</code></a> to perform hyperparameter tuning in Spark with ease:</p>
+<p><code>{{r echo=TRUE, eval=FALSE}} library(tune) library(parsnip) library(mlbench) data(Ionosphere) svm_rbf(cost = tune(), rbf_sigma = tune()) %&gt;%   set_mode("classification") %&gt;%   set_engine("kernlab") %&gt;%   tune_grid(Class ~ .,     resamples = rsample::bootstraps(dplyr::select(Ionosphere, -V2), times = 30),     control = control_grid(verbose = FALSE))</code></p>
+<pre><code># Bootstrap sampling
+# A tibble: 30 x 4
+   splits            id          .metrics          .notes
+ * &lt;list&gt;            &lt;chr&gt;       &lt;list&gt;            &lt;list&gt;
+ 1 &lt;split [351/124]&gt; Bootstrap01 &lt;tibble [10 × 5]&gt; &lt;tibble [0 × 1]&gt;
+ 2 &lt;split [351/126]&gt; Bootstrap02 &lt;tibble [10 × 5]&gt; &lt;tibble [0 × 1]&gt;
+ 3 &lt;split [351/125]&gt; Bootstrap03 &lt;tibble [10 × 5]&gt; &lt;tibble [0 × 1]&gt;
+ 4 &lt;split [351/135]&gt; Bootstrap04 &lt;tibble [10 × 5]&gt; &lt;tibble [0 × 1]&gt;
+ 5 &lt;split [351/127]&gt; Bootstrap05 &lt;tibble [10 × 5]&gt; &lt;tibble [0 × 1]&gt;
+ 6 &lt;split [351/131]&gt; Bootstrap06 &lt;tibble [10 × 5]&gt; &lt;tibble [0 × 1]&gt;
+ 7 &lt;split [351/141]&gt; Bootstrap07 &lt;tibble [10 × 5]&gt; &lt;tibble [0 × 1]&gt;
+ 8 &lt;split [351/123]&gt; Bootstrap08 &lt;tibble [10 × 5]&gt; &lt;tibble [0 × 1]&gt;
+ 9 &lt;split [351/118]&gt; Bootstrap09 &lt;tibble [10 × 5]&gt; &lt;tibble [0 × 1]&gt;
+10 &lt;split [351/136]&gt; Bootstrap10 &lt;tibble [10 × 5]&gt; &lt;tibble [0 × 1]&gt;
+# … with 20 more rows</code></pre>
+<p>The Spark connection was already registered, so the code ran in Spark without any additional changes. We can verify that this was the case by navigating to the Spark web interface:</p>
+<p><img src="2020-05-06-sparklyr-1-2-spark-backend-foreach-package.png" alt="Spark running foreach package using sparklyr"></p>
+<h2 id="databricks-connect" class="anchored">Databricks Connect</h2>
+<p><a href="https://docs.databricks.com/dev-tools/databricks-connect.html">Databricks Connect</a> allows you to connect your favorite IDE (like <a href="https://rstudio.com/products/rstudio/download/">RStudio</a>!) to a Spark <a href="https://databricks.com/">Databricks</a> cluster.</p>
+<p>You will first have to install the <code>databricks-connect</code> Python package as described in our <a href="https://github.com/sparklyr/sparklyr#connecting-through-databricks-connect">README</a> and start a Databricks cluster, but once that’s ready, connecting to the remote cluster is as easy as running:</p>
+<p><code>{{r echo=TRUE, eval=FALSE}} sc &lt;- spark_connect(   method = "databricks",   spark_home = system2("databricks-connect", "get-spark-home", stdout = TRUE))</code></p>
+<p><img src="2020-05-06-sparklyr-1-2-spark-databricks-connect-rstudio.png" alt="Databricks Connect with RStudio Desktop"></p>
+<p>That’s about it, you are now remotely connected to a Databricks cluster from your local R session.</p>
+<h2 id="structures" class="anchored">Structures</h2>
+<p>If you previously used <code>collect()</code> to deserialize structurally complex Spark data frames into their equivalents in R, you likely have noticed that Spark SQL struct columns were only mapped into JSON strings in R, which was non-ideal. You might also have run into a much dreaded <code>java.lang.IllegalArgumentException: Invalid type list</code> error when using <code>dplyr</code> to query nested attributes from any struct column of a Spark data frame in <code>sparklyr</code>.</p>
+<p>Unfortunately, often times in real-world Spark use cases, data describing entities comprised of sub-entities (e.g., a product catalog of all hardware components of some computers) needs to be denormalized / shaped in an object-oriented manner in the form of Spark SQL structs to allow efficient read queries. When <code>sparklyr</code> had the limitations mentioned above, users often had to invent their own workarounds when querying Spark struct columns, which explained why there was a mass popular demand for <code>sparklyr</code> to have better support for such use cases.</p>
+<p>The good news is with <code>sparklyr</code> 1.2, those limitations no longer exist when working running with Spark 2.4 or above.</p>
+<p>As a concrete example, consider the following catalog of computers:</p>
+<p><code>{{r echo=TRUE, eval=FALSE}} library(dplyr) computers &lt;- tibble::tibble(   id = seq(1, 2),   attributes = list(     list(       processor = list(freq = 2.4, num_cores = 256),       price = 100    ),    list(      processor = list(freq = 1.6, num_cores = 512),      price = 133    )   ) ) computers &lt;- copy_to(sc, computers, overwrite = TRUE)</code></p>
+<p>A typical <code>dplyr</code> use case involving <code>computers</code> would be the following:</p>
+<p><code>{{r echo=TRUE, eval=FALSE}} high_freq_computers &lt;- computers %&gt;%                        filter(attributes.processor.freq &gt;= 2) %&gt;%                        collect()</code></p>
+<p>As previously mentioned, before <code>sparklyr</code> 1.2, such query would fail with <code>Error: java.lang.IllegalArgumentException: Invalid type list</code>.</p>
+<p>Whereas with <code>sparklyr</code> 1.2, the expected result is returned in the following form:</p>
+<pre><code># A tibble: 1 x 2
+     id attributes
+  &lt;int&gt; &lt;list&gt;
+1     1 &lt;named list [2]&gt;</code></pre>
+<p>where <code>high_freq_computers$attributes</code> is what we would expect:</p>
+<pre><code>[[1]]
+[[1]]$price
+[1] 100
+[[1]]$processor
+[[1]]$processor$freq
+[1] 2.4
+[[1]]$processor$num_cores
+[1] 256</code></pre>
+<h2 id="and-more" class="anchored">And More!</h2>
+<p>Last but not least, we heard about a number of pain points <code>sparklyr</code> users have run into, and have addressed many of them in this release as well. For example:</p>
+<ul>
+<li>Date type in R is now correctly serialized into Spark SQL date type by <code>copy_to()</code></li>
+<li><code>&lt;spark dataframe&gt; %&gt;% print(n = 20)</code> now actually prints 20 rows as expected instead of 10</li>
+<li><code>spark_connect(master = "local")</code> will emit a more informative error message if it’s failing because the loopback interface is not up</li>
+</ul>
+<p>… to name just a few. We want to thank the open source community for their continuous feedback on <code>sparklyr</code>, and are looking forward to incorporating more of that feedback to make <code>sparklyr</code> even better in the future.</p>
+<p>Finally, in chronological order, we wish to thank the following individuals for contributing to <code>sparklyr</code> 1.2: <a href="https://github.com/zero323">zero323</a>, <a href="https://github.com/Loquats">Andy Zhang</a>, <a href="https://github.com/yl790">Yitao Li</a>, <a href="https://github.com/javierluraschi">Javier Luraschi</a>, <a href="https://github.com/falaki">Hossein Falaki</a>, <a href="https://github.com/lu-wang-dl">Lu Wang</a>, <a href="https://github.com/samuelmacedo83">Samuel Macedo</a> and <a href="https://github.com/jozefhajnala">Jozef Hajnala</a>. Great job everyone!</p>
+<p>If you need to catch up on <code>sparklyr</code>, please visit <a href="https://sparklyr.ai">sparklyr.ai</a>, <a href="https://spark.rstudio.com">spark.rstudio.com</a>, or some of the previous release posts: <a href="https://blog.rstudio.com/2020/01/29/sparklyr-1-1/">sparklyr 1.1</a> and <a href="https://blog.rstudio.com/2019/03/15/sparklyr-1-0/">sparklyr 1.0</a>.</p>
+<p>Thank you for reading this post.</p>
+<p>This post was originally published on <a href="https://blogs.rstudio.com/ai/">blogs.rstudio.com/ai/</a></p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

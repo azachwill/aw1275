@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2017-10-16">
+
+<title>Announcing RStudio Professional Drivers</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Announcing RStudio Professional Drivers</h1>
+
+<p class="date">2017-10-16</p>
+</header>
+
+<p>Today we are excited to announce the availability of <a href="https://www.rstudio.com/products/drivers/">RStudio Professional Drivers</a>. There are, of course, many ways to connect to <a href="http://db.rstudio.com">Databases using R</a>. RStudio Professional Drivers are specifically intended for use with our professional products, including <a href="https://www.rstudio.com/products/rstudio-server-pro/">RStudio Server Pro</a>, <a href="https://www.rstudio.com/products/shiny-server-pro/">Shiny Server Pro</a>, and <a href="https://www.rstudio.com/products/connect/">RStudio Connect</a>. These data connectors combined with enhancements to <a href="http://dplyr.tidyverse.org/">dplyr</a>, the <a href="https://github.com/rstats-db/odbc">odbc</a> package, and the <a href="https://blog.rstudio.com/2017/08/16/rstudio-preview-connections/">RStudio IDE</a> provide a comprehensive suite of tools for accessing and analyzing data with your enterprise systems.</p>
+<h2 id="connect-to-popular-data-sources" class="anchored">Connect to popular data sources</h2>
+<p><a href="https://www.rstudio.com/products/drivers/">RStudio Professional Drivers</a> help you connect to some of the most popular databases. Available for download today are ODBC drivers for Microsoft SQL Server, Oracle, PostgreSQL, Apache Hive, Apache Impala, and Salesforce. We will add several more drivers over the coming months. Don’t see your database listed? Please contact our <a href="https://rstudio.youcanbook.me/">sales team</a> to let us know what you would like us to add.</p>
+<p><img src="2017-09-08-driver-logos.png" alt="RStudio Professional Driver Logos" style="width: 70%"></p>
+<h2 id="professional-advantages" class="anchored">Professional advantages</h2>
+<p><a href="https://www.rstudio.com/products/drivers/">RStudio Professional Drivers</a> are intended for customers who need standards-based, supported data connectors that are easy to install and work with our professional products. They provide the following advantages:</p>
+<ul>
+<li><strong>Professional</strong>. We deliver professional ODBC drivers that are supported along with our pro products. Use these drivers when you run R and Shiny with your production systems.</li>
+<li><strong>Coverage</strong>. We connect you to some of the most popular databases available today, and we are committed to increasing the number of data connectors we support in the future.</li>
+<li><strong>Consistency</strong>. Use the same data connectors everywhere you use RStudio professional products. Develop and publish your content with the same set of data connectors systemwide.</li>
+<li><strong>Convenience</strong>. Our drivers are easy to install and designed to work with our products. This means no more headaches trying to configure third party drivers and packages with your system.</li>
+</ul>
+<h2 id="using-rstudio-server-pro" class="anchored">Using RStudio Server Pro</h2>
+<p>If you are an existing customer, you can use <a href="https://www.rstudio.com/products/drivers/">RStudio Professional Drivers</a> with your current version of <a href="https://www.rstudio.com/products/rstudio-server-pro/">RStudio Server Pro</a>. The latest version of <a href="https://posit.co/blog/rstudio-v1-1-release">RStudio Server Pro (v1.1)</a> has integrated support for using these drivers with <a href="https://posit.co/blog/rstudio-preview-connections">Data Connections</a>. When you install the drivers onto your server, <a href="https://www.rstudio.com/products/rstudio-server-pro/">RStudio Server Pro</a> will automatically discover your drivers and populate the Connections wizard. Once you establish a connection you can browse your data source catalog and schema in the Connections tab.</p>
+<p><img src="2017-08-16-connection_create.png" alt="RStudio Connection wizard" style="width: 70%"></p>
+<h2 id="using-rstudio-connect-and-shiny-server-pro" class="anchored">Using RStudio Connect and Shiny Server Pro</h2>
+<p>Many Shiny applications and R Markdown documents are designed with database backends. With <a href="https://www.rstudio.com/products/drivers/">RStudio Professional Drivers</a> you can develop and publish your content using the same data connectors systemwide. These drivers also ensure that your production ready applications are backed by professional software and support. Use these drivers when you run Shiny in production with <a href="https://www.rstudio.com/products/shiny-server-pro/">Shiny Server Pro</a> or <a href="https://www.rstudio.com/products/connect/">RStudio Connect</a>.</p>
+<h2 id="using-our-open-source-products" class="anchored">Using our open source products</h2>
+<p><a href="https://www.rstudio.com/products/drivers/">RStudio Professional Drivers</a> are intended for customers who need supported data connectors that are easy to install and work with our professional products. But alternative options exist for various data sources. The <a href="https://blog.rstudio.com/2017/08/16/rstudio-preview-connections/">RStudio IDE</a>, the <a href="https://github.com/rstats-db/odbc">odbc</a> package, and <a href="http://dplyr.tidyverse.org/">dplyr</a> will still work when you bring your own ODBC driver. To learn more about best practices when using data connectors, see our new website, <a href="http://db.rstudio.com">Databases using R</a>.</p>
+<p><em>If you are a current customer or if you are evaluating RStudio professional products, you can download <a href="https://www.rstudio.com/products/drivers/">RStudio Professional Drivers</a> today for no additional charge. If you are interested to learn more about how RStudio professional products can help you and your organization, please contact our <a href="https://rstudio.youcanbook.me/">sales team</a> for more information or email us at info@rstudio.com.</em></p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

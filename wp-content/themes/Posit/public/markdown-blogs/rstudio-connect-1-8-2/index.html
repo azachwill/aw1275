@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-04-02">
+
+<title>RStudio Connect 1.8.2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Connect 1.8.2</h1>
+
+<p class="date">2020-04-02</p>
+</header>
+
+<h2 id="a-big-update-for-our-python-community" class="anchored">A big update for our Python community</h2>
+<p>One of the biggest frustrations for a data scientist, whether your primary language is R or Python, is to have your hard work go underutilized. A stream of disposable reports, emails, and presentations that get viewed once and cast aside are not the ideal recipe for how to make an impact. To combat this, we have seen data scientists create more interactive content (such as applications, APIs, and dashboards) to engage the divided attention of stakeholders. Unfortunately, delivering interactivity often comes at the cost of learning far more about IT and infrastructure than perhaps you had planned.</p>
+<p>At RStudio, we believe data scientists shouldn’t have to become experts in DevOps just to share their work with the rest of their organization. RStudio Connect was created to handle the burden of deployment and provide a single platform for all the content your team produces in R and Python. Today we are excited to announce RStudio Connect 1.8.2, with new options for data scientists who use Python to share and communicate; including support for Python APIs (with Flask) and beta support for interactive Python applications with Dash.</p>
+<h3 align="center" class="anchored">
+<a href="https://rstudio.chilipiper.com/book/schedule-time-with-rstudio">Schedule a demo of RStudio Connect</a>
+</h3>
+<h2 id="flask-api-deployment" class="anchored">Flask API Deployment</h2>
+<p>RStudio Connect 1.8.2 introduces support for Python API deployment, including applications built with Flask and other WSGI-compatible frameworks. This functionality lets data science teams make models developed in Python available as REST APIs. Once deployed, an RStudio Connect publisher can give other teams or services access to the API, securely delivering data science insights across their organization.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="flask-example.gif" class="img-fluid"></p>
+<p></p><figcaption>Python API Example on RStudio Connect 1.8.2</figcaption><p></p>
+</figure>
+</div>
+<p>RStudio Connect automatically integrates with several Flask extension packages like <code>Flask-RESTX</code>, <code>Flask-API</code>, and <code>Flasgger</code> to provide web-accessible documentation or an API console interface. Examples for each of these extensions can be found in the <a href="https://docs.rstudio.com/connect/user/flask/#examples">User Guide</a>.</p>
+<p>Publishing a Python API to RStudio Connect requires the <a href="https://pypi.org/project/rsconnect-python/"><code>rsconnect-python</code></a> package. This package is available to install with pip from PyPi and enables a command-line interface that can be used to publish from any Python IDE including PyCharm, VS Code, JupyterLab, Spyder, and others.</p>
+<p>Developers with RStudio Connect publisher accounts can follow along with the new Python API Jump Start Example to learn the basic deployment workflow:</p>
+<p><img src="jumpstart.gif" alt="Flask Example in the Jump Start on RStudio Connect 1.8.2" style="width:400px;"></p>
+<p>Additional getting started information and examples can be found in the <a href="https://docs.rstudio.com/connect/user/flask/">User Guide</a>.</p>
+<h3 align="center" class="anchored">
+<a href="https://rstudio.com/products/connect/evaluation/">Download RStudio Connect 1.8.2</a>
+</h3>
+<h2 id="beta-support-for-dash-applications" class="anchored">Beta Support for Dash Applications</h2>
+<p>Dash applications provide an easy way for Python users to create interactive applications and dashboards that help decision makers engage with their work.</p>
+<p>Python users can develop Dash applications in the IDE of their choosing. Publishing an application to RStudio Connect is supported using the <a href="https://pypi.org/project/rsconnect-python/"><code>rsconnect-python</code></a> package. Refer to the <a href="https://docs.rstudio.com/connect/user/dash/">User Guide</a> for details.</p>
+<p>Once deployed to RStudio Connect, publishers can control access to their application, add viewers or collaborators, and adjust runtime settings to maximize performance or scale to meet audience demand.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="bikeshare-dash.gif" class="img-fluid"></p>
+<p></p><figcaption>Example Dash Application on RStudio Connect 1.8.2</figcaption><p></p>
+</figure>
+</div>
+<p>This is a Dash application hosted on RStudio Connect that shows availability predictions for Washington DC’s docked bike-share stations. To see more examples like this, visit our <a href="https://solutions.rstudio.com/python/overview/">Solutions Engineering</a> website.</p>
+<p><strong>What does “Beta” Mean?</strong> <em>Dash support is a beta feature which is still undergoing final testing before its official release. Should you encounter any bugs, glitches, lack of functionality or other problems, please let us know so we can improve before public release.</em></p>
+<h3 align="center" class="anchored">
+Learn how data science teams use RStudio products<br><a href="https://rstudio.com/solutions/r-and-python/">Visit R &amp; Python - A Love Story</a>
+</h3>
+<h2 id="new-notable" class="anchored">New &amp; Notable</h2>
+<ul>
+<li>For <strong>Publishers</strong>, 1.8.2 makes it easy to share filtered content lists:</li>
+</ul>
+<p><img src="filter-links.gif" alt="Share filtered content links in RStudio Connect 1.8.2" style="width:500px;"></p>
+<p>Easily share links to custom views of the content dashboard page, such as specific tags or search results.</p>
+<ul>
+<li><p>For <strong>Administrators and Publishers</strong>, this release includes new default runtime settings that allow APIs and applications to scale more efficiently.</p></li>
+<li><p>The User and Admin Guide documentation sites have been updated:</p>
+<ul>
+<li>Visit the <a href="https://docs.rstudio.com/connect/admin/">Admin Guide</a></li>
+<li>Visit the <a href="https://docs.rstudio.com/connect/user/">User Guide</a></li>
+</ul></li>
+</ul>
+<h2 id="security-deprecations-breaking-changes" class="anchored">Security, Deprecations &amp; Breaking Changes</h2>
+<ul>
+<li><p><strong>Security</strong> Enforce locked user restrictions for active browser sessions.</p></li>
+<li><p><strong>Breaking Change</strong> The <code>Postgres.URL</code> database connection URL no longer supports the <code>{$}</code> password placeholder. The <code>Postgres.URL</code> automatically uses the <code>Postgres.Password</code> value without a placeholder.</p></li>
+<li><p><strong>Breaking Change</strong> The <code>Postgres.InstrumentationURL</code> database connection URL no longer supports the <code>{$}</code> password placeholder. <code>The Postgres.InstrumentationURL</code> automatically uses the <code>Postgres.InstrumentationPassword</code> value without a placeholder.</p></li>
+<li><p><strong>Breaking Change</strong> Due to breaking changes to the <code>virtualenv</code> package, Python installations must have a version of <code>virtualenv</code> below 20, e.g.: <code>virtualenv&lt;20</code>. The version of <code>setuptools</code> must be 40.8 or higher. Incompatible versions will result in an error at startup.</p></li>
+<li><p><strong>Deprecation</strong> The settings <code>SAML.IdPSigningCertificate</code> and <code>SAML.SPEncryptionCertificate</code> would previously accept the contents of a certificate as a long Base64 inline value. This option is no longer supported and a warning will be issued during startup if used. Now, these settings only support a path to a PEM certificate file.</p></li>
+<li><p><strong>Deprecation</strong> The setting <code>SAML.IdPMetaData</code> has been deprecated. If this setting is currently used, a configuration migration will take place to transfer its value to either <code>SAML.IdPMetaDataURL</code> or <code>SAML.IdPMetaDataPath</code>. The deprecated metadata setting will be removed in a future release. The configuration migration for SAML settings is an automatic process that does not require immediate intervention but that will need a single manual step to be completed.</p></li>
+</ul>
+<p>Please review the full version of the release notes available <a href="http://docs.rstudio.com/connect/news">here</a>.</p>
+<blockquote>
+<h4 id="upgrade-planning" class="anchored">Upgrade Planning</h4>
+<p>Due to breaking changes to the <code>virtualenv</code> package, Python installations must have a version of <code>virtualenv</code> below 20, e.g.: <code>virtualenv&lt;20</code>. The version of <code>setuptools</code> must be 40.8 or higher. Incompatible versions will result in an error at startup. Review the <a href="https://docs.rstudio.com/rsc/integration/python/">documentation</a> for more details. If you are upgrading from an earlier version, be sure to consult the release notes for the intermediate releases, as well.</p>
+</blockquote>
+<h3 align="center" class="anchored">
+<a href="https://rstudio.com/products/connect/">Click through to learn more about RStudio Connect</a>
+</h3>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

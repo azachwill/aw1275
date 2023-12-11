@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2018-10-23">
+
+<title>RStudio 1.2 Preview: Plumber Integration</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio 1.2 Preview: Plumber Integration</h1>
+
+<p class="date">2018-10-23</p>
+</header>
+
+<p>The <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio 1.2 Preview Release</a> makes it even easier to create RESTful Web APIs in R using the <a href="https://cran.r-project.org/web/packages/plumber/index.html">plumber</a> package.</p>
+<blockquote>
+<p>plumber is a package that converts your existing R code to a web API using a handful of special one-line comments.</p>
+</blockquote>
+<p>RStudio 1.2 provides the following plumber-related productivity enhancements:</p>
+<ul>
+<li>push-button local server execution for development and testing</li>
+<li>easy API publishing to <a href="https://rstudio.com/products/connect">RStudio Connect</a></li>
+<li>automatic API documentation and interactive execution via Swagger</li>
+<li>create a new Plumber API project or add an API to an existing directory</li>
+</ul>
+<p>A full discussion of Web APIs and the plumber package is beyond the scope of this article; for a primer, check out: <a href="https://rviews.rstudio.com/2018/07/23/rest-apis-and-plumber/">R Views: REST APIs and Plumber</a></p>
+<p>Let’s take a look at the new features.</p>
+<h2 id="creating-an-api" class="anchored">Creating an API</h2>
+<p>On the RStudio main menu, select <strong>File / New Files / Plumber API</strong>.</p>
+<p>RStudio will offer to install plumber and any dependencies, if necessary. Then, give your API a folder name and a location for that folder</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="new_plumber_api.png" class="img-fluid"></p>
+<p></p><figcaption>New Plumber API Dialog</figcaption><p></p>
+</figure>
+</div>
+<p>An R source file named <strong>plumber.R</strong> containing sample APIs is opened in RStudio. This file shows the essentials of the plumber-specific annotations that identify and document APIs. For the example input above, the location would be <code>~/code/MyAPI/HelloWorld/plumber.R</code>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="plumber_source.png" class="img-fluid"></p>
+<p></p><figcaption>plumber.R source file</figcaption><p></p>
+</figure>
+</div>
+<h2 id="creating-a-plumber-api-project" class="anchored">Creating a Plumber API project</h2>
+<p>If a recent version of the plumber package is already installed, you can also create a new RStudio project via <strong>File / New Project / New Directory / New Plumber API Project</strong>. You may have to scroll down the list of project types to see the plumber option:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="new_project.png" class="img-fluid"></p>
+<p></p><figcaption>New Project Dialog</figcaption><p></p>
+</figure>
+</div>
+<p>This will prompt for the same information as the other approach, but the result is a standalone RStudio project containing the <strong>plumber.R</strong> file with the same sample APIs.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="new_project_details.png" class="img-fluid"></p>
+<p></p><figcaption>New Project Details Dialog</figcaption><p></p>
+</figure>
+</div>
+<h2 id="running-a-local-api-server" class="anchored">Running a Local API server</h2>
+<p>Comments beginning with <strong><code>#*</code></strong> followed by plumber-specific annotations such as <strong><code>@get</code></strong> identify this as a plumber API file. RStudio adds the <strong>Run API</strong> button in place of the <strong>Run</strong> and <strong>Source</strong> buttons seen on a generic R source file.</p>
+<blockquote>
+<p>The plumber package also supports a <strong><code>#'</code></strong> prefix, but these are not recognized by RStudio; be sure to use <strong><code>#*</code></strong> if you are using RStudio to author APIs, otherwise the <strong>Run API</strong> button will not be shown.</p>
+</blockquote>
+<p>Clicking this button will start a local http server and display the auto-generated API documentation and test page in the location currently selected in the <strong>Run API</strong> button’s dropdown.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="run_api.png" class="img-fluid"></p>
+<p></p><figcaption>Run API Button</figcaption><p></p>
+</figure>
+</div>
+<p>When an API is running, the <strong>Run API</strong> button changes to <strong>Reload API</strong>; use this after making changes to your API source files to test them out. To stop running the APIs, click the stop icon in the RStudio Console or the pane or window showing the API preview.</p>
+<h2 id="interacting-with-the-apis" class="anchored">Interacting with the APIs</h2>
+<p>The plumber package auto-generates a page showing all the APIs defined in your project and displays it in RStudio.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="swagger_overview.png" class="img-fluid"></p>
+<p></p><figcaption>Swagger Overview</figcaption><p></p>
+</figure>
+</div>
+<p>In addition to providing documentation, you can use this page to make test calls to the APIs. Click on the first API, <strong>/echo</strong>, to expand it. Then click <strong>Try it out</strong>. Enter some text in the edit box, and click <strong>Execute</strong> to make a REST call to the API. Scroll down to see both an example of how to construct the REST call, e.g.&nbsp;via <strong>curl</strong>, and the JSON response.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="swagger_echo.png" class="img-fluid"></p>
+<p></p><figcaption>Swagger Echo</figcaption><p></p>
+</figure>
+</div>
+<p>Try the other APIs, as well, and you will see that the output is not limited to <code>JSON</code> text; the <strong>/plot</strong> API returns an image, which is shown inline.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="swagger_plot.png" class="img-fluid"></p>
+<p></p><figcaption>Swagger Plot</figcaption><p></p>
+</figure>
+</div>
+<h2 id="breakpoints" class="anchored">Breakpoints</h2>
+<p>Authoring APIs directly in RStudio provides a nice workflow. As your APIs become more complex, you may need to debug the code to figure out what’s happening.</p>
+<p>In an R source file with plumber annotations, inserting <strong>browser()</strong> in the source code at the point you wish to start debugging will trigger a breakpoint. Then RStudio’s features can be used to examine and modify the program state, single-step, and so on. For more on RStudio debugging facilities, see <a href="https://support.rstudio.com/hc/en-us/articles/205612627-Debugging-with-RStudio">this article</a>.</p>
+<h2 id="publishing-to-connect" class="anchored">Publishing to Connect</h2>
+<p>Now that you have some APIs, you need to make them available to others. The easiest way is to publish to an <a href="https://rstudio.com/products/connect">RStudio Connect</a> server. With Connect, you get push-button publishing, and can leverage features such as load balancing, authentication, and access-control.</p>
+<blockquote>
+<p>A file named <strong>plumber.R</strong> containing plumber annotations is required to publish an API to RStudio Connect.</p>
+</blockquote>
+<p>Next to the <strong>Run API</strong> button is the publish button. Click that to begin the publishing process.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="connect_publish.png" class="img-fluid"></p>
+<p></p><figcaption>Connect Publish</figcaption><p></p>
+</figure>
+</div>
+<p>Upon completion, the browser launches to show your API on Connect. From there, use Connect tools and options to manage the APIs. The Publish button in RStudio may then be used to republish the APIs after you’ve made changes.</p>
+<h2 id="publishing-elsewhere" class="anchored">Publishing elsewhere</h2>
+<p>The plumber docs provide <a href="https://www.rplumber.io/docs/hosting.html">details on how to publish to other services</a> such as DigitalOcean, and how to leverage Docker containers for running plumber APIs.</p>
+<h1 id="resources">Resources</h1>
+<ul>
+<li><a href="https://www.rplumber.io/">plumber website</a></li>
+<li><a href="https://www.rstudio.com/resources/videos/plumbing-apis-with-plumber/">Webinar: Plumbing APIs with Plumber</a></li>
+<li><a href="https://rviews.rstudio.com/2018/07/23/rest-apis-and-plumber/">R Views: REST APIs and Plumber</a></li>
+<li><a href="http://docs.rstudio.com/connect/1.5.4/user/publishing.html#publishing-plumber-apis">RStudio Connect: Publishing APIs</a></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

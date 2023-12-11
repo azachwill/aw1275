@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-12-20">
+<meta name="description" content="We are delighted to announce pins 1.1.0 is now available on CRAN. You can use pins to publish, version, and share objects such as datasets and models.">
+
+<title>Announcing pins 1.1.0</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Announcing pins 1.1.0</h1>
+
+<p class="date">2022-12-20</p>
+</header>
+
+<p>I’m delighted to announce that <a href="https://pins.rstudio.com/">pins</a> 1.1.0 for R is now available on CRAN. The pins package publishes data, models, and other R objects, making it easy to share them across projects and with your colleagues. You can pin objects to a variety of pin boards, including folders (to share on a networked drive or with services like DropBox), Posit Connect, Amazon S3, Azure blob storage, and as of this new release, Google Cloud Storage! Pins can be versioned, making it straightforward to track changes, re-run analyses on historical data, and undo mistakes.</p>
+<p>You can install pins with:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"pins"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>About 18 months ago, we <a href="https://www.rstudio.com/blog/pins-1-0-0/">released pins 1.0.0</a> with a major overhaul of the user interface for the package. We continue to build on this new interface as our community uses pins in more complex ways on both our own professional tools and other platforms as well.</p>
+<p>This post highlights several important improvements we want to make sure you know about. To see all the changes in pins 1.1.0, including a few minor breaking changes, check out the <a href="https://pins.rstudio.com/news/index.html#pins-110">release notes</a>.</p>
+<h2 id="support-for-google-cloud-storage" class="anchored">Support for Google Cloud Storage</h2>
+<p>After the release of pins 1.0.0, one of the features most requested by the community was <a href="https://github.com/rstudio/pins-r/issues/572">support for using pins on Google Cloud Storage</a>. This is now available in pins 1.1.0!</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pins)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>board <span class="ot">&lt;-</span> <span class="fu">board_gcs</span>(<span class="st">"pins-testing"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>board <span class="sc">%&gt;%</span> <span class="fu">pin_write</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="st">"nice-numbers"</span>, <span class="at">type =</span> <span class="st">"json"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Creating new version '20230123T190421Z-c3943'</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Writing to pin 'nice-numbers'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Like <code>board_s3()</code> for AWS S3 and <code>board_azure()</code> for Azure blob storage, this allows you to both write to and read from an existing bucket that you have access to. Together with <a href="https://www.rstudio.com/blog/pins-for-python/">pins for Python</a>, which we announced last year, this means that you can read and write on any of the AWS, Microsoft, or Google platforms in either R or Python. To read the pin we just wrote from R, I can use Python:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pins</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>board <span class="op">=</span> pins.board_gcs(<span class="st">"pins-testing"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>board.pin_read(<span class="st">"nice-numbers"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You can use pins for multilingual data science and R/Python interoperability!</p>
+<h2 id="reading-from-boards-on-the-web" class="anchored">Reading from boards on the web</h2>
+<p>The pins package has had support for <a href="https://pins.rstudio.com/reference/board_url.html"><code>board_url()</code></a> for a long time, but we have realized that it didn’t always work how users wanted or expected. This new release adds support for you as a publisher creating a <a href="https://pins.rstudio.com/reference/write_board_manifest.html">manifest file</a> to go along with your board so that your collaborators can consume pins from the board in a more straightforward way.</p>
+<p>Take a look <a href="https://pins.rstudio.com/articles/using-board-url.html">at our new vignette</a> on how to set up <code>board_url()</code> for easy collaboration, and many thanks to Ian Lyttle for contributing both the vignette and many of the ideas behind this new functionality. Ian has also created a small R package demonstrating how to share a dataset via pins directly from your pkgdown site using the new <code>board_url()</code>. <a href="https://github.com/ijlyttle/pkgpins">Check it out!</a></p>
+<h2 id="improvements-for-posit-connect" class="anchored">Improvements for Posit Connect</h2>
+<p>Many users of our professional publishing platform <a href="https://posit.co/products/enterprise/connect/">Posit Connect</a> take advantage of pins to share data and models. Several changes in this release focus on making the experience of these users better.</p>
+<p>When you use Connect, the pins package keeps track of how to identify specific pieces of content and Connect users in a <a href="https://en.wikipedia.org/wiki/Cache_(computing)">cache</a>. If you’re familiar with caching, you probably know the saying attributed to Phil Karlton:</p>
+<blockquote>
+<p>There are only two hard things in computer science: cache invalidation and naming things.</p>
+</blockquote>
+<p>The previous incarnation of the content and user caches, unfortunately, demonstrated how hard this really can be, and our Connect customers sometimes experienced their caches getting into a bad state when the situation on the server changed. In this release, we changed the cache approach from using files on disk to an <a href="https://adv-r.hadley.nz/environments.html">environment</a> in R, so caches no longer persist between sessions. What this means for you is that these caches will be much less likely to end up in a broken state, and you can fix any cache problems by restarting R. It also means that in a new session, pins will need to look up some of these relationships between content and users.</p>
+<p>This release also improved the pins code preview on Connect and updated the function for creating a board for Connect to <code>board_connect()</code>, following our rebranding from RStudio to Posit.</p>
+<h2 id="acknowledgements" class="anchored">Acknowledgements</h2>
+<p>We’d like to thank all 66 folks who have contributed to pins since the 1.0.0 release, whether via filing issues or contributing code or documentation: <a href="https://github.com/9Rahulsharma">@9Rahulsharma</a>, <a href="https://github.com/afshinmhCLG">@afshinmhCLG</a>, <a href="https://github.com/akgold">@akgold</a>, <a href="https://github.com/AkthemRehab">@AkthemRehab</a>, <a href="https://github.com/atusy">@atusy</a>, <a href="https://github.com/augustohassel">@augustohassel</a>, <a href="https://github.com/AYu1804">@AYu1804</a>, <a href="https://github.com/biggiemikkie">@biggiemikkie</a>, <a href="https://github.com/bjfletcher">@bjfletcher</a>, <a href="https://github.com/christian-million">@christian-million</a>, <a href="https://github.com/chrisumphlett">@chrisumphlett</a>, <a href="https://github.com/cl00wny">@cl00wny</a>, <a href="https://github.com/cnemarich">@cnemarich</a>, <a href="https://github.com/colearendt">@colearendt</a>, <a href="https://github.com/daattali">@daattali</a>, <a href="https://github.com/dewoller">@dewoller</a>, <a href="https://github.com/duju211">@duju211</a>, <a href="https://github.com/edavidaja">@edavidaja</a>, <a href="https://github.com/erwinlares">@erwinlares</a>, <a href="https://github.com/fh-mthomson">@fh-mthomson</a>, <a href="https://github.com/FMKerckhof">@FMKerckhof</a>, <a href="https://github.com/gardiners">@gardiners</a>, <a href="https://github.com/guzu92">@guzu92</a>, <a href="https://github.com/hadley">@hadley</a>, <a href="https://github.com/harell">@harell</a>, <a href="https://github.com/hongooi73">@hongooi73</a>, <a href="https://github.com/ijlyttle">@ijlyttle</a>, <a href="https://github.com/IndrajeetPatil">@IndrajeetPatil</a>, <a href="https://github.com/innir">@innir</a>, <a href="https://github.com/jameshunterbr">@jameshunterbr</a>, <a href="https://github.com/joelgsponer">@joelgsponer</a>, <a href="https://github.com/jonthegeek">@jonthegeek</a>, <a href="https://github.com/juliasilge">@juliasilge</a>, <a href="https://github.com/justinmillar">@justinmillar</a>, <a href="https://github.com/kmasiello">@kmasiello</a>, <a href="https://github.com/laurejo1">@laurejo1</a>, <a href="https://github.com/machow">@machow</a>, <a href="https://github.com/maglet">@maglet</a>, <a href="https://github.com/mattwarkentin">@mattwarkentin</a>, <a href="https://github.com/michkam89">@michkam89</a>, <a href="https://github.com/minimenchmuncher">@minimenchmuncher</a>, <a href="https://github.com/MislavSag">@MislavSag</a>, <a href="https://github.com/oguchihy">@oguchihy</a>, <a href="https://github.com/ojziff">@ojziff</a>, <a href="https://github.com/raisin-toast">@raisin-toast</a>, <a href="https://github.com/ramiromagno">@ramiromagno</a>, <a href="https://github.com/rjake">@rjake</a>, <a href="https://github.com/rmccombie">@rmccombie</a>, <a href="https://github.com/Sade154">@Sade154</a>, <a href="https://github.com/SaJaToGu">@SaJaToGu</a>, <a href="https://github.com/salim-b">@salim-b</a>, <a href="https://github.com/samterfa">@samterfa</a>, <a href="https://github.com/scherbakovdmitri">@scherbakovdmitri</a>, <a href="https://github.com/schmalte04">@schmalte04</a>, <a href="https://github.com/sellorm">@sellorm</a>, <a href="https://github.com/slodge">@slodge</a>, <a href="https://github.com/slohr">@slohr</a>, <a href="https://github.com/taiyanl">@taiyanl</a>, <a href="https://github.com/thomaszwagerman">@thomaszwagerman</a>, <a href="https://github.com/tomasjanikds">@tomasjanikds</a>, <a href="https://github.com/tomsing1">@tomsing1</a>, <a href="https://github.com/TylerGrantSmith">@TylerGrantSmith</a>, <a href="https://github.com/vdamico">@vdamico</a>, <a href="https://github.com/vgXhc">@vgXhc</a>, <a href="https://github.com/wurli">@wurli</a>, and <a href="https://github.com/yacaslimi">@yacaslimi</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

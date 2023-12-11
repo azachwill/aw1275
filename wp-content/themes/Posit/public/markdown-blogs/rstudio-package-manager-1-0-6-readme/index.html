@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2019-03-13">
+
+<title>RStudio Package Manager 1.0.6 - README</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Package Manager 1.0.6 - README</h1>
+
+<p class="date">2019-03-13</p>
+</header>
+
+<p>The 1.0.6 release of RStudio Package Manager helps R users understand packages. The primary feature in this release is embedded package READMEs, detailed below. If you’re new to Package Manager, it is an on-premise product built to give teams and organizations reliable and consistent package management. Download an <a href="https://rstudio.com/products/package-manager">evaluation today</a>.</p>
+<p></p>
+<h2 id="package-readmes" class="anchored">Package READMEs</h2>
+<p>Many R packages have rich README files that can include:</p>
+<ul>
+<li>An introduction to the package</li>
+<li>Examples for key functions</li>
+<li>Badges to indicate download counts, build status, code coverage, and other metrics</li>
+<li>Other helpful information, like the package’s hex sticker!</li>
+</ul>
+<p>This information can help a new user when they are first introduced to a package, or help an experienced user or admin gauge package quality. Package READMEs distill and supplement the rich information available in vignettes, Description files, and help files.</p>
+<p>Starting in version 1.0.6, READMEs are automatically shown alongside the traditional package metadata. For CRAN packages, Package Manager will automatically show a README for the 12,000 CRAN packages that have them. READMEs are also displayed for internal packages <a href="https://docs.rstudio.com/rspm/1.0.6/admin/repositories.html#git-sources">sourced from Git</a> or <a href="https://docs.rstudio.com/rspm/1.0.6/admin/quickstarts.html#quickstart-local">local files</a>. These READMEs provide an easy way for package authors to document their code for colleagues, publicize new releases and features, and disseminate knowledge to team members.</p>
+<h2 id="deprecations-breaking-changes-and-security-updates" class="anchored">Deprecations, Breaking Changes, and Security Updates</h2>
+<ul>
+<li>Version 1.0.6 includes a number of updates to Package Manager’s built-in CRAN source. Customers using an internet-connected server <em>do not need to take any action</em>. Updates will be applied during the next CRAN sync. <em>Offline, air-gapped customers should following <a href="https://docs.rstudio.com/rspm/1.0.6/admin/air-gapped.html#air-gapped-upgrade">these instructions</a> to re-fetch the CRAN data immediately after upgrading, and then run the <code>rspm sync</code> command.</em></li>
+</ul>
+<p>Please consult the full <a href="https://docs.rstudio.com/rspm/news/">release notes</a>.</p>
+<blockquote>
+<h4 id="upgrade-planning" class="anchored">Upgrade Planning</h4>
+<p>Please note the breaking changes and deprecations above. Upgrading to 1.0.6 from 1.0.4 will take less than five minutes. There will be a five-to-ten minute delay in the next CRAN sync following the upgrade. If you are upgrading from an earlier version, be sure to consult the release notes for the intermediate releases, as well.</p>
+</blockquote>
+<p>Don’t see that perfect feature? Wondering why you should be worried about package management? <a href="mailto:sales@rstudio.com">Email us</a>; our product team is happy to help!</p>
+<ul>
+<li><a href="https://docs.rstudio.com/rspm/admin">Admin Guide</a></li>
+<li><a href="https://www.rstudio.com/wp-content/uploads/2018/07/RStudio-Package-Manager-Overview.pdf">Overview PDF</a></li>
+<li><a href="https://resources.rstudio.com/webinars/introduction-to-the-rstudio-package-manager-sean-lopp">Introductory Webinar</a></li>
+<li><a href="https://demo.rstudiopm.com">Online Demo</a></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

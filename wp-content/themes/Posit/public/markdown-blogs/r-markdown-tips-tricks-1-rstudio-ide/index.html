@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-11-22">
+<meta name="description" content="In this series, we walk through lesser-known tips and tricks to help you work more effectively and efficiently in R Markdown. This first post focuses on working with R Markdown in the RStudio IDE.">
+
+<title>R Markdown Lesser-Known Tips &amp; Tricks #1: Working in the RStudio IDE</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">R Markdown Lesser-Known Tips &amp; Tricks #1: Working in the RStudio IDE</h1>
+
+<p class="date">2021-11-22</p>
+</header>
+
+<p><sup> Photo by <a href="https://unsplash.com/@kumoknits?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Karina L</a> on <a href="https://unsplash.com/?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a> </sup></p>
+<p>The R Markdown file format combines R programming and the markdown language to create dynamic, reproducible documents. R Markdown can be used for reports, slide shows, blogs, books — even <a href="https://bookdown.org/yihui/rmarkdown/shiny-start.html" target="_blank">Shiny apps</a>! With so many possibilities, authors learn how to use their tools in effective ways.</p>
+<p>We asked our Twitter friends <a href="https://twitter.com/_bcullen/status/1333878752741191680" target="_blank">the tips and tricks that they have picked up</a> along their R Markdown journey. There was a flurry of insightful replies, ranging from organizing files to working with YAML. We wanted to highlight some of the responses so that you can also use them when creating R Markdown documents.</p>
+<p>This is the first of a four-part series to help you on your path to R Markdown success, starting with <strong>working with R Markdown documents in the RStudio IDE.</strong></p>
+<p><strong>1. Create new chunks with shortcuts</strong></p>
+<p>We understand the pain of typing out all those backticks to create a new chunk, and <a href="https://yihui.org/en/2021/10/unbalanced-delimiters/" target="_blank">it is also error-prone</a>. Instead, insert an R code chunk by clicking the Insert button on the document toolbar.</p>
+<center>
+<p><img src="img/img9.png" alt="Insert button in document toolbar that looks like a green square with a C and a plus sign." width="80%"></p>
+</center>
+<p><br> You can also type the keyboard shortcut <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>I</kbd> (<kbd>Cmd</kbd> + <kbd>Option</kbd> + <kbd>I</kbd> on macOS). Use the shortcut inside a chunk to split it into two:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="img/img1.gif" class="img-fluid"></p>
+<p></p><figcaption>Breaking up one code chunk into two using Ctrl+Cmd+I Shortcut in RStudio IDE</figcaption><p></p>
+</figure>
+</div>
+<p><strong>2. Run all (or some) chunks</strong></p>
+<p>Within RStudio, the Run button on the right-hand side of the document toolbar opens a drop-down menu. The menu contains handy shortcuts for running code chunks.</p>
+<center>
+<p><img src="img/img10.png" alt="Run dropdown menu with various options for running code chunks." width="50%"></p>
+</center>
+<p><br></p>
+<p>For example, you don’t have to run chunks individually. Run all chunks below your cursor by clicking <strong>Run All Chunks Below</strong>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="img/img2.gif" class="img-fluid"></p>
+<p></p><figcaption>Selections available from the Run button menu in RStudio</figcaption><p></p>
+</figure>
+</div>
+<p><strong>3. Show plots in the Viewer pane</strong></p>
+<p>By default, code chunks display R Markdown plots “inline”, or directly underneath the code chunk. If you would rather see the plot in the Viewer pane, go to <strong>RStudio</strong> &gt; <strong>Preferences</strong> &gt; <strong>R Markdown</strong> and unselect “Show output inline for all R Markdown documents”.</p>
+<center>
+<p><img src="img/img3.png" alt="R Markdown checkbox for the output options in Global Options" width="70%"></p>
+</center>
+<p>Voilà! Next time you run the document, the plot will show in the Viewer pane as opposed to inline.</p>
+<p><em>Before…</em></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="img/img4.png" class="img-fluid"></p>
+<p></p><figcaption><em>Output inline with code</em></figcaption><p></p>
+</figure>
+</div>
+<p><em>After…</em></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="img/img5.png" class="img-fluid"></p>
+<p></p><figcaption><em>Output in Viewer pane</em></figcaption><p></p>
+</figure>
+</div>
+<p><strong>4. Drag and drop formulas from Wikipedia into your R Markdown document</strong></p>
+<p>You can include LaTeX formulas in your R Markdown files. Enclose them between dollar signs (<code>$</code>) to see the rendered formula.</p>
+<p>Since Wikipedia uses LaTeX HTML formatting on its website, this means you can highlight formulas and drag them into your R Markdown document.</p>
+<script src="https://fast.wistia.com/embed/medias/2sqms83hj9.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:33.54% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_2sqms83hj9 videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<p><strong>5. Use the visual markdown editor</strong></p>
+<p><a href="https://www.rstudio.com/products/rstudio/download/" target="_blank">RStudio v1.4</a> has a visual markdown editing mode. This lets you see what your R Markdown document will look like without knitting. You can edit your document in this mode, as well.</p>
+<p>Click the compass button on the far-right end of the document toolbar to switch into visual markdown editing mode.</p>
+<center>
+<p><img src="img/img11.png" alt="Visual markdown editor button on the right-hand side of toolbar." width="80%"></p>
+</center>
+<p><br></p>
+<p>Alternatively, you can use the <kbd>⇧</kbd>+<kbd>⌘</kbd>+<kbd>F4</kbd> keyboard shortcut.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="img/img7.gif" class="img-fluid"></p>
+<p></p><figcaption>Switching to Visual Markdown Editing Mode on RStudio using shortcuts</figcaption><p></p>
+</figure>
+</div>
+<p>Typing <kbd>⌘/</kbd> finds and inserts what you need into the document:</p>
+<script src="https://fast.wistia.com/embed/medias/0q6hpkuvhm.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:94.17% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_0q6hpkuvhm videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<p>These are only a few of the many features available in the visual markdown editor. Read more in <a href="https://rstudio.github.io/visual-markdown-editing/" target="_blank">the RStudio Visual Markdown Editing documentation</a>.</p>
+<h2 id="continue-the-journey" class="anchored">Continue the Journey</h2>
+<p>We hope that these tips &amp; tricks help you when you are working with R Markdown documents in the RStudio IDE. Thank you to everybody who shared advice, workflows, and features!</p>
+<p>Stay tuned for the second post in this four-part series: <strong>Cleaning up your code.</strong></p>
+<h2 id="resources" class="anchored">Resources</h2>
+<ul>
+<li>For more information on R Markdown and the RStudio IDE, see <a href="https://rmarkdown.rstudio.com/articles_integration.html" target="_blank">R Markdown Integration in the IDE</a>.</li>
+<li>Read more about Visual R Markdown in the <a href="https://rstudio.github.io/visual-markdown-editing/" target="_blank">documentation</a> and the <a href="https://blog.rstudio.com/2020/09/30/rstudio-v1-4-preview-visual-markdown-editing/" target="_blank">accompanying blog post</a>.</li>
+<li>To learn about RStudio Connect, a platform on which you can schedule and deploy for R Markdown documents so they are accessible to all the relevant stakeholders in your organization, check out the <a href="https://www.rstudio.com/products/connect/" target="_blank">RStudio Connect product page</a>.</li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

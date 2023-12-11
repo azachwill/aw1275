@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-10-14">
+
+<title>RStudio v1.4 Preview: Command Palette</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio v1.4 Preview: Command Palette</h1>
+
+<p class="date">2020-10-14</p>
+</header>
+
+<p><em>This post is part of a series on new features in RStudio 1.4, currently available as a <a href="https://www.rstudio.com/products/rstudio/download/preview/">preview release</a>.</em></p>
+<h2 id="whats-a-command-palette" class="anchored">What’s a Command Palette?</h2>
+<p>Just as a paint palette gives the artist instant access to all their colors, a command palette is a software affordance that gives instant, searchable access to all of a program’s commands. RStudio 1.4 introduces this very popular tool to our workbench.</p>
+<p><img align="center" style="padding: 35px;" src="command-palette-ide.png" alt="Screenshot of the RStudio IDE with the Command Palette open"></p>
+<p>Command palettes have become a fixture of modern IDEs, and with good reason. They improve:</p>
+<ul>
+<li><strong>Keyboard accessibility</strong>; even commands that do not have keyboard shortcuts are easily invoked from the palette.</li>
+<li><strong>Speed</strong>; it is often much faster to invoke a command from the palette with a few quick keystrokes than to reach for the mouse or drill into a menu.</li>
+<li><strong>Discoverability</strong>; since the palette lists all the commands, it can be browsed to find a command for a task by name without trying to figure out which menu or toolbar might contain it.</li>
+</ul>
+<h2 id="invoking-the-palette" class="anchored">Invoking the Palette</h2>
+<p>The palette can be invoked with the keyboard shortcut <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> (<kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> on macOS).</p>
+<p>It’s also available on the <em>Tools</em> menu (<em>Tools</em> -&gt; <em>Show Command Palette</em>).</p>
+<h2 id="content" class="anchored">Content</h2>
+<p>RStudio’s command palette has three main types of content:</p>
+<h3 id="commands" class="anchored">Commands</h3>
+<p>First and foremost, the command palette serves as a way to search for and invoke RStudio commands quickly with just a few keystrokes. Every RStudio command is in the palette, unless it’s been explicitly hidden in the current mode.</p>
+<p>To find a command, enter a word or short sequence of characters from the command. For example, to create a new script, start typing <code>new scr</code>.</p>
+<p><img align="center" style="padding: 35px;" src="new-script.png" alt="The Command Palette showing commands for creating new scripts"></p>
+<p>You can keep typing to filter the list, or press <kbd>Up</kbd>/<kbd>Down</kbd> to choose a command from the list and then <kbd>Enter</kbd> to execute the chosen command. Commands are displayed with their bound keyboard shortcuts, if any, so that you know how to invoke the command directly with the keyboard next time.</p>
+<p>If your command doesn’t have a shortcut, you can <a href="https://support.rstudio.com/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts">use the <em>Modify Keyboard Shortcuts</em> command</a> to add one.</p>
+<h3 id="settings" class="anchored">Settings</h3>
+<p>In addition to all of RStudio’s commands, the command palette provides easy access to most of its settings. You’ll see the word <code>Setting</code> in front of settings, along with a small control that allows you to change the setting.</p>
+<p>For example, you can turn RStudio’s code margin indicator off and on or move it to a different column. If you have a code editor open, you’ll see these changes reflected in real time as you make them.</p>
+<p><img align="center" style="padding: 35px;" src="margin.png" alt="The Command Palette showing options related to the margin column"></p>
+<p>Note that the settings displayed are your personal (user-level) settings. Just like the settings in Global Options, they can be overridden by project-level settings, and some settings don’t take effect until after a restart.</p>
+<h3 id="rstudio-addins" class="anchored">RStudio Addins</h3>
+<p>Finally, the command palette shows all of the commands exposed by any installed RStudio add-ins. You can find these by typing any part of the add-in name and/or part of the command. For example, to use a command from the excellent <a href="https://github.com/r-lib/styler">styler addin</a>:</p>
+<p><img align="center" style="padding: 35px;" src="style-selection.png" alt="The Command Palette showing code style commands from the styler addin"></p>
+<p>This makes the palette user-extensible; if you want to add your own commands to the palette, you can <a href="https://rstudio.github.io/rstudioaddins/">create an RStudio Addin</a> to do so with just a few lines of code, or use the <a href="https://www.garrickadenbuie.com/blog/shrtcts/">shrtcts addin</a> to do so in even fewer lines of code!</p>
+<h2 id="search-syntax" class="anchored">Search Syntax</h2>
+<p>The command palette’s search syntax is simple; it looks for complete matches for each space-separated term you enter. So, for example, a query for <code>new proj</code> will find all of the entries that contain the term <code>new</code> AND the term <code>proj</code>.</p>
+<p>In the future, we hope to improve the matching heuristics by prioritizing complete matches and recently or frequently used commands.</p>
+<p>You can try out the new Command Palette by installing the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio 1.4 Preview Release</a>. If you do, please let us know how we can make it better on the <a href="https://community.rstudio.com/c/rstudio-ide">community forum</a>!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

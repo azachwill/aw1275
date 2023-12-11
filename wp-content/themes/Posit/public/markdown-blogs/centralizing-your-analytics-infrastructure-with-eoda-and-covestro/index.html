@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-05-25">
+<meta name="description" content="On June 16th, we’ll be teaming up with eoda and Covestro to discuss—in German—how they put their data science into production by developing a unified infrastructure.">
+
+<title>Centralizing your Analytics Infrastructure with eoda and Covestro</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Centralizing your Analytics Infrastructure with eoda and Covestro</h1>
+
+<p class="date">2021-05-25</p>
+</header>
+
+<p><b>Guten Tag!</b> On June 16th, we’ll be teaming up with <a href="https://www.eoda.de/" target="_blank" rel="noopener noreferrer">eoda</a> and <a href="https://www.covestro.com/en" target="_blank" rel="noopener noreferrer">Covestro</a> to discuss—in German—how they put their data science into production by developing a unified infrastructure. In addition to learning about Covestro’s success, participants will also receive hands-on guidance on deploying data products in highly structured environments.</p>
+<p><img src="robots.png" alt="Reproducible robots" class="center"></p>
+<p style="text-align: right">
+<small><i>Photo by <a href="https://unsplash.com/@ekrull" target="_blank" rel="noopener noreferrer">Ekrull</a> on Unsplash</i></small>
+</p>
+<p>The primary problem for Covestro, a leading manufacturing company in Germany, was that they lacked a centralized development environment. Data scientists that used R and Python did complex analyses on their laptops and used a variety of tools to analyze and share results. The team decided that they wanted to deliver a greater impact at faster speeds, and so with the help of eoda and RStudio, they created a centralized, reproducible analytics infrastructure. Although R and Python represent the core of their environment, many other techniques and tools were integrated such as H2O for machine learning, scaling with kubernetes, CI/CD with GitLab, and version control with SVN. Not only did this framework increase the collaboration of Covestro’s data science teams, but compliance guidelines could also be better fulfilled. A centralized infrastructure, incorporating statistics, IT support, machine learning and artificial intelligence, enables decentralized teams to solve problems and achieve long-term success.</p>
+<p>The second half of this 2-hour German webinar will be a hands-on workshop that participants can follow along with. The instructors will discuss how to use RStudio products, including native git integration and multiple approaches to deploying with <a href="https://www.rstudio.com/products/connect/" target="_blank" rel="noopener noreferrer">RStudio Connect</a>. This workshop will provide teams with an excellent collaborative workflow for building, maintaining, and scaling projects in a growing data science environment.</p>
+<h2 id="what-you-will-learn" class="anchored">What you will learn</h2>
+<ul>
+<li><p>Insights into the pain points and solutions for the data science initiatives of Covestro. What is a centralized analytics system? What tools and techniques are needed?</p></li>
+<li><p>How to identify existing building blocks in your infrastructure and successfully address them. What is infrastructure as code? What is the business value for your company?</p></li>
+<li><p>Exclusive insights into RStudio products. How to use the native git integration of RStudio products? How does deployment work with RStudio Connect?</p></li>
+</ul>
+<p>Please note: This live webinar will be presented in German, and English subtitles will be provided approximately 3 weeks following the recording.</p>
+<p>Register here: <a href="https://www.eoda.de/webinar-data-science-in-production/">https://www.eoda.de/webinar-data-science-in-production/</a></p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

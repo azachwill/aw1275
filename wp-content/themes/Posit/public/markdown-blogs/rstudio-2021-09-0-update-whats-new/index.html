@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-09-29">
+<meta name="description" content="The RStudio 2021.09.0 “Ghost Orchid” update includes a number of improvements including improved usability when R is busy, more consistent and flexible logging, ability to replay local background jobs, high DPI plots for retina displays, searchable documentation with improved look and feel, and a new way to manage groups in Kubernetes deployments.">
+
+<title>RStudio 2021.09.0 Update: What’s New</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio 2021.09.0 Update: What’s New</h1>
+
+<p class="date">2021-09-29</p>
+</header>
+
+<div style="font-size:60%; display: flex; justify-content: center">
+Photo by Mick Fournier / HBI Producers of Fine Orchids
+</div>
+
+<p>This post describes some of the improvements contained in the RStudio update 2021.09.0, code-named Ghost Orchid:</p>
+<ul>
+<li><a href="#calendar-versioning">Calendar Versioning</a></li>
+<li><a href="#improved-usability-when-r-is-busy">Improved Usability When R is Busy</a></li>
+<li><a href="#logging-changes">Logging Changes</a></li>
+<li><a href="#high-dpi-retina-plots">High DPI Retina Plots</a></li>
+<li><a href="#replay-local-jobs">Replay Local Jobs</a></li>
+<li><a href="#load-balancing">Load Balancing</a></li>
+<li><a href="#kubernetes---supplemental-groups">Kubernetes Supplemental Groups</a></li>
+</ul>
+<h3 id="calendar-versioning" class="anchored">Calendar Versioning</h3>
+<p>One noticeable change in this update is the shift to a calendar based versioning scheme for all RStudio products. This release is an update to v1.4.1717-3. See <a href="https://blog.rstudio.com/2021/08/30/calendar-versioning-for-commercial-rstudio-products/">this post</a> for details.</p>
+<h3 id="improved-usability-when-r-is-busy" class="anchored">Improved Usability When R is Busy</h3>
+<p>This release contains a change to improve how the IDE responds to the user when R is in the midst of some types of busy operations. Now you are able to save your changes, use the terminal, and open new files even when R is busy.</p>
+<p><img align="center" style="padding: 35px:" src="r-is-busy.png"></p>
+<p>To understand this change, it’s helpful to understand a bit more about how R works under the hood. Like Python and many other languages, R uses a single thread of execution for access to data so programmers do not have to worry about locking and concurrency. This design however prevents R from supporting preemptive multitasking, a feature that allows the operating system to interrupt a program in the midst of whatever it’s doing at the request of the user. Instead, most long-running R routines are written to periodically yield control back to the system. This allows the system to check to see if the user has requested an interrupt, and to do background tasks for user-interactivity. These checks allow the RStudio IDE to support interrupts, and to respond to clicks and commands from the user.</p>
+<p>Some long running R operations unfortunately do not make these yield calls, and when this happens in v1.4, it’s not possible to open or save files, use the terminal, or even for the IDE to respond. Further, when using the IDE connecting to a remote server, the browser only allows a small number of outstanding requests. Once those are all used up, it causes a logjam where even the abort operation is not received. In these extreme circumstances, the only option left for the user in v1.4 is to wait for the operation to complete or to refresh the browser.</p>
+<p>Now in 2021.09.0, the RStudio IDE allows you to open and save files even when R is in one of these uncooperative busy states. It also allows you to use the terminal so you can monitor the CPU usage and see the state of files on the disk. Another change is that the memory usage statistic will update even when R is busy.</p>
+<p>And to avoid the browser logjam with RStudio Server, a placeholder response is returned to free up the browser connection. This means that you’ll always be able to send an interrupt or abort request to the IDE.</p>
+<h3 id="logging-changes" class="anchored">Logging Changes</h3>
+<p>System log files help administrators of the system diagnose problems. In this release, we have improved both the logging infrastructure and the quality and quantity of logging messages for the open source products and RStudio Workbench. As with the previous release, all logging configuration settings should be placed in <code>/etc/rstudio/logging.conf</code>.</p>
+<h4 id="message-improvements" class="anchored">Message Improvements</h4>
+<p>There have been a number of improvements to the messages logged by the system:</p>
+<ul>
+<li>Info messages logged at startup to detail which configuration files were used</li>
+<li>Additional debug messages for the rserver to trace request handling and load balancing</li>
+<li>Details added to a number of errors to provide more context</li>
+</ul>
+<h4 id="file-logging" class="anchored">File Logging</h4>
+<p>The default setting for logger-type has changed to <code>file</code> from <code>syslog</code>. Even with this default, warnings and errors continue to be logged to syslog by default, but that can be disabled by setting <code>warn-syslog=0</code>. By default, log files are placed in the new directory <code>/var/log/rstudio</code>. There is an <code>rstudio-server</code> subdirectory that contains rserver and rsession logs. Those pertaining to the job launcher are placed in the <code>launcher</code> subdirectory. This is team effort to put all RStudio logs in one place.</p>
+<p>Note that the RStudio monitor log, that combines server and session logs into one stream, is still created in the old location: <code>/var/lib/rstudio-server/monitor/log/rstudio-server.log</code>.</p>
+<h4 id="json-format" class="anchored">JSON Format</h4>
+<p>To support better integration with external log file index and search, log files can be formatted as JSON by setting:</p>
+<p><code>log-message-format=json</code></p>
+<h4 id="session-protocol-debugging" class="anchored">Session Protocol Debugging</h4>
+<p>To diagnose problems with an R session, it can be helpful to see the sequence of requests that lead up to that error. There’s a new IDE preference called <code>Session Protocol Debug</code>, settable from the <a href="https://blog.rstudio.com/2020/10/14/rstudio-v1-4-preview-command-palette/">Command Palette</a>. When enabled, it turns on debug logging for the session and enables a special option to show messages before and after each request handled by the IDE. This information is placed by default in a log file in <code>/var/log/rstudio/rstudio-server/rsession-username.log</code>.</p>
+<p>This log complements the session diagnostics option, providing an easier to read log than the existing ‘strace’ option that logs all system calls at a low level.</p>
+<h4 id="logging-details" class="anchored">Logging Details</h4>
+<p>Read more about RStudio logging in the <a href="https://docs.rstudio.com/ide/server-pro/server_management/logging.html">admin guide</a>.</p>
+<h3 id="high-dpi-retina-plots" class="anchored">High DPI Retina Plots</h3>
+<p>Images generated for displays that have more dots-per-inch (DPI), such as the Mac retina, should be rendered at a higher resolution to match what’s possible with those displays. The Mac Desktop version of RStudio has supported higher resolution plots for a long time, but in 2021.09.0, this feature is supported for RStudio Server and the other desktop versions as well.</p>
+<h3 id="replay-local-jobs" class="anchored">Replay Local Jobs</h3>
+<p>The RStudio IDE has a new button that allows you to quickly re-run a local job with the same parameters:</p>
+<p><img align="center" style="padding: 35px:" src="replay-job.png"></p>
+<h3 id="load-balancing" class="anchored">Load Balancing</h3>
+<p>RStudio Workbench now supports a more flexible way to configure nodes in the cluster. For details, see <a href="https://blog.rstudio.com/2021/09/21/rstudio-workbench-load-balancing-changes/">this post</a>.</p>
+<h3 id="kubernetes---supplemental-groups" class="anchored">Kubernetes - Supplemental Groups</h3>
+<p>In RStudio Workbench, when using Kubernetes to manage session instances, the <code>launcher-sessions-create-container-user</code> option allows you to create a unix account for the session user on-the-fly when the session starts. This eliminates the need to provision user accounts on the Kubernetes session image. Instead, the user-id and group information from the user’s account on the RStudio Workbench system is used to create a matching account on the system image when the session is started. This allows the session to access the network file systems that use those ids for permissions.</p>
+<p>New in 2021.09.0, enabling this option will also create supplemental groups ids.</p>
+<h3 id="more-info" class="anchored">More Info</h3>
+<p>There’s lots more in this release, and it’s <a href="https://www.rstudio.com/products/rstudio/download/">available for download today</a>. You can read about all the features and bugfixes in the “Ghost Orchid” update in the <a href="https://www.rstudio.com/products/rstudio/release-notes/">RStudio Release Notes</a>, and we’d love to hear your feedback about the new release on our <a href="https://community.rstudio.com/c/rstudio-ide/9">community forum</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-09-29">
+<meta name="description" content="Taylor Rodgers, Senior Data Scientist and project lead at PKGlobal, walks through creating a powerful Shiny application with shinyMatrix and plotly for engineers, manufacturers, and plant workers.">
+
+<title>How to Use shinyMatrix and plotly Graphs as Inputs in a Shiny App</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">How to Use shinyMatrix and plotly Graphs as Inputs in a Shiny App</h1>
+
+<p class="date">2021-09-29</p>
+</header>
+
+
+Photo by <a href="https://unsplash.com/@clayton_cardinalli" target="_blank" rel="noopener noreferrer">Clayton Cardinalli</a> on <a href="https://unsplash.com/?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a>
+
+<br> <br>
+<div class="lt-gray-box">
+<p>This is a guest post from Taylor Rodgers, Senior Data Scientist and project lead at PKGlobal. He’s written extensively on data science topics, including the book <em><a href="https://www.taylorrodgers.com/store/p4/how-to-manage-successful-data-team.html" target="_blank" rel="noopener noreferrer">Data Work: A Jargon-Free Guide to Managing Successful Data Teams</a></em>. His next book, <em><a href="https://www.taylorrodgers.com/store/p5/beginner-r-programming-plain-english.html" target="_blank" rel="noopener noreferrer">R Programming in Plain English</a></em>, is also available for free in beta.</p>
+</div>
+<h3 id="introduction" class="anchored">Introduction</h3>
+<p>At <a href="https://pkglobal.com/" target="_blank" rel="noopener noreferrer">PKGlobal</a>, we had a manufacturing client that wanted a Shiny app for their engineers and plant workers. This Shiny app would allow their employees, none of whom are data scientists or machine learning experts, to use a machine learning algorithm with over 60 inputs to make a prediction. The prediction would allow them to use less material and significantly cut down on costs. (We’re talking tens of thousands of dollars a week!)</p>
+<p>This posed a challenge though. How do you democratize an ML model to manufacturing workers with so many parameters?</p>
+<p>The solution was a Shiny app with an intuitive interface. One that presented the parameters in roughly the same way they would see them on the factory floor and allowed them multiple options for how they inputed those values.</p>
+<p>This project wound up using Shiny’s amazing strength and flexible functionality. Packages, such as shinyMatrix and plotly, provided the end-user the ability to determine their manufacturing inputs the way they wanted. Specific Shiny functions, such as <code>observeEvent</code> and <code>reactive</code>, ensured these methods could communicate with one another without the “wonkiness” that happens with less flexible tools, such as PowerBI or Tableau.</p>
+<p><em>Please note that much of this code is based on online resources, such as Carson Sievert’s Stack Overflow <a href="https://stackoverflow.com/questions/47280032/draggable-line-chart-in-r-shiny" target="_blank" rel="noopener noreferrer">comment</a> and Hadley Wickham’s <a href="https://mastering-shiny.org/" target="_blank" rel="noopener noreferrer">Mastering Shiny</a>, as well as package-specific documentation. This article simply ties these resources together to teach you how to use them and why they work.</em></p>
+<h3 id="so-what-did-this-tool-look-like" class="anchored">So What Did This Tool Look Like?</h3>
+<p>Our client gave us their blessing to showcase this Shiny functionality, but they did request that we not share the details on what the model predicted or their company name. We can, however, reveal what these inputs looked like. If you look below, you’ll see an animation showcasing this functionality.</p>
+<center>
+<img src="example01.gif" class="img-fluid" style="width:50.0%">
+</center>
+<p>There are a lot of details here, so let me break them out one-by-one.</p>
+<p>Within the application, we showed a time-series plot with seven points. Each point represents an input (speed) at a given time in the manufacturing process. All points were required in the final algorithm.</p>
+<center>
+<img src="image01.png" class="img-fluid" style="width:50.0%">
+</center>
+<p>The user can drag and drop these plots, which then changed the output on the algorithm. (The algorithm isn’t included in this demo.)</p>
+<p>Most users liked this option for inputting parameters. However, some wanted to get more specific. They wanted to <em>hand type</em> their inputs. That’s why we gave them the option to toggle to a <code>matrixInput</code>.</p>
+<center>
+<img src="image02.png" class="img-fluid" style="width:50.0%">
+</center>
+<p>And here’s where things started to get complicated.</p>
+<p>We had to ensure both input methods would sync up with one another. For example, if the end-user altered point 2 on the drag-and-drop plot, then that same value must appear on the matrix input. You can see this on the GIF below. I move point 2 on the graph and we find that same value appears on the matrix. When we change point 2 on the matrix, the graph updates to reflect that change.</p>
+<center>
+<img src="example02.gif" class="img-fluid" style="width:50.0%">
+</center>
+<p>These input methods also had to account for user error. The algorithm had specific rules the user had to follow. The first and last time x-axis value had to be 0 and 70, respectively. We had to find a way to enforce those rules to make sure the algorithm worked correctly.</p>
+<p>So to recap, we needed an app that would accomplish the following:</p>
+<ol type="1">
+<li>Allow the user to drag-and-drop plot points to feed an algorithm</li>
+<li>Allow the user to hand type those same points into a matrix that would feed an algorithm</li>
+<li>Ensure the plot and the matrix would match one another</li>
+<li>Ensure that the user couldn’t break the app by not following “the rules”</li>
+</ol>
+<p>Believe it or not, there was even more functionality included. We actually had <em>six</em> of these plot / matrix combos. We also had to show the nearest neighbor, depending on which tab the user selected. And that wasn’t all either. We also had to give the ability to select a different nearest neighbor without breaking the functionality we built!</p>
+<p>I won’t cover those additional features in this how-to document. The good news is that they are largely an extension of the topics we’ll cover in the article below.</p>
+<h3 id="what-packages-and-functions-did-this-app-use" class="anchored">What Packages and Functions Did This App Use?</h3>
+<p>Delivering this functionality required the following packages:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"shiny"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"plotly"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"shinyMatrix"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We made heavy use of the functions <code>observeEvent</code> and <code>reactive</code>. I suggest reviewing this <a href="https://shiny.rstudio.com/articles/reactivity-overview.html" target="_blank" rel="noopener noreferrer">article</a> on the subject to better understand the concept. You don’t need to be an expert on these functions, though. My article below will provide a good demo on how to use them.</p>
+<h3 id="building-the-ui" class="anchored">Building the UI</h3>
+<p>Down below, you’ll see the “skeleton” of the app we’ll build. This will include the packages, data sets, and UI that you’ll need. I also include three table outputs that will help illustrate how the app handles the values within the <code>matrixInput</code> and <code>reactiveValue</code> functions.</p>
+<p>To get started, go into RStudio and create a new Shiny app. Paste the code below into the app.R file of your Shiny app:</p>
+<details>
+<summary>
+app.R
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">### Load packages</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(shiny)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(shinyMatrix)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="do">### Define default matrix</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>rateInputs_m <span class="ot">&lt;-</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matrix</span>(</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">26</span>, <span class="dv">29</span>, <span class="dv">39</span>, <span class="dv">70</span>, <span class="fl">0.78</span>, <span class="fl">1.05</span>, <span class="fl">1.21</span>, <span class="fl">0.67</span>, <span class="fl">0.61</span>, <span class="fl">0.67</span>, <span class="fl">0.67</span>),</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">nrow =</span> <span class="dv">7</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="cn">NULL</span>, <span class="fu">c</span>(<span class="st">"Time"</span>, <span class="st">"Speed"</span>))</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="do">### Define UI</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">titlePanel</span>(<span class="st">"Plotly and Shiny Matrix Input Demonstration"</span>),</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column</span>(</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="dv">4</span>,</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">radioButtons</span>(</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>      <span class="st">"toggleInputSelect"</span>,</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Input Method:"</span>,</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">"Drag-and-Drop"</span> <span class="ot">=</span> <span class="st">"dragDrop"</span>, <span class="st">"Hand Typed"</span> <span class="ot">=</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"handTyped"</span>)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">br</span>(),</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">conditionalPanel</span>(<span class="at">condition =</span> <span class="st">"input.toggleInputSelect=='dragDrop'"</span>,</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">plotlyOutput</span>(<span class="st">"speed_p"</span>, <span class="at">height =</span> <span class="st">"250px"</span>)),</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">conditionalPanel</span>(</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>      <span class="at">condition =</span> <span class="st">"input.toggleInputSelect=='handTyped'"</span>,</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>      <span class="fu">matrixInput</span>(</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>        <span class="st">"rateInputs_mi"</span>,</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">value =</span> rateInputs_m,</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>        <span class="at">class =</span> <span class="st">"numeric"</span>,</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>        <span class="at">row =</span> <span class="fu">list</span>(<span class="at">names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column</span>(<span class="dv">8</span>,</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>         <span class="fu">tabsetPanel</span>(</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>           <span class="at">id =</span> <span class="st">"tabs"</span>,</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>           <span class="fu">tabPanel</span>(</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>             <span class="st">"Algorithm Tab"</span>,</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>             <span class="at">value =</span> <span class="st">"algorithmOutput"</span>,</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>             <span class="fu">column</span>(<span class="dv">3</span>, <span class="fu">br</span>(),</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>                    tags<span class="sc">$</span><span class="fu">h4</span>(<span class="st">"Original Values"</span>),</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">tableOutput</span>(<span class="st">"table1"</span>)),</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>             <span class="fu">column</span>(<span class="dv">3</span>, <span class="fu">br</span>(),</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>                    tags<span class="sc">$</span><span class="fu">h4</span>(<span class="st">"Matix Inputs"</span>),</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">tableOutput</span>(<span class="st">"table2"</span>)),</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>             <span class="fu">column</span>(<span class="dv">3</span>, <span class="fu">br</span>(),</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>                    tags<span class="sc">$</span><span class="fu">h4</span>(<span class="st">"Reactive Values"</span>),</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">tableOutput</span>(<span class="st">"table3"</span>))</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>           )</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>         ))</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="do">### Define server logic</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output, session) {</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>  output<span class="sc">$</span>table1 <span class="ot">&lt;-</span> <span class="fu">renderTable</span>({</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>    rateInputs_m</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>  output<span class="sc">$</span>table2 <span class="ot">&lt;-</span> <span class="fu">renderTable</span>({</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>    input<span class="sc">$</span>rateInputs_mi</span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>  output<span class="sc">$</span>table3 <span class="ot">&lt;-</span> <span class="fu">renderTable</span>({</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>    <span class="fu">req</span>(rv<span class="sc">$</span>time)</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(rv<span class="sc">$</span>time, rv<span class="sc">$</span>speed)</span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Creating Reactive Values</span></span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>  rv <span class="ot">&lt;-</span> <span class="fu">reactiveValues</span>()</span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a><span class="do">### Run the application</span></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a><span class="fu">shinyApp</span>(<span class="at">ui =</span> ui, <span class="at">server =</span> server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</details>
+<p>If you run the app, you may notice that altering the matrix input on the left-hand side only changes the table labeled “Matrix Inputs.” The “original” table is the one defined at the beginning of the app.R script. shinyMatrix uses those inputs, but starts to function as its own object once the app runs.</p>
+<p>You can see this demonstrated below. Notice that we change the speed in the third row and only the value updates on the “Matrix Input” table on the right.</p>
+<center>
+<img src="example03.gif" class="img-fluid" style="width:70.0%">
+</center>
+<p>This is an important distinction to make. We’ll end up adding a third object that will operate in the background. Like the shinyMatrix, this will also use the original matrix defined at the beginning of our app, but become independent later.</p>
+<p>One other thing I want you to notice are the conditional panels (<code>conditionalPanel</code>) in the UI script.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">conditionalPanel</span>(<span class="at">condition =</span> <span class="st">"input.toggleInputSelect=='dragDrop'"</span>,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">plotlyOutput</span>(<span class="st">"speed_p"</span>, <span class="at">height =</span> <span class="st">"250px"</span>)),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">conditionalPanel</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">condition =</span> <span class="st">"input.toggleInputSelect=='handTyped'"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matrixInput</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"rateInputs_mi"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">value =</span> rateInputs_m,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">class =</span> <span class="st">"numeric"</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">row =</span> <span class="fu">list</span>(<span class="at">names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>)<span class="er">)</span>, </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>These conditional panels make it possible to toggle back and forth between the two input methods we’ll use later in the app.</p>
+<h3 id="building-the-plotly-drag-and-drop-inputs" class="anchored">Building the Plotly Drag-and-Drop Inputs</h3>
+<p>Now that we have our UI, we can add to our server function. Within this server function, we’ll build a set of smaller functions that will coordinate with one another to produce the functionality we want. These functions include <code>reactiveValues</code>, <code>renderPlotly</code>, and <code>observeEvent</code>.</p>
+<ul>
+<li><p><code>reactiveValues</code> stores a list of values that we’ll use as both a source and destination in the other two functions.</p></li>
+<li><p><code>renderPlotly</code> allows us to display a plotly graph within our application and will use the reactive values as its data.</p></li>
+<li><p><code>observeEvent</code> observes the end-user as they interact with the application. We will use this function to update the reactive value list, but only if the user updates the matrix input or moves a point on the plotly graph.</p></li>
+</ul>
+<p>If you look below, you can see how these will interact. We store the original matrix inputs in the reactive value function. The user can update either the plotly graph or the matrix input. We’ll have two event observation functions that will update the reactive values with the new inputs.</p>
+<center>
+<img src="image03.png" class="img-fluid" style="width:50.0%">
+</center>
+<p>This graph is a somewhat simplistic representation of the steps we’ll be programming. But overall, it highlights what we’ll be working towards.</p>
+<h3 id="creating-the-reactive-values" class="anchored">Creating the Reactive Values</h3>
+<p>The first thing we’ll add is the reactive value function. I already have an empty reactive function in the app.R script shared earlier. Go ahead and adjust the <code>rv</code> object to match what you see below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating Reactive Values</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>rv <span class="ot">&lt;-</span> <span class="fu">reactiveValues</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">time=</span>rateInputs_m[,<span class="dv">1</span>],</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">speed=</span>rateInputs_m[,<span class="dv">2</span>]</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this function, we pulled the <code>rateInputs_m</code> matrix defined at the top of our app.R script and assigned each column to its respective name. So column one (<code>rateInputs_m[,1]</code>) is time and column two (<code>rateInputs_m[,2]</code>) is speed. The functions we’ll add later will call upon this reactive value list, rather than the original <code>rateInputs_m</code> matrix.</p>
+<p>If you run the app, you should see values populate in the “Reactive Values” table on the far right.</p>
+<center>
+<img src="image09.png" class="img-fluid" style="width:70.0%">
+</center>
+<p>These values won’t change yet, but it’s important to note we now have three matrices in the background: the original matrix, the shinyMatrix, and now these reactive values.</p>
+<p>There are a few other nuances I want to point out as well.</p>
+<p>First, pay close attention to the parentheses <code>(...)</code> surrounding the <code>reactiveValues</code> function in the code above. If you read the documentation (<code>?reactiveValues</code>), this function operates more like a list.</p>
+<p>That means using the <code>({...})</code> notation will prevent this reactive value list from working. Instead, we’ll need to use <code>(...)</code> notation.</p>
+<p>The second thing is the use of the <code>=</code> sign rather than <code>&lt;-</code> to assign object names. Normally, you could assign object names with <code>&lt;-</code>, but since these are not individual objects <em>per se</em>, but items within a list-like function, we’ll need to use the equal <code>=</code> sign.</p>
+<p>The third thing is the use of <code>,</code> between each list item. Unlike the reactive functions with a Shiny app, this must be comma-separated.</p>
+<h3 id="creating-the-renderplotly-function" class="anchored">Creating the renderPlotly Function</h3>
+<p>Next we’ll add our reactive function for plotly. We start with the <code>renderPlotly</code> function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Speed 1's Plot and Table and Feedback</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>output<span class="sc">$</span>speed_p <span class="ot">&lt;-</span> <span class="fu">renderPlotly</span>({</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We’ll need to alter this later, but to start, let’s just add the full <code>plot_ly</code> function to see what it looks like:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Speed 1's Plot and Table and Feedback</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>output<span class="sc">$</span>speed_p <span class="ot">&lt;-</span> <span class="fu">renderPlotly</span>({</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_ly</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_lines</span>(<span class="at">x =</span> rv<span class="sc">$</span>time,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">y =</span> rv<span class="sc">$</span>speed,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="fu">I</span>(<span class="st">"black"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">layout</span>(</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Time"</span>),</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Speed"</span>),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">showlegend =</span> <span class="cn">FALSE</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will plot the reactive values defined earlier. We can see that we add lines for the x-axis and y-axis, which are <code>rv$time</code> and <code>rv$speed</code> respectively. We also do some minor formatting items with the <code>layout</code> function.</p>
+<p>Now here’s where things start to get tricky. If you remember, we want the end-user to drag-and-drop these plot points to determine how they feed into the algorithm. And we’ll need to ensure the reactive value list updates with the new values after they move one of those points.</p>
+<p>Let’s first add the ability to move the plot points. We can do this with the <code>config</code> function, as seen below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Speed 1's Plot and Table and Feedback</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>output<span class="sc">$</span>speed_p <span class="ot">&lt;-</span> <span class="fu">renderPlotly</span>({</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_ly</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_lines</span>(<span class="at">x =</span> rv<span class="sc">$</span>time,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">y =</span> rv<span class="sc">$</span>speed,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="fu">I</span>(<span class="st">"black"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">layout</span>(</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Time"</span>),</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Speed"</span>),</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">showlegend =</span> <span class="cn">FALSE</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">config</span>(<span class="at">edits =</span> <span class="fu">list</span>(<span class="at">shapePosition =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">displayModeBar =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If we try to run the app now, we still wouldn’t be able to move the lines on the plot. The reason is that we only allowed for “shapes” to be moved on the plot. We still need to create our shapes.</p>
+<p>If you look at the code below, you can see I added a function called <code>map2</code>. We can include these shapes by adding it to the <code>layout</code> function near the bottom.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Speed 1's Plot and Table and Feedback</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>output<span class="sc">$</span>speed_p <span class="ot">&lt;-</span> <span class="fu">renderPlotly</span>({</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  speed_c <span class="ot">&lt;-</span> <span class="fu">map2</span>(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    rv<span class="sc">$</span>time,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    rv<span class="sc">$</span>speed,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span> <span class="fu">list</span>(</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">type =</span> <span class="st">"circle"</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">xanchor =</span> .x,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">yanchor =</span> .y,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">x0 =</span> <span class="sc">-</span><span class="dv">4</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">x1 =</span> <span class="dv">4</span>,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">y0 =</span> <span class="sc">-</span><span class="dv">4</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">y1 =</span> <span class="dv">4</span>,</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">xsizemode =</span> <span class="st">"pixel"</span>,</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">ysizemode =</span> <span class="st">"pixel"</span>,</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">fillcolor =</span> <span class="st">"grey"</span>,</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">line =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">"black"</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_ly</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_lines</span>(<span class="at">x =</span> rv<span class="sc">$</span>time,</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>              <span class="at">y =</span> rv<span class="sc">$</span>speed,</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="fu">I</span>(<span class="st">"black"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">layout</span>(</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Time"</span>),</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Speed"</span>),</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>      <span class="at">showlegend =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>      <span class="at">shapes =</span> speed_c</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">config</span>(<span class="at">edits =</span> <span class="fu">list</span>(<span class="at">shapePosition =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>           <span class="at">displayModeBar =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Within the <code>map2</code> function, I defined a list of arguments that will create the circles we can move. This then maps those arguments to both <code>rv$time</code> and <code>rv$speed</code>, the values from our reactive value list.</p>
+<p>By referencing this object in the <code>layout</code> function near the bottom of this script, we will see those points appear on our Shiny application.</p>
+<p>There’s one last thing to add to the <code>plot_ly</code> function before moving forward. We will want to observe interactions on this plot by the end-user. For that reason, we need to give it a “name” that we can reference later. So we’ll add the argument <code>source="speed_s"</code> and you can see that in the final code for this section below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Speed 1's Plot and Table and Feedback</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>output<span class="sc">$</span>speed_p <span class="ot">&lt;-</span> <span class="fu">renderPlotly</span>({</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  speed_c <span class="ot">&lt;-</span> <span class="fu">map2</span>(</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    rv<span class="sc">$</span>time,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    rv<span class="sc">$</span>speed,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span> <span class="fu">list</span>(</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">type =</span> <span class="st">"circle"</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">xanchor =</span> .x,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">yanchor =</span> .y,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">x0 =</span> <span class="sc">-</span><span class="dv">4</span>,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">x1 =</span> <span class="dv">4</span>,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">y0 =</span> <span class="sc">-</span><span class="dv">4</span>,</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">y1 =</span> <span class="dv">4</span>,</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">xsizemode =</span> <span class="st">"pixel"</span>,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">ysizemode =</span> <span class="st">"pixel"</span>,</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">fillcolor =</span> <span class="st">"grey"</span>,</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">line =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">"black"</span>)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_ly</span>(<span class="at">source =</span> <span class="st">"speed_s"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_lines</span>(<span class="at">x =</span> rv<span class="sc">$</span>time,</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>              <span class="at">y =</span> rv<span class="sc">$</span>speed,</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="fu">I</span>(<span class="st">"black"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">layout</span>(</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">shapes =</span> speed_c,</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Time"</span>),</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>      <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Speed"</span>),</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>      <span class="at">showlegend =</span> <span class="cn">FALSE</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">config</span>(<span class="at">edits =</span> <span class="fu">list</span>(<span class="at">shapePosition =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>           <span class="at">displayModeBar =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now let’s run the app and move the dots around. The lines don’t move with the dots, do they?</p>
+<p>That’s because the app doesn’t know how to respond when we move a plot point. It’s not updating the reactive list we made earlier. That’s where the <code>observeEvent</code> function comes in handy.</p>
+<h3 id="creating-the-observeevent-for-plotly" class="anchored">Creating the observeEvent for Plotly</h3>
+<p>Within Shiny, we can use either the <code>observeEvent</code> or <code>observe</code> functions to see how the end-user interacts with the app. Those functions can then make adjustments to the app, based on what code we add.</p>
+<p>As you can imagine, they have a wide-range of uses and they are something I suggest you get very good at doing if you want to build more Shiny apps.</p>
+<p>You can use both functions in relatively similar ways, but I like the <code>observeEvent</code> function myself.</p>
+<p>Let’s create our <code>observeEvent</code> function. Take the code below and add it to your <code>server</code> function in the Shiny app.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">observeEvent</span>(<span class="fu">event_data</span>(<span class="at">event =</span> <span class="st">"plotly_relayout"</span>, <span class="at">source =</span> <span class="st">"speed_s"</span>), {</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now there’s two things I want you to pay attention to here. The first is the <code>event_data</code> function. This is a plotly function and allows us to specify which plotly event we want to observe.</p>
+<p>In this example, we want to know whether a “plotly_relayout” event occurred and whether it came from the plotly graph called “speed_s”. If you recall, we had named the plotly graph we created earlier as “speed_s”.</p>
+<p>The second thing I want you to notice is where I placed the <code>event_data</code> function. I placed it between the first <code>(</code> and the first <code>{</code>. By placing the <code>event_data</code> function at this location and using “speed_s” as the source, the <code>observeEvent</code> function will proceed if there’s an event associated with “speed_s”. It will then execute the code enclosed within the <code>{...}</code> brackets.</p>
+<p>Now with that out of the way, we can start filling in the interior of this <code>observeEvent</code> function. We’ll add the same <code>event_data()</code> as earlier and we’ll then sub-select specific values from it.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">observeEvent</span>(<span class="fu">event_data</span>(<span class="at">event =</span> <span class="st">"plotly_relayout"</span>, <span class="at">source =</span> <span class="st">"speed_s"</span>), {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Speed 1 Event Data</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  speed_ed <span class="ot">&lt;-</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">event_data</span>(<span class="st">"plotly_relayout"</span>, <span class="at">source =</span> <span class="st">"speed_s"</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  speed_sa <span class="ot">&lt;-</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    speed_ed[<span class="fu">grepl</span>(<span class="st">"^shapes.*anchor$"</span>, <span class="fu">names</span>(speed_ed))]</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There’s two steps here. The first is determining the actual event data. I provide an example of what this looks like below:</p>
+<center>
+<img src="image05.png" class="img-fluid" style="width:50.0%">
+</center>
+<p>The problem with this function is sometimes it will display events unrelated to the ones we want. For example, sometimes it’ll record a user adjusting the range on the plot, like you see below:</p>
+<center>
+<img src="image04.png" class="img-fluid" style="width:50.0%">
+</center>
+<p><code>speed_sa</code> helps us overcome this problem. It will only includes events with the word “shapes” in its column header. When it does include that word, the values will be the same as the <code>speed_ed</code> object above it.</p>
+<center>
+<img src="image06.png" class="img-fluid" style="width:50.0%">
+</center>
+<p>After we pull the new shape points, we need to do some additional data transformations. If you recall, we’re updating the reactive values. However, there’s seven rows we could update. How will Shiny know which row to update?</p>
+<p>The good news is that our event data includes a numeric value associated with the shape the user moved. Unfortunately, that value does not correspond to the row number. If you have seven values, like our app does, it will begin the count at zero. So instead of 1 through 7, we have 0 through 6. We can account for this by merely extracting the number from the column name and adding a 1 to it.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">observeEvent</span>(<span class="fu">event_data</span>(<span class="at">event =</span> <span class="st">"plotly_relayout"</span>, <span class="at">source =</span> <span class="st">"speed_s"</span>), {</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Speed 1 Event Data</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  speed_ed <span class="ot">&lt;-</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">event_data</span>(<span class="st">"plotly_relayout"</span>, <span class="at">source =</span> <span class="st">"speed_s"</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  speed_sa <span class="ot">&lt;-</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    speed_ed[<span class="fu">grepl</span>(<span class="st">"^shapes.*anchor$"</span>, <span class="fu">names</span>(speed_ed))]</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  speed_ri <span class="ot">&lt;-</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unique</span>(readr<span class="sc">::</span><span class="fu">parse_number</span>(<span class="fu">names</span>(speed_sa)) <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We’ll also want to pull the new values associated with the new location of the plot points. That’s what the <code>speed_pts &lt;- as.numeric(speed_sa)</code> code added below accomplishes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">observeEvent</span>(<span class="fu">event_data</span>(<span class="at">event =</span> <span class="st">"plotly_relayout"</span>, <span class="at">source =</span> <span class="st">"speed_s"</span>), {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Speed 1 Event Data</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  speed_ed <span class="ot">&lt;-</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">event_data</span>(<span class="st">"plotly_relayout"</span>, <span class="at">source =</span> <span class="st">"speed_s"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  speed_sa <span class="ot">&lt;-</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    speed_ed[<span class="fu">grepl</span>(<span class="st">"^shapes.*anchor$"</span>, <span class="fu">names</span>(speed_ed))]</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  speed_ri <span class="ot">&lt;-</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unique</span>(readr<span class="sc">::</span><span class="fu">parse_number</span>(<span class="fu">names</span>(speed_sa)) <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  speed_pts <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(speed_sa)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we get to the fun part! We’ll need to include some extra logic to take into account some of the rules we want in place.</p>
+<p>The first rule is that we want to re-sort the dot plots. The second is to ensure that the x-axis value for the first and last point are always 0 and 70, respectively.</p>
+<center>
+<img src="image08.png" class="img-fluid" style="width:50.0%">
+</center>
+<p>While there are probably several ways to implement these two rules, I found it easier to make a matrix to serve as a temporary home for our values. I could then alter this matrix the way I needed to ensure these rules stayed in place and limit the amount of “wonkiness” in the application.</p>
+<p>To start this process, look at the additional lines of code I added below. You’ll see the new matrix called “temp_matrix.” All this does is record the values from the reactive values list and puts it in the temporary matrix.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">observeEvent</span>(<span class="fu">event_data</span>(<span class="at">event =</span> <span class="st">"plotly_relayout"</span>, <span class="at">source =</span> <span class="st">"speed_s"</span>), {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Speed 1 Event Data</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  speed_ed <span class="ot">&lt;-</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">event_data</span>(<span class="st">"plotly_relayout"</span>, <span class="at">source =</span> <span class="st">"speed_s"</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  speed_sa <span class="ot">&lt;-</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    speed_ed[<span class="fu">grepl</span>(<span class="st">"^shapes.*anchor$"</span>, <span class="fu">names</span>(speed_ed))]</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  speed_ri <span class="ot">&lt;-</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unique</span>(readr<span class="sc">::</span><span class="fu">parse_number</span>(<span class="fu">names</span>(speed_sa)) <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  speed_pts <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(speed_sa)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Speed 1 Point Updates</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  temp_matrix <span class="ot">&lt;-</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">matrix</span>(</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="fu">round</span>(rv<span class="sc">$</span>time, <span class="dv">2</span>), <span class="fu">round</span>(rv<span class="sc">$</span>speed, <span class="dv">2</span>)),</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">nrow =</span> <span class="dv">7</span>,</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="cn">NULL</span>, <span class="fu">c</span>(<span class="st">"Time"</span>, <span class="st">"Speed"</span>))</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  temp_matrix[speed_ri, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(speed_pts[<span class="dv">1</span>], <span class="dv">2</span>)</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  temp_matrix[speed_ri, <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(speed_pts[<span class="dv">2</span>], <span class="dv">2</span>)</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We then update the temporary matrix with the new values. We use “speed_ri”, which is the “row index,” to determine the proper row to update. We then use <code>speed_pts[1]</code> and <code>speed_pts[2]</code> to update the temporary matrix values with their new values for the x and y axis.</p>
+<p>Next, we want to re-sort the values. Remember, these are time values and we want them sorted in order of seconds. If we don’t, the model inputs may be in the incorrect order. And we also want to ensure the first and last value are 0 and 70, respectively.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">observeEvent</span>(<span class="fu">event_data</span>(<span class="at">event =</span> <span class="st">"plotly_relayout"</span>, <span class="at">source =</span> <span class="st">"speed_s"</span>), {</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Speed 1 Event Data</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  speed_ed <span class="ot">&lt;-</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">event_data</span>(<span class="st">"plotly_relayout"</span>, <span class="at">source =</span> <span class="st">"speed_s"</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  speed_sa <span class="ot">&lt;-</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    speed_ed[<span class="fu">grepl</span>(<span class="st">"^shapes.*anchor$"</span>, <span class="fu">names</span>(speed_ed))]</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  speed_ri <span class="ot">&lt;-</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unique</span>(readr<span class="sc">::</span><span class="fu">parse_number</span>(<span class="fu">names</span>(speed_sa)) <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  speed_pts <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(speed_sa)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Speed 1 Point Updates</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  temp_matrix <span class="ot">&lt;-</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">matrix</span>(</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="fu">round</span>(rv<span class="sc">$</span>time, <span class="dv">2</span>), <span class="fu">round</span>(rv<span class="sc">$</span>speed, <span class="dv">2</span>)),</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">nrow =</span> <span class="dv">7</span>,</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="cn">NULL</span>, <span class="fu">c</span>(<span class="st">"Time"</span>, <span class="st">"Speed"</span>))</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  temp_matrix[speed_ri, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(speed_pts[<span class="dv">1</span>], <span class="dv">2</span>)</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  temp_matrix[speed_ri, <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(speed_pts[<span class="dv">2</span>], <span class="dv">2</span>)</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>  temp_matrix <span class="ot">&lt;-</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    temp_matrix[<span class="fu">order</span>(temp_matrix[, <span class="dv">1</span>], <span class="at">decreasing =</span> <span class="cn">FALSE</span>), ]</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  temp_matrix[<span class="dv">1</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  temp_matrix[<span class="dv">7</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">70</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After we do that, we want to update the reactive value list with these new values found in the temporary matrix.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">observeEvent</span>(<span class="fu">event_data</span>(<span class="at">event =</span> <span class="st">"plotly_relayout"</span>, <span class="at">source =</span> <span class="st">"speed_s"</span>), {</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Speed 1 Event Data</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  speed_ed <span class="ot">&lt;-</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">event_data</span>(<span class="st">"plotly_relayout"</span>, <span class="at">source =</span> <span class="st">"speed_s"</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  speed_sa <span class="ot">&lt;-</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    speed_ed[<span class="fu">grepl</span>(<span class="st">"^shapes.*anchor$"</span>, <span class="fu">names</span>(speed_ed))]</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  speed_ri <span class="ot">&lt;-</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unique</span>(readr<span class="sc">::</span><span class="fu">parse_number</span>(<span class="fu">names</span>(speed_sa)) <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  speed_pts <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(speed_sa)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Speed 1 Point Updates</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  temp_matrix <span class="ot">&lt;-</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">matrix</span>(</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="fu">round</span>(rv<span class="sc">$</span>time, <span class="dv">2</span>), <span class="fu">round</span>(rv<span class="sc">$</span>speed, <span class="dv">2</span>)),</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">nrow =</span> <span class="dv">7</span>,</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="cn">NULL</span>, <span class="fu">c</span>(<span class="st">"Time"</span>, <span class="st">"Speed"</span>))</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  temp_matrix[speed_ri, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(speed_pts[<span class="dv">1</span>], <span class="dv">2</span>)</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  temp_matrix[speed_ri, <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(speed_pts[<span class="dv">2</span>], <span class="dv">2</span>)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>  temp_matrix <span class="ot">&lt;-</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    temp_matrix[<span class="fu">order</span>(temp_matrix[, <span class="dv">1</span>], <span class="at">decreasing =</span> <span class="cn">FALSE</span>), ]</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  temp_matrix[<span class="dv">1</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  temp_matrix[<span class="dv">7</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">70</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Update reactive values</span></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>  rv<span class="sc">$</span>time <span class="ot">&lt;-</span> <span class="fu">round</span>(temp_matrix[, <span class="dv">1</span>], <span class="dv">2</span>)</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>  rv<span class="sc">$</span>speed <span class="ot">&lt;-</span> <span class="fu">round</span>(temp_matrix[, <span class="dv">2</span>], <span class="dv">2</span>)</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>With this code in place, we should now be able to move the dots on the plotly graph. Go ahead and try on your app!</p>
+<p>Pay close attention to which tables on the right are changing. If you’ll notice, only the reactive value list is changing.</p>
+<center>
+<img src="example04.gif" class="img-fluid" style="width:100.0%">
+</center>
+<h3 id="building-the-shinymatrix-inputs" class="anchored">Building the shinyMatrix Inputs</h3>
+<p>If you recall, we wanted to provide our end-user the ability to toggle back and forth between the drag-and-drop plot and the ability to hand type their inputs.</p>
+<center>
+<img src="example01.gif" class="img-fluid" style="width:50.0%">
+</center>
+<p>So if they want to visualize how speed changes overtime, they can use the plotly graph. If they want to input precise values, they can hand type them.</p>
+<p>Fortunately, there’s a great package out there called shinyMatrix that allows this.</p>
+<p>So how do we add this?</p>
+<p>Well, if you look at the UI script, you’ll notice that I had included an input called <code>matrixInput</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">matrixInput</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"rateInputs_mi"</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">value =</span> rateInputs_m,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">class =</span> <span class="st">"numeric"</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">row =</span> <span class="fu">list</span>(<span class="at">names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This function actually works pretty good on its own, but we need to do more. Currently, the new values you can type into the matrix only apply to itself. If we run the app, we’ll notice that the reactive values (which is what the plotly graph uses) does not update. And rules, such as the first and last value must equal 0 and 70, do not apply either.</p>
+<center>
+<img src="example05.gif" class="img-fluid" style="width:70.0%">
+</center>
+<p>We’ll need to add an additional <code>observeEvent()</code> function to update the reactive value list, similar to how we did the plotly relayout.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">observeEvent</span>(<span class="fu">req</span>(input<span class="sc">$</span>rateInputs_mi <span class="sc">&amp;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                   input<span class="sc">$</span>toggleInputSelect <span class="sc">==</span> <span class="st">"handTyped"</span>),</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>             {</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>               </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>             })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We will add a Boolean statement to this event observation between the first <code>(</code> and the first <code>{</code>. Much like our other event observation function, this will only continue in certain instances. The user will need to select both the “Hand Type” option in the UI and change the matrix input for this function to continue.</p>
+<p>It may not be clear now why this is important, but later on, we’ll be adding to our earlier <code>observeEvent</code> function for the “plotly_relayout” events. We want to prevent these two event observations from competing with one another. Adding these statements between the <code>(</code> and <code>{</code> ensures these functions only proceeds at the right moment.</p>
+<p>Now let’s actually add our code!</p>
+<p>This one is a lot easier to write. The shinyMatrix package makes it a relatively straight forward process to make updates.</p>
+<p>First, we’ll take all the values in the <code>rateInputs_mi</code> matrix (the shinyMatrix input in the UI) and assign it to a “temp matrix.” Please note, it is important to include the full matrix code below for it to register with the plotly graph. This is done for the same reasons as we did with the plotly. We want to ensure the end-user follows the rules required for the algorithm input.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">observeEvent</span>(<span class="fu">req</span>(input<span class="sc">$</span>rateInputs_mi <span class="sc">&amp;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                   input<span class="sc">$</span>toggleInputSelect <span class="sc">==</span> <span class="st">"handTyped"</span>),</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>             {</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>               temp_matrix <span class="ot">&lt;-</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">matrix</span>(</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>                   input<span class="sc">$</span>rateInputs_mi,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">nrow =</span> <span class="dv">7</span>,</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="cn">NULL</span>, <span class="fu">c</span>(<span class="st">"Time"</span>, <span class="st">"Speed"</span>))</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>                 )</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>               temp_matrix[<span class="dv">1</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>               temp_matrix[<span class="dv">7</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">70</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>               temp_matrix <span class="ot">&lt;-</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>                 temp_matrix[<span class="fu">order</span>(temp_matrix[, <span class="dv">1</span>], <span class="at">decreasing =</span> <span class="cn">FALSE</span>), ]</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>               </span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>             })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As you can see in the code above, we force the first and last value to be 0 and 70, respectively. We also re-order the speed values from least to highest.</p>
+<p>Next, we’ll update the reactive value list.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">observeEvent</span>(<span class="fu">req</span>(input<span class="sc">$</span>rateInputs_mi <span class="sc">&amp;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                   input<span class="sc">$</span>toggleInputSelect <span class="sc">==</span> <span class="st">"handTyped"</span>),</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>             {</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>               temp_matrix <span class="ot">&lt;-</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">matrix</span>(</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>                   input<span class="sc">$</span>rateInputs_mi,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">nrow =</span> <span class="dv">7</span>,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="cn">NULL</span>, <span class="fu">c</span>(<span class="st">"Time"</span>, <span class="st">"Speed"</span>))</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>                 )</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>               temp_matrix[<span class="dv">1</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>               temp_matrix[<span class="dv">7</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">70</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>               temp_matrix <span class="ot">&lt;-</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>                 temp_matrix[<span class="fu">order</span>(temp_matrix[, <span class="dv">1</span>], <span class="at">decreasing =</span> <span class="cn">FALSE</span>), ]</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>               </span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>               rv<span class="sc">$</span>time <span class="ot">&lt;-</span> temp_matrix[, <span class="dv">1</span>]</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>               rv<span class="sc">$</span>speed <span class="ot">&lt;-</span> temp_matrix[, <span class="dv">2</span>]</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>               </span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>             })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>But there’s one more thing we need to do.</p>
+<p>Normally with shinyMatrix, we don’t need to worry about updating the shinyMatrix with new values. It usually does that itself. But in this case, the end-user may have entered 71 for the last time value. If you look at the script above, we changed that value back to 70. That changes only applies to the reactive value list though! We need to make sure the shinyMatrix updates too.</p>
+<p>As seen in the GIF below, we are able to change the first and last value to something other than 0 and 70. I can also change the order of the values. While the reactive list on the far right changes, the table for the shinyMatrix does not. You can replicate this yourself in the app currently.</p>
+<center>
+<img src="example06.gif" class="img-fluid" style="width:100.0%">
+</center>
+<p>To fix this, we update the matrix input with the reactive values. You can see this with the <code>updateMatrixInput</code> function below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">observeEvent</span>(<span class="fu">req</span>(input<span class="sc">$</span>rateInputs_mi <span class="sc">&amp;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>                   input<span class="sc">$</span>toggleInputSelect <span class="sc">==</span> <span class="st">"handTyped"</span>),</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>             {</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>               temp_matrix <span class="ot">&lt;-</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">matrix</span>(</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                   input<span class="sc">$</span>rateInputs_mi,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">nrow =</span> <span class="dv">7</span>,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="cn">NULL</span>, <span class="fu">c</span>(<span class="st">"Time"</span>, <span class="st">"Speed"</span>))</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>                 )</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>               temp_matrix[<span class="dv">1</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>               temp_matrix[<span class="dv">7</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">70</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>               temp_matrix <span class="ot">&lt;-</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>                 temp_matrix[<span class="fu">order</span>(temp_matrix[, <span class="dv">1</span>], <span class="at">decreasing =</span> <span class="cn">FALSE</span>), ]</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>               </span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>               rv<span class="sc">$</span>time <span class="ot">&lt;-</span> temp_matrix[, <span class="dv">1</span>]</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>               rv<span class="sc">$</span>speed <span class="ot">&lt;-</span> temp_matrix[, <span class="dv">2</span>]</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>               </span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>               <span class="fu">updateMatrixInput</span>(session, <span class="st">"rateInputs_mi"</span>, temp_matrix)</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>               </span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>             })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now try the same experiment before! It works right? If you look below, you can see that we can no longer “break the rules”. The matrix corrects itself.</p>
+<center>
+<img src="example07.gif" class="img-fluid" style="width:70.0%">
+</center>
+<p>But we’re still not done! We still need to ensure the plotly graph talks back to the matrixInput and vice versa!</p>
+<h3 id="how-to-make-these-inputs-options-work-together" class="anchored">How to Make These Inputs Options Work Together</h3>
+<p>When running your earlier experiment, you may have noticed the plotly graph doesn’t seem to change the matrix input.</p>
+<p>We had programmed the second event observation function to update the plotly graph on the first tab. We did not program it to work the other way… yet!</p>
+<p>This is an easy change to make. All you need to do is add the same <code>updateMatrixInput</code> function to your <code>observeEvent()</code> function for the plotly graph. Here’s the full code below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">observeEvent</span>(<span class="fu">event_data</span>(<span class="at">event =</span> <span class="st">"plotly_relayout"</span>, <span class="at">source =</span> <span class="st">"speed_s"</span>), {</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Speed 1 Event Data</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  speed_ed <span class="ot">&lt;-</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">event_data</span>(<span class="st">"plotly_relayout"</span>, <span class="at">source =</span> <span class="st">"speed_s"</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  speed_sa <span class="ot">&lt;-</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    speed_ed[<span class="fu">grepl</span>(<span class="st">"^shapes.*anchor$"</span>, <span class="fu">names</span>(speed_ed))]</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  speed_ri <span class="ot">&lt;-</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unique</span>(readr<span class="sc">::</span><span class="fu">parse_number</span>(<span class="fu">names</span>(speed_sa)) <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  speed_pts <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(speed_sa)</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Speed 1 Point Updates</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  temp_matrix <span class="ot">&lt;-</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">matrix</span>(</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="fu">round</span>(rv<span class="sc">$</span>time, <span class="dv">2</span>), <span class="fu">round</span>(rv<span class="sc">$</span>speed, <span class="dv">2</span>)),</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">nrow =</span> <span class="dv">7</span>,</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="cn">NULL</span>, <span class="fu">c</span>(<span class="st">"Time"</span>, <span class="st">"Speed"</span>))</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>  temp_matrix[speed_ri, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(speed_pts[<span class="dv">1</span>], <span class="dv">2</span>)</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>  temp_matrix[speed_ri, <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(speed_pts[<span class="dv">2</span>], <span class="dv">2</span>)</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>  temp_matrix <span class="ot">&lt;-</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>    temp_matrix[<span class="fu">order</span>(temp_matrix[, <span class="dv">1</span>], <span class="at">decreasing =</span> <span class="cn">FALSE</span>), ]</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>  temp_matrix[<span class="dv">1</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>  temp_matrix[<span class="dv">7</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">70</span></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Update reactive values</span></span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>  rv<span class="sc">$</span>time <span class="ot">&lt;-</span> <span class="fu">round</span>(temp_matrix[, <span class="dv">1</span>], <span class="dv">2</span>)</span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>  rv<span class="sc">$</span>speed <span class="ot">&lt;-</span> <span class="fu">round</span>(temp_matrix[, <span class="dv">2</span>], <span class="dv">2</span>)</span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">updateMatrixInput</span>(session, <span class="st">"rateInputs_mi"</span>, temp_matrix)</span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And with that last addition, these two input methods should work together. Give your app a preview and see if that’s the case!</p>
+<p>The complete app should look something like this:</p>
+<details>
+<summary>
+Final app.R
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="do">### Load packages</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(shiny)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(shinyMatrix)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="do">### Define default matrix</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>rateInputs_m <span class="ot">&lt;-</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matrix</span>(</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">26</span>, <span class="dv">29</span>, <span class="dv">39</span>, <span class="dv">70</span>, <span class="fl">0.78</span>, <span class="fl">1.05</span>, <span class="fl">1.21</span>, <span class="fl">0.67</span>, <span class="fl">0.61</span>, <span class="fl">0.67</span>, <span class="fl">0.67</span>),</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">nrow =</span> <span class="dv">7</span>,</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="cn">NULL</span>, <span class="fu">c</span>(<span class="st">"Time"</span>, <span class="st">"Speed"</span>))</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a><span class="do">### Define UI</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">titlePanel</span>(<span class="st">"Plotly and Shiny Matrix Input Demonstration"</span>),</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column</span>(</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>    <span class="dv">4</span>,</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">radioButtons</span>(</span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>      <span class="st">"toggleInputSelect"</span>,</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Input Method:"</span>,</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">"Drag-and-Drop"</span> <span class="ot">=</span> <span class="st">"dragDrop"</span>, <span class="st">"Hand Typed"</span> <span class="ot">=</span></span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"handTyped"</span>)</span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">br</span>(),</span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">conditionalPanel</span>(<span class="at">condition =</span> <span class="st">"input.toggleInputSelect=='dragDrop'"</span>,</span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">plotlyOutput</span>(<span class="st">"speed_p"</span>, <span class="at">height =</span> <span class="st">"250px"</span>)),</span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">conditionalPanel</span>(</span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a>      <span class="at">condition =</span> <span class="st">"input.toggleInputSelect=='handTyped'"</span>,</span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>      <span class="fu">matrixInput</span>(</span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>        <span class="st">"rateInputs_mi"</span>,</span>
+<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">value =</span> rateInputs_m,</span>
+<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a>        <span class="at">class =</span> <span class="st">"numeric"</span>,</span>
+<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a>        <span class="at">row =</span> <span class="fu">list</span>(<span class="at">names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column</span>(<span class="dv">8</span>,</span>
+<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a>         <span class="fu">tabsetPanel</span>(</span>
+<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a>           <span class="at">id =</span> <span class="st">"tabs"</span>,</span>
+<span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a>           <span class="fu">tabPanel</span>(</span>
+<span id="cb23-45"><a href="#cb23-45" aria-hidden="true" tabindex="-1"></a>             <span class="st">"Algorithm Tab"</span>,</span>
+<span id="cb23-46"><a href="#cb23-46" aria-hidden="true" tabindex="-1"></a>             <span class="at">value =</span> <span class="st">"algorithmOutput"</span>,</span>
+<span id="cb23-47"><a href="#cb23-47" aria-hidden="true" tabindex="-1"></a>             <span class="fu">column</span>(<span class="dv">3</span>, <span class="fu">br</span>(),</span>
+<span id="cb23-48"><a href="#cb23-48" aria-hidden="true" tabindex="-1"></a>                    tags<span class="sc">$</span><span class="fu">h4</span>(<span class="st">"Original Values"</span>),</span>
+<span id="cb23-49"><a href="#cb23-49" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">tableOutput</span>(<span class="st">"table1"</span>)),</span>
+<span id="cb23-50"><a href="#cb23-50" aria-hidden="true" tabindex="-1"></a>             <span class="fu">column</span>(<span class="dv">3</span>, <span class="fu">br</span>(),</span>
+<span id="cb23-51"><a href="#cb23-51" aria-hidden="true" tabindex="-1"></a>                    tags<span class="sc">$</span><span class="fu">h4</span>(<span class="st">"Matix Inputs"</span>),</span>
+<span id="cb23-52"><a href="#cb23-52" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">tableOutput</span>(<span class="st">"table2"</span>)),</span>
+<span id="cb23-53"><a href="#cb23-53" aria-hidden="true" tabindex="-1"></a>             <span class="fu">column</span>(<span class="dv">3</span>, <span class="fu">br</span>(),</span>
+<span id="cb23-54"><a href="#cb23-54" aria-hidden="true" tabindex="-1"></a>                    tags<span class="sc">$</span><span class="fu">h4</span>(<span class="st">"Reactive Values"</span>),</span>
+<span id="cb23-55"><a href="#cb23-55" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">tableOutput</span>(<span class="st">"table3"</span>))</span>
+<span id="cb23-56"><a href="#cb23-56" aria-hidden="true" tabindex="-1"></a>           )</span>
+<span id="cb23-57"><a href="#cb23-57" aria-hidden="true" tabindex="-1"></a>         ))</span>
+<span id="cb23-58"><a href="#cb23-58" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-59"><a href="#cb23-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-60"><a href="#cb23-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-61"><a href="#cb23-61" aria-hidden="true" tabindex="-1"></a><span class="do">### Define server logic</span></span>
+<span id="cb23-62"><a href="#cb23-62" aria-hidden="true" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output, session) {</span>
+<span id="cb23-63"><a href="#cb23-63" aria-hidden="true" tabindex="-1"></a>  output<span class="sc">$</span>table1 <span class="ot">&lt;-</span> <span class="fu">renderTable</span>({</span>
+<span id="cb23-64"><a href="#cb23-64" aria-hidden="true" tabindex="-1"></a>    rateInputs_m</span>
+<span id="cb23-65"><a href="#cb23-65" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb23-66"><a href="#cb23-66" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-67"><a href="#cb23-67" aria-hidden="true" tabindex="-1"></a>  output<span class="sc">$</span>table2 <span class="ot">&lt;-</span> <span class="fu">renderTable</span>({</span>
+<span id="cb23-68"><a href="#cb23-68" aria-hidden="true" tabindex="-1"></a>    input<span class="sc">$</span>rateInputs_mi</span>
+<span id="cb23-69"><a href="#cb23-69" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb23-70"><a href="#cb23-70" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-71"><a href="#cb23-71" aria-hidden="true" tabindex="-1"></a>  output<span class="sc">$</span>table3 <span class="ot">&lt;-</span> <span class="fu">renderTable</span>({</span>
+<span id="cb23-72"><a href="#cb23-72" aria-hidden="true" tabindex="-1"></a>    <span class="fu">req</span>(rv<span class="sc">$</span>time)</span>
+<span id="cb23-73"><a href="#cb23-73" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(rv<span class="sc">$</span>time, rv<span class="sc">$</span>speed)</span>
+<span id="cb23-74"><a href="#cb23-74" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb23-75"><a href="#cb23-75" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb23-76"><a href="#cb23-76" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-77"><a href="#cb23-77" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Creating Reactive Values</span></span>
+<span id="cb23-78"><a href="#cb23-78" aria-hidden="true" tabindex="-1"></a>  rv <span class="ot">&lt;-</span> <span class="fu">reactiveValues</span>(<span class="at">time =</span> rateInputs_m[, <span class="dv">1</span>],</span>
+<span id="cb23-79"><a href="#cb23-79" aria-hidden="true" tabindex="-1"></a>                       <span class="at">speed =</span> rateInputs_m[, <span class="dv">2</span>])</span>
+<span id="cb23-80"><a href="#cb23-80" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-81"><a href="#cb23-81" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Speed 1's Plot and Table and Feedback</span></span>
+<span id="cb23-82"><a href="#cb23-82" aria-hidden="true" tabindex="-1"></a>  output<span class="sc">$</span>speed_p <span class="ot">&lt;-</span> <span class="fu">renderPlotly</span>({</span>
+<span id="cb23-83"><a href="#cb23-83" aria-hidden="true" tabindex="-1"></a>    speed_c <span class="ot">&lt;-</span> <span class="fu">map2</span>(</span>
+<span id="cb23-84"><a href="#cb23-84" aria-hidden="true" tabindex="-1"></a>      rv<span class="sc">$</span>time,</span>
+<span id="cb23-85"><a href="#cb23-85" aria-hidden="true" tabindex="-1"></a>      rv<span class="sc">$</span>speed,</span>
+<span id="cb23-86"><a href="#cb23-86" aria-hidden="true" tabindex="-1"></a>      <span class="sc">~</span> <span class="fu">list</span>(</span>
+<span id="cb23-87"><a href="#cb23-87" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">"circle"</span>,</span>
+<span id="cb23-88"><a href="#cb23-88" aria-hidden="true" tabindex="-1"></a>        <span class="at">xanchor =</span> .x,</span>
+<span id="cb23-89"><a href="#cb23-89" aria-hidden="true" tabindex="-1"></a>        <span class="at">yanchor =</span> .y,</span>
+<span id="cb23-90"><a href="#cb23-90" aria-hidden="true" tabindex="-1"></a>        <span class="at">x0 =</span> <span class="sc">-</span><span class="dv">4</span>,</span>
+<span id="cb23-91"><a href="#cb23-91" aria-hidden="true" tabindex="-1"></a>        <span class="at">x1 =</span> <span class="dv">4</span>,</span>
+<span id="cb23-92"><a href="#cb23-92" aria-hidden="true" tabindex="-1"></a>        <span class="at">y0 =</span> <span class="sc">-</span><span class="dv">4</span>,</span>
+<span id="cb23-93"><a href="#cb23-93" aria-hidden="true" tabindex="-1"></a>        <span class="at">y1 =</span> <span class="dv">4</span>,</span>
+<span id="cb23-94"><a href="#cb23-94" aria-hidden="true" tabindex="-1"></a>        <span class="at">xsizemode =</span> <span class="st">"pixel"</span>,</span>
+<span id="cb23-95"><a href="#cb23-95" aria-hidden="true" tabindex="-1"></a>        <span class="at">ysizemode =</span> <span class="st">"pixel"</span>,</span>
+<span id="cb23-96"><a href="#cb23-96" aria-hidden="true" tabindex="-1"></a>        <span class="at">fillcolor =</span> <span class="st">"grey"</span>,</span>
+<span id="cb23-97"><a href="#cb23-97" aria-hidden="true" tabindex="-1"></a>        <span class="at">line =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">"black"</span>)</span>
+<span id="cb23-98"><a href="#cb23-98" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb23-99"><a href="#cb23-99" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb23-100"><a href="#cb23-100" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb23-101"><a href="#cb23-101" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb23-102"><a href="#cb23-102" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_ly</span>(<span class="at">source =</span> <span class="st">"speed_s"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb23-103"><a href="#cb23-103" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_lines</span>(<span class="at">x =</span> rv<span class="sc">$</span>time,</span>
+<span id="cb23-104"><a href="#cb23-104" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> rv<span class="sc">$</span>speed,</span>
+<span id="cb23-105"><a href="#cb23-105" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="fu">I</span>(<span class="st">"black"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb23-106"><a href="#cb23-106" aria-hidden="true" tabindex="-1"></a>      <span class="fu">layout</span>(</span>
+<span id="cb23-107"><a href="#cb23-107" aria-hidden="true" tabindex="-1"></a>        <span class="at">shapes =</span> speed_c,</span>
+<span id="cb23-108"><a href="#cb23-108" aria-hidden="true" tabindex="-1"></a>        <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Time"</span>),</span>
+<span id="cb23-109"><a href="#cb23-109" aria-hidden="true" tabindex="-1"></a>        <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Speed"</span>),</span>
+<span id="cb23-110"><a href="#cb23-110" aria-hidden="true" tabindex="-1"></a>        <span class="at">showlegend =</span> <span class="cn">FALSE</span></span>
+<span id="cb23-111"><a href="#cb23-111" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">%&gt;%</span></span>
+<span id="cb23-112"><a href="#cb23-112" aria-hidden="true" tabindex="-1"></a>      <span class="fu">config</span>(<span class="at">edits =</span> <span class="fu">list</span>(<span class="at">shapePosition =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb23-113"><a href="#cb23-113" aria-hidden="true" tabindex="-1"></a>             <span class="at">displayModeBar =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb23-114"><a href="#cb23-114" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb23-115"><a href="#cb23-115" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb23-116"><a href="#cb23-116" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-117"><a href="#cb23-117" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-118"><a href="#cb23-118" aria-hidden="true" tabindex="-1"></a>  <span class="fu">observeEvent</span>(<span class="fu">event_data</span>(<span class="at">event =</span> <span class="st">"plotly_relayout"</span>, <span class="at">source =</span> <span class="st">"speed_s"</span>), {</span>
+<span id="cb23-119"><a href="#cb23-119" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Speed 1 Event Data</span></span>
+<span id="cb23-120"><a href="#cb23-120" aria-hidden="true" tabindex="-1"></a>    speed_ed <span class="ot">&lt;-</span> <span class="fu">event_data</span>(<span class="st">"plotly_relayout"</span>, <span class="at">source =</span> <span class="st">"speed_s"</span>)</span>
+<span id="cb23-121"><a href="#cb23-121" aria-hidden="true" tabindex="-1"></a>    speed_sa <span class="ot">&lt;-</span></span>
+<span id="cb23-122"><a href="#cb23-122" aria-hidden="true" tabindex="-1"></a>      speed_ed[<span class="fu">grepl</span>(<span class="st">"^shapes.*anchor$"</span>, <span class="fu">names</span>(speed_ed))]</span>
+<span id="cb23-123"><a href="#cb23-123" aria-hidden="true" tabindex="-1"></a>    speed_ri <span class="ot">&lt;-</span> <span class="fu">unique</span>(readr<span class="sc">::</span><span class="fu">parse_number</span>(<span class="fu">names</span>(speed_sa)) <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb23-124"><a href="#cb23-124" aria-hidden="true" tabindex="-1"></a>    speed_pts <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(speed_sa)</span>
+<span id="cb23-125"><a href="#cb23-125" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb23-126"><a href="#cb23-126" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Speed 1 Point Updates</span></span>
+<span id="cb23-127"><a href="#cb23-127" aria-hidden="true" tabindex="-1"></a>    temp_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb23-128"><a href="#cb23-128" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="fu">round</span>(rv<span class="sc">$</span>time, <span class="dv">2</span>), <span class="fu">round</span>(rv<span class="sc">$</span>speed, <span class="dv">2</span>)),</span>
+<span id="cb23-129"><a href="#cb23-129" aria-hidden="true" tabindex="-1"></a>      <span class="at">nrow =</span> <span class="dv">7</span>,</span>
+<span id="cb23-130"><a href="#cb23-130" aria-hidden="true" tabindex="-1"></a>      <span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb23-131"><a href="#cb23-131" aria-hidden="true" tabindex="-1"></a>      <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="cn">NULL</span>, <span class="fu">c</span>(<span class="st">"Time"</span>, <span class="st">"Speed"</span>))</span>
+<span id="cb23-132"><a href="#cb23-132" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb23-133"><a href="#cb23-133" aria-hidden="true" tabindex="-1"></a>    temp_matrix[speed_ri, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(speed_pts[<span class="dv">1</span>], <span class="dv">2</span>)</span>
+<span id="cb23-134"><a href="#cb23-134" aria-hidden="true" tabindex="-1"></a>    temp_matrix[speed_ri, <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(speed_pts[<span class="dv">2</span>], <span class="dv">2</span>)</span>
+<span id="cb23-135"><a href="#cb23-135" aria-hidden="true" tabindex="-1"></a>    temp_matrix <span class="ot">&lt;-</span></span>
+<span id="cb23-136"><a href="#cb23-136" aria-hidden="true" tabindex="-1"></a>      temp_matrix[<span class="fu">order</span>(temp_matrix[, <span class="dv">1</span>], <span class="at">decreasing =</span> <span class="cn">FALSE</span>), ]</span>
+<span id="cb23-137"><a href="#cb23-137" aria-hidden="true" tabindex="-1"></a>    temp_matrix[<span class="dv">1</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb23-138"><a href="#cb23-138" aria-hidden="true" tabindex="-1"></a>    temp_matrix[<span class="dv">7</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">70</span></span>
+<span id="cb23-139"><a href="#cb23-139" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb23-140"><a href="#cb23-140" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Update reactive values</span></span>
+<span id="cb23-141"><a href="#cb23-141" aria-hidden="true" tabindex="-1"></a>    rv<span class="sc">$</span>time <span class="ot">&lt;-</span> <span class="fu">round</span>(temp_matrix[, <span class="dv">1</span>], <span class="dv">2</span>)</span>
+<span id="cb23-142"><a href="#cb23-142" aria-hidden="true" tabindex="-1"></a>    rv<span class="sc">$</span>speed <span class="ot">&lt;-</span> <span class="fu">round</span>(temp_matrix[, <span class="dv">2</span>], <span class="dv">2</span>)</span>
+<span id="cb23-143"><a href="#cb23-143" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb23-144"><a href="#cb23-144" aria-hidden="true" tabindex="-1"></a>    <span class="fu">updateMatrixInput</span>(session, <span class="st">"rateInputs_mi"</span>, temp_matrix)</span>
+<span id="cb23-145"><a href="#cb23-145" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb23-146"><a href="#cb23-146" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb23-147"><a href="#cb23-147" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-148"><a href="#cb23-148" aria-hidden="true" tabindex="-1"></a>  <span class="fu">observeEvent</span>(<span class="fu">req</span>(input<span class="sc">$</span>rateInputs_mi <span class="sc">&amp;</span></span>
+<span id="cb23-149"><a href="#cb23-149" aria-hidden="true" tabindex="-1"></a>                     input<span class="sc">$</span>toggleInputSelect <span class="sc">==</span> <span class="st">"handTyped"</span>),</span>
+<span id="cb23-150"><a href="#cb23-150" aria-hidden="true" tabindex="-1"></a>               {</span>
+<span id="cb23-151"><a href="#cb23-151" aria-hidden="true" tabindex="-1"></a>                 temp_matrix <span class="ot">&lt;-</span></span>
+<span id="cb23-152"><a href="#cb23-152" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">matrix</span>(</span>
+<span id="cb23-153"><a href="#cb23-153" aria-hidden="true" tabindex="-1"></a>                     input<span class="sc">$</span>rateInputs_mi,</span>
+<span id="cb23-154"><a href="#cb23-154" aria-hidden="true" tabindex="-1"></a>                     <span class="at">nrow =</span> <span class="dv">7</span>,</span>
+<span id="cb23-155"><a href="#cb23-155" aria-hidden="true" tabindex="-1"></a>                     <span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb23-156"><a href="#cb23-156" aria-hidden="true" tabindex="-1"></a>                     <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="cn">NULL</span>, <span class="fu">c</span>(<span class="st">"Time"</span>, <span class="st">"Speed"</span>))</span>
+<span id="cb23-157"><a href="#cb23-157" aria-hidden="true" tabindex="-1"></a>                   )</span>
+<span id="cb23-158"><a href="#cb23-158" aria-hidden="true" tabindex="-1"></a>                 temp_matrix[<span class="dv">1</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb23-159"><a href="#cb23-159" aria-hidden="true" tabindex="-1"></a>                 temp_matrix[<span class="dv">7</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">70</span></span>
+<span id="cb23-160"><a href="#cb23-160" aria-hidden="true" tabindex="-1"></a>                 temp_matrix <span class="ot">&lt;-</span></span>
+<span id="cb23-161"><a href="#cb23-161" aria-hidden="true" tabindex="-1"></a>                   temp_matrix[<span class="fu">order</span>(temp_matrix[, <span class="dv">1</span>], <span class="at">decreasing =</span> <span class="cn">FALSE</span>), ]</span>
+<span id="cb23-162"><a href="#cb23-162" aria-hidden="true" tabindex="-1"></a>                 </span>
+<span id="cb23-163"><a href="#cb23-163" aria-hidden="true" tabindex="-1"></a>                 rv<span class="sc">$</span>time <span class="ot">&lt;-</span> temp_matrix[, <span class="dv">1</span>]</span>
+<span id="cb23-164"><a href="#cb23-164" aria-hidden="true" tabindex="-1"></a>                 rv<span class="sc">$</span>speed <span class="ot">&lt;-</span> temp_matrix[, <span class="dv">2</span>]</span>
+<span id="cb23-165"><a href="#cb23-165" aria-hidden="true" tabindex="-1"></a>                 </span>
+<span id="cb23-166"><a href="#cb23-166" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">updateMatrixInput</span>(session, <span class="st">"rateInputs_mi"</span>, temp_matrix)</span>
+<span id="cb23-167"><a href="#cb23-167" aria-hidden="true" tabindex="-1"></a>                 </span>
+<span id="cb23-168"><a href="#cb23-168" aria-hidden="true" tabindex="-1"></a>               })</span>
+<span id="cb23-169"><a href="#cb23-169" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-170"><a href="#cb23-170" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb23-171"><a href="#cb23-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-172"><a href="#cb23-172" aria-hidden="true" tabindex="-1"></a><span class="do">### Run the application</span></span>
+<span id="cb23-173"><a href="#cb23-173" aria-hidden="true" tabindex="-1"></a><span class="fu">shinyApp</span>(<span class="at">ui =</span> ui, <span class="at">server =</span> server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</details>
+<p>See the app on <a href="https://colorado.rstudio.com/rsc/connect/#/apps/14a2ce4f-4248-4c05-ac80-8e7db0d7d6de/access">RStudio Connect</a>.</p>
+<h3 id="things-to-remember" class="anchored">Things to Remember</h3>
+<p>If there’s one thing I hope you learned from this tutorial, it’s that Shiny apps are powerful tools. Data scientists can build applications that allow engineers, manufacturers, and plant workers to use machine learning to improve results and save money. Shiny provides endless ways to provide this service in a flexible and intuitive way for the end user. The only hard part is the programming. Learn to invest the time in learning observation and reactive functions. Find new and novel ways to use existing packages, such as plotly and shinyMatrix, to build something cool.</p>
+<p><strong>Watch Taylor’s R in Manufacturing talk here:</strong></p>
+<script src="https://fast.wistia.com/embed/medias/ozwqigkag9.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_ozwqigkag9 videoFoam=true" style="height:100%;position:relative;width:100%">
+<div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;">
+<img src="https://fast.wistia.com/embed/medias/ozwqigkag9/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;">
+</div>
+</div>
+</div>
+</div>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

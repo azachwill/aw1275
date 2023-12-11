@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-07-06">
+<meta name="description" content="Ryan Estrellado describes how to present data to stakeholders in an engaging way (and keep them from falling asleep in the process).">
+
+<title>How I Use Stories to Share Data at Meetings</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">How I Use Stories to Share Data at Meetings</h1>
+
+<p class="date">2022-07-06</p>
+</header>
+
+<div class="cell">
+
+</div>
+<div class="lt-gray-box">
+<p>Ryan Estrellado is a writer and educator. He is the author of the book <a href="https://ryanestrellado.com/the-k12-educators-data-guidebook" target="_blank">The K–12 Educator’s Data Guidebook: Reimagining Practical Data Use in Schools</a> and a co-author of <a href="https://ryanestrellado.com/data-science-in-education-using-r" target="_blank">Data Science in Education Using R</a>.</p>
+Ryan tells inspiring stories about the reality of education work, from overcoming a fear of data to finding a creative practice in the workplace. He has over twenty years of experience in public education. Ryan writes about data-driven decision making in schools and how to build creative education careers at <a href="https://ryanestrellado.com" target="_blank">ryanestrellado.com</a>.
+</div>
+<p><strong>Want to keep people awake at data presentations? Try sharing your findings backwards. You’ve worked it. Now put your chart down, flip it and reverse it.</strong></p>
+<p>The first time I put someone to sleep with a data presentation was in 2003.</p>
+<p>I was a school psychologist in a public school in the United States. That meant, among other things, that I tested elementary school students for learning disabilities. Then I’d share the results at meetings with parents and school staff so we could all help the student better.</p>
+<p>At one of these meetings, as I soldiered through every single data point of my tests, I noticed a teammate had gone silent. At first, I thought she was using active listening skills. Then it struck me that one can’t do that with their eyes closed.</p>
+<p>Yes, she was sleeping. In providing a safe place to nap, I had done a service for the public education community. But it wasn’t the service I was paid to do.</p>
+<p>Over the next few years, people fell asleep at my meetings more times. And recently, I realized what I was doing wrong. In this article, I’ll be sharing those lessons with you.</p>
+<h2 class="anchored">
+Sequence Well or Risk Slumber
+</h2>
+<p>If this article were called, “How to Put People to Sleep With Data Presentations,” the main point would be this: Present findings to your audience in the same sequence that you discovered them. That’s exactly what I did all those years as a school psychologist. And we already know how that turned out. So what to do?</p>
+<p>In Season 5, Episode 21 of <em>Seinfeld</em>, George Costanza laments his bad fortune and resolves to do the opposite of every choice he’s ever made:</p>
+<blockquote>
+<p>No, wait a minute. I always have tuna on toast. Nothing’s ever worked out for me with tuna on toast. I want the complete opposite of tuna on toast. Chicken salad. On rye. Untoasted.</p>
+</blockquote>
+<p>I had a similar experience reflecting on my data presentations. People fell asleep when I shared my findings in the same order that I discovered them. Like George, I wanted the complete opposite: Presenting the findings in the <em>reverse</em> order that I discovered them. I mean, if one way puts the audience to sleep, then shouldn’t the opposite way keep them awake?</p>
+<p>Or, as Jerry puts it in that episode of <em>Seinfeld</em>, “If every instinct you have is wrong, then the opposite would have to be right.”</p>
+<center>
+<blockquote class="twitter-tweet">
+<p lang="en" dir="ltr">
+In short, I presented information in the same order I discovered it during the analysis. The whole game changed when I started presenting information in the REVERSE order I discovered it in the analysis. Let me explain: (2/7) <a href="https://t.co/Yzaub9YQFX">pic.twitter.com/Yzaub9YQFX</a>
+</p>
+— Ryan Estrellado (<span class="citation" data-cites="ry_estrellado">@ry_estrellado</span>) <a href="https://twitter.com/ry_estrellado/status/1409900670317064196?ref_src=twsrc%5Etfw">June 29, 2021</a>
+</blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</center>
+<p>In the rest of this post, I’ll share the sequence of steps I take to discover my findings. Then I’ll reverse those steps to craft a story for a presentation. I’ll explore the Palmer Penguins R package to show how this idea works.</p>
+<h2 class="anchored">
+The Analysis: Start With the Data Points
+</h2>
+<p>When I do any kind of data analysis, I follow some version of this sequence:</p>
+<ol type="1">
+<li>Look at all the data points</li>
+<li>Note interesting details</li>
+<li>Categorize details into interesting themes</li>
+</ol>
+<p>I go through these steps to explore the Palmer Penguins dataset in the next few sections. As I do, notice how I start with broad questions and arrive at more specific themes.</p>
+<h3 class="anchored">
+Look at All the Data Points
+</h3>
+<p>First, I’ll use a basic question to start my exploration. During this stage, I like to let my curiosity lead. When I look through the Palmer Penguins dataset, I notice there are variables that describe measurements:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; Rows: 344
+#&gt; Columns: 8
+#&gt; $ species           &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…
+#&gt; $ island            &lt;fct&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…
+#&gt; $ bill_length_mm    &lt;dbl&gt; 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, …
+#&gt; $ bill_depth_mm     &lt;dbl&gt; 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, …
+#&gt; $ flipper_length_mm &lt;int&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186…
+#&gt; $ body_mass_g       &lt;int&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …
+#&gt; $ sex               &lt;fct&gt; male, female, female, NA, female, male, female, male…
+#&gt; $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…</code></pre>
+</div>
+</div>
+<p>So for this example, I use this question: Do different species of penguins have different measurements?</p>
+<p>When I’m exploring a dataset, I visualize the data in various ways. Again, at this stage, I’m not overthinking it. It’s more like sketching ideas than it is painting a masterpiece.</p>
+<p>I’m curious about differences in measurements, so I plot the bill length, bill depth, and flipper length. I use a scatter plot because I want to see each data point. I also color the points by species, based on the hunch that different species have different measurements:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> bill_length_mm, </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Bill Length By Species"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="figsBill%20Length%20Plot-1.png" class="img-fluid" alt="Scatterplot with body mass on the x-axis, bill length on the y-axis, colored by species, showing a slightly positive relationship with Chinstrap penguins having higher bill length but lower body mass, Adelie with low bill length and low body mass, and Gentoo with high body mass and high bill length" width="2100"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> bill_depth_mm, </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> species)) <span class="sc">+</span> </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Bill Depth By Species"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="figsBill%20Depth%20Plot-1.png" class="img-fluid" alt="Scatterplot with body mass on the x-axis, bill depth on the y-axis, colored by species, showing two distinctive groups with Adelie and Chinstrap in one group with low body mass and high bill depth, and another group of Gentoo with high body mass and low bill depth." width="2100"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> flipper_length_mm, </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> species)) <span class="sc">+</span> </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Flipper Length By Species"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="figsFlipper%20Length%20Plot-1.png" class="img-fluid" alt="Scatterplot with body mass on the x-axis, flipper length on the y-axis, colored by species, showing a positive relationship with Chinstrap and Adelie penguins with low body mass and lower flipper length, and Gentoo with high body mass and high flipper length" width="2100"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>I also find the average length of these measurements by penguin species:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_bill_length =</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mean</span>(bill_length_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_bill_depth =</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mean</span>(bill_depth_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_flipper_length =</span> </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mean</span>(flipper_length_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_body_mass =</span> </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mean</span>(body_mass_g, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; # A tibble: 3 × 5
+#&gt;   species   mean_bill_length mean_bill_depth mean_flipper_length mean_body_mass
+#&gt;   &lt;fct&gt;                &lt;dbl&gt;           &lt;dbl&gt;               &lt;dbl&gt;          &lt;dbl&gt;
+#&gt; 1 Adelie                38.8            18.3                190.          3701.
+#&gt; 2 Chinstrap             48.8            18.4                196.          3733.
+#&gt; 3 Gentoo                47.5            15.0                217.          5076.</code></pre>
+</div>
+</div>
+<p>I’ve plotted and summarized the data to help me spot interesting details. Now I’ll play with some language to describe what I notice.</p>
+<h3 class="anchored">
+Note Interesting Details
+</h3>
+<p>Here’s where my exploration pays off. In the last section, I led with my curiosity. In this session, I start focusing on details. Or, as the design thinkers would say, the last section was for divergent thinking. This section is for convergent thinking:</p>
+<ul>
+<li>The Chinstrap penguins have the highest mean bill length, though it’s similar to the Gentoo’s bill length</li>
+<li>The Chinstrap penguins have the highest mean bill depth, though the Adelie’s are very close</li>
+<li>The Gentoo penguins have the highest mean flipper length, followed by the Chinstrap, and then the Adelie</li>
+</ul>
+<h3 class="anchored">
+Categorize Details Into Interesting Themes
+</h3>
+<p>I think of themes as a collection of interesting details. Interesting details on their own are just that—interesting details. But when I describe what they have in common, I get something else—the beginnings of a story.</p>
+<p>For example, I can play with different ways to describe what I pointed out in the last section:</p>
+<ul>
+<li>Patterns in species measurements</li>
+<li>Differences, but also similarities</li>
+<li>The Chinstrap penguins trade bill size for flipper size</li>
+</ul>
+<p>By this point in the process, I’ve explored the data and found interesting details. Then I played with ways to talk about those details. Now, I’ll craft a way to share this with an audience.</p>
+<p>The good news is most of the work is already done. But there’s one important move I need to make if I want to avoid another snooze cruise.</p>
+<h2 class="anchored">
+The Presentation: Start With the Story
+</h2>
+Starting with the data points and ending with the story doesn’t set the tone for a compelling discussion. It’s like inviting your friends over for dinner, then showing them your timeshare presentation before bringing out the food. They were there for the shrimp cocktail and gossip. That needs to come first if you want to keep them happy. <br> <br>
+<center>
+<img src="upside-down.gif" alt="Man saying 'everything is upside down'">
+</center>
+<p>Here’s how I would present the information:</p>
+<ol type="1">
+<li>Point out interesting themes</li>
+<li>Describe selected details</li>
+<li>Show selected data points</li>
+</ol>
+<p>I go through these steps to present the findings in the next few sections. As I do, notice how I start with a story before supporting it with selected data points.</p>
+<h3 class="anchored">
+Point Out Interesting Themes
+</h3>
+<p>The first part is the hook. It’s how you set the tone. So open with the story and let your audience know you’ve got something to share. And remember, you can’t <em>make</em> them be interested, but you can show them that <em>you’re</em> interested.</p>
+<p>You might open the presentation for the Palmer Penguins exploration like this:</p>
+<blockquote>
+<p>I was expecting to see some differences in measurements. These are different species of penguins, after all. But it turns out it’s not as simple as one species being bigger than the others.</p>
+</blockquote>
+<h3 class="anchored">
+Describe Selected Details
+</h3>
+<p>The second part is about unpacking interesting details. It’s how you signal credibility. Whatever it is you found so interesting isn’t made up. You discovered it by doing an actual analysis:</p>
+<blockquote>
+<p>There’s one example of this that stuck to me. The Chinstrap penguins had bigger bills on average. But surprisingly, they didn’t have the biggest average flipper length.</p>
+</blockquote>
+<h3 class="anchored">
+Show Selected Data Points
+</h3>
+<p>And now comes the data. This part is about digging a level deeper and showing your audience exactly what you saw. What really works here is the context. You’ve already set the stage with your theme and details. Now the data helps your audience see how you arrived at the story:</p>
+<blockquote>
+<p>Let me show you what I mean. Here’s a plot that compares the bill length of all three species:</p>
+</blockquote>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, <span class="at">y =</span> bill_length_mm, <span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Bill Length By Species"</span>, </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Body mass in mm"</span>, </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Bill length in mm"</span>, </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">"Data: Palmer Penguins"</span>, </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">"Species"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="figsBill%20Length%20Presentation-1.png" class="img-fluid" alt="Scatterplot with body mass on the x-axis, bill length on the y-axis, colored by species, showing a slightly positive relationship with Chinstrap penguins having higher bill length but lower body mass, Adelie with low bill length and low body mass, and Gentoo with high body mass and high bill length" width="2100"></p>
+</figure>
+</div>
+</div>
+</div>
+<blockquote>
+<p>And here’s one that compares the flipper length of all three species:</p>
+</blockquote>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> flipper_length_mm, </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> species)) <span class="sc">+</span> </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Flipper Length By Species"</span>, </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Body mass in mm"</span>, </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Flipper length in mm"</span>, </span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">"Data: Palmer Penguins"</span>,  </span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">"Species"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="figsFlipper%20Length%20Presentation-1.png" class="img-fluid" alt="Scatterplot with body mass on the x-axis, flipper length on the y-axis, colored by species, showing a positive relationship with Chinstrap and Adelie penguins with low body mass and lower flipper length, and Gentoo with high body mass and high flipper length" width="2100"></p>
+</figure>
+</div>
+</div>
+</div>
+<blockquote>
+<p>See what I mean? The Chinstrap penguins tend to have longer bill lengths. But they didn’t tend to have longer flipper length. That crown goes to the Gentoo. You can see that more in this table of mean measurements:</p>
+</blockquote>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="st">"Mean Bill Length"</span> <span class="ot">=</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mean</span>(bill_length_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Mean Flipper Length"</span> <span class="ot">=</span> </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mean</span>(flipper_length_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"Species"</span> <span class="ot">=</span> species) <span class="sc">|&gt;</span> </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(<span class="st">"Mean Bill Length"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; # A tibble: 3 × 3
+#&gt;   Species   `Mean Bill Length` `Mean Flipper Length`
+#&gt;   &lt;fct&gt;                  &lt;dbl&gt;                 &lt;dbl&gt;
+#&gt; 1 Adelie                  38.8                  190.
+#&gt; 2 Chinstrap               48.8                  196.
+#&gt; 3 Gentoo                  47.5                  217.</code></pre>
+</div>
+</div>
+<h2 class="anchored">
+Conclusion
+</h2>
+<p>So that’s it. Start your data analysis by looking at many data points. Then describe it through an interesting story. Afterward, start your presentation by leading with a story. Then signal the rigor of your analysis with supporting data points.</p>
+<p>When you do this, you’ll organize one fewer meeting where people nod off. And more to the point of a data presentation, you’ll create a fun environment where actual learning happens. Because who says truth can’t also be entertaining?</p>
+<h2 class="anchored">
+Notes
+</h2>
+<ol type="1">
+<li><strong>flip it and reverse it</strong>: Elliot, M (2002). “Work It,” <em>Under Construction</em>, The Goldmind, Inc.<br>
+</li>
+<li><strong>I’ll be sharing those lessons with you</strong>: I’ve shared this technique in a video about <a href="https://ryanestrellado.com/how-to-present-data-without-putting-people-to-sleep">presenting school data</a> and in my book about <a href="https://ryanestrellado.com/the-k12-educators-data-guidebook">data-driven decision making in schools</a></li>
+<li><strong>George Costanza laments his bad fortune</strong>: <a href="https://youtu.be/CizwH_T7pjg">George’s clip on YouTube</a></li>
+<li><strong>we’ll see the sequence of steps</strong>: This post has an example of numerical data, but I use this sequence when reflecting on interview responses or <a href="https://podcasts.apple.com/us/podcast/donuts-in-the-lounge-a-podcast-for-educators/id1610942852">other stories from educators in the field</a>.</li>
+<li><strong>Palmer Penguins Package</strong>: Horst AM, Hill AP, Gorman KB (2020). <em>palmerpenguins: Palmer Archipelago (Antarctica) penguin data</em>. R package version 0.1.0. <a href="https://allisonhorst.github.io/palmerpenguins/">https://allisonhorst.github.io/palmerpenguins/</a>. doi: 10.5281/zenodo.3960218.</li>
+<li><strong>For this example, we’ll use this question</strong>: You’ll likely be exploring your own data more thoroughly, but I’m keeping it simple for this post to illustrate the technique.</li>
+<li><strong>so I plot the bill length, bill depth, and flipper length</strong>: There were some warnings about missing data. I didn’t include them here for aesthetic reasons. But you can find all the code for this piece in its <a href="https://github.com/restrellado/presenting-data-rstats-edition">GitHub repository</a>.</li>
+<li><strong>the last section was for divergent thinking</strong>: Read more about divergent and convergent thinking in Brown, T (2009). <em>Change by design</em>. HarperBusiness.</li>
+</ol>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

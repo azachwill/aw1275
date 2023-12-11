@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2019-05-14">
+
+<title>Introducing SAML in RStudio Connect</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Introducing SAML in RStudio Connect</h1>
+
+<p class="date">2019-05-14</p>
+</header>
+
+<p>RStudio Connect 1.7.4 builds off of the prior release with significant improvements for RStudio Connect administrators. SAML support is available for production, a new admin view of scheduled reports helps identify potential conflicts, additional server APIs support deployment workflows, and our email configuration has been completely re-vamped.</p>
+<p></p>
+<h2 id="scheduled-content-calendar" class="anchored">Scheduled Content Calendar</h2>
+<p>This release includes a new calendar view, pictured above, that helps administrators review all scheduled content in a single place. This view can help administrators identify reports that are running too frequently, or times when multiple reports have overlapping schedules; e.g., Monday at 9am.</p>
+<h2 id="saml-support" class="anchored">SAML Support</h2>
+<p>We are very excited to announce the release of SAML 2.0 as a production authentication method for RStudio Connect. This opens the door for integration with common identity providers in the enterprise, along with single-sign-on, multi-factor authentication, and other important security conventions.</p>
+<p>As a part of this release, we prepared SAML integration templates to simplify your integration with common cloud identity providers. RStudio Connect also supports the SAML 2.0 protocol for integrations with many other authentication providers or homegrown SAML tools.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Identity Provider</th>
+<th>Status</th>
+<th>More Information</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Azure Active Directory</td>
+<td>Tested and Integrated</td>
+<td><a href="https://azuremarketplace.microsoft.com/en-us/marketplace/apps/aad.rstudioconnect?tab=Overview">Azure Portal</a></td>
+</tr>
+<tr class="even">
+<td>Okta</td>
+<td>Tested &amp; Integrated</td>
+<td><a href="https://saml-doc.okta.com/SAML_Docs/How-to-Configure-SAML-2.0-for-RStudio-Connect.html">Okta Integration Guide</a></td>
+</tr>
+<tr class="odd">
+<td>OneLogin</td>
+<td>Tested &amp; Integrated</td>
+<td>Search <a href="https://www.onelogin.com/product/app-catalog">OneLogin Portal</a> After Login</td>
+</tr>
+<tr class="even">
+<td>Google, JumpCloud, ADFS, WSO2, PingIdentity, Shibboleth</td>
+<td>Tested</td>
+<td><a href="https://support.rstudio.com/hc/en-us/articles/360022321494">Configuration Guide</a></td>
+</tr>
+<tr class="odd">
+<td>General SAML 2.0</td>
+<td>Supported</td>
+<td><a href="https://support.rstudio.com/hc/en-us/articles/360022321494">Configuration Guide</a></td>
+</tr>
+<tr class="even">
+<td>Duo, Centrify, Auth0</td>
+<td>Supported</td>
+<td><a href="https://support.rstudio.com/hc/en-us/articles/360022321494">Available in RStudio Connect 1.7.6+</a></td>
+</tr>
+</tbody>
+</table>
+<p>RStudio Connect’s SAML 2.0 authentication method supports Just-In-Time provisioning, either local or remote group management, Identity Provider metadata, and a handful of other configuration options that can be explored in the RStudio Connect Admin Guide.</p>
+<h2 id="server-apis" class="anchored">Server APIs</h2>
+<p>The <a href="https://docs.rstudio.com/connect/1.7.4/api/">Connect Server API</a> allows teams to interact with RStudio Connect from code. This release lets you programmatically update <a href="https://docs.rstudio.com/connect/1.7.4/user/cookbook.html#cookbook-content">updating content settings</a> and <a href="https://docs.rstudio.com/connect/1.7.4/user/cookbook.html#cookbook-promotion">manage content bundles</a>. Build a custom workflow, such as promoting content from a staging server to production.</p>
+<p></p>
+<p>Learn more about <a href="https://solutions.rstudio.com/deploy/promote/">different approaches to asset deployment</a>, including how to <a href="https://solutions.rstudio.com/deploy/overview/">integrate RStudio Connect into CI/CD toolchains</a>.</p>
+<h2 id="email-overhaul" class="anchored">Email Overhaul</h2>
+<p>RStudio Connect uses email to distribute content, manage user accounts, notify publishers of errors, and more. In order to send emails, administrators must configure Connect to use sendmail or an SMTP client. In prior versions of RStudio Connect, this configuration was done in the RStudio Connect dashboard. Version 1.7.4 and above removes this support in favor of <a href="https://docs.rstudio.com/connect/1.7.4/admin/email-setup.html">managing email settings</a> with the RStudio Connect configuration file. This change makes setup easier and more consistent for administrators.</p>
+<blockquote>
+<p>When upgrading to RStudio Connect 1.7.4, administrators should <a href="https://support.rstudio.com/hc/en-us/articles/360022554513">follow these instructions</a> to migrate email settings to the configuration file.</p>
+</blockquote>
+<p>In addition, RStudio Connect no longer requires email setup. Disabling email can be useful for groups starting a proof-of-concept, or teams running Connect in certain locked-down environments, In these cases, Connect will gracefully disable settings that require email. For full functionality we strongly recommend an email integration.</p>
+<h2 id="breaking-changes-and-deprecations" class="anchored">Breaking Changes and Deprecations</h2>
+<ul>
+<li>Network information is no longer collected and stored at <code>{Server.DataDir}/metrics/rrd/network-*.rrd</code>. This information was never used by RStudio Connect and is removed to save storage space.<br>
+</li>
+<li>The experimental content API has changed, see the <a href="https://docs.rstudio.com/connect/1.7.4/api/#updateContent">new API documentation</a> for details.<br>
+</li>
+<li>The <code>[LoadBalancing].EnforceMinRsconnectVersion</code> setting now defaults to true and has been deprecated. RStudio Connect will now require <code>rsconnect</code> version 0.8.3 or above.</li>
+<li>The next version of RStudio Connect will not support discovering R versions through the file <code>/etc/rstudio/r-versions</code>. Administrators using this file should migrate this information to the Connect configuration file’s <a href="https://docs.rstudio.com/connect/1.7.4/admin/r.html#r-versions"><code>[Server].RVersion</code> field</a>.</li>
+</ul>
+<p>Please consult the full <a href="https://docs.rstudio.com/connect/news">release notes</a>.</p>
+<blockquote>
+<h4 id="upgrade-planning" class="anchored">Upgrade Planning</h4>
+<p>RStudio Connect 1.7.4 introduces a new upgrade process to facilitate changes to the RStudio Connect configuration file. This process requires administrators to upgrade RStudio Connect and then update the configuration file, as <a href="https://docs.rstudio.com/connect/1.7.4/admin/appendix-configuration.html#appendix-configuration-migration">described here</a>. Specific <a href="https://support.rstudio.com/hc/en-us/articles/360022554513">instructions</a> for the 1.7.4 upgrade are also available. If you are upgrading from an earlier release than 1.7.2, please consult the intermediate release notes.</p>
+</blockquote>
+<p>If you haven’t yet had a chance to download and try <a href="https://rstudio.com/products/connect/">RStudio Connect</a>, we encourage you to do so. RStudio Connect is the best way to share all the work that you do in R and Python (Shiny apps, R Markdown documents, plots, dashboards, Plumber APIs, Jupyter, etc.) with collaborators, colleagues, or customers.</p>
+<p>You can find more details or download a 45-day evaluation of the product at <a href="https://www.rstudio.com/products/connect/">https://www.rstudio.com/products/connect/</a>. Additional resources can be found below.</p>
+<ul>
+<li><a href="https://www.rstudio.com/products/connect/">RStudio Connect home page &amp; downloads</a></li>
+<li><a href="http://docs.rstudio.com/connect/admin/">RStudio Connect Admin Guide</a></li>
+<li><a href="http://docs.rstudio.com/connect/news/">Detailed news and changes between each version</a></li>
+<li><a href="https://www.rstudio.com/pricing/#ConnectPricing">Pricing</a></li>
+<li><a href="https://beta.rstudioconnect.com/connect/">An online preview of RStudio Connect</a></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

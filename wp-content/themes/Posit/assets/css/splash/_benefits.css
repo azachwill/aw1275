@@ -1,0 +1,28 @@
+@media only screen and (min-width: 1024px) and (max-height: 800px) {
+    #benefits-1 .code-container {
+        @apply h-[45%];
+    }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+#benefits-2 .section-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+#benefits-2 .section-container {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.section-benefits {
+    .testimonial {
+        &__name {
+            font-weight: 700;
+        }
+
+        &__title {
+            font-weight: 700;
+        }
+    }
+}

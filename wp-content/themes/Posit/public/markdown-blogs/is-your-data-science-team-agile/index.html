@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-06-09">
+<meta name="description" content="Data science teams struggle to deliver results quickly. Agile techniques such as rapid iteration and continuous collaboration with stakeholders can help overcome these challenges.">
+
+<title>Is Your Data Science Team Agile?</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Is Your Data Science Team Agile?</h1>
+
+<p class="date">2020-06-09</p>
+</header>
+
+
+<style type="text/css">
+  table {
+    border-top: 1px solid rgba(117,170,219,.6);
+    border-bottom: 1px solid rgba(117,170,219,.6);
+    margin: 45px 0 45px 0;
+    padding: 40px 0 20px 0;
+  }
+  tr:nth-child(even) {
+    background: #ffffff;
+}
+tr {
+  vertical-align: top;
+}
+  th {
+    font-size: 24px;
+    font-weight: 400;
+  } 
+  td li {
+    font-size: 15px;
+  }
+</style>
+<p><sup>Photo by <a href="https://unsplash.com/@vespir?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank" rel="noopener noreferrer">James Forbes</a> on <a href="https://unsplash.com/s/photos/winding-path-through-woods?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank" rel="noopener noreferrer">Unsplash</a></sup></p>
+<p>As we recently wrote in our first post on <a href="https://deploy-preview-290--rstudio-blog.netlify.app/2020/05/19/driving-real-lasting-value-with-serious-data-science/" target="_blank" rel="noopener noreferrer">Serious Data Science</a>, there are numerous challenges to effectively implementing data science in an organization. Many industry surveys warn that <strong>most analytics and data science projects fail</strong>, and <strong>most companies don’t achieve the revenue and profit growth that they hoped</strong> their data science investments would deliver. In this post, we’ll examine some underlying causes of why this happens.</p>
+<p>In our previous post in this series, we discussed how to tackle <a href="https://blog.rstudio.com/2020/06/02/is-your-data-science-credible-enough/" target="_blank" rel="noopener noreferrer">building credibility for your data science team</a>. Here, we will focus on the challenges of quickly delivering real value with your data science team with a platform that supports an agile approach.</p>
+<h2 id="data-science-development-is-often-a-long-and-winding-path-to-value" class="anchored">Data Science Development is Often a Long and Winding Path to Value</h2>
+<p>In talking with many different data science teams, we’ve heard that it takes far too long for a team to ramp up, perform analyses, and then share those analyses in an impactful way with their organization. This makes it challenging for data science leaders to deliver value to the rest of their organization, which in turn makes it difficult to justify buying new tools, hiring new team members, and investing in their training.</p>
+<p>Several common obstacles make it difficult for a data science team to quickly ramp up and be productive:</p>
+<ul>
+<li><strong>Training on new tools:</strong> When an organization invests in a new data science platform or brings in new team members unfamiliar with that tool, teams often require extensive training before they can start reliably delivering analyses.</li>
+<li><strong>Monolithic applications:</strong> Too many data science development projects try to solve all problems at once by building or buying a single grand solution. Frequently these new massive tools take months to implement, require major changes to processes and demand significant configuration and professional services before they can be used effectively. And, if the new platforms don’t integrate well with existing tools, data scientists are forced to use multiple different environments to get their work done, which impedes their productivity and often leads to those analytic investments being under-utilized.</li>
+<li><strong>Slow exploratory development:</strong> Good data science requires the ability to rapidly explore many approaches to solving a problem and to revise proposed solutions with colleagues and stakeholders. However, many firms adopt point-and-click model development tools in their quests for ease of use, not realizing that those interactive systems lock data scientists into hours of manual labor to create a new version when stakeholders request changes.</li>
+<li><strong>Difficult to share and access results:</strong> Finally, if your stakeholders cannot find your data products, they won’t use them. Too many insights get delivered using ad hoc emails or isolated web links because existing tools make it difficult to deploy data science insights without extensive help from IT. This leads to stakeholders frequently struggling to find results, using analyses based on old data, or waiting too long to get an updated version.</li>
+</ul>
+<h2 id="finding-the-shortest-path-to-value" class="anchored">Finding the Shortest Path to Value</h2>
+<p>Delivering data science value in an organization requires that your team be agile. While “Agile” usually refers to a very specific development methodology, here we use “agile” to simply describe a process that has four principles:</p>
+<ol type="1">
+<li><strong>Use what you have.</strong> To quickly ramp up and deliver value, take advantage of the existing knowledge of your team and your previous investments.</li>
+<li><strong>Collaborate regularly.</strong> The users of the product continuously meet with and influence developers.</li>
+<li><strong>Iterate on deliverables rapidly.</strong> Developers incorporate feedback into the product in short development cycles until it delivers what the users want.</li>
+<li><strong>Deliver results frequently.</strong> The process routinely delivers new products for users to critique and improve.</li>
+</ol>
+<p>Applying these principles to the data science development process allows your team to deliver value more quickly and efficiently. They help your team overcome the obstacles noted previously, and they demonstrate commitment to a Serious Data Science approach (see Figure 1).</p>
+<div style="overflow-x:auto;">
+
+<table>
+<tbody><tr>
+<th>
+Obstacles
+</th>
+<th>
+Solutions
+</th>
+</tr>
+<tr>
+<td>
+Training required on new tools
+</td>
+<td>
+Use tools many data scientists already know
+</td>
+</tr>
+<tr>
+<td>
+Monolithic applications take too long to set up and don’t use existing analytic investments
+</td>
+<td>
+Focus on small prototypes to prove value, using tools that integrate with your existing frameworks
+</td>
+</tr>
+<tr>
+<td>
+Slow exploratory development
+</td>
+<td>
+Rapid, code-based development
+</td>
+</tr>
+<tr>
+<td>
+Difficult to access and share results
+</td>
+<td>
+Deliver live results directly to stakeholders
+</td>
+</tr>
+
+</tbody></table>
+</div>
+<p>Figure 1: Use agile principles in a Serious Data Science approach to address common development obstacles.</p>
+<p>To make your team more agile in your data science development process, we recommend that you:</p>
+<ul>
+<li><strong>Apply your existing knowledge.</strong> Many data scientists already know how to use R and Python because of the huge open source communities around these languages. This means your team will not require extensive training on a new platform. Using R and Python as the foundation of your data science platform also helps you quickly recruit and retain the best Data Science talent by letting your data scientists work in the environments they already know and love.</li>
+<li><strong>Focus on small prototypes that prove value.</strong> Instead of trying to build or buy a single data science platform, focus your development on small easy-to-test modules that can then be combined with code or scripts. As an example, instead of trying to reinvent the entire customer buying experience, break up that concept into independent prototypes that improve recommendations, streamline purchases, and improve pricing for profitability. And choose a platform that integrates well with the other analytic frameworks you’ve already built, so that you can exploit those investments, rather building everything from scratch. (We will be talking about this principle of Interoperability in greater detail in the future).</li>
+<li><strong>Rapidly evolve your solution using code-based development.</strong> We recommended using a code-based data science foundation such as R or Python that allows easy auditing and peer review in our <a href="https://blog.rstudio.com/2020/06/02/is-your-data-science-credible-enough/" target="_blank" rel="noopener noreferrer">prior blog post about credibility</a>. Code also allows you to rapidly evolve your solution to explore new approaches and accommodate stakeholder feedback. One of the features of R and Python that users love most is how easy it is to explore different analytic approaches to solving any given problem. For example, this <a href="https://rstudio.com/about/customer-stories/liberty-mutual/" target="_blank" rel="noopener noreferrer">recent customer spotlight with Liberty Mutual</a> highlights the power and flexibility of R in their data science environment.</li>
+<li><strong>Deliver live results directly to stakeholders.</strong> Stakeholder feedback is critical to agile development, but it won’t help if they don’t have your latest results. You can eliminate that concern if you publish data science results on a web-based platform such as <a href="https://rstudio.com/products/connect/" target="_blank" rel="noopener noreferrer">RStudio Connect</a>. You can even automate this publication process using continuous integration development techniques such as Github actions. You can also notify stakeholders with automated emails from packages like <em>blastula</em>, which we will be covering in more detail in an upcoming webinar. Speeding up this delivery and feedback mechanism ensures stakeholders get input and see the value your data science team is delivering in real-time.</li>
+</ul>
+<h3 id="astellas-aymen-waqar-discusses-the-analytics-communications-gap" class="anchored">Astellas’ Aymen Waqar discusses the analytics communications gap:</h3>
+<div style="padding: 15px 40px 35px 40px;text-align: center;">
+<script src="https://fast.wistia.com/embed/medias/iwmemji2xh.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<span class="wistia_embed wistia_async_iwmemji2xh popoverAnimateThumbnail=true videoFoam=true" style="display:inline-block;height:100%;position:relative;width:100%">&nbsp;</span>
+</div>
+</div>
+</div>
+<h2 id="learn-more-about-serious-data-science" class="anchored">Learn more about Serious Data Science</h2>
+<p>For more information, see our previous posts <a href="https://blog.rstudio.com/2020/05/19/driving-real-lasting-value-with-serious-data-science/" target="_blank" rel="noopener noreferrer">introducing the concepts of Serious Data Science</a>, and <a href="https://blog.rstudio.com/2020/06/02/is-your-data-science-credible-enough/" target="_blank" rel="noopener noreferrer">drilling into the importance of credibility</a>. In the coming weeks, we will round out this series with a post on how to make sure the value your data science team provides is durable.</p>
+<p>If you’d like to learn more, we also recommend:</p>
+<ul>
+<li><a href="https://rstudio.com/about/customer-stories/brown-forman/" target="_blank" rel="noopener noreferrer">Paul Ditterline describes a Serious Data Science approach adopted by Brown-Forman</a>, in which building on familiar open-source languages allowed their data scientists to ramp up quickly, and “turn into application developers and data engineers without learning any new languages or computer science skills.”</li>
+<li><a href="https://rstudio.com/solutions/r-and-python/" target="_blank" rel="noopener noreferrer">R and Python: A Love Story</a> shows how RStudio enables collaboration between the R and Python users on your data science team and helps all of them easily share their data science insights with your stakeholders.</li>
+<li>Visit the <a href="https://rstudio.com/products/team/" target="_blank" rel="noopener noreferrer">RStudio Team product page</a> to learn how the RStudio Team platform for data science allows you to capitalize on your existing analytic investments and rapidly deliver value to your organization.</li>
+<li>For more information on using RStudio Connect and the blastula package to send custom emails to your stakeholders with plots, tables, and results inline, see <a href="https://blog.rstudio.com/2020/01/22/rstudio-connect-1-8-0/" target="_blank" rel="noopener noreferrer">this recent blog post</a> on the Connect 1.8 release.</li>
+<li>See <a href="https://rstudio.com/about/what-makes-rstudio-different/" target="_blank" rel="noopener noreferrer">What Makes RStudio Different</a> to learn about how RStudio helps support open source data science.</li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

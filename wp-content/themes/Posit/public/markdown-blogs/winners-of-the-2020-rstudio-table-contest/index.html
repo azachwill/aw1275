@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-12-23">
+<meta name="description" content="Tables are a fantastic way to communicate lists of quantitative and qualitative information. To help celebrate them, and to encourage the R community to share great examples with code and tutorials, we’ve hosted the 2020 Table Contest. This year’s contest has been a smashing success. Let’s have a look at the winners and honourable mentions.">
+
+<title>Winners of the 2020 RStudio Table Contest</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Winners of the 2020 RStudio Table Contest</h1>
+
+<p class="date">2020-12-23</p>
+</header>
+
+<p>The inaugural 2020 RStudio Table Contest came to a close in mid-November and we were delighted to see that over 80 entries were submitted. With such enthusiasm for tables, it took some time to look over all of the entries but we do have a winner.</p>
+<h2 id="the-winner-and-the-runner-up" class="anchored">The Winner and the Runner-up</h2>
+<p><img src="van-der-welden.png" class="img-fluid"></p>
+<p>The winner is an entry by Niels van der Velden called Editable Datatables in R Shiny Using SQL. Niels provides a <a href="https://www.nielsvandervelden.com/post/sql_datatable/editable-datatables-in-r-shiny-using-sql/">detailed tutorial here</a> (along with a <a href="https://niels-van-der-velden.shinyapps.io/employee_directory_crud_app/">live example</a> and <a href="https://github.com/nvelden/Employee_Directory_CRUD">GitHub repository</a>). It’s a great demonstration of an interactive employee directory where a DT table is central in presenting the employee information. Shiny provides all of the interactivity and the {pool} package handles the storage of the entries with a database backend. Learn more at <a href="https://community.rstudio.com/t/employee-directory-editable-dt-table-contest-submission/81403">RStudio Community</a>.</p>
+<hr>
+<p><img src="gans.png" class="img-fluid"></p>
+<p>A close runner-up is an entry by Maya Gans (previous RStudio intern!) that presents the Table Generator Shiny extension available in the {tidyCDISC} package (<a href="https://maya-gans.shinyapps.io/tablecontest-biogen/">live example</a>, <a href="https://github.com/biogen-inc/tidycdisc/tree/table-contest">GitHub repository</a>). This is a complete table-generation system where users could provide their own clinical data and make summary tables without any programming effort. The Shiny application allows for dragging pairs of columns and their summary statistic counterpart to create a {gt} table. There’s great flexibility to customize the generated tables as one could subgroup, filter, and reorder the underlying table structure. Crucially, the app supports table export to either HTML or CSV. Learn more at <a href="https://community.rstudio.com/t/tidycdisc-table-contest-submission/86688">RStudio Community</a>.</p>
+<p>Honorable Mentions</p>
+<p>There were so many great entries that we’d like to highlight as honorable mentions. All of these were either in the form of a static table or as a tutorial.</p>
+<h3 id="static-tables" class="anchored">Static Tables</h3>
+<p>A large portion of the contest entries were in the form of a static (i.e., not Shiny-based) table. In quite a few cases interactive bits (e.g., sparkline plots) were interspersed in table cells, making for a delightful experience. Here are a few of the tables that deserve some attention.</p>
+<p>Beyoncé and Taylor Swift Albums, by Georgios Karamanis (<a href="https://github.com/gkaramanis/tidytuesday/blob/master/2020-week40/plots/beyonce-swift.png">live example</a>, <a href="https://github.com/gkaramanis/tidytuesday/tree/master/2020-week40">GitHub repository</a>, <a href="https://community.rstudio.com/t/86399">RStudio Community</a>)</p>
+<p><img src="gkaramanis.png" class="img-fluid"></p>
+<p><br></p>
+<p>What do I binge next? An overview of the top IMDb TV shows, by Cédric Scherer (<a href="https://cedricscherer.netlify.app/files/IMDb_Top250.png">live example</a>, <a href="https://github.com/Z3tt/Rstudio_TableContest_2020">GitHub repository</a>, <a href="https://community.rstudio.com/t/86409">RStudio Community</a>).</p>
+<p><img src="scherer.png" class="img-fluid"></p>
+<p><br></p>
+<p>2019 NFL Team Ratings, by Kyle Cuilla (<a href="https://rpubs.com/kcuilla/nfl_team_ratings">live example</a>, <a href="https://github.com/kcuilla/2020-RStudio-Table-Contest">GitHub repository</a>, <a href="https://community.rstudio.com/t/81205">RStudio Community</a>).</p>
+<p><img src="cuilla.png" class="img-fluid"></p>
+<p><br></p>
+<p>The Big Mac Index Table, by A. Calatroni, S. Lussier &amp; R. Krouse (<a href="https://rpubs.com/acalatroni/682678">live example</a>, <a href="https://github.com/agstn/RStudio_table_contest_2020">GitHub repository</a>, <a href="https://community.rstudio.com/t/86123">RStudio Community</a>).</p>
+<p><img src="calatroni.png" class="img-fluid"></p>
+<p><br></p>
+<p>Technology Figures of the EU, by Florian Handke (<a href="https://rpubs.com/FlorianHandke/table_contest_2020">live example</a>, <a href="https://github.com/FlorianHandke/RStudio_Table_Contest_2020">GitHub repository</a>, <a href="https://community.rstudio.com/t/87855">RStudio Community</a>).</p>
+<p><img src="handke.png" class="img-fluid"></p>
+<p><br></p>
+<p>Imperial March, by Bill Schmid (<a href="https://github.com/schmid07/R-Studio-Table-Contest-Submission">live example and repository</a>, <a href="https://community.rstudio.com/t/86345">RStudio Community</a>).</p>
+<p><img src="schmid.png" class="img-fluid"></p>
+<h3 id="tutorials" class="anchored">Tutorials</h3>
+<p>Sometimes in order to learn a new package or feature it helps to get a more-involved walkthrough. Tutorials are long form articles that dive into a set of features, table-package, or multiple packages, with the goal of giving the reader a deeper understanding of how it all works.</p>
+<p>Comparison Tutorial, by Evangeline ‘Gina’ Reynolds (<a href="https://evamaerey.github.io/tables/about">tutorial</a>, <a href="https://github.com/EvaMaeRey/tables">GitHub repository</a>, <a href="https://community.rstudio.com/t/87978">RStudio Community</a>).</p>
+<p>Replicating a New York Times Table of Swedish COVID-19 Deaths with gt, by Malcolm Barrett (<a href="https://malco.io/2020/05/16/replicating-an-nyt-table-of-swedish-covid-deaths-with-gt/">tutorial</a>, <a href="https://github.com/malcolmbarrett/malco.io/blob/master/content/post/2020-05-16-replicating-an-nyt-table-of-swedish-covid-deaths-with-gt/index.Rmd">GitHub repository</a>, <a href="https://community.rstudio.com/t/82423">RStudio Community</a>).</p>
+<p>Recreating a Table by The Economist with Reactable, by Connor Rothschild (<a href="https://www.connorrothschild.com/post/economist-table-replication-using-reactable">tutorial</a>, <a href="https://github.com/connorrothschild/economist-table-replication">GitHub repository</a>, <a href="https://community.rstudio.com/t/84725">RStudio Community</a>).</p>
+<p>Top of the Class: Public Spending on Education, by David Smale (<a href="https://davidsmale.netlify.app/portfolio/spending-on-education/">tutorial</a>, <a href="https://github.com/committedtotape/education-spending">GitHub repository</a>, <a href="https://community.rstudio.com/t/86113">RStudio Community</a>).</p>
+<h3 id="table-packages" class="anchored">Table Packages</h3>
+<p>A number of submissions were essentially submissions of the author’s package, which supports creating or customizing tables in some way. In fact, the grand prize and runner up are both examples of this! Below are additional honorable mention entries of these table-package submissions.</p>
+<p>DataEditR: Interactive Editor for Viewing, Filtering, Entering &amp; Editing Data, by Dillon Hammill (<a href="https://github.com/DillonHammill/DataEditR/">GitHub repository</a>, <a href="https://community.rstudio.com/t/87976">RStudio Community</a>).</p>
+<p>A Not So Short Introduction to rtables, by Gabriel Becker, Adrian Waddell (<a href="https://waddella.github.io/RStudioTableContest2020/A_Not_So_Short_Introduction_to_rtables.html">post</a>, <a href="https://github.com/waddella/RStudioTableContest2020">GitHub repository</a>, <a href="https://community.rstudio.com/t/86538">RStudio Community</a>).</p>
+<h2 id="in-closing" class="anchored">In Closing</h2>
+<p>We want to thank you all for making this Table Contest so great. It is incredibly hard to judge submissions with such an overall high level of quality. We fully acknowledge that there are many other really great entries we did not highlight in this article. We encourage you to check out all of the entries at <a href="https://community.rstudio.com/tags/c/R-Markdown/tables/38/table-contest">RStudio Community</a>.</p>
+<p>There were so many great submissions that our <a href="https://blog.rstudio.com/2020/12/21/rmd-news/">growing R Markdown team</a> is considering hosting a <em>tables gallery</em> with examples that others can learn from or use as launching pad for their own display tables. We’d love to hear your comments and suggestions <a href="https://community.rstudio.com/t/2020-table-contest-winners/91517/2">in RStudio Community!</a></p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Package Build">
+<meta name="dcterms.date" content="2022-06-28">
+<meta name="description" content="10 ways RStudio Connect can give your data science team superpowers, from visualizations to pins, to APIs, and more.">
+
+<title>10 ways you can provide value with RStudio Connect</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">10 ways you can provide value with RStudio Connect</h1>
+<p class="author">Package Build</p>
+
+<p class="date">2022-06-28</p>
+</header>
+
+<p>In speaking with the community, I hear about so many different ways that teams are using <a href="https://www.rstudio.com/products/connect/" target="_blank">RStudio Connect</a> and providing value across their companies.</p>
+<p>On Twitter I posted <a href="https://twitter.com/_RachaelDempsey/status/1532830320516546562?s=20&amp;t=NfaSd2S66q_Zeo_a6EDvRA"><strong>10 ways RStudio Connect can give your data science team superpowers</strong></a> and thought it’d be helpful to share here as well.</p>
+<p>I’d love to hear about all the other ways your team is using RStudio Connect and about the cool things you are building too! If you’re interested in sharing your work at a meetup as well, please consider filling out the <a href="https://docs.google.com/forms/d/e/1FAIpQLSexuUNx-_qOkPl8JXogf8TtCo6DyLyzB2YCtm5CjBgIGTFmhg/viewform?usp=send_form" target="_blank">speaker submission form</a>.</p>
+<h3 id="so-here-we-go" class="anchored">So, here we go!</h3>
+<p>How many have you done?</p>
+<ol type="1">
+<li><a href="#Shiny">Start sharing Shiny applications</a></li>
+<li><a href="#Pins">Deploy pins to share data, models, and other R objects across projects and with your colleagues</a></li>
+<li><a href="#Blog">Build a blog to share work &amp; best practices among others at your company and/or help facilitate a meetup group</a></li>
+<li><a href="#Parameterized">Schedule automated PDF reports with parameterized R Markdown for business stakeholders</a></li>
+<li><a href="#Slack">Use RStudio with communication channels (like Slack) that are already in use by business stakeholders</a></li>
+<li><a href="#Landing">Build a custom landing page for business stakeholders to make content discovery easier</a></li>
+<li><a href="#Package">Use an internally created package to standardize dashboards across the team</a></li>
+<li><a href="#Tableau">Use APIs to enable Tableau users at your company to leverage work done by your data science team in R and Python</a></li>
+<li><a href="#ConnectAPI">Check out the Connect Server API to utilize usage data that helps answer questions like: Is my CEO using this app?</a></li>
+<li><a href="#Microservices">Host microservices via Plumber APIs that connect data science work with your data engineering &amp; development teams</a></li>
+</ol>
+<p>You can also <a href="#Python">replace any of the examples above with Python</a> because RStudio Connect supports Jupyter, Flask, FastAPI, Dash, Streamlit, Bokeh, mixed R/Python content with reticulate, Python pins, etc.</p>
+<h3 id="of-course-start-sharing-shiny-applications" class="anchored"><a name="Shiny"></a>Of course, start sharing Shiny applications</h3>
+<p>Shiny makes it easy to build interactive web applications straight from R.</p>
+<p>Here’s an <a href="https://youtu.be/07j22d4B_hA">example of how Microsoft’s data scientists use Shiny</a> and own the model development life cycle from data ingestion, model development, model deployment to visualization of insights with Paul Chang.</p>
+<p><img src="images/shiny.jpeg" class="img-fluid"></p>
+<ul>
+<li><a href="https://youtu.be/07j22d4B_hA" target="_blank">Meetup Recording: Capacity Planning for Microsoft Azure Data Centers Using R &amp; RStudio Connect</a><br>
+</li>
+<li><a href="https://lnkd.in/gh-hGScE" target="_blank">Meetup slides</a><br>
+</li>
+<li><a href="https://www.shiny.rstudio.com" target="_blank">Shiny website</a></li>
+</ul>
+<h3 id="deploy-pins-to-share-data-models-and-other-r-objects-across-projects-and-with-your-colleagues." class="anchored"><a name="Pins"></a>Deploy pins to share data, models, and other R objects across projects and with your colleagues.</h3>
+<p>The <a href="www.pins.rstudio.com" target="_blank">pins package</a> publishes data, models, and other R objects, making it easy to share them across projects and with your colleagues. Pins can be automatically versioned, making it straightforward to track changes, re-run analyses on historical data, and undo mistakes.</p>
+<p>Here’s an <a href="https://youtu.be/e2h-BVgY4VA">example of how the City of Reykjavík pins models that are used in their Shiny app</a> to show the capacity of pools with Hlynur Hallgrímsson.</p>
+<p><img src="images/pins2.jpg" class="img-fluid"></p>
+<ul>
+<li><a href="https://youtu.be/e2h-BVgY4VA" target="_blank">Meetup recording: The data you were promised…and the data that you got</a></li>
+<li><a href="https://hlynurhallgrims.github.io/the_data_you_were_promised/#1" target="_blank">Meetup slides</a></li>
+<li><a href="https://rstudio.com/iceland" target="_blank">Short-film featuring the City of Reykjavík’s data team</a></li>
+</ul>
+<h3 id="build-a-blog-to-share-work-best-practices-among-others-at-your-company-andor-to-help-facilitate-a-meetup-group" class="anchored"><a name="Blog"></a>Build a blog to share work &amp; best practices among others at your company and/or to help facilitate a meetup group</h3>
+<p>Your internal data science community helps each other learn, collaborate, and share. However, you may not have a central place for your assets, making it difficult for members to find information from the past or know where to save their work.</p>
+<p>A blog can be a lightweight way to consolidate resources, events, and other information for your internal data science community. Here’s an <a href="https://youtu.be/MrW5XFf7aps">example of deploying a blog to RStudio Connect</a> with Isabella Velasquez.</p>
+<p><img src="images/blog3.jpg" class="img-fluid"></p>
+<ul>
+<li><a href="https://youtu.be/MrW5XFf7aps" target="_blank">Meetup recording: Building a blog with R</a></li>
+<li><a href="https://colorado.rstudio.com/rsc/building-a-blog-with-r/Building%20a%20Blog%20With%20R.html#/section" target="_blank">Meetup slides</a></li>
+<li><a href="https://github.com/ivelasq/internal-blog-example" target="_blank">GitHub Link for Internal Blog Example</a></li>
+</ul>
+<h3 id="schedule-automated-pdf-reports-with-parameterized-r-markdown-for-business-stakeholders" class="anchored"><a name="Parameterized"></a>Schedule automated PDF reports with parameterized R Markdown for business stakeholders</h3>
+<p>One of the many benefits of working with R Markdown is that you can reproduce analysis at the click of a button. This makes it very easy to update any work and alter any input parameters within the report.</p>
+<p>Parameterized reports extend this one step further, and allow users to specify one or more parameters to customize the analysis. This is useful if you want to create a report template that can be reused across multiple similar scenarios.</p>
+<p>Here’s an <a href="https://youtu.be/JsaGSrM8aZ0">example of creating an income statement for a group of theoretical office branches with parameterized R Markdown</a> with Brad Lindblad.</p>
+<p><img src="images/finance.jpeg" class="img-fluid"></p>
+<ul>
+<li><a href="https://youtu.be/JsaGSrM8aZ0" target="_blank">Meetup recording: Professional financial reports with R Markdown</a></li>
+<li><a href="https://github.com/bradlindblad/pro_reports_talk" target="_blank">Github link</a></li>
+</ul>
+<h3 id="use-rstudio-with-communication-channels-like-slack-that-are-already-in-use-by-business-stakeholders." class="anchored"><a name="Slack"></a>Use RStudio with communication channels (like Slack) that are already in use by business stakeholders.</h3>
+<p>Serving stakeholders data in the moment they need it in an environment where they are already talking about business performance can help in democratizing information, especially when end-users are experiencing dashboard overload.</p>
+<p>Here’s an <a href="https://lnkd.in/gk6GKHSR">example of how Campaign Monitor serves individualized insights directly to stakeholders with R, Python, and RStudio Connect</a> with Matthias Mueller.</p>
+<p><img src="images/slack2.jpg" class="img-fluid"></p>
+<ul>
+<li><a href="https://youtu.be/Y2zoRCXgPwk" target="_blank">Meetup recording: Serving bespoke insights through automation</a></li>
+<li><a href="https://www.rstudio.com/blog/r-in-marketing-meetup/" target="_blank">Blog post: Democratizing Data with R, Python, and Slack</a></li>
+</ul>
+<h3 id="build-a-custom-landing-page-for-business-stakeholders-to-make-content-discovery-easier" class="anchored"><a name="Landing"></a>Build a custom landing page for business stakeholders to make content discovery easier</h3>
+<p>How do you make sure your audience finds what they need on RStudio Connect without paging through the dashboard, remembering the right search terms, or bookmarking every content item you share?</p>
+<p>After deploying many pieces of related content, how do you share them as a cohesive project?</p>
+<p>Here’s a <a href="https://youtu.be/GBNzhIkObyE">walkthrough of using connectwidgets to build your ideal showcase of data products</a> with Kelly O’Briant.</p>
+<script src="https://fast.wistia.com/embed/medias/zqgzo2fbe7.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:53.96% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_zqgzo2fbe7 videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<center>
+
+Example of gallery created by connectwidgets
+
+</center>
+<p><br></p>
+<ul>
+<li><a href="https://youtu.be/GBNzhIkObyE" target="_blank">Meetup recording: Building your ideal showcase of data products</a></li>
+<li><a href="https://www.rstudio.com/blog/rstudio-connect-data-showcase/" target="_blank">Blog post: Curating Your Data Science Content on RStudio Connect</a></li>
+</ul>
+<h3 id="use-an-internally-created-package-to-standardize-dashboards-across-the-team" class="anchored"><a name="Package"></a>Use an internally created package to standardize dashboards across the team</h3>
+<p>Here’s an <a href="https://youtu.be/ssmwUBSpF-8">example of how Snap Finance ensures a reproducible development workflow with a Shiny dashboard framework</a> with Alan Carlson.</p>
+<p>Using their internal package, the team is able to build dashboards the same way, reducing tech debt and simplifying code review. This allows their team to bring on new developers and have them become almost instant contributors. With standardization, their developers are spending more time actually developing instead of spending time spinning up a Shiny framework.</p>
+<script src="https://fast.wistia.com/embed/medias/pl819znagu.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:60.83% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_pl819znagu videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<ul>
+<li><a href="https://youtu.be/ssmwUBSpF-8" target="_blank">Meetup recording: Robust, modular dashboards that minimize tech debt</a></li>
+<li><a href="https://www.rstudio.com/about/customer-stories/snap-finance/" target="_blank">Snap Finance Customer spotlight</a></li>
+</ul>
+<h3 id="use-apis-to-enable-tableau-users-at-your-company-to-leverage-work-done-by-your-data-science-team-in-r-and-python" class="anchored"><a name="Tableau"></a>Use APIs to enable Tableau users at your company to leverage work done by your data science team in R and Python</h3>
+<p>RStudio Connect includes support for Tableau Analytics Extensions, which provide a way to create calculated fields in workbooks that can execute scripts outside of the Tableau environment. This RStudio Connect integration enables you to create R or Python HTTP API extensions for use across all your Tableau workbooks.</p>
+<p>Compared to existing methods for integrating R and/or Python in Tableau, integration via APIs hosted on RStudio Connect provides better security and dependency management. James Blair led us through a demo of this in <a href="https://youtu.be/t25Lbi5D6kg" target="_blank">the meetup recording here.</a></p>
+<p><img src="images/fastapi.png" class="img-fluid"></p>
+<ul>
+<li><a href="https://youtu.be/t25Lbi5D6kg" target="_blank">Meetup recording: Leveraging R &amp; Python in Tableau with RStudio Connect</a></li>
+<li><a href="https://docs.rstudio.com/rsc/integration/tableau/" target="_blank">Tableau Integration Documentation</a></li>
+<li><a href="https://blog.rstudio.com/2021/10/21/embedding-shiny-apps-in-tableau-dashboards-using-shinytableau/" target="_blank">Blog post: Embedding Shiny Apps in Tableau using shinytableau</a></li>
+<li><a href="https://www.rstudio.com/blog/rstudio-connect-2021-09-0-tableau-analytics-extensions/" target="_blank">Blog post: Tableau Analytics Extensions</a></li>
+</ul>
+<h3 id="check-out-the-connect-server-api-to-utilize-usage-data-that-helps-answer-questions-like-is-my-ceo-using-this-app" class="anchored"><a name="ConnectAPI"></a>Check out the Connect Server API to utilize usage data that helps answer questions like: Is my CEO using this app?</h3>
+<p>The <a href="https://docs.rstudio.com/connect/api/#overview--versioning-of-the-api" target="_blank">RStudio Connect Server API</a> provides easy access to your server’s instrumentation data from when users visit your server. As a publisher or administrator, you have access to these data: who logged in, when they logged in, what they looked at, and how long they spent on that piece of content.</p>
+<p>With this, you can extend Connect and visualize advanced usage metrics that help answer important questions and focus your data science work. Here’s a <a href="https://youtu.be/0iljqY9j64U" target="_blank">walk-through &amp; resources to get started</a> with Cole Arendt.</p>
+<p><img src="images/connectapiusage.png" class="img-fluid"></p>
+<ul>
+<li><a href="https://youtu.be/0iljqY9j64Uf" target="_blank">Meetup recording: Shiny usage tracking in RStudio Connect</a></li>
+<li><a href="https://github.com/RStudioEnterpriseMeetup/Presentations/blob/2b5db2fa109458c38ba7ac2d79a66c869e0a241a/shiny-app-usage.pdf" target="_blank">Meetup slides</a></li>
+<li><a href="https://www.rstudio.com/blog/track-shiny-app-use-server-api/" target="_blank">Blog post with examples</a></li>
+</ul>
+<h3 id="host-microservices-via-plumber-apis-that-connect-data-science-work-with-your-data-engineering-development-teams" class="anchored"><a name="Microservices"></a>Host microservices via Plumber APIs that connect data science work with your data engineering &amp; development teams</h3>
+<p>As data science teams—and their applications—grow larger, teams can experience growing pains that make applications complex, difficult to customize, or challenging to collaborate across large teams.</p>
+<p>You can use the Plumber package to deploy APIs to RStudio Connect as part of a microservices architecture that allows your team to work with front-end development teams using their preferred framework (e.g., React, Angular, Vue).</p>
+<p>Here’s an <a href="https://youtu.be/k3PuGGmA7Hg">example of how KPMG uses microservices to scale R-based applications across the enterprise</a>.</p>
+<p><img src="images/kpmg2.jpg" class="img-fluid"></p>
+<ul>
+<li><a href="https://youtu.be/k3PuGGmA7Hg" target="_blank">Meetup recording: Making microservices part of your data team</a></li>
+<li><a href="https://github.com/RStudioEnterpriseMeetup/Presentations/blob/main/KPMG%20Making%20Microservices%20Part%20of%20Your%20Team%20-%20RStudio%20Meetup.pptx" target="_blank">Meetup slides</a></li>
+</ul>
+<h3 id="what-about-python" class="anchored"><a name="Python"></a>What about Python?</h3>
+<p>You can also replace any of the examples above with Python because RStudio Connect supports:<br>
+* <a href="https://docs.rstudio.com/connect/user/jupyter-notebook/">Jupyter Notebooks</a><br>
+* <a href="https://docs.rstudio.com/connect/1.8.2/user/flask/">Flask applications</a><br>
+* <a href="https://docs.rstudio.com/connect/user/fastapi/">FastAPI applications</a><br>
+* <a href="https://docs.rstudio.com/connect/user/dash/">Plotly Dash applications</a><br>
+* <a href="https://docs.rstudio.com/connect/user/streamlit/">Streamlit applications</a> * <a href="https://docs.rstudio.com/connect/user/bokeh/">Bokeh applications</a> * <a href="https://solutions.rstudio.com/r/reticulate/">Mixed R/Python content with the reticulate package</a><br>
+* <a href="https://rstudio.github.io/pins-python/intro.html">Python pins</a></p>
+<p>We’d love to highlight your Python use cases too! If you’re interested in sharing your work at a meetup, please consider filling out the <a href="https://docs.google.com/forms/d/e/1FAIpQLSexuUNx-_qOkPl8JXogf8TtCo6DyLyzB2YCtm5CjBgIGTFmhg/viewform?usp=send_form" target="_blank">speaker submission form</a>.</p>
+<p><img src="images/python.jpeg" class="img-fluid"></p>
+<ul>
+<li><a href="https://youtu.be/o36425S1-VU" target="_blank">Meetup recording: Using Python with RStudio Team</a></li>
+<li><a href="https://lnkd.in/gyq5jZ4i" target="_blank">Integrating RStudio Connect with Python</a></li>
+</ul>
+<h2 id="learn-more" class="anchored">Learn More</h2>
+<p>If you haven’t had a chance to try RStudio Connect before, you can <a href="https://www.rstudio.com/products/connect/evaluation/" target="_blank">request an evaluation here.</a></p>
+<p>If you need help convincing your team that ️<strong>you should have these superpowers too</strong>, check out the <a href="https://www.rstudio.com/champion" target="_blank">RStudio Champion Site</a> for resources to help build a business case, grow your internal data science community, work with IT, and more.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

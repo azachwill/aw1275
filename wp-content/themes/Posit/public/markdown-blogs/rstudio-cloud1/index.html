@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-02-04">
+<meta name="description" content="RStudio Cloud is always evolving, so we’re beginning a series of blog posts to highlight things that have changed behind the scenes.">
+
+<title>What’s New on RStudio Cloud - February 2021</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">What’s New on RStudio Cloud - February 2021</h1>
+
+<p class="date">2021-02-04</p>
+</header>
+
+<p>We roll out new features and improvements regularly on RStudio Cloud, typically every week or two. You can always view the list of significant new features on Cloud’s <a href="https://rstudio.cloud/learn/whats-new" target="_blank" rel="noopener noreferrer">What’s New</a> page, which you can access via the left hand navigator in Cloud.</p>
+<div class="screenshot">
+<p><img align="center" style="padding: 35px" src="menu.png" alt="menu screenshot"></p>
+</div>
+<p>But to go into a bit more detail, we have decided to begin periodic postings here on the RStudio Blog to highlight significant new developments. We hope you find it useful.</p>
+<p>Here are the new features we’ve released over the past month or so:</p>
+<ul>
+<li>Cloud Plus Plan</li>
+<li>RStudio 1.4</li>
+<li>Python 3.8</li>
+<li>Project Memory Gauge</li>
+</ul>
+<h3 id="cloud-plus-plan" class="anchored">Cloud Plus Plan</h3>
+<p>We’ve had lots of users (many of them students) request a plan on Cloud that just lets them use more hours on the service. Many don’t need all the premium features of our paid plans, but love the convenience of accessing their work from any computer without needing to install any software and want to be able to use Cloud more than the hours included with the Free plan.</p>
+<div class="screenshot">
+<p><img align="center" style="padding: 35px:" src="cloud-plus.png" alt="Cloud plus logo"></p>
+</div>
+<p>We’re happy to announce that a Cloud Plus plan is now available for $5/month. Cloud Plus includes all the features of our Cloud Free plan, plus 50 project hours per month. Any additional project hours are billed at 20¢ per hour (as is the case with all our self-service, paid plans).</p>
+<p>If the Cloud Free features meet your needs, but you use more than 15 project hours a month, this is likely the right plan for you. Please visit the Cloud <a href="https://rstudio.cloud/plans/plus" target="_blank" rel="noopener noreferrer">Plans &amp; Pricing</a> page for more details.</p>
+<h3 id="rstudio-1.4" class="anchored">RStudio 1.4</h3>
+<p>The latest release of our world class IDE is now available on Cloud. All your new and existing projects on RStudio Cloud will automatically be updated to use this new release.</p>
+<p>To learn more about all the great new features and capabilities of RStudio 1.4, please take a look at our blog post <a href="https://blog.rstudio.com/2021/01/19/announcing-rstudio-1-4/" target="_blank" rel="noopener noreferrer">Announcing RStudio 1.4</a>.</p>
+<h3 id="python-3.8" class="anchored">Python 3.8</h3>
+<p>If you use python on Cloud (for example, via the reticulate package), Cloud has been updated to use python 3.8. This should make it easier to use the latest versions of many python packages on Cloud — and stay tuned for more exciting python developments this year…</p>
+<h3 id="project-memory-gauge" class="anchored">Project Memory Gauge</h3>
+<div class="screenshot">
+<p><img align="center" style="padding: 35px:" src="ram-144.png" alt="New RAM meter"></p>
+</div>
+<p>Every project on RStudio Cloud runs inside its own container and by default is allocated 1GB of RAM. Depending on your subscription, you can increase a project’s allocation up to 8GB.</p>
+<p>You can now see how much of your project’s allocated memory is currently in use: when you open a project you will find a project memory gauge in the header. This gauge updates roughly every ten seconds.</p>
+<p>Note that reclaiming unused memory is controlled by R and the operating system. You may see “uncanny” fluctuations in the gauge as the system manages memory.</p>
+<h2 id="whats-next" class="anchored">What’s Next?</h2>
+<p>We don’t like to pre-announce features before they’re available, but the team is busy both improving our underlying systems and developing new features. If there is something you’d love to see improved or added to Cloud, please let us know in the <a href="https://community.rstudio.com/c/rstudio-cloud" target="_blank" rel="noopener noreferrer">RStudio Cloud section</a> of the RStudio Community site.</p>
+<p>If you are new to RStudio Cloud and would like to learn more about the platform and various plans available, check out the <a href="https://rstudio.com/products/cloud/" target="_blank" rel="noopener noreferrer">RStudio Cloud product page</a>.</p>
+<p>Thanks!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

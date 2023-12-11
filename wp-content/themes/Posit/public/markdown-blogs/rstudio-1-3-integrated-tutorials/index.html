@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-02-25">
+
+<title>RStudio 1.3 Preview: Integrated Tutorials</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio 1.3 Preview: Integrated Tutorials</h1>
+
+<p class="date">2020-02-25</p>
+</header>
+
+<p><em>This blog post is part of a series on new features in RStudio 1.3, currently available as a <a href="https://www.rstudio.com/products/rstudio/download/preview/">preview release</a>.</em></p>
+<p>We’re excited to announce that RStudio v1.3 will gain a newly-minted pane: the <strong>Tutorial</strong> pane, used to host tutorials powered by the <a href="https://rstudio.github.io/learnr/"><strong>learnr</strong></a> package.</p>
+<p>The <strong>learnr</strong> package makes it easy to turn any <a href="https://rmarkdown.rstudio.com/">R Markdown</a> document into an interactive tutorial. Here are some example tutorials from the <strong>learnr</strong> package, hosted on <a href="https://www.shinyapps.io/">shinyapps.io</a>:</p>
+<div class="rstudio-showcase-row">
+<div class="rstudio-showcase-item">
+<h3 class="anchored">
+Summarizing Data
+</h3>
+<p><a href="https://learnr-examples.shinyapps.io/ex-data-summarise/"> <img src="tutorial-ex-data-summarise.png" alt="Summarizing Data with R"> </a></p>
+</div>
+<div class="rstudio-showcase-item">
+<h3 class="anchored">
+Filtering Data
+</h3>
+<p><a href="https://learnr-examples.shinyapps.io/ex-data-filter/"> <img src="tutorial-ex-data-filter.png" alt="Filtering Data with R"> </a></p>
+</div>
+</div>
+<p>A <em>learnr</em> tutorial can include any of the following:</p>
+<ol type="1">
+<li>Narrative, figures, illustrations and equations,</li>
+<li>Code exercises (R code chunks that users can edit and execute),</li>
+<li>Quiz questions,</li>
+<li>Videos,</li>
+<li>Interactive Shiny components.</li>
+</ol>
+<p>With the <strong>Tutorial</strong> pane, it is now possible to work through a <em>learnr</em> tutorial directly from the comfort of the RStudio IDE. You can use the RStudio IDE to learn, reflect, and tinker as you work through your running tutorial.</p>
+<p><img align="center" src="rstudio-tutorials.png" alt="The RStudio IDE, with a tutorial running in the Tutorial pane."></p>
+<h2 id="browsing-tutorials" class="anchored">Browsing Tutorials</h2>
+<p>RStudio will automatically index and display the tutorials provided by the installed R packages in your R library paths:</p>
+<p><img align="center" src="rstudio-tutorials-list.png" alt="The RStudio IDE, with the Tutorial pane showing a list of available tutorials."></p>
+<p>You can use this list to browse and run tutorials at your convenience.</p>
+<h2 id="authoring-tutorials" class="anchored">Authoring Tutorials</h2>
+<p>The <strong>learnr</strong> package bundles a selection of tutorials that will introduce users to R, RStudio and the <a href="https://www.tidyverse.org/">Tidyverse</a>, but we hope the R community at large will find this a useful medium for creating and sharing their own R tutorials. If you’re interesting in authoring your own <em>learnr</em> tutorials, please see the <a href="https://rstudio.github.io/learnr/publishing.html">Publishing</a> article on the <a href="https://rstudio.github.io/learnr/"><strong>learnr</strong> website</a>.</p>
+<h2 id="try-it-out" class="anchored">Try it Out!</h2>
+<p>The <strong>Tutorial</strong> pane is available in the latest iteration of the RStudio v1.3 preview release. You can download the latest preview release here:</p>
+<p><a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio 1.3 Preview</a></p>
+<p>We’d also like to take this time to highlight a small selection of R packages developed and shared by members of the R community that provide their own <em>learnr</em> tutorials:</p>
+<ul>
+<li><p><a href="https://vegawidget.github.io/vegawidget/">vegawidget</a> can be used to render charts specified using the <a href="https://vega.github.io/vega/">Vega</a> visualization grammar, and includes a <em>learnr</em> tutorial exploring how the package can be used;</p></li>
+<li><p><a href="https://rstudio.github.io/sortable/">sortable</a> includes a tutorial showing how sortable widgets can be included in your own <em>learnr</em> tutorials;</p></li>
+<li><p><a href="https://cran.r-project.org/package=sur">sur</a> includes a tutorial that (quite comprehensively!) explores the manipulation of R data frames, including how missing data can be handled.</p></li>
+</ul>
+<p>If you’d like to try out the tutorials bundled in these packages, you can install the packages from CRAN with:</p>
+<pre><code>install.packages(c("vegawidget", "sortable", "sur"))</code></pre>
+<p>and their associated tutorials will automatically become available in the <strong>Tutorial</strong> pane.</p>
+<hr>
+<p>Questions? Comments? Please share your feedback with us on the RStudio <a href="https://community.rstudio.com/c/rstudio-ide">community forums</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

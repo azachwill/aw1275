@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-03-30">
+<meta name="description" content="With the RStudio Connect Server API, you can access advanced usage metrics to focus your data science work.">
+
+<title>Track Shiny App User Activity With the RStudio Connect Server API</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Track Shiny App User Activity With the RStudio Connect Server API</h1>
+
+<p class="date">2022-03-30</p>
+</header>
+
+<p>Data scientists spend a lot of time creating apps, dashboards, and reports. All of this effort is often hampered by siloed workflows between coworkers and across teams, which leads to delays in presenting your insights to stakeholders and clients.</p>
+<p>After all that time and effort, are you even sure what you’re sharing is relevant to your audience? You may start to wonder: who looked at this recently? What content is most popular? Having the numbers to back up your work can help you determine your next move and justify your efforts to your stakeholders.</p>
+<p><a href="https://www.rstudio.com/products/connect/" target="_blank">RStudio Connect</a> is designed to help you share and understand your data products in real-time. Connect is RStudio’s enterprise publishing platform for data science products like R Markdown documents, Shiny apps, Flask APIs, and more. Using the <a href="https://docs.rstudio.com/connect/api" target="_blank">RStudio Connect Server API</a>, you can extend Connect to see advanced usage metrics to answer important questions and focus your data science work.</p>
+<p>Cole Arendt from RStudio presented on the topic during a <a href="https://www.youtube.com/watch?v=0iljqY9j64U" target="_blank">YouTube Live event</a>. Watch the webinar here:</p>
+<center>
+<iframe width="640" height="360" src="https://www.youtube.com/embed/0iljqY9j64U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="">
+</iframe>
+</center>
+<h2 id="collecting-instrumentation-data-from-rstudio-connect" class="anchored">Collecting Instrumentation Data From RStudio Connect</h2>
+<p>RStudio Connect automatically records “instrumentation data”, or data from when users visit your server. As a publisher or administrator, you have access to these data: who logged in, when they logged in, what they looked at, and how long they spent on that piece of content.</p>
+<p>Here is an example of Shiny instrumentation data from Connect:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/image1.png" class="img-fluid"></p>
+<p></p><figcaption>Shiny usage instrumentation data</figcaption><p></p>
+</figure>
+</div>
+<p>You can use instrumentation data to answer questions like:</p>
+<ul>
+<li>How many Shiny apps are on this server?</li>
+<li>Who looked at this app recently and for how long?</li>
+<li>Which users have access to which app?</li>
+<li>Is viewership increasing?</li>
+</ul>
+<p>With this information, you can track progress against your goals and efficiently set up your next steps. This will cut down on overhead and free up time to allocate towards other efforts.</p>
+<p>If you are interested in ways of boosting viewership, you can create a custom gallery of your content using the <a href="https://rstudio.github.io/connectwidgets/" target="_blank">connectwidgets</a> package. This makes it easy for your audience to discover your work without scrolling through your entire Connect server. Have some restricted apps in your gallery? The permissions feature directs non-authenticated viewers to request access. Read more about <a href="https://www.rstudio.com/blog/rstudio-connect-1-9-0/" target="_blank">RStudio Connect’s content creation features</a>.</p>
+<h2 id="extending-connect-with-the-rstudio-connect-server-api" class="anchored">Extending Connect With the RStudio Connect Server API</h2>
+<p>The RStudio Connect Server API provides easy access to your server’s instrumentation data. With the <a href="https://pkgs.rstudio.com/connectapi/" target="_blank">R</a> and <a href="https://github.com/rstudio/rsconnect-python/" target="_blank">Python</a> clients, you can load your server’s instrumentation data into your IDE.</p>
+<p>To install connectapi in R, run the below:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">'rstudio/connectapi'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Create a client:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(connectapi)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>client <span class="ot">&lt;-</span> <span class="fu">connect</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">server =</span> <span class="st">'https://connect.example.com'</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">api_key =</span> <span class="st">'&lt;SUPER SECRET API KEY&gt;'</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># If your server is defined by your environment variables, you can just run:</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>client <span class="ot">&lt;-</span> <span class="fu">connect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Once you set up your client, you can use it to interact with RStudio Connect. Say you want to retrieve the instrumentation data from all of your Shiny apps:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>usage_shiny <span class="ot">&lt;-</span> <span class="fu">get_usage_shiny</span>(client)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This results in a data frame with the instrumentation data mentioned above.</p>
+<h2 id="creating-a-report-with-connect-server-api-data" class="anchored">Creating a Report With Connect Server API Data</h2>
+<p>Once you have access to the Connect server data, you can make custom informative reports for your stakeholders. For example, <a href="https://colorado.rstudio.com/rsc/usage/rsc-usage.html" target="_blank">this flexdashboard</a> shows the most popular Shiny applications and static content from RStudio’s demo server:</p>
+<script src="https://fast.wistia.com/embed/medias/c8xjq88vc7.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:60.63% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_c8xjq88vc7 videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<p>Since this dashboard is built with R Markdown, you can schedule emails with RStudio Connect and the <a href="https://pkgs.rstudio.com/blastula/" target="_blank">blastula</a> package. Send an email to your team anytime the dashboard is refreshed. Find out how on the <a href="https://solutions.rstudio.com/r/blastula/" target="_blank">Solutions website</a>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/image2.png" class="img-fluid"></p>
+<p></p><figcaption>Example email from flexdashboard showing Shiny usage</figcaption><p></p>
+</figure>
+</div>
+<p>Need something more interactive? You can create a <a href="https://colorado.rstudio.com/rsc/usage-interactive/" target="_blank">Shiny app</a> for users to explore the data in real-time. This one shows the most popular apps and most active viewers over time.</p>
+<script src="https://fast.wistia.com/embed/medias/03wpixim0r.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:60.63% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_03wpixim0r videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<p>Want to try these out with your RStudio Connect server? You can download the code from our <a href="https://github.com/sol-eng/connect-usage" target="_blank">Github repository</a>, add your environment variables, and display your own data.</p>
+<h2 id="learn-more" class="anchored">Learn More</h2>
+<p>With the RStudio Connect API, you can access data that helps quantify your work’s reach and make content more relevant to your stakeholders.</p>
+<ul>
+<li>Watch the full webinar on <a href="https://www.youtube.com/watch?v=0iljqY9j64U" target="_blank">YouTube</a> and review Cole’s <a href="https://github.com/RStudioEnterpriseMeetup/Presentations/blob/main/shiny-app-usage.pdf" target="_blank">slides</a>.</li>
+<li>Check out the <a href="https://docs.rstudio.com/connect/cookbook/" target="_blank">RStudio Connect Server API Cookbook</a> for useful recipes when accessing your usage data.</li>
+<li>Read the Solutions Engineering team’s documentation on <a href="https://solutions.rstudio.com/data-science-admin/tracking/" target="_blank">how to create the dashboard shown above</a> and <a href="https://solutions.rstudio.com/data-science-admin/connect-apis/" target="_blank">a showcase of different types of Connect API reports</a>.</li>
+<li>Access the <a href="https://pkgs.rstudio.com/connectapi/" target="_blank">R client</a> and <a href="https://github.com/rstudio/rsconnect-python/" target="_blank">Python client</a> for the Connect Server API.</li>
+</ul>
+<p>Want to make the RStudio Connect Server API bigger and better? We have a variety of spots to check out.</p>
+<ul>
+<li>Join the discussion on <a href="https://community.rstudio.com/t/rstudio-connect-usage-data-thread-to-discuss-ideas-improvements-and-share-how-youve-done-this/130581" target="_blank">RStudio Community</a>.</li>
+<li>Contribute to <a href="https://github.com/sol-eng/connect-usage" target="_blank">open-source packages and tools</a>. We welcome pull requests, examples, feature requests, issues, and comments.</li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

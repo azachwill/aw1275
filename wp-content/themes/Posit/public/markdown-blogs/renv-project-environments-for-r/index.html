@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2019-11-06">
+
+<title>renv: Project Environments for R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">renv: Project Environments for R</h1>
+
+<p class="date">2019-11-06</p>
+</header>
+
+<p>We’re excited to announce that <a href="https://rstudio.github.io/renv/"><code>renv</code></a> is now available on CRAN! You can install <code>renv</code> with:</p>
+<p><code>{{r install-renv, eval=FALSE}} install.packages("renv")</code></p>
+<p><code>renv</code> is an R dependency manager. Use <code>renv</code> to make your projects more:</p>
+<ul>
+<li><p><strong>Isolated</strong>: Each project gets its own library of R packages, so you can feel free to upgrade and change package versions in one project without worrying about breaking your other projects.</p></li>
+<li><p><strong>Portable</strong>: Because <code>renv</code> captures the state of your R packages within a lockfile, you can more easily share and collaborate on projects with others, and ensure that everyone is working from a common base.</p></li>
+<li><p><strong>Reproducible</strong>: Use <code>renv::snapshot()</code> to save the state of your R library to the lockfile <code>renv.lock</code>. You can later use <code>renv::restore()</code> to restore your R library exactly as specified in the lockfile.</p></li>
+</ul>
+<p>If you’ve used <a href="http://rstudio.github.io/packrat">Packrat</a> before, this may all feel familiar. User feedback has made it clear that a number of the decisions we made during Packrat’s development ultimately made it frustrating to use, and led to a sub-optimal user experience. The goal then is for <code>renv</code> to be a robust, stable replacement for the Packrat package, with fewer surprises and better default behaviors. While we will continue maintaining Packrat, all new development will focus on <code>renv</code>.</p>
+<p>In addition, we’ve built <code>renv</code> to work well with R projects using Python through <a href="https://rstudio.github.io/reticulate/"><code>reticulate</code></a>. Using <code>renv</code>, you can also create project-local Python environments, and instruct <code>reticulate</code> to automatically bind to, manage, and use these environments.</p>
+<h2 id="getting-started" class="anchored">Getting Started</h2>
+<p>The core essence of the <code>renv</code> workflow is fairly simple:</p>
+<ol type="1">
+<li><p>Use <code>renv::init()</code> to initialize a project. <code>renv</code> will discover the R packages used in your project, and install those packages into a private project library.</p></li>
+<li><p>Work in your project as usual, installing and upgrading R packages as required as your project evolves.</p></li>
+<li><p>Use <code>renv::snapshot()</code> to save the state of your project library. The project state will be serialized into a file called <code>renv.lock</code>.</p></li>
+<li><p>Use <code>renv::restore()</code> to restore your project library from the state of your previously-created lockfile <code>renv.lock</code>.</p></li>
+</ol>
+<p>In short: use <code>renv::init()</code> to initialize your project library, and use <code>renv::snapshot()</code> / <code>renv::restore()</code> to save and load the state of your library.</p>
+<p>After your project has been initialized, you can work within the project as before, but without fear that installing or upgrading packages could affect other projects on your system.</p>
+<h2 id="collaborating" class="anchored">Collaborating</h2>
+<p>When you want to share a project with other collaborators, you may want to ensure everyone is working with the same environment – otherwise, code in the project may unexpectedly fail to run because of changes in behavior between different versions of the packages in use. You can use <code>renv</code> to help make this possible.</p>
+<p>When using <code>renv</code>, the packages used in your project will be recorded into a lockfile, <code>renv.lock</code>. Because <code>renv.lock</code> records the exact versions of R packages used within a project, if you share that file with your collaborators, they will be able to use <code>renv::restore()</code> to install exactly those packages into their own library. This implies the following workflow for collaboration:</p>
+<ol type="1">
+<li><p>Select a way to share your project sources. The most common way nowadays is to use a version control system with a hosted repository; e.g.&nbsp;<a href="https://git-scm.com/">Git</a> with <a href="https://github.com/">GitHub</a>, but many other options are available.</p></li>
+<li><p>Make sure your project is initialized with <code>renv</code> by calling <code>renv::init()</code>.</p></li>
+<li><p>Call <code>renv::snapshot()</code> as needed, to generate and update <code>renv.lock</code>.</p></li>
+<li><p>Share your project sources, alongside the generated lockfile <code>renv.lock</code>.</p></li>
+</ol>
+<p>After your collaborators have received your <code>renv.lock</code> lockfile – for example, by cloning the project repository – they can then also execute <code>renv::init()</code> to automatically install the packages declared in that lockfile into their own private project library. By doing this, they will now be able to work within your project using the exact same R packages that you were when <code>renv.lock</code> was generated.</p>
+<h2 id="time-travel" class="anchored">Time Travel</h2>
+<p>On some occasions, you might find that you’ve made a change to <code>renv.lock</code> that you’d like to roll back. If you’re using <a href="https://git-scm.com/">Git</a> for version control with your project (and we strongly encourage you to!), <code>renv</code> has a couple helper functions that make it easy to find and use previously-committed versions of the lockfile.</p>
+<ul>
+<li><p>Use <code>renv::history()</code> to view past versions of <code>renv.lock</code> that have been committed to your repository, and find the commit hash associated with that particular revision of <code>renv.lock</code>.</p></li>
+<li><p>Use <code>renv::revert()</code> to pull out an old version of <code>renv.lock</code> based on the previously-discovered commit, and then use <code>renv::restore()</code> to restore your library from that state.</p></li>
+</ul>
+<p>If you have an alternate version control system you’d like to see us support, please <a href="https://github.com/rstudio/renv/issues">let us know</a>!</p>
+<h2 id="integration-with-python" class="anchored">Integration with Python</h2>
+<p><code>renv</code> also makes it easy to set up a project-local Python environment to use with your R projects. This can be especially useful if you’re using the <a href="https://rstudio.github.io/reticulate/"><code>reticulate</code></a> package, or other packages depending on reticulate such as <a href="https://tensorflow.rstudio.com/"><code>tensorflow</code></a> or <a href="https://keras.rstudio.com/"><code>keras</code></a>. Just call:</p>
+<p><code>{{r use-python, eval=FALSE}} renv::use_python()</code></p>
+<p>and a project-local Python environment will be set up and used by <code>reticulate</code>. When <code>renv</code>’s Python integration is active, a couple extra features will activate:</p>
+<ol type="1">
+<li><p><code>renv</code> will instruct <code>reticulate</code> to load your project-local version of Python by default, avoiding some of the challenges with finding and selecting an appropriate version of Python on the system.</p></li>
+<li><p>Calling <code>reticulate::py_install()</code> will install packages into the project’s Python environment by default.</p></li>
+<li><p>When <code>renv::snapshot()</code> is called, your project’s Python library will also be captured into <code>requirements.txt</code> (for virtual environments) / <code>environment.yml</code> (for <a href="https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html">Conda</a> environments).</p></li>
+<li><p>Similarly, <code>renv::restore()</code> will also attempt to restore your Python environment, as encoded in <code>requirements.txt</code> / <code>environment.yml</code> from a previous snapshot.</p></li>
+</ol>
+<h2 id="packrat" class="anchored">Packrat</h2>
+<p>If you’ve used Packrat before, you’re likely interested to learn what’s changed in <code>renv</code>. We’ll try to summarize the most poignant changes:</p>
+<h3 id="project-initialization" class="anchored">Project Initialization</h3>
+<p><code>packrat::init()</code> would, by default, attempt to retrieve package sources from CRAN under the assumption that you might want to rebuild packages from sources in the future (e.g.&nbsp;in an offline environment). This assumption was rarely true, and still often was unhelpful as many packages are difficult to build from sources.</p>
+<p>To alleviate this, <code>renv::init()</code> no longer downloads package sources, and also attempts to copy and reuse packages already installed in your R libraries. This makes initializing new projects a breeze – you no longer have to sit around and wait as your project’s multitude of dependencies get reinstalled; instead, the copies already available on your system will be copied and re-used.</p>
+<h3 id="snapshots-and-dependencies" class="anchored">Snapshots and Dependencies</h3>
+<p><code>packrat::snapshot()</code> would, in addition to capturing the state of your project library, also attempt to discover the R packages used in your project by crawling your <code>.R</code> and <code>.Rmd</code> files for dependencies. Unfortunately, this system was fairly unreliable and caused a number of issues, especially when the machinery itself emitted warnings or errors that could not be easily diagnosed.</p>
+<p>The dependency discovery machinery in <code>renv</code> has been rewritten from the ground up, and should now be much more reliable. However, if you discover that this still causes issues for you, you can disable this altogether by changing the type of snapshot performed in your project. Use <code>renv::settings$snapshot.type("simple")</code> to use “simple” snapshots in your project, where the state of your library is captured as-is without any extra filtering to limit which of your installed packages enter the lockfile.</p>
+<h2 id="extra-tools" class="anchored">Extra Tools</h2>
+<p>In addition, <code>renv</code> comes with a couple extra tools out-of-the-box to help with common development workflows:</p>
+<ul>
+<li><p>Install packages from a wide variety of sources with <code>renv::install()</code>. <code>renv::install()</code> understands a subset of the <a href="https://cran.r-project.org/web/packages/remotes/vignettes/dependencies.html">remotes specification</a>, and so can be used for simple, dependency-free package installation in your projects. Currently, you can install packages from CRAN, GitHub, Gitlab, and Bitbucket. In addition, <code>renv</code> is also compatible with other tools commonly used to install packages, such as <a href="https://remotes.r-lib.org/"><code>remotes</code></a> and <a href="https://pak.r-lib.org/"><code>pak</code></a>.</p></li>
+<li><p>Use <code>renv::dependencies()</code> to enumerate the R dependencies in your project. If necessary, use <code>.renvignore</code> files to tell <code>renv</code> which files and folders should not be scanned during dependency discovery.</p></li>
+</ul>
+<p>Finally, if you have a Packrat project that you’d like to try porting to <code>renv</code>, you can use <code>renv::migrate()</code> to migrate the project infrastructure over to <code>renv</code>.</p>
+<h2 id="learning-more" class="anchored">Learning More</h2>
+<p>Please check out the <code>renv</code> <a href="https://rstudio.github.io/renv/articles/renv.html">Getting started guide</a> to learn more. If you are looking for strategies to manage reproducible environments, or don’t know if <code>renv</code> is the right fit, check out <a href="https://environments.rstudio.com" class="uri">https://environments.rstudio.com</a>. If you have questions or comments, please get in touch with us on the <a href="https://community.rstudio.com/">RStudio community forums</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

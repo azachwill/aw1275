@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-03-22">
+<meta name="description" content="APIs increase the impact of your data science work. With the plumber package, you can turn your R code into API endpoints so that others can use your function or model.">
+
+<title>Creating APIs for Data Science With plumber</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Creating APIs for Data Science With plumber</h1>
+
+<p class="date">2022-03-22</p>
+</header>
+
+<p><sup>Photo by <a href="https://unsplash.com/@kharaoke?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Khara Woods</a> on <a href="https://unsplash.com/">Unsplash</a></sup></p>
+<p>Whether it’s pulling <a href="https://developer.twitter.com/en/docs/twitter-api" target="_blank">data from Twitter</a>, accessing <a href="https://openweathermap.org/api" target="_blank">the most recent weather information</a>, or tracking <a href="https://openflights.org/data.html" target="_blank">where a particular plane is going</a>, application programming interfaces (APIs) are often part of our data science pipeline. But why would you want to <em>create</em> an API? And how difficult is it to do?</p>
+<p>APIs make it easy to scale the reach of your work. They allow your data science results to be responsive, accessible, and automated. And thanks to the <a href="https://www.rplumber.io/" target="_blank">plumber</a> package, you can convert your R functions into API endpoints using just a few special comments.</p>
+<h2 id="what-is-an-api" class="anchored">What is an API?</h2>
+<p>APIs are messenger systems that allow applications to communicate with one another. You send a request to the API. The API takes your request to the server and receives a response. Then, the API delivers the response back to you.</p>
+<p>You may already use APIs to retrieve data as part of your data science pipeline. For example, the <a href="https://cran.r-project.org/web/packages/rtweet/index.html" target="_blank">rtweet</a> package allows R users to interact with Twitter’s API. You request data through the package and then receive the API’s data as a response.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/image1.png" class="img-fluid"></p>
+<p></p><figcaption>Graphic of a laptop sending a request to an API, the API getting information from a server, then responding to the request back to the computer</figcaption><p></p>
+</figure>
+</div>
+<p>APIs communicate via “endpoints”. The endpoint receives a request to take an action. For example, when you run <code>usrs &lt;- search_users("#rstats", n = 1000)</code> from rtweet, you are interacting with an endpoint that returns a list of users.</p>
+<p>Since APIs allow different systems to interact when they wouldn’t be able to otherwise, they are incredibly powerful tools to increase interactivity and reach.</p>
+<h2 id="why-would-a-data-scientist-want-to-create-an-api" class="anchored">Why would a data scientist want to create an API?</h2>
+<p>At some point, you may want to share your R output with others. If the other person is not an R user, they may not be able to use your work without translating it into their language of choice.</p>
+<p>If your results are available in the form of an API, then anybody can import your results without this difficult translation step. API responses are readable across platforms and applications. Just as you use R to interact with the Twitter API, others can access the Twitter API with other tools.</p>
+<p>Let’s say you are working with a website developer who uses Javascript. You just developed a model in R and you’d like to share the results. You can send the developer an API so that they can display the results on a website without reconstructing your model in another language. The website can show updated results because it is communicating with your API in real-time. You do not have to manually refresh your code each time there’s a change in the data. For example, RStudio’s <a href="https://www.rstudio.com/pricing/" target="_blank">pricing calculator</a> uses an API created from a backend R model to feed the results into our website!</p>
+<p>Making your data science work available through an API reduces the handoff between R and other tools or technologies. More people can access your results and use them to make data-driven decisions.</p>
+<div class="lt-gray-box">
+<p>We recommend reading James Blair’s post on how APIs increase the impact of your analyses, <a href="https://www.rstudio.com/blog/rstudio-and-apis/" target="_blank">RStudio and APIs</a>.</p>
+</div>
+<h2 id="creating-an-api-with-plumber" class="anchored">Creating an API with plumber</h2>
+<p>The plumber package allows you to create APIs from your R code. It does this through special comments that give instructions on how to turn the functions in your script into API endpoints. It’s pretty amazing — with this package, your R code is easily accessible from other tools and frameworks.</p>
+<p>Here’s an example plumber script. Notice how familiar it looks:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/image2.png" class="img-fluid"></p>
+<p></p><figcaption>Screenshot of an R script decorated with plumber comments</figcaption><p></p>
+</figure>
+</div>
+<p>Let’s walk through how to convert this R function into an API.</p>
+<p><strong>1. Write standard R code</strong></p>
+<p>Let’s say we want to randomly choose 100 numbers and create a histogram. We write out a function in R:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>() {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  rand <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hist</span>(rand)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Notice that the function is not assigned to an object. We can test it out by running the below:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  rand <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hist</span>(rand)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>()</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>2. Add special comments</strong></p>
+<p>Now, we instruct plumber on how to turn the function into an API endpoint. Plumber parses your script to identify special comments beginning in the <code>#*</code> or <code>@</code> symbols. It uses them to convert your script into an API.</p>
+<p>Let’s give our function a description using <code>#*</code>. Here, we’re telling plumber to call this function “Plot a histogram”:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#* Plot a histogram</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now, let’s tell plumber that when we get a request, execute this function and return the plot:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /plot</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>By default, plumber will turn your response into JSON format. You can adjust the type of response if that is not the output you would like. For example, our function outputs an image. It doesn’t make sense to return an image in JSON format. We can “serialize” our result so that the API returns a PNG rather than JSON.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#* @serializer png</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This is just one example of what an API can do. To learn more, check out the <a href="https://www.rplumber.io/articles/rendering-output.html" target="_blank">plumber documentation on rendering output</a>.</p>
+<p>Now, our script looks like this:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># plumber.R</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plumber)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#* Plot a histogram</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#* @serializer png</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /plot</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>() {</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  rand <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hist</span>(rand)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Congratulations! We wrote an API using R.</p>
+<p><strong>3. Plumb it</strong></p>
+<p>Now that we’ve created an API, it’s time to “plumb” (run) it!</p>
+<p>After we write our plumber script in the RStudio IDE, a special button appears that allows us to “Run API”:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/image3.png" class="img-fluid"></p>
+<p></p><figcaption>Screenshot of R console highlighting the button where it says we can run the API</figcaption><p></p>
+</figure>
+</div>
+<p>Running the API generates an interface for our API.</p>
+<script src="https://fast.wistia.com/embed/medias/ioibdyrv6e.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:60.63% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_ioibdyrv6e videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<center>
+
+Plumbing an API in RStudio
+
+</center>
+<p>The interface provides a way to interact with our API’s endpoints. We can test out different calls to make sure that everything runs as expected.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/image4.png" class="img-fluid"></p>
+<p></p><figcaption>Button to get request from the API interface generated by plumber</figcaption><p></p>
+</figure>
+</div>
+<center>
+
+Endpoint in our code and the interface
+
+</center>
+<p>Run ‘try it out’ and then ‘execute’ to see what the API returns (in our case, an image of a histogram):</p>
+<script src="https://fast.wistia.com/embed/medias/b0d0wt7ji7.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:60.83% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_b0d0wt7ji7 videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<center>
+
+Testing out our API through the interface
+
+</center>
+<p>Notice that you never left RStudio to create, run, and test your API!</p>
+<p><strong>4. Deploy the API</strong></p>
+<p>We can develop and test an API on our laptop, but how do we share it with others (for example, the website developer we mentioned previously)? We do not want our laptop to be serving the requests for a variety of reasons, including maintenance and security concerns.</p>
+<p><a href="https://www.rstudio.com/products/connect/" target="_blank">RStudio Connect</a> is an enterprise publishing platform that deploys APIs created by plumber with versioning, dependency management, and authentication. RStudio Connect also supports the deployment of many other data product formats, including Python APIs developed using frameworks such as Flask, FastAPI, Quart, Falcon, and Sanic. See the <a href="https://www.rstudio.com/blog/rstudio-connect-2021-08-python-updates/" target="_blank">RStudio Connect Python Updates blog post</a> for more info on deploying Python APIs on Connect.</p>
+<script src="https://fast.wistia.com/embed/medias/znvyytmc1u.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:60.83% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_znvyytmc1u videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<center>
+
+Editing access settings in RStudio Connect
+
+</center>
+<p>RStudio Connect also ensures that you are not consuming more system resources than is necessary. It automatically manages the processes necessary to handle the current load and balances incoming traffic across all available processes. It will also shut down idle processes when they’re not in use.</p>
+<p>Learn more about <a href="https://www.rplumber.io/articles/hosting.html" target="_blank">hosting Plumber APIs</a>.</p>
+<p>Now that our API is hosted, anybody can use it in their application! Access it on RStudio Connect: <a href="https://colorado.rstudio.com/rsc/plumber-histogram-example/" target="_blank">https://colorado.rstudio.com/rsc/plumber-histogram-example/</a>.</p>
+<h2 id="learn-more" class="anchored">Learn More</h2>
+<p>APIs increase the impact of your data science work by making your code accessible to a larger audience. Thanks to plumber, you can create them by providing a few special comments in your R code.</p>
+<ul>
+<li>Read the <a href="https://www.rplumber.io/index.html" target="_blank">plumber documentation</a>.</li>
+<li>Want a more in-depth example? Watch James Blair convert a data science model into an API in his excellent talk, <a href="https://www.rstudio.com/resources/webinars/expanding-r-horizons-integrating-r-with-plumber-apis/" target="_blank">Expanding R Horizons: Integrating R with Plumber APIs</a>.</li>
+<li>Want to see more plumber examples? The Solutions Engineering team shares some in their <a href="https://github.com/sol-eng/plumberExamples" target="_blank">GitHub repository</a>.</li>
+<li>Learn more about <a href="https://www.rstudio.com/products/connect/" target="_blank">RStudio Connect</a>.</li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

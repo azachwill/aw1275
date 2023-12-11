@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-05-04">
+<meta name="description" content="APIs can dramatically increase the impact of data analytics by making real time results accessible to a larger audience. RStudio empowers organizations to both create and use analytic APIs.">
+
+<title>RStudio and APIs</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio and APIs</h1>
+
+<p class="date">2021-05-04</p>
+</header>
+
+<p><sup> Photo by <a href="https://unsplash.com/@samthewam24?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Samuel Sianipar</a> on <a href="https://unsplash.com/s/photos/pipes?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a> </sup></p>
+<p>Data Scientists and analysts work to constantly deliver valuable insights from data. In many cases, these individuals practice a <a href="https://www.rstudio.com/resources/why-your-enterprise-needs-code-first-data-science/">Code First approach</a>, using a programming language like R or Python to explore and understand data. Once an analysis reaches conclusion, it is important to carefully consider what happens next. Perhaps the analysis resulted in a complex machine learning model that can generate valuable predictions on new data. Or perhaps it resulted in some new business logic that can be implemented to improve efficiency. In any case, ensuring the longevity of analysis outcomes increases business value long after the original analysis concludes.</p>
+<h2 id="increasing-the-impact-of-an-analysis" class="anchored">Increasing the impact of an analysis</h2>
+<p>There are common, standard methods for distributing results and increasing the impact of a given analysis. Data scientists may choose one or more of several options:</p>
+<ul>
+<li><strong>Prepare and present a presentation</strong> to business stakeholders.</li>
+<li><strong>Create a reproducible report</strong> that is widely shared and distributed.</li>
+<li><strong>Develop and share an interactive dashboard or application</strong> to provide others with self-service access to the analysis results and findings at their convenience.</li>
+<li>Or, as we’ll discuss in this post, <strong>share the analysis as an API</strong> that allows real time interactivity with other technologies.</li>
+</ul>
+<p>In each case, the goal is to increase the potential impact of the analysis.The greater the reproducibility, interactivity and reach of the analysis, the greater the potential impact.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="analysis-impact.png" class="img-fluid"></p>
+<p></p><figcaption>Analysis Impact</figcaption><p></p>
+</figure>
+</div>
+<p>Let’s consider an example. Sofia works as a business analyst for a large SaaS company. She was recently assigned a project to analyze customer usage of the company platform to better identify customers at risk of churning. After careful analysis, Sofia determines the top 5 contributing factors to customer churn. At this point, she has learned something of value, and she can share those insights with business leaders via a presentation or email to help inform future decisions. However, this outcome has limited impact. What if Sofia created a reproducible report or a dashboard using Shiny or Dash to better understand the existing customer base and their risk factors? Now the analysis impact has dramatically increased.</p>
+<p>As a result of Sofia’s analysis, the company wants to generate real time predictions for each customer. This will allow each customer interaction to be informed by the customers current level of risk. In order to achieve this, the work Sofia has done <strong>needs to be responsive and accessible in real time, from a variety of other tools and technologies.</strong> This is when creating an API can prove particularly useful.</p>
+<h2 id="apis-provide-real-time-analysis-outcomes" class="anchored">APIs provide real time analysis outcomes</h2>
+<p>APIs are, in their most basic form, a standardized way for computers to communicate with one another. Just as human communication is improved by a shared baseline or common language, APIs allow different digital platforms to communicate with one another. In the case of data analytics, APIs can empower real time interaction with statistical models and analysis outcomes. This enables other developers either inside or outside of an organization to integrate directly with and build upon work that’s already been done without the need for costly re-implementation.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="api-diagram.png" class="img-fluid"></p>
+<p></p><figcaption>API Diagram</figcaption><p></p>
+</figure>
+</div>
+<p>The impact of a given analysis can often be measured by how accessible its results are. Slide presentations, reports, and interactive applications all increase analysis impact by distributing results to a wider audience. APIs can further increase impact by allowing other tools within the organization to quickly make use of analysis results. Unfortunately, many organizations stop short of creating these APIs and don’t realize the full impact potential of a given analysis.</p>
+<p>This isn’t to say that every analysis should result in an API. When an analysis is expected to be short lived or exists only as a proof of concept, an API may be unnecessary. However, when other tools want to build upon the work done in an existing analysis, an API becomes a useful tool that enables quick integration.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="rstudio-connect-diagram.png" class="img-fluid"></p>
+<p></p><figcaption>RStudio Connenct Diagram</figcaption><p></p>
+</figure>
+</div>
+<h2 id="to-learn-more" class="anchored">To learn more</h2>
+<p>RStudio Connect enables enterprise data science teams to quickly deliver analysis results to a wide variety of business stakeholders. In addition to supporting interactive applications and static reports, RStudio Connect can also be used to deploy and manage R and Python APIs, using the Plumber and Flask frameworks. To learn more:</p>
+<ul>
+<li>Visit the <a href="https://www.rstudio.com/products/connect/">Connect product page</a>, or <a href="http://rstd.io/r_and_python">set up a meeting</a> with our Customer Success team.</li>
+<li>Watch the webinar, <a href="https://www.rstudio.com/resources/webinars/expanding-r-horizons-integrating-r-with-plumber-apis/">“Expanding R Horizons: Integrating R with Plumber APIs”</a></li>
+<li>Check out these examples of <a href="https://solutions.rstudio.com/r/rest-apis/">Plumber</a> and <a href="https://solutions.rstudio.com/python/flask/">Flask</a> APIs.</li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

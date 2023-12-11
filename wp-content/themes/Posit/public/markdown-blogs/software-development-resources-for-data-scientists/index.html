@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-05-16">
+<meta name="description" content="Many tools used routinely by software developers can also be useful to data scientists.">
+
+<title>Software Development Resources for Data Scientists</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Software Development Resources for Data Scientists</h1>
+
+<p class="date">2022-05-16</p>
+</header>
+
+<p>Data scientists concentrate on making sense of data through exploratory analysis, statistics, and models. Software developers apply a separate set of knowledge with different tools. Although their focus may seem unrelated, data science teams can benefit from adopting software development best practices. Version control, automated testing, and other dev skills help create reproducible, production-ready code and tools.</p>
+<p>Rachael Dempsey recently <a href="https://twitter.com/_RachaelDempsey/status/1518578015978266625?s=20&amp;t=niXllzayd4AoZ8GWGV8Pqw" target="_blank">asked the Twitter community</a> for suggestions on resources that data scientists can use to improve their software development skill set.</p>
+<p>We received so many great recommendations that we wanted to summarize and share them here. This blog post walks through software development best practices that your team may want to adopt and where to find out more.</p>
+<p>The areas discussed below are:</p>
+<ul>
+<li><a href="#structure-your-data-science-projects-so-that-everything-just-runs-the-first-time">Project structure</a></li>
+<li><a href="#test-functions-so-that-they-do-what-you-expect-them-to-do">Automatic testing</a></li>
+<li><a href="#create-reproducible-environments-so-that-results-are-consistent">Reproducible environments</a></li>
+<li><a href="#use-version-control-to-track-and-control-changes-across-a-team">Version control</a></li>
+</ul>
+<h2 id="structure-your-data-science-projects-so-that-everything-just-runs-the-first-time" class="anchored">Structure your data science projects so that everything “just runs the first time”</h2>
+<p>It’d be great if we could open an R script, click Run, and we have the output we need. However, code doesn’t always “just work.” As our projects get bigger and more complex, we need structure so that they are easy to manage and understand.</p>
+<p>As Daniel Chen says in his <a href="https://youtu.be/UQHz38s3DyA" target="_blank">Structuring Your Data Science Projects</a> talk, a proper project structure gets us to the happy place where our code runs. Existing principles, templates, and tools can guide you:</p>
+<ul>
+<li>Make a project for your work so that file directories are easy to work with</li>
+<li>Organize work into subfolders so that anybody can open up your project and understand what is going on</li>
+<li>Create functions to organize what your code is doing</li>
+<li>Write reports that show your stakeholders what they care about (and hide what they don’t)</li>
+<li>Use workflow orchestrators to see which tasks depend on each other and to rebuild your analysis (<a href="https://books.ropensci.org/targets/" target="_blank">the targets package</a> is an option for R users)</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/workflow.png" class="img-fluid"></p>
+<p></p><figcaption>An example workflow diagram created from the targets package</figcaption><p></p>
+</figure>
+</div>
+<center>
+<i>
+
+A workflow diagram showing a project’s activities and dependencies<br>Source: <a href="https://wlandau.github.io/targets-tutorial/#1" target="_blank">Reproducible computation at scale in R, Will Landau</a>
+</i></center><i>
+</i>
+
+<p><br> Organized projects allow data scientists to remain productive as their projects grow.</p>
+<h3 id="project-structure-resources" class="anchored">Project Structure Resources</h3>
+<ul>
+<li><a href="https://rstats.wtf/save-source.html" target="_blank">What They Forgot to Teach You About R - A Holistic Workflow</a></li>
+<li><a href="https://slides.djnavarro.net/project-structure/#1" target="_blank">Project Structure Slides by Danielle Navarro</a></li>
+<li><a href="https://goodresearch.dev/" target="_blank">Good Research Code Handbook</a></li>
+<li><a href="https://workflowr.github.io/workflowr/" target="_blank">workflowr package</a></li>
+<li><a href="https://swcarpentry.github.io/make-novice/" target="_blank">Data Carpentries Automation and Make Course</a></li>
+</ul>
+<h2 id="test-functions-so-that-they-do-what-you-expect-them-to-do" class="anchored">Test functions so that they do what you expect them to do</h2>
+<p>A data scientist can test a function by inputting some values, seeing if the output is what you expect, modifying the code if there are issues, and rerunning to check the values again. However, this process leaves a lot of room for error. It’s easy to forget what changed and cause something else to break.</p>
+<p>Automated testing offers a better option, such as with the <a href="https://docs.pytest.org/en/latest/" target="_blank">pytest package</a> or <a href="https://testthat.r-lib.org/" target="_blank">testthat package</a>. Automated testing focuses on small, well-defined pieces of code. Data scientists write out explicit expectations. Tests are saved in a single location, making them easy to rerun. When a test fails, it’s clear where to look for the problem.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> foobar <span class="im">import</span> foo, bar</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_foo_values():</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> foo(<span class="dv">4</span>) <span class="op">==</span> <span class="dv">8</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> foo(<span class="fl">2.2</span>) <span class="op">==</span> <span class="fl">1.9</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_bar_limits():</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> bar(<span class="dv">4</span>, [<span class="dv">1</span>, <span class="dv">90</span>], option<span class="op">=</span><span class="va">True</span>) <span class="op">&lt;</span> <span class="dv">8</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># If you want to test that bar() raises an exception when called with certain</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># arguments, e.g. if bar() should raise an error when its argument is negative:</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_bar_errors():</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> pytest.raises(<span class="pp">ValueError</span>):</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        bar(<span class="op">-</span><span class="dv">4</span>, [<span class="dv">2</span>, <span class="dv">10</span>])  <span class="co"># test passes if bar raises a ValueError</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<center>
+<i>
+
+Example Python Test<br>Source: <a href="https://36-750.github.io/practices/unit-testing/" target="_blank">Statistical Computing Course, Alex Reinhart and Christopher R. Genovese</a>
+</i></center><i>
+</i>
+
+<p>Incorporating automated testing in a workflow exposes problems early and makes it easier to alter code.</p>
+<h3 id="testing-resources" class="anchored">Testing Resources</h3>
+<ul>
+<li><a href="https://goodresearch.dev/" target="_blank">Good Research Code Handbook</a></li>
+<li><a href="https://36-750.github.io/practices/unit-testing/" target="_blank">Statistical Computing - Unit Testing</a></li>
+<li><a href="https://r-pkgs.org/tests.html" target="_blank">R Packages - Testing</a></li>
+<li><a href="https://testthat.r-lib.org/" target="_blank">testthat package</a></li>
+</ul>
+<h2 id="create-reproducible-environments-so-that-results-are-consistent" class="anchored">Create reproducible environments so that results are consistent</h2>
+<p>Have you ever had a script that worked great, but now you can’t reproduce the results on a new laptop? This may happen because of changes in the operating system, package versions, or other factors. You have to spend time figuring out why the output is suddenly different.</p>
+<p>A reproducible environment ensures workflows run as they did in the past. Your team controls everything needed to run a project in a reproducible environment. Each person running the code can expect the same behavior since everything is standardized.</p>
+<p>Virtual environments for Python or the <a href="https://rstudio.github.io/renv/articles/renv.html" target="_blank">renv package</a> for R are examples of the tools that can help a data science team reproduce their work. They record the version of loaded packages in a project and can re-install the declared versions of those packages.</p>
+<p>For example, say one of your projects uses <code>dplyr::group_map()</code>, introduced in dplyr v0.8.0. If a team member runs the code with an older version of dplyr, they will run into an error. The renv package captures the state of the environment in which the code was written and shares that environment with others so that they can run the code without issue. (Try out <a href="https://github.com/JosiahParry/renv-example" target="_blank">Josiah Parry’s example</a> on GitHub.)</p>
+<p>With reproducible environments, data scientists can collaborate on work and validate results regardless of when and where they are running code.</p>
+<h3 id="reproducible-environments-resources" class="anchored">Reproducible Environments Resources</h3>
+<ul>
+<li><a href="https://rstats.wtf/get-to-know-your-r-installation.html" target="_blank">What They Forgot to Teach You About R - Personal R Admin</a></li>
+<li><a href="https://environments.rstudio.com/" target="_blank">RStudio - Reproducible Environments</a></li>
+<li><a href="https://solutions.rstudio.com/python/minimum-viable-python/" target="_blank">Minimal Viable Python</a></li>
+<li><a href="https://education.molssi.org/python-package-best-practices/" target="_blank">Python Package Best Practices</a></li>
+<li><a href="https://docs.python.org/3/tutorial/venv.html" target="_blank">Python virtual environments</a>, <a href="https://rstudio.github.io/renv/articles/renv.html" target="_blank">renv package</a>, and <a href="https://youtu.be/yjlEbIDevOs" target="_blank">renv webinar</a></li>
+</ul>
+<h2 id="use-version-control-to-track-and-control-changes-across-a-team" class="anchored">Use version control to track and control changes across a team</h2>
+<p>Data scientists produce many files. As these files evolve throughout a project, keeping track of the latest version becomes more challenging. If the team collaborates on the same file, someone may use an outdated version and has to spend time reconciling mismatched lines of code.</p>
+<p>Version control with tools like Git and GitHub can alleviate these pains. Teams can manage asynchronous work and avoid conflict or confusion. It’s easy to track the evolution of files, find (and revert) changes, and resolve differences between versions.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/diff.png" class="img-fluid"></p>
+<p></p><figcaption>Differences between two versions of a file from the diff window available in RStudio’s Git GUI</figcaption><p></p>
+</figure>
+</div>
+<center>
+<i>
+
+Quick check of differences between two versions of a file<br>(current version uses <code>mtcars<span class="math inline"><em>h</em><em>p</em> &lt; /<em>c</em><em>o</em><em>d</em><em>e</em> &gt; <em>i</em><em>n</em><em>s</em><em>t</em><em>e</em><em>a</em><em>d</em><em>o</em><em>f</em> &lt; <em>c</em><em>o</em><em>d</em><em>e</em> &gt; <em>m</em><em>t</em><em>c</em><em>a</em><em>r</em><em>s</em></span>am</code>)
+</i></center><i>
+</i>
+
+<p>Using version control in data science projects makes collaboration and maintenance more manageable.</p>
+<h3 id="version-control-resources" class="anchored">Version Control Resources</h3>
+<ul>
+<li><a href="https://happygitwithr.com/" target="_blank">Happy Git and GitHub for the useR</a></li>
+<li><a href="https://peerj.com/preprints/3159v2/" target="_blank">Excuse me, do you have a moment to talk about version control?</a></li>
+<li><a href="https://lab.github.com/" target="_blank">GitHub Learning Lab</a></li>
+<li><a href="https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN" target="_blank">Git GUI in RStudio IDE</a></li>
+<li>Other Git GUIs: <a href="https://www.gitkraken.com/" target="_blank">GitKraken</a>, <a href="https://www.sourcetreeapp.com/" target="_blank">Sourcetree</a></li>
+</ul>
+<h2 id="learn-more" class="anchored">Learn More</h2>
+<p>These are just a few areas that data science teams should concentrate on to improve their software development skill set. We hope that you find them helpful and are excited to learn more!</p>
+<ul>
+<li>Read the <a href="https://twitter.com/_RachaelDempsey/status/1518578015978266625?s=20&amp;t=SfEXfXBBkuzeKzUOgh70KA" target="_blank">original Twitter thread</a> for more links.</li>
+<li>Watch helpful <a href="https://youtube.com/playlist?list=PLXKlQEvIRus_oupGJ3rxMC0wtXunhz5N0" target="_blank">YouTube videos</a> on this topic.</li>
+</ul>
+<p><strong>Interested in developing holistic workflows, improving debugging processes, and writing non-repetitive code? Register for What They Forgot to Teach You About R at rstudio::conf(2022), a two-day session led by Shannon McClintock Pileggi, Jenny Bryan, and David Aja. Learn more on the rstudio::conf <a href="https://www.rstudio.com/conference/2022/workshops/wtf-rstats/" target="_blank">workshop page</a>.</strong></p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

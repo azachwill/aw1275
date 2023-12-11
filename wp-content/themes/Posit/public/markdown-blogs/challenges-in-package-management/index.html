@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-02-23">
+<meta name="description" content="Installing software packages from CRAN or PyPI is easy until it isn’t. Let’s look at common challenges associated with package management and understand why it can be so difficult.">
+
+<title>Challenges in Package Management</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Challenges in Package Management</h1>
+
+<p class="date">2022-02-23</p>
+</header>
+
+<center>
+<p><font size="2">Photo courtesy of <a href="https://www.pexels.com/photo/business-cargo-cargo-container-city-262353/">Pexels</a></font></p>
+</center>
+<p>Installing software packages from public repositories like <a href="https://cran.r-project.org/">CRAN</a> or <a href="https://pypi.org/">PyPI</a> is easy until it isn’t. New developers and veterans reading this are likely familiar with the frustration of a lost afternoon from a package failing to install accompanied by an indecipherable error message—spending hours scouring the web only to find that the instructions were missing a crucial step. Did the package maintainers miss this, or could there be more going on?</p>
+<p>From the outside, it might feel like it should be easier than it is, but digging a little deeper can lead to a sea of complexity and confusion. So let’s look at some of the common challenges associated with package management, understand why it’s difficult, and how we can do better.</p>
+<h2 id="what-is-package-management" class="anchored">What is Package Management</h2>
+<p>Package management is the entire ecosystem of tools and processes that install, upgrade, delete, and generally manage software programs for a computer. Here, we’ll focus on the challenges related to the systems that manage software dependencies, also called software packages, for data scientists and software engineers.</p>
+<p>Software packages are shared and installed to extend or enhance existing language functionality. For example, there are packages to serve HTTP requests, plot complex graphs, perform sophisticated statistical functions, and many more.</p>
+<p>Most programming languages will have public repositories that host these packages like CRAN for R, or PyPI and Anaconda for Python. If you’re familiar with R, then anytime you’ve run the <code>install.packages</code> command, you’ve probably downloaded a package from the CRAN repository. Similarly, if you’ve used <code>pip</code> for Python, you’ve likely interfaced with the PyPI repository.</p>
+<h2 id="a-simple-example" class="anchored">A Simple Example</h2>
+<p>Say you want to install the data visualization dependency <a href="https://packagemanager.rstudio.com/client/#/repos/2/packages/ggplot2"><code>ggplot2</code></a> to plot a graph. R can accomplish this by running the <code>install.packages</code> function. The output of which looks something like this:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Installing package into ‘<span class="sc">/</span>usr<span class="sc">/</span>local<span class="sc">/</span>lib<span class="sc">/</span>R<span class="sc">/</span>site<span class="sc">-</span>library’</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>(as <span class="st">'lib'</span> is unspecified)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>also installing the dependencies<span class="st">' colorspace'</span>, <span class="st">'cli'</span>, <span class="st">'crayon'</span>, <span class="st">'utf8'</span>, <span class="st">'farver'</span>, <span class="st">'labeling'</span>, <span class="st">'lifecycle'</span>, <span class="st">'munsell'</span>, <span class="st">'R6'</span>, <span class="st">'RColorBrewer'</span>, <span class="st">'viridisLite'</span>, <span class="st">'ellipsis'</span>, <span class="st">'fansi'</span>, <span class="st">'magrittr'</span>, <span class="st">'pillar'</span>, <span class="st">'pkgconfig'</span>, <span class="st">'vctrs'</span>, <span class="st">'digest'</span>, <span class="st">'glue'</span>, <span class="st">'gtable'</span>, <span class="st">'isoband'</span>, <span class="st">'rlang'</span>, <span class="st">'scales'</span>, <span class="st">'tibble'</span>, <span class="st">'withr'</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>trying URL <span class="st">'https://packagemanager.rstudio.com/all/__linux__/focal/latest/src/contrib/colorspace_2.0-2.tar.gz'</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>Content type <span class="st">'binary/octet-stream'</span> length <span class="dv">2621589</span> <span class="fu">bytes</span> (<span class="fl">2.5</span> MB)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="sc">==</span><span class="er">================================================</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>downloaded <span class="fl">2.5</span> MB</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>... omitted <span class="cf">for</span> brevity ...</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> installing <span class="sc">*</span>binary<span class="sc">*</span> package <span class="st">'ggplot2'</span>...</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> <span class="fu">DONE</span> (ggplot2)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>The downloaded source packages are <span class="cf">in</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    ‘<span class="sc">/</span>tmp<span class="sc">/</span>RtmpXOEyc3<span class="sc">/</span>downloaded_packages’</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>So what is even happening here? We wanted to download the package <code>ggplot2</code> and ended up also downloading <code>colorspace</code>, <code>cli</code>, and a bunch of others! It turns out that software packages usually require or recommend other software packages.</p>
+<p>These recursive dependencies are called a package’s <strong>dependency graph</strong>. These dependency graphs can quickly get complicated, as we can see in this visualization:</p>
+<center>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="dependency-graph.jpg" class="img-fluid"></p>
+<p></p><figcaption>graph showing software packages as nodes and dependency relationships as edges</figcaption><p></p>
+</figure>
+</div>
+<p><font size="2">A complex dependency graph showing the required and recommended dependencies for the <code>ggplot2</code> package</font></p>
+</center>
+<p>Beyond this graph, a package can also require system dependencies. You may have installed these in the past using tools like <code>brew</code> for macOS, <code>apt</code> for Linux’s Ubuntu distribution, or <code>choco</code> for Windows.</p>
+<p>At this point, you may be saying to yourself, “install the system dependencies, install the package’s dependencies and those package’s dependencies, and finally install the package.” It sounds challenging, but it should be doable, right? Unfortunately, we still have a few more challenges to face in this recursive rabbit hole.</p>
+<h2 id="versioning-and-dependency-solvers" class="anchored">Versioning and Dependency Solvers</h2>
+<p>In general, adding software dependencies to a project happens naturally as the project evolves. That is, on day one, you may install <code>tibble</code>, the next day <code>rmarkdown</code>, and so on. However, these projects could also be evolving, so on that first day, <code>tibble</code> was version <code>3.1.4</code>, and the next day it’s <code>3.1.5</code>.</p>
+<p>In this example, a problem could arise where the installed version of <code>rmarkdown</code> was developed using the <code>3.1.5</code> version and may not be compatible with older versions.</p>
+<p>You could update <code>tibble</code>, but it might depend on another package that is not compatible with the newer version. This problem also extends to the requisite system dependencies, which can be more challenging to reconcile.</p>
+<center>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="version-example.jpg" class="img-fluid"></p>
+<p></p><figcaption>A dependency network showing two packages <code>tibble-3.1.4</code> and <code>apollo</code> installed, the desired <code>rmarkdown</code> package and its incompatible dependency <code>tibble-3.1.5</code>.</figcaption><p></p>
+</figure>
+</div>
+<p><font size="2">An example graph showing an incompatible dependency cycle, assuming we already have <code>tibble-3.1.4</code> and <code>apollo</code> installed, and we want the latest version of <code>rmarkdown</code></font></p>
+</center>
+<p>Different package management systems deploy various strategies to solve this problem. For example, CRAN employs an approach that enforces that all packages are compatible with one another at any given point in time. Another option is to include a dependency solver like Python’s <a href="https://pip.pypa.io/en/stable/topics/dependency-resolution/"><code>pip</code></a> and <a href="https://www.anaconda.com/blog/understanding-and-improving-condas-performance"><code>conda</code></a> tools do.</p>
+<p>A dependency solver systematically works out which packages and versions of those packages are most likely to be compatible. This process can be immensely challenging and take an indeterminate amount of time to get perfect, so most projects tend to rely on heuristics or a guess-and-check method to get it right. For example, <code>pip</code> now uses a backtracking algorithm to perform this operation. This change happened as recently as November 2020, and I recommend <a href="https://pyfound.blogspot.com/2019/12/moss-czi-support-pip.html">looking back</a> at why it was necessary in the first place.</p>
+<p>Let’s look at one more wrinkle in installing these dependencies.</p>
+<h2 id="operating-system-and-cpu-architecture" class="anchored">Operating System and CPU Architecture</h2>
+<p>So far, we’ve only talked about problems related to dependencies playing nicely with one another, but after we know what packages and package versions we need, is there anything else that can go wrong? Some of you may have noticed this peculiar line in the simple example above:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span> installing <span class="pp">*</span>binary<span class="pp">*</span> package <span class="st">'ggplot2'</span>...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This statement means we are installing a compiled binary software package. Most of the software we install today is a “binary” distribution which means it is pre-built for a specific operating system and CPU architecture. These distributions install more quickly, and require less work than configuring our computers to build from the source code.</p>
+<p>The problems start when our computer differs from the machine used to build the packages. For example, you may have heard of Apple’s new M1 apple laptops that use the <a href="https://developer.apple.com/documentation/xcode/writing-arm64-code-for-apple-platforms">ARM64 CPU</a> architecture. As a result of this release, existing package binaries compiled for macOS Intel x86 computers will not work on these new machines. Some package managers attempt to solve this by building packages for as many operating systems and CPU architectures as possible, while others try to maximize compatibility through portable build distributions like <a href="https://www.python.org/dev/peps/pep-0513/">Python’s manylinux system</a>.</p>
+<p>However, the situation gets more problematic when we again consider system dependencies, but I’ll leave that topic for another time as it warrants an article in itself.</p>
+<h2 id="more-information" class="anchored">More Information</h2>
+<p>We covered many topics, including package management, versioning, dependency resolvers, and compiling pre-built package binaries. Of course, there’s so much more to say about these subjects, but hopefully, this helps shed light on why package management is challenging and the problems engineers face every day.</p>
+<p>RStudio recognizes these challenges and has a couple of ways to help with our <a href="https://www.rstudio.com/products/package-manager/">Package Manager</a> product which:</p>
+<ul>
+<li>provides an easy way to pin to CRAN dates to ensure compatibility and determinism</li>
+<li>supports internal, non-CRAN R packages to make sharing and collaboration as simple as possible</li>
+<li>provides pre-built R package binaries for Windows and Linux operating systems and CPU architectures</li>
+<li>and much more</li>
+</ul>
+<p>If these challenges sound exciting or you’d like to learn more, the RStudio Package Manager team is hiring! See our <a href="https://www.rstudio.com/about/careers/">careers page</a> for more information.</p>
+<h2 id="references" class="anchored">References</h2>
+<ul>
+<li><a href="https://cran.r-project.org/">https://cran.r-project.org/</a></li>
+<li><a href="https://pypi.org/">https://pypi.org/</a></li>
+<li><a href="https://pip.pypa.io/en/stable/topics/dependency-resolution/">https://pip.pypa.io/en/stable/topics/dependency-resolution/</a></li>
+<li><a href="https://www.anaconda.com/blog/understanding-and-improving-condas-performance">https://www.anaconda.com/blog/understanding-and-improving-condas-performance</a></li>
+<li><a href="https://pyfound.blogspot.com/2019/12/moss-czi-support-pip.html">https://pyfound.blogspot.com/2019/12/moss-czi-support-pip.html</a></li>
+<li><a href="https://developer.apple.com/documentation/xcode/writing-arm64-code-for-apple-platforms">https://developer.apple.com/documentation/xcode/writing-arm64-code-for-apple-platforms</a></li>
+<li><a href="https://www.python.org/dev/peps/pep-0513/">https://www.python.org/dev/peps/pep-0513/</a></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

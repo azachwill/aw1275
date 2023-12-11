@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-02-12">
+<meta name="description" content="App Stories are a bit different from the User Showcase: an App Story will center around a Shiny application, but the application will be designed specifically to show off specific features, and it will also include explanations of how to use those features.">
+
+<title>Introducing Shiny App Stories</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Introducing Shiny App Stories</h1>
+
+<p class="date">2021-02-12</p>
+</header>
+
+<p>Today we’re introducing <a href="https://shiny.rstudio.com/app-stories/">App Stories</a> to the <a href="https://shiny.rstudio.com/">Shiny website</a>. If you’ve spent any time learning about Shiny, there’s a good chance you’ve already seen our <a href="https://shiny.rstudio.com/gallery/#user-showcase">Shiny User Showcase</a>. These are applications that Shiny users around the world have allowed us to share, and it’s an excellent place to get ideas about what you can do with Shiny.</p>
+<p>App Stories are a bit different from the User Showcase: an App Story will center around a Shiny application, but the application will be designed specifically to show off specific features, and it will also include explanations of how to use those features.</p>
+<p>We’re kicking off App Stories with an application for <a href="https://connect.rstudioservices.com/explore_your_weather/">exploring weather patterns</a> in US cities. This story shows off some of Shiny 1.6.0’s new features, and it has two parts: <a href="https://shiny.rstudio.com/app-stories/weather-lookup-about.html">About the app</a> describing the application’s functionality and motivation, and <a href="https://shiny.rstudio.com/app-stories/weather-lookup-caching.html">Using <code>bindCache()</code> to speed up an app</a> which shows how Shiny’s new <code>bindCache()</code> function can be used to easily speed up your apps with very little code.</p>
+<div style="max-width: 550px; margin: 0 auto;">
+<p><img src="full_app.png" alt="Screenshot of the weather explorer app"></p>
+</div>
+<p>Both posts for the weather explorer go deeper into motivations and real-use-case scenarios than traditional documentation, and they provide insight into the development process of a nice-looking and high-performance Shiny app.</p>
+<div style="max-width: 550px; margin: 0 auto;">
+<p><img src="caching_article_sections.png" alt="Screenshot of sections in caching article"> <em>Articles are written trying to explain why in addition to how to use new features in Shiny</em></p>
+</div>
+<p>Going forward we will continue to add new applications along with posts about those applications. We’re experimenting with this kind of documentation, so we welcome feedback about what topics you would like explored or what could be improved. Feel free to tweet at us (Winston: <a href="https://twitter.com/winston_chang"><span class="citation" data-cites="winston_chang">@winston_chang</span></a>, Nick: <a href="https://twitter.com/NicholasStrayer"><span class="citation" data-cites="NicholasStrayer">@NicholasStrayer</span></a>) with your thoughts and ideas. Happy app making!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

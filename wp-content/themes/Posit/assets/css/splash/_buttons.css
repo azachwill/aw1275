@@ -1,0 +1,38 @@
+@layer utilities {
+    .btn,
+    .btn-primary,
+    .btn-secondary {
+        @apply px-8 py-4 rounded-[10px] text-18 font-source-pro;
+    }
+
+    .btn-sm,
+    .btn-sm-primary,
+    .btn-sm-secondary {
+        @apply px-6 py-[10px] rounded-[5px] text-14 font-source-pro lowercase;
+    }
+
+    .btn-lg,
+    .btn-lg-primary,
+    .btn-lg-secondary {
+        @apply px-11 py-5 rounded-[10px] text-24 font-source-pro;
+    }
+
+    .btn,
+    .btn-sm,
+    .btn-lg,
+    .btn-primary,
+    .btn-sm-primary,
+    .btn-lg-primary {
+        @apply flex justify-center text-neutral-light uppercase bg-blue4 border-2 border-blue4 cursor-pointer
+        hover:bg-blue3 hover:text-blue6 hover:border-blue3
+        disabled:text-gray1 disabled:bg-gray3 disabled:border-gray3 disabled:cursor-not-allowed;
+    }
+
+    .btn-secondary,
+    .btn-sm-secondary,
+    .btn-lg-secondary {
+        @apply flex justify-center text-blue4 uppercase border-2 border-blue4 cursor-pointer
+        hover:text-blue3 hover:border-blue3
+        disabled:text-gray1 disabled:border-gray3 disabled:cursor-not-allowed;
+    }
+}

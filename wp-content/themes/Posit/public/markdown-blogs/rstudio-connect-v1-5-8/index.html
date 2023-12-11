@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2017-10-24">
+
+<title>RStudio Connect v1.5.8</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Connect v1.5.8</h1>
+
+<p class="date">2017-10-24</p>
+</header>
+
+<p>We’re pleased to announce RStudio Connect: version 1.5.8. This release enables reconnects for Shiny applications, more consistent and trustworthy editing of user information, and various LDAP improvements.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="rsc-154-plumber.png" class="img-fluid"></p>
+<p></p><figcaption>The auto-generated “swagger” interface for a web API written using Plumber.</figcaption><p></p>
+</figure>
+</div>
+<p>The major changes this release include:</p>
+<ul>
+<li>Enabled <strong>support for Shiny reconnects</strong>. Users of Shiny applications are less likely to be interrupted during brief network hiccups. The <code>Client.ReconnectTimeout</code> property specifies how long that session is maintained when there is connectivity trouble. The default setting is <code>15s</code>. See https://shiny.rstudio.com/articles/reconnecting.html to learn more about reconnecting to Shiny applications. Disable this feature by giving the <code>Client.ReconnectTimeout</code> property a value of <code>0</code>.</li>
+<li>Greater <strong>consistency around editing user information</strong>. Authentication providers that expect user information to come in externally (like LDAP and OAuth) will by default forbid users from editing their information and will automatically refresh user profile information when the user logs in. Other providers now more consistently allow information that was specified when the user created their account to be edited by the user later.</li>
+<li>The <code>browseURL</code> R function is disabled when executing deployed content. Use techniques like the Shiny <code>shiny::tags$a</code> function to expose links to application visitors.</li>
+<li>Support more flexibility when searching for LDAP users and groups with the <code>[LDAP].UserFilterBase</code> and <code>[LDAP].GroupFilterBase</code> settings.</li>
+<li>LDAP configuration’s <code>BindDN</code> password can now be stored in an external file using the new <code>BindPasswordFile</code> field. Also made improvements to LDAP group membership lookups.</li>
+<li>Previously, usernames could not be edited when using the LDAP authentication provider by default or if the <code>Authentication.RequireExternalUsernames</code> flag was set to <code>true</code>. Now, user email, first name, and last name are also not editable for this configuration.</li>
+<li>Connect administrators now receive an email as license expiration nears. Email is sent when the license is sixty days from expiring. Disable this behavior through the <code>Licensing.Expiration</code> setting.</li>
+<li>Resolved a bug in the version of the <code>rebuild-packrat</code> command-line tool that was released in v1.5.6. Previously, the migration utility would render static content inaccessible. This release fixes this behavior and adds support for running this CLI tool while the RStudio Connect server is online. However, due to the discovery of new defects, the utility is disabled by default and is not recommended for production use until further notice. Those wishing to attempt to use the utility anyway should do so on a staging server that can be safely lost, and all content should be thoroughly tested after it has completed. http://docs.rstudio.com/connect/1.5.8/admin/cli.html#migration-cli</li>
+<li>Fixed an issue with account confirmations and password resets for servers using non-UTC time zones.</li>
+<li>LDAP now updates user email, first name, and last name every time a user logs in.</li>
+<li>Fix an issue when performing the <code>LOGIN</code> SMTP authentication mechanism.</li>
+<li>BREAKING: Changed the default value for <code>PAM.AuthenticatedSessionService</code> to <code>su</code>. Previously, on some distributions of Linux, setting <code>PAM.ForwardPassword</code> to <code>true</code> could present PAM errors to users when running applications as the current user if the <code>AuthenticatedSessionService</code> was not configured. System administrators who had previously edited the <code>rstudio-connect</code> PAM service for use in <code>ForwardPassword</code> mode should update the <code>PAM.AuthenticatedSessionService</code> configuration option. See:http://docs.rstudio.com/connect/1.5.8/admin/process-management.html#pam-credential-caching-kerberos</li>
+<li>BREAKING: The format of the RStudio Connect package file names have changed. Debian package file names have the form <code>rstudio-connect_1.2.3-7_amd64.deb</code>. RPM package file names have the form <code>rstudio-connect-1.2.3-7.x86_64.rpm</code>. In addition, the RPM meta-data will have a “version” of <code>1.2.3</code> and a “release” of <code>7</code> for this file name. Previously, the RPM would have had a “version” of <code>1.2.3-7</code>.</li>
+</ul>
+<p>You can see the full release notes for RStudio Connect 1.5.8 <a href="http://docs.rstudio.com/connect/1.5.8/news/">here</a>.</p>
+<blockquote>
+<h4 id="upgrade-planning" class="anchored">Upgrade Planning</h4>
+<p>There are no special precautions to be aware of when upgrading from v1.5.6. You can expect the installation and startup of v1.5.8 to be complete in under a minute.</p>
+<p>If you’re upgrading from a release older than v1.5.6, be sure to consider the “Upgrade Planning” notes from those other releases, as well.</p>
+</blockquote>
+<p>If you haven’t yet had a chance to download and try <a href="https://rstudio.com/products/connect">RStudio Connect</a> we encourage you to do so. RStudio Connect is the best way to share all the work that you do in R (Shiny apps, R Markdown documents, plots, dashboards, Plumber APIs, etc.) with collaborators, colleagues, or customers.</p>
+<p>You can find more details or download a 45 day evaluation of the product at <a href="https://www.rstudio.com/products/connect/">https://www.rstudio.com/products/connect/</a>. Additional resources can be found below.</p>
+<ul>
+<li><a href="https://www.rstudio.com/products/connect/">RStudio Connect home page &amp; downloads</a></li>
+<li><a href="http://docs.rstudio.com/connect/admin/">RStudio Connect Admin Guide</a></li>
+<li><a href="https://www.rstudio.com/wp-content/uploads/2016/01/RSC-IT-Q-and-A.pdf">What IT needs to know about RStudio Connect</a></li>
+<li><a href="http://docs.rstudio.com/connect/news/">Detailed news and changes between each version</a></li>
+<li><a href="https://www.rstudio.com/pricing/#ConnectPricing">Pricing</a></li>
+<li><a href="https://beta.rstudioconnect.com/connect/">An online preview of RStudio Connect</a></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

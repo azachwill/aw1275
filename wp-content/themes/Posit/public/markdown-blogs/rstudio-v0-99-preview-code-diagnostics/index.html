@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2015-04-28">
+
+<title>RStudio v0.99 Preview: Code Diagnostics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio v0.99 Preview: Code Diagnostics</h1>
+
+<p class="date">2015-04-28</p>
+</header>
+
+<p>In RStudio v0.99 we’ve made a major investment in R source code analysis. This work resulted in significant improvements in <a href="https://blog.rstudio.com/2015/02/23/rstudio-v0-99-preview-code-completion/">code completion</a>, and in the latest <a href="https://www.rstudio.com/products/rstudio/download/preview/">preview release</a> enable a new inline code diagnostics feature that highlights various issues in your R code as you edit.</p>
+<p>For example, here we’re getting a diagnostic that notes that there is an extra parentheses:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/04/screen-shot-2015-04-08-at-12-04-14-pm.png" class="img-fluid"></p>
+<p></p><figcaption>Screen Shot 2015-04-08 at 12.04.14 PM</figcaption><p></p>
+</figure>
+</div>
+<p>Here the diagnostic indicates that we’ve forgotten a comma within a shiny UI definition:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/04/screen-shot-2015-04-28-at-11-29-46-am.png" class="img-fluid"></p>
+<p></p><figcaption>diagnostics-comma</figcaption><p></p>
+</figure>
+</div>
+<p>This diagnostic flags an unknown parameter to a function call:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/04/screen-shot-2015-04-08-at-11-50-07-am.png" class="img-fluid"></p>
+<p></p><figcaption>Screen Shot 2015-04-08 at 11.50.07 AM</figcaption><p></p>
+</figure>
+</div>
+<p>This diagnostic indicates that we’ve referenced a variable that doesn’t exist and suggests a fix based on another variable in scope:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/04/screen-shot-2015-04-08-at-4-23-49-pm.png" class="img-fluid"></p>
+<p></p><figcaption>Screen Shot 2015-04-08 at 4.23.49 PM</figcaption><p></p>
+</figure>
+</div>
+<p>A wide variety of diagnostics are supported, including optional diagnostics for code style issues (e.g.&nbsp;the inclusion of unnecessary whitespace). Diagnostics are also available for several other languages including C/C++, JavaScript, HTML, and CSS.</p>
+<h3 id="configuring-diagnostics" class="anchored">Configuring Diagnostics</h3>
+<p>By default, code in the current source file is checked whenever it is saved, as well as if the keyboard is idle for a period of time. You can tweak this behavior using the <strong>Code</strong> -&gt; <strong>Diagnostics</strong> options:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/04/screen-shot-2015-04-28-at-11-37-34-am.png" class="img-fluid"></p>
+<p></p><figcaption>diagnostics-options</figcaption><p></p>
+</figure>
+</div>
+<p>Note that several of the available diagnostics are disabled by default. This is because we’re in the process of refining their behavior to eliminate “false negatives” where correct code is flagged as having a problem. We’ll continue to improve these diagnostics and enable them by default when we feel they are ready.</p>
+<h3 id="trying-it-out" class="anchored">Trying it Out</h3>
+<p>You can try out the new code diagnostics by downloading the latest <a href="https://www.rstudio.com/products/rstudio/download/preview/">preview release</a> of RStudio. This feature is a work in progress and we’re particularly interested in feedback on how well it works. Please also let us know if there are common coding problems which you think we should add new diagnostics for. We hope you try out the preview and <a href="https://support.rstudio.com/">let us know</a> how we can make it better.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-09-26">
+<meta name="description" content="We are excited to demonstrate all the new things in gt 0.7.0. This release has so many new features and enhancements that unlock new ways for making tables.">
+
+<title>All the New Things in {gt} 0.7.0</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">All the New Things in {gt} 0.7.0</h1>
+
+<p class="date">2022-09-26</p>
+</header>
+
+<p>A new version of {gt} <code>0.7.0</code> is out and there is so much goodness in this release! The goal with the package is to make building tables for publication a hassle-free process, all the while giving you plenty of powerful options to be creative. There’s really a lot to cover so let’s start immediately!</p>
+<h2 class="anchored">
+The New Word Table Output Format
+</h2>
+<p>Thanks to Ellis Hughes (otherwise known as <a href="https://github.com/thebioengineer"><code>@thebioengineer</code>, on GitHub</a>), we can now export {gt} tables to Word documents. This is great if you’re working on a document in Quarto or R Markdown that will be eventually exported to the <code>.docx</code> format.</p>
+<p>Other workflows are supported as well. Say you just want to create a table in a new Word document. For that, you could use the <code>gtsave()</code> function like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>gtcars <span class="sc">%&gt;%</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(model, year, hp, trq) <span class="sc">%&gt;%</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>(<span class="at">rowname_col =</span> <span class="st">"model"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_stubhead</span>(<span class="at">label =</span> <span class="st">"car"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gtsave</span>(<span class="at">filename =</span> <span class="st">"some_gtcars.docx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The key thing to know whenever using <code>gtsave()</code> is to name the output file with the appropriate file extension (for Word that is <code>.docx</code>). This is roughly what it’ll look like when the new file is opened in Word:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="some-gtcars-in-word.png" class="img-fluid" alt="Word document containing a table with five rows, one for a different car model from the gtcars dataset in gt. The column names are year, hp, and trq." width="1980"></p>
+</div>
+</div>
+<p>If you want to emit the raw OOXML that constitutes the Word table, that can be done with the new <code>as_word()</code> function. This can be useful for tinkering with the generated table code or for situations where the OOXML needs to be embedded in an existing Word document.</p>
+<h2 class="anchored">
+A whole new family of vector formatting functions (<code>vec_fmt_*()</code>) has been added!
+</h2>
+<p>The {gt} package has an ever-growing assortment of powerful formatting functions so that you can format your table data any way you please. We decided to bring all of that utility over to a new family of functions so that you could format vectors with a similar interface. These new functions are of the form <code>vec_fmt_*()</code> and the naming closely follows that of their column formatting counterparts (<code>fmt_*()</code>). Here’s a listing of all 14 of these new vector formatting functions and what they do:</p>
+<ul>
+<li><code>vec_fmt_number()</code>: Format a vector as numeric values</li>
+<li><code>vec_fmt_integer()</code>: Format a vector as integer values</li>
+<li><code>vec_fmt_scientific()</code>: Format a vector as values in scientific notation</li>
+<li><code>vec_fmt_engineering()</code>: Format a vector as values in engineering notation</li>
+<li><code>vec_fmt_percent()</code>: Format a vector as percentage values</li>
+<li><code>vec_fmt_partsper()</code>: Format a vector as parts-per quantities</li>
+<li><code>vec_fmt_fraction()</code>: Format a vector as mixed fractions</li>
+<li><code>vec_fmt_currency()</code>: Format a vector as currency values</li>
+<li><code>vec_fmt_bytes()</code>: Format a vector as values in terms of bytes</li>
+<li><code>vec_fmt_date()</code>: Format a vector as date values</li>
+<li><code>vec_fmt_time()</code>: Format a vector as time values</li>
+<li><code>vec_fmt_datetime()</code>: Format a vector as datetime values</li>
+<li><code>vec_fmt_duration()</code>: Format a vector of numeric or duration values as styled time duration strings</li>
+<li><code>vec_fmt_markdown()</code>: Format a vector containing Markdown text</li>
+</ul>
+<p>In all of these, you can control the output style of the resulting character vector with the <code>output</code> argument. This can either be <code>"auto"</code> (the default), <code>"plain"</code>, <code>"html"</code>, <code>"latex"</code>, <code>"rtf"</code>, or <code>"word"</code>. In {knitr} rendering (i.e., Quarto or R Markdown), the <code>"auto"</code> option will choose the correct output value. Put another way, if you are rendering a document to HTML then any inline R statements that use a <code>vec_fmt_*()</code> will render the vector as HTML.</p>
+<p>If any of these functions are used interactively (like, in the R console) then we can expect <code>"plain"</code> by default.</p>
+<p>It’s always good to have some examples! Let’s create a numeric vector for the next few examples:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>num_vals <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">5.2</span>, <span class="fl">8.65</span>, <span class="dv">0</span>, <span class="sc">-</span><span class="fl">5.3</span>, <span class="cn">NA</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s just focus on using <code>vec_fmt_number()</code>; using that function with the default options will create a character vector where the numeric values have two decimal places and <code>NA</code> values will render as <code>"NA"</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_fmt_number</span>(num_vals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>#&gt; [1] "5.20" "8.65" "0.00" "-5.30" "NA"</code></pre>
+<p>We can change the decimal mark to a comma, and we have to be sure to change the digit separator mark from the default comma (in the <code>"en"</code> locale) to something else (a period works here):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_fmt_number</span>(num_vals, <span class="at">sep_mark =</span> <span class="st">"."</span>, <span class="at">dec_mark =</span> <span class="st">","</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>#&gt; [1] "5,20" "8,65" "0,00" "-5,30" "NA"</code></pre>
+<p>If we are formatting for a different locale, we could supply the locale ID (here, we’ll use <code>"fr"</code>) and let {gt} handle these locale-specific formatting options:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_fmt_number</span>(num_vals, <span class="at">locale =</span> <span class="st">"fr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>#&gt; [1] "5,20" "8,65" "0,00" "-5,30" "NA"</code></pre>
+<p>There are <em>many</em> options for formatting values. Perhaps you need to have explicit positive and negative signs? Use <code>force_sign = TRUE</code> for that.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_fmt_number</span>(num_vals, <span class="at">force_sign =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>#&gt; [1] "+5.20" "+8.65" "0.00" "-5.30" "NA"</code></pre>
+<p>Those trailing zeros past the decimal mark can be stripped out by using the <code>drop_trailing_zeros</code> option.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_fmt_number</span>(num_vals, <span class="at">drop_trailing_zeros =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>#&gt; [1] "5.2" "8.65" "0" "-5.3" "NA"</code></pre>
+<p>As a last example, one can wrap the values in a pattern with the pattern argument. Note here that <code>NA</code> values won’t have the pattern applied.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_fmt_number</span>(num_vals, <span class="at">pattern =</span> <span class="st">"`{x}`"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>#&gt; [1] "`5.20`" "`8.65`" "`0.00`" "`-5.30`" "NA"</code></pre>
+<p>That’s just a few examples with <code>vec_fmt_number()</code> but we hope you’ll use these new functions wherever you need formatted values outside of a {gt} table. We promise that any new formatting functions of the <code>fmt_*()</code> type will have a corresponding <code>vec_fmt_*()</code> counterpart, and, that the two families of functions will maintain feature parity among themselves.</p>
+<h2 class="anchored">
+Table presets/themes with the new <code>opt_stylize()</code> function
+</h2>
+<p>It’s now incredibly easy to have colorful and stylish tables thanks to the new <code>opt_stylize()</code> function. We provide you with a carefully curated set of background colors, line colors, and line styles. There are six numbered styles and six color variations (<code>"blue"</code>, <code>"cyan"</code>, <code>"pink"</code>, <code>"green"</code>, <code>"red"</code>, and <code>"gray"</code>), giving you 36 combinations of style and color to choose from. The styling is fairly comprehensive and it tries to differentiate the various locations within a table. Here is an example of a table that contains the maximal number of parts (header, footer, stub, summary rows, etc.) and is styled with <code>opt_stylize()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>exibble <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>(<span class="at">rowname_col =</span> <span class="st">"row"</span>, <span class="at">groupname_col =</span> <span class="st">"group"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary_rows</span>(</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">groups =</span> <span class="st">"grp_a"</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(num, currency),</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">fns =</span> <span class="fu">list</span>(</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">min =</span> <span class="sc">~</span><span class="fu">min</span>(., <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">max =</span> <span class="sc">~</span><span class="fu">max</span>(., <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    )) <span class="sc">%&gt;%</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">grand_summary_rows</span>(</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> currency,</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">fns =</span> <span class="fu">list</span>(</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">total =</span> <span class="sc">~</span><span class="fu">sum</span>(., <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    )) <span class="sc">%&gt;%</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_source_note</span>(<span class="at">source_note =</span> <span class="st">"This is a source note."</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_footnote</span>(</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">footnote =</span> <span class="st">"This is a footnote."</span>,</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(<span class="at">columns =</span> <span class="dv">1</span>, <span class="at">rows =</span> <span class="dv">1</span>)</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"The title of the table"</span>,</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"The table's subtitle"</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">opt_stylize</span>(<span class="at">style =</span> <span class="dv">6</span>, <span class="at">color =</span> <span class="st">"cyan"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="opt-stylize-cyan.png" class="img-fluid" alt="A gt table that is adapted from the exibble dataset and themed with the opt_stylize function (using style 6 and the cyan color theme)." width="1125"></p>
+</div>
+</div>
+<p>If you take the example code and experiment with different values for <code>style</code> and <code>color</code> you’ll see that some styles have table borders applied, some apply darker colors to the table stub and summary sections, and, some even have vertical lines (for that retro look!). Each of the six color variations uses a range of five color tints, all fine-tuned to maximize the contrast between text and its background.</p>
+<h2 class="anchored">
+The new <code>tab_stub_indent()</code> for superfine control over row label indentation (in the stub)
+</h2>
+<p>Indentation of row labels can be seen as an effective way for establishing structure in a table stub. The new <code>tab_stub_indent()</code> function allows you to set row label indentation through either explicit definition of an indentation level (e.g., <code>1</code>, <code>2</code>, etc.), or, by way of an indentation directive using keywords (<code>"increase"</code> or <code>"decrease"</code>). Let’s make a relatively complex {gt} table using the included <code>pizzaplace</code> data to see this new function in action:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  pizzaplace <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">group_by</span>(type, size) <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">summarize</span>(</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">sold =</span> <span class="fu">n</span>(),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">income =</span> <span class="fu">sum</span>(price),</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">.groups =</span> <span class="st">"drop_last"</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">summarize</span>(</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">sold =</span> <span class="fu">sum</span>(sold),</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">income =</span> <span class="fu">sum</span>(income),</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">size =</span> <span class="st">"All Sizes"</span>,</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  pizzaplace <span class="sc">%&gt;%</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">group_by</span>(type, size) <span class="sc">%&gt;%</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">summarize</span>(</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">sold =</span> <span class="fu">n</span>(),</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">income =</span> <span class="fu">sum</span>(price),</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>(<span class="at">rowname_col =</span> <span class="st">"size"</span>, <span class="at">groupname_col =</span> <span class="st">"type"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"Pizzas Sold in 2015"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> sold,</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">0</span>,</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">use_seps =</span> <span class="cn">TRUE</span></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_currency</span>(</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> income,</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">currency =</span> <span class="st">"USD"</span></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_options</span>(</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">summary_row.background.color =</span> <span class="st">"#ACEACE"</span>,</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">row_group.background.color =</span> <span class="st">"#FFEFDB"</span>,</span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">row_group.as_column =</span> <span class="cn">TRUE</span></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"gray95"</span>),</span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">list</span>(</span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cells_body</span>(<span class="at">rows =</span> <span class="fu">matches</span>(<span class="st">"^All"</span>)),</span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cells_stub</span>(<span class="at">rows =</span> <span class="fu">matches</span>(<span class="st">"^All"</span>))</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_stub_indent</span>(</span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">rows =</span> <span class="fu">matches</span>(<span class="st">"^L|^M|^S|^XL|^XXL"</span>),</span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">indent =</span> <span class="dv">2</span></span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="noivvvzmvr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#noivvvzmvr .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#noivvvzmvr .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#noivvvzmvr .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#noivvvzmvr .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#noivvvzmvr .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#noivvvzmvr .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#noivvvzmvr .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#noivvvzmvr .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#noivvvzmvr .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#noivvvzmvr .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#noivvvzmvr .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#noivvvzmvr .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#noivvvzmvr .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFEFDB;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#noivvvzmvr .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFEFDB;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#noivvvzmvr .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#noivvvzmvr .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#noivvvzmvr .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#noivvvzmvr .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#noivvvzmvr .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#noivvvzmvr .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#noivvvzmvr .gt_summary_row {
+  color: #333333;
+  background-color: #ACEACE;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#noivvvzmvr .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#noivvvzmvr .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#noivvvzmvr .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#noivvvzmvr .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#noivvvzmvr .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#noivvvzmvr .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#noivvvzmvr .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#noivvvzmvr .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#noivvvzmvr .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#noivvvzmvr .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#noivvvzmvr .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#noivvvzmvr .gt_left {
+  text-align: left;
+}
+
+#noivvvzmvr .gt_center {
+  text-align: center;
+}
+
+#noivvvzmvr .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#noivvvzmvr .gt_font_normal {
+  font-weight: normal;
+}
+
+#noivvvzmvr .gt_font_bold {
+  font-weight: bold;
+}
+
+#noivvvzmvr .gt_font_italic {
+  font-style: italic;
+}
+
+#noivvvzmvr .gt_super {
+  font-size: 65%;
+}
+
+#noivvvzmvr .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#noivvvzmvr .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#noivvvzmvr .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#noivvvzmvr .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#noivvvzmvr .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#noivvvzmvr .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#noivvvzmvr .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table">
+  <thead class="gt_header">
+    <tr>
+      <td colspan="4" class="gt_heading gt_title gt_font_normal gt_bottom_border" style="">Pizzas Sold in 2015</td>
+    </tr>
+    
+  </thead>
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="2" scope="colgroup" id=""></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="sold">sold</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="income">income</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr class="gt_row_group_first"><td headers="chicken stub_2_1 stub_1" rowspan="4" class="gt_row gt_left gt_stub_row_group">chicken</td>
+<th id="stub_2_1" scope="row" class="gt_row gt_left gt_stub" style="background-color: #F2F2F2;">All Sizes</th>
+<td headers="chicken stub_2_1 sold" class="gt_row gt_right" style="background-color: #F2F2F2;">11,050</td>
+<td headers="chicken stub_2_1 income" class="gt_row gt_right" style="background-color: #F2F2F2;">$195,919.50</td></tr>
+    <tr><td headers="chicken sold_2 stub_2" class="gt_row gt_left gt_stub gt_indent_2">L</td>
+<td headers="chicken sold_2 sold" class="gt_row gt_right">4,932</td>
+<td headers="chicken sold_2 income" class="gt_row gt_right">$102,339.00</td></tr>
+    <tr><td headers="chicken sold_3 stub_2" class="gt_row gt_left gt_stub gt_indent_2">M</td>
+<td headers="chicken sold_3 sold" class="gt_row gt_right">3,894</td>
+<td headers="chicken sold_3 income" class="gt_row gt_right">$65,224.50</td></tr>
+    <tr><td headers="chicken sold_4 stub_2" class="gt_row gt_left gt_stub gt_indent_2">S</td>
+<td headers="chicken sold_4 sold" class="gt_row gt_right">2,224</td>
+<td headers="chicken sold_4 income" class="gt_row gt_right">$28,356.00</td></tr>
+    <tr class="gt_row_group_first"><td headers="classic stub_2_5 stub_1" rowspan="6" class="gt_row gt_left gt_stub_row_group">classic</td>
+<th id="stub_2_5" scope="row" class="gt_row gt_left gt_stub" style="background-color: #F2F2F2;">All Sizes</th>
+<td headers="classic stub_2_5 sold" class="gt_row gt_right" style="background-color: #F2F2F2;">14,888</td>
+<td headers="classic stub_2_5 income" class="gt_row gt_right" style="background-color: #F2F2F2;">$220,053.10</td></tr>
+    <tr><td headers="classic sold_6 stub_2" class="gt_row gt_left gt_stub gt_indent_2">L</td>
+<td headers="classic sold_6 sold" class="gt_row gt_right">4,057</td>
+<td headers="classic sold_6 income" class="gt_row gt_right">$74,518.50</td></tr>
+    <tr><td headers="classic sold_7 stub_2" class="gt_row gt_left gt_stub gt_indent_2">M</td>
+<td headers="classic sold_7 sold" class="gt_row gt_right">4,112</td>
+<td headers="classic sold_7 income" class="gt_row gt_right">$60,581.75</td></tr>
+    <tr><td headers="classic sold_8 stub_2" class="gt_row gt_left gt_stub gt_indent_2">S</td>
+<td headers="classic sold_8 sold" class="gt_row gt_right">6,139</td>
+<td headers="classic sold_8 income" class="gt_row gt_right">$69,870.25</td></tr>
+    <tr><td headers="classic sold_9 stub_2" class="gt_row gt_left gt_stub gt_indent_2">XL</td>
+<td headers="classic sold_9 sold" class="gt_row gt_right">552</td>
+<td headers="classic sold_9 income" class="gt_row gt_right">$14,076.00</td></tr>
+    <tr><td headers="classic sold_10 stub_2" class="gt_row gt_left gt_stub gt_indent_2">XXL</td>
+<td headers="classic sold_10 sold" class="gt_row gt_right">28</td>
+<td headers="classic sold_10 income" class="gt_row gt_right">$1,006.60</td></tr>
+    <tr class="gt_row_group_first"><td headers="supreme stub_2_11 stub_1" rowspan="4" class="gt_row gt_left gt_stub_row_group">supreme</td>
+<th id="stub_2_11" scope="row" class="gt_row gt_left gt_stub" style="background-color: #F2F2F2;">All Sizes</th>
+<td headers="supreme stub_2_11 sold" class="gt_row gt_right" style="background-color: #F2F2F2;">11,987</td>
+<td headers="supreme stub_2_11 income" class="gt_row gt_right" style="background-color: #F2F2F2;">$208,197.00</td></tr>
+    <tr><td headers="supreme sold_12 stub_2" class="gt_row gt_left gt_stub gt_indent_2">L</td>
+<td headers="supreme sold_12 sold" class="gt_row gt_right">4,564</td>
+<td headers="supreme sold_12 income" class="gt_row gt_right">$94,258.50</td></tr>
+    <tr><td headers="supreme sold_13 stub_2" class="gt_row gt_left gt_stub gt_indent_2">M</td>
+<td headers="supreme sold_13 sold" class="gt_row gt_right">4,046</td>
+<td headers="supreme sold_13 income" class="gt_row gt_right">$66,475.00</td></tr>
+    <tr><td headers="supreme sold_14 stub_2" class="gt_row gt_left gt_stub gt_indent_2">S</td>
+<td headers="supreme sold_14 sold" class="gt_row gt_right">3,377</td>
+<td headers="supreme sold_14 income" class="gt_row gt_right">$47,463.50</td></tr>
+    <tr class="gt_row_group_first"><td headers="veggie stub_2_15 stub_1" rowspan="4" class="gt_row gt_left gt_stub_row_group">veggie</td>
+<th id="stub_2_15" scope="row" class="gt_row gt_left gt_stub" style="background-color: #F2F2F2;">All Sizes</th>
+<td headers="veggie stub_2_15 sold" class="gt_row gt_right" style="background-color: #F2F2F2;">11,649</td>
+<td headers="veggie stub_2_15 income" class="gt_row gt_right" style="background-color: #F2F2F2;">$193,690.45</td></tr>
+    <tr><td headers="veggie sold_16 stub_2" class="gt_row gt_left gt_stub gt_indent_2">L</td>
+<td headers="veggie sold_16 sold" class="gt_row gt_right">5,403</td>
+<td headers="veggie sold_16 income" class="gt_row gt_right">$104,202.70</td></tr>
+    <tr><td headers="veggie sold_17 stub_2" class="gt_row gt_left gt_stub gt_indent_2">M</td>
+<td headers="veggie sold_17 sold" class="gt_row gt_right">3,583</td>
+<td headers="veggie sold_17 income" class="gt_row gt_right">$57,101.00</td></tr>
+    <tr><td headers="veggie sold_18 stub_2" class="gt_row gt_left gt_stub gt_indent_2">S</td>
+<td headers="veggie sold_18 sold" class="gt_row gt_right">2,663</td>
+<td headers="veggie sold_18 income" class="gt_row gt_right">$32,386.75</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<p><br></p>
+<p>As can be seen, all the size indicators (e.g., <code>"S"</code>, <code>"M"</code>, <code>"L"</code>, etc.) have been indented by two stops. Because we have a stub we can use select helpers to target the row labels that require indentation (here in this example, the <code>matches()</code> selecting function was used with a regular expression).</p>
+<h2 class="anchored">
+The new <code>fmt_duration()</code> function
+</h2>
+<p>There’s always room for more formatting functions in {gt} and to that end we’ve added <code>fmt_duration()</code> and <code>vec_fmt_duration()</code> to format numeric or duration values as styled time duration strings. We can use a variety of input types like those of the <code>numeric</code> or <code>difftime</code> classes. Options abound as we can specify which time units any numeric input values have (as weeks, days, hours, minutes, or seconds) and the output can be customized with a duration style (corresponding to narrow, wide, colon-separated, and ISO forms) and a choice of output units ranging from weeks to seconds.</p>
+<p>Let’s use <code>vec_fmt_duration()</code> to demonstrate this type of formatting. As we can use numeric values in the input vector, let’s define one of those to use in the examples:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>num_vals <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">3.235</span>, <span class="fl">0.23</span>, <span class="fl">0.005</span>, <span class="cn">NA</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The necessary thing with numeric values as an input is defining what time unit those values have. We’re going to use <code>input_units = "days"</code> to state that the values are days. What we get by default is the <code>"narrow"</code> version of the duration formatting:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_fmt_duration</span>(num_vals, <span class="at">input_units =</span> <span class="st">"days"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>#&gt; [1] "3d 5h 38m 23s" "5h 31m 12s" "7m 12s" "NA"</code></pre>
+<p>We can modify this to be <code>"wide"</code> duration formatting:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_fmt_duration</span>(num_vals, <span class="at">input_units =</span> <span class="st">"days"</span>, <span class="at">duration_style =</span> <span class="st">"wide"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>#&gt; [1] "3 days 5 hours 38 minutes 23 seconds" "5 hours 31 minutes 12 seconds"       
+#&gt; [3] "7 minutes 12 seconds"                 "NA"</code></pre>
+<p>We support the use of locales in this function. If you needed this in the German locale (<code>"de"</code>), it’s just a matter to using the <code>locale</code> argument:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_fmt_duration</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  num_vals,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">input_units =</span> <span class="st">"days"</span>,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">duration_style =</span> <span class="st">"wide"</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">locale =</span> <span class="st">"de"</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>#&gt; [1] "3 Tage 5 Stunden 38 Minuten 23 Sekunden" "5 Stunden 31 Minuten 12 Sekunden"       
+#&gt; [3] "7 Minuten 12 Sekunden"                   "NA"</code></pre>
+<p>There are many more options to explore. We hope this new pair of formatting functions is both easy and enjoyable to use.</p>
+<h2 class="anchored">
+An upgraded <code>gtsave()</code> that uses {webshot2}
+</h2>
+<p>Previously if you wanted to export a table as a PNG image, you may have been frustrated with some shortcomings (e.g., bold text curiously not working, Unicode characters looking more than a little strange, etc.). This is because, under the hood, {gt} used {webshot} to generate the image and, within {webshot}, <em>PhantomJS</em> was used to actually do the work. <em>PhantomJS</em> isn’t doing so great these days but the more recent {webshot2} package uses {chromote} to do a much better job on image capture. This is basically a lot of words just to say that: (1) we’re now using {webshot2}, and (2) PNG image export is much better now!</p>
+<h2 class="anchored">
+Accessibility enhancements for HTML table outputs
+</h2>
+<p>HTML tables as produced by {gt} can be structurally complex. Owing to that, screen readers (applications that allow blind or visually impaired users to read the text that is displayed on the computer screen) had some difficulty parsing certain tables. Through collaboration with Dr.&nbsp;JooYoung Seo (<a href="https://github.com/jooyoungseo"><code>@jooyoungseo</code>, on GitHub</a>), we were able to make a great number of accessibility enhancements for HTML table outputs. As a result {gt} is now one of the most accessible table packages around!</p>
+<h2 class="anchored">
+Signing off
+</h2>
+<p>Improvements to the {gt} package are very important to us and there’s so much in store (already!) for the next release (<code>0.7.0</code>). It’s not just about adding new things but improving what’s already there. We get a lot out of your feature requests and questions so never hesitate to <a href="https://github.com/rstudio/gt/issues">file an issue</a> or talk about your ideas in the <a href="https://github.com/rstudio/gt/discussions"><em>Discussions</em> page</a>. Till next time!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

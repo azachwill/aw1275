@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2017-09-11">
+
+<title>Announcing blogdown: Create Websites with R Markdown</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Announcing blogdown: Create Websites with R Markdown</h1>
+
+<p class="date">2017-09-11</p>
+</header>
+
+<p>Today I’m excited to announce a new R package, <strong>blogdown</strong>, to help you create general-purpose (static) websites with R Markdown. The first version of <strong>blogdown</strong> is available on CRAN now, and you can install it with:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"blogdown"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The source package is hosted on Github in the repository <a href="https://github.com/rstudio/blogdown">rstudio/blogdown</a>. Since <strong>blogdown</strong> is a new package, you may install and test the development version using <code>devtools::install_github("rstudio/blogdown")</code> if you run into problems with the CRAN version.</p>
+<h2 id="introduction" class="anchored">Introduction</h2>
+<p>In a nutshell, <strong>blogdown</strong> is an effort to integrate R Markdown with static website generators, so that you can generate web pages dynamically. For example, you can use R code chunks (or <a href="https://rmarkdown.rstudio.com/authoring_knitr_engines.html">other languages</a> that <strong>knitr</strong> supports) to generate tables and graphics automatically on any web page. Before <strong>blogdown</strong>, you can easily do this using:</p>
+<ul>
+<li>the <strong>rmarkdown</strong> package to create single output files from R Markdown documents;</li>
+<li>and the <a href="https://github.com/rstudio/bookdown"><strong>bookdown</strong></a> package to compile multiple R Markdown documents to a book;</li>
+</ul>
+<p>But the structure of a website can be far more complicated than a collection of independent HTML pages or a book. With <strong>blogdown</strong>, the directory structure of your R Markdown files can be arbitrary. You can easily create a project website, or a blog. Each page can have its own metadata (such as categories and tags), and you can generate pages of lists of content (such as a list of blog posts or examples).</p>
+<p>Besides the advantage in website structures, another highlight of <strong>blogdown</strong> is that it inherited <strong>bookdown</strong>’s Markdown extensions (based on Pandoc’s Markdown), which means you can easily write technical content on your website, including everything that Pandoc supports (e.g., headings, lists, footnotes, tables, figures, citations, LaTeX math, and quotes, etc) and <strong>bookdown</strong>’s extensions (e.g., figure and table captions, cross-references, theorems, proofs, numbered equations, and HTML widgets, etc).</p>
+<p>There are several popular static site generators, and the main one we support in <strong>blogdown</strong> is <a href="https://gohugo.io">Hugo</a>. Hugo is easy to install (no dependencies), lightning fast (one millisecond per page), and very flexible. We have also provided (limited) support for <a href="https://jekyllrb.com">Jekyll</a> and <a href="https://hexo.io">Hexo</a> (see documentation). The Markdown support in these generators is often poor in terms of functionalities (you cannot easily beat Pandoc’s Markdown), and sometimes it is painful that they use different flavors of Markdown. With <strong>blogdown</strong>, you can use richer Markdown syntax if you want.</p>
+<h2 id="get-started" class="anchored">Get Started</h2>
+<p>It is extremely easy to get started with a new website. After you have installed the <strong>blogdown</strong> package, it only takes one step to create a new website—just call the function <code>new_site()</code> under an empty directory (or an empty RStudio project):</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>blogdown<span class="sc">::</span><span class="fu">new_site</span>()</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>It will download and install Hugo if it has not been installed, download a default Hugo theme, add some sample posts, build the site, and launch it in your web browser (or RStudio Viewer) so that you can immediately preview the website. Note you only need to use this function once for every new site. For an existing website, you may call <code>blogdown::serve_site()</code> or the RStudio addin “Serve Site” to preview the site; it will watch changes in your source files continuously and rebuild your site automatically.</p>
+<p>To write new posts, you may use the RStudio addin “New Post”:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://bookdown.org/yihui/blogdown/images/new-post.png" class="img-fluid"></p>
+<p></p><figcaption>New Post</figcaption><p></p>
+</figure>
+</div>
+<p>If you are not satisfied with the default theme, you can try to create another new site with <a href="https://bookdown.org/yihui/blogdown/other-themes.html">a different theme</a> till you find a theme that you like.</p>
+<h2 id="documentation" class="anchored">Documentation</h2>
+<p>The comprehensive documentation of this package is a book written in <strong>bookdown</strong>, which is freely available at https://bookdown.org/yihui/blogdown/ and to be published by Chapman &amp; Hall later this year. The book may seem to be short (about 150 pages), but it contains many external resources, such as examples that we have spent a lot of time on creating. It may take you quite a while to fully digest this book, but perhaps it is not necessary. For example, you do not have to read Chapter 2 to understand how Hugo works if you can find a theme that you like and don’t want to customize too much (hint: this is unlikely—you will surely be bored by the appearance of your website someday). Anyway, you are expected to read at least Chapter 1 of this book.</p>
+<h2 id="migration" class="anchored">Migration</h2>
+<p>If you don’t have a website right now, consider yourself to be lucky. It is much easier to start a new website than converting an existing website. The latter is not impossible, and we have shown in <a href="https://bookdown.org/yihui/blogdown/migration.html">Chapter 4</a> how to convert WordPress and Jekyll websites to Hugo. To give you an idea about how long it takes to convert a website:</p>
+<ul>
+<li><p>I spent a whole week on converting <a href="https://yihui.name">my personal website</a> from Jekyll to Hugo. The complication was that I had a Chinese blog, an English blog, two project websites (<a href="https://yihui.name/knitr/"><strong>knitr</strong></a> and <a href="https://yihui.name/animation/"><strong>animation</strong></a>), and several single-page project websites (such as <a href="https://yihui.name/formatR/"><strong>formatR</strong></a>). Finally I managed to put all of them in <a href="https://github.com/rbind/yihui">one repository</a>.</p></li>
+<li><p><a href="https://robjhyndman.com">Rob Hyndman</a> spent several days on converting his WordPress website to <strong>blogdown</strong> (<a href="https://support.rbind.io/2017/05/15/converting-robjhyndman-to-blogdown/">read more here</a>), when the <strong>blogdown</strong> documentation was far from being complete (Chapter 4 did not exist).</p></li>
+<li><p>It took me four hours to convert <a href="https://simplystatistics.org/">Simply Statistics blog</a> from Jekyll to <strong>blogdown</strong>. It had about 1000 posts at that time.</p></li>
+<li><p>I have converted three WordPress sites by myself: <a href="https://rviews.rstudio.com/">the RViews blog</a> took me a few days, <a href="https://blog.rstudio.com/">the RStudio blog</a> took me one day, and <a href="http://kbroman.org/">Karl Broman</a>’s blog took me one hour.</p></li>
+</ul>
+<p>I have provided the scripts that I used in Chapter 4, and hopefully you can reuse them to convert your own websites to save you some time.</p>
+<h2 id="conclusion" class="anchored">Conclusion</h2>
+<p>I believe <strong>blogdown</strong> can introduce a highly streamlined experience to create and maintain a website. At least I feel addicted to blogging again after three years. I have been a firm believer in writing, but I hated the fact that I had to log in an online system to write something (e.g., WordPress), or manually type out all the YAML metadata in a new post (which is why I created the RStudio addin “New Post”). Now I just need to open my RStudio project, use the “Serve Site” addin, then create a new post using the addin “New Post” or revise existing posts, and I can live preview the site immediately in RStudio Viewer when I save the post. Deployment of the website is as simple as pushing to Github, and <a href="https://www.netlify.com">Netlify</a> will do the rest of work for me.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://slides.yihui.name/gif/cat-flow.gif" class="img-fluid"></p>
+<p></p><figcaption>cats flow</figcaption><p></p>
+</figure>
+</div>
+<p>There are many advantages of static websites as mentioned in <a href="https://bookdown.org/yihui/blogdown/static-sites.html">Chapter 2</a> of the book. You whole website is just contained in a folder that you can preview locally (even offline!) or publish to any web server. Your posts are plain-text files that you can create or edit at any time, which means finally you have got something more meaningful to do <a href="https://twitter.com/imtaras/status/906392194012999680">on your next flight</a> than having to stare at Sudoku puzzles to kill time (you may teach your neighbors R Markdown and <strong>blogdown</strong> if they feel jealousy looking at your screen).</p>
+<h2 id="acknowledgements" class="anchored">Acknowledgements</h2>
+<p>Although <strong>blogdown</strong> is still relatively new, I have received a lot of useful feedback during the development of the package and the book. There have been about 200 <a href="https://github.com/rstudio/blogdown/issues">Github issues</a> (including <a href="https://github.com/rstudio/blogdown/pulls">pull requests</a>) and a few dozen questions on <a href="http://stackoverflow.com/questions/tagged/blogdown">StackOverflow</a>. Some Github issues were really inspiring (e.g., <a href="https://github.com/rstudio/blogdown/issues/40">#40</a> and <a href="https://github.com/rstudio/blogdown/issues/97">#97</a>), and I was very glad that they filed the feature requests. I also want to thank <a href="https://github.com/rstudio/blogdown/graphs/contributors">those who</a> submitted Github pull requests to improve the book. To be honest, this book was quite painful to write, because there are too many technologies potentially related to a website (e.g., JavaScript, domain names, DNS, and continuous deployment). However, I have gained a lot of motivation and inspiration from several early brave users who created their websites and wrote their own <strong>blogdown</strong> tutorials (even before the official documentation existed). That is also <a href="https://bookdown.org/yihui/blogdown/author.html">how I found</a> the co-authors of this book, <a href="https://twitter.com/ProQuesAsker">Amber</a> and <a href="https://apreshill.rbind.io">Alison</a>.</p>
+<p>I’m particularly grateful to the feedback from beginners (so please don’t be shy to ask “dumb” questions). It is very helpful to see what can be confusing to beginners, so that we can try better explanations or implementations, which can usually benefit users of all levels.</p>
+<p>If you are looking for inspirations from other people’s <strong>blogdown</strong>-based websites, you may thumb through the Github organization https://github.com/rbind. You are also welcome to move your website over there to share with or inspire more people.</p>
+<p>As usual, please feel free to ask questions on <a href="https://stackoverflow.com/questions/tagged/blogdown">StackOverflow</a> (with at least tags <code>r</code> and <code>blogdown</code>), and file bug reports and feature requests <a href="https://github.com/rstudio/blogdown">on Github</a>. I recommend you to spend some time on reading the <strong>blogdown</strong> book, but I understand it may not be easy to digest, so it is fine to ask questions before you finish reading the book. I’ll be happy to point you to the relevant sections if your questions have been answered in the book. I hope you can enjoy this package, and have fun with your website!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

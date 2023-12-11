@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2014-03-27">
+
+<title>New Shiny website launched; Shiny 0.9 released</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">New Shiny website launched; Shiny 0.9 released</h1>
+
+<p class="date">2014-03-27</p>
+</header>
+
+<p>We’re excited to introduce to you our new website for Shiny: <a href="https://shiny.rstudio.com/">shiny.rstudio.com</a>!</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://shiny.rstudio.com/"><img src="https://rstudioblog.files.wordpress.com/2014/03/shiny-rstudio-com.gif" class="img-fluid"></a></p>
+<p></p><figcaption>shiny-rstudio-com</figcaption><p></p>
+</figure>
+</div>
+<p>We’ve included <a href="https://shiny.rstudio.com/articles/">articles</a> on many Shiny-related topics, dozens of <a href="https://shiny.rstudio.com/gallery/">example applications</a>, and an all-new <a href="https://shiny.rstudio.com/tutorial/">tutorial</a> for getting started.</p>
+<p>Whether you’re a beginner or expert at Shiny, we hope that having these resources available in one place will help you find the information you need.</p>
+<p><strong>We’d also like to announce Shiny 0.9, now available on CRAN.</strong> This release includes many bug fixes and new features, including:</p>
+<h2 id="new-application-layout-options" class="anchored">New application layout options</h2>
+<p>Until now, the vast majority of Shiny apps have used a sidebar-style layout. Shiny 0.9 introduces new layout features to:</p>
+<ol type="1">
+<li><p>Make it easy to create custom page layouts using the Bootstrap grid system. See our new <a href="https://shiny.rstudio.com/articles/layout-guide.html">application layout guide</a> or a <a href="https://shiny.rstudio.com/gallery/plot-plus-three-columns.html">live example</a>.</p></li>
+<li><p>Provide navigation bars and lists for separating your application into different pages. See <a href="https://shiny.rstudio.com/reference/shiny/latest/navbarPage.html">navbarPage</a> and <a href="https://shiny.rstudio.com/reference/shiny/latest/navlistPanel.html">navlistPanel</a>, and <a href="https://shiny.rstudio.com/gallery/navbar-example.html">this example</a>.</p></li>
+<li><p>Enhance <a href="https://shiny.rstudio.com/reference/shiny/latest/navlistPanel.html">tabsetPanel</a> to allow pill-style tabs, and to let tabs be placed above, below, or to either side of tab content.</p></li>
+<li><p>Create floating panels and place them relative to the sides of the page, optionally making them draggable. See <a href="https://shiny.rstudio.com/reference/shiny/latest/absolutePanel.html">absolutePanel</a> or <a href="https://shiny.rstudio.com/gallery/absolutely-positioned-panels.html">this example</a>.</p></li>
+<li><p>Use <a href="https://www.google.com/webhp?ion=1&amp;espv=2&amp;ie=UTF-8#q=bootstrap+themes">Bootstrap themes</a> to easily modify the fonts and colors of your application. <a href="https://shiny.rstudio.com/gallery/retirement-simulation.html">Example</a></p></li>
+</ol>
+<p>You can see many of these features in action together in <a href="https://shiny.rstudio.com/gallery/superzip-example.html">our reimplementation</a> of the Washington Post’s <a href="http://www.washingtonpost.com/sf/local/2013/11/09/washington-a-world-apart/">interactive article on Super Zips</a>.</p>
+<h2 id="selectize.js-integration" class="anchored">Selectize.js integration</h2>
+<p>The JavaScript library <a href="https://github.com/brianreavis/selectize.js">selectize.js</a> provides a much more flexible interface compared to the basic select input. It allows you to type and search in the options, use placeholders, control the number of options/items to show/select, and so on.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2014/03/selectize.png" class="img-fluid"></p>
+<p></p><figcaption>selectize</figcaption><p></p>
+</figure>
+</div>
+<p>We have integrated selectize.js in shiny 0.9, and <code>selectInput</code> now creates selectize inputs by default. (You can revert back to plain select inputs by passing <code>selectize=FALSE</code> to <code>selectInput</code>.) For more advanced uses, we have included a new <code>selectizeInput</code> function that lets you pass options to selectize.</p>
+<p>Please check out <a href="https://demo.shinyapps.io/013-selectize/">this example</a> to see a subset of features of the selectize input. There is also <a href="https://demo.shinyapps.io/017-select-vs-selectize/">an example</a> comparing the select and selectize input.</p>
+<h2 id="showcase-mode" class="anchored">Showcase mode</h2>
+<p>Shiny apps can now (optionally) run in a “showcase” mode in which the app’s R code can be automatically displayed within the app. Most of the Shiny example apps in our new <a href="https://shiny.rstudio.com/gallery/">gallery</a> use showcase mode.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://shiny.rstudio.com/gallery/kmeans-example.html"><img src="https://rstudioblog.files.wordpress.com/2014/03/kmeans.png" class="img-fluid"></a></p>
+<p></p><figcaption>Showcase example</figcaption><p></p>
+</figure>
+</div>
+<p>As you interact with the application, reactive expressions and outputs in server.R will light up as they execute. This can be helpful in visualizing the reactivity in your app.</p>
+<p>See <a href="https://shiny.rstudio.com/articles/display-modes.html">this article</a> to learn more.</p>
+<p>As always, you can install the latest release of Shiny by running this command at the R console:</p>
+<p><code>install.packages("shiny")</code></p>
+<p>The complete list of bug fixes and features is available in the <a href="http://cran.r-project.org/web/packages/shiny/NEWS">NEWS file</a>.</p>
+<p>We hope you’ll find these new features helpful in exploring and understanding your data!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2019-06-24">
+
+<title>RStudio Connect 1.7.6 - Publish Git-backed Content</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Connect 1.7.6 - Publish Git-backed Content</h1>
+
+<p class="date">2019-06-24</p>
+</header>
+
+<p>RStudio Connect 1.7.6 has been released and is now available for download. This release includes a new publishing method for Git-backed content, the ability for publishers to manage vanity URLs for applications, full support for all SAML authentication providers, and other improvements and bug fixes.</p>
+<p></p>
+<h2 id="updates" class="anchored">Updates</h2>
+<h3 id="new-publishing-method-for-git-backed-content" class="anchored">New publishing method for Git-backed content</h3>
+<p>This release adds the ability for data scientists to deploy content from Git repositories for individual applications within RStudio Connect.</p>
+<p></p>
+<p>This publishing method is designed to allow data scientists to publish directly from Git repositories to Connect, and have that content get updated at regular intervals without the need for external CI/CD systems like Jenkins or Travis CI.</p>
+<p></p>
+<p>This publishing method complements the existing methods of:</p>
+<ul>
+<li>Push-button publishing from the RStudio IDE</li>
+<li>Push-button publishing from Jupyter Notebooks</li>
+<li>Programmatic deployment with CI/CD pipelines using the RStudio Connect Server APIs</li>
+</ul>
+<p>Refer to the documentation on Git-Backed Content in the <a href="https://docs.rstudio.com/connect/1.7.6/user/git-backed.html">User Guide</a> and <a href="https://docs.rstudio.com/connect/1.7.6/admin/content-management.html#git-backed">Administration Guide</a> for additional information on the configuration and usage of this new functionality.</p>
+<h3 id="publishers-can-modify-vanity-urls-for-content" class="anchored">Publishers can modify vanity URLs for content</h3>
+<p>Vanity URLs allow administrators to create “vanity paths” for published content in RStudio Connect, which makes the content available at a customized URL path rather than a URL path that uses the numeric app ID as an identifier.</p>
+<p></p>
+<p>This release adds the ability for publishers to modify vanity URLs for published content without the need for administrators to perform this configuration.</p>
+<p>Refer to the documentation on custom vanity URLs in the <a href="https://docs.rstudio.com/connect/1.7.6/user/settings-panel.html#vanity-url">User Guide</a> and <a href="https://docs.rstudio.com/connect/1.7.6/admin/appendix-configuration.html#appendix-configuration-authorization">Administration Guide</a> for additional information on the configuration and usage of this new <code>Authorization.PublishersCanManageVanities</code> setting.</p>
+<h3 id="ability-to-isolate-viewer-permissions-and-discoverability" class="anchored">Ability to isolate viewer permissions and discoverability</h3>
+<p>This release adds the ability for administrators to configure a global setting to prevent viewers from seeing any other registered users, groups, or publishers in RStudio Connect.</p>
+<p></p>
+<p>This setting is useful for RStudio Connect environments where users with the viewer role should not able to discover the existence or identities of other users, groups, or publishers on the server. With this setting enabled, users with the viewer role will only be able to discover and view published content that they have been explicitly granted access to.</p>
+<p>Refer to the Administration Guide Configuration section on <a href="https://docs.rstudio.com/connect/1.7.6/admin/appendix-configuration.html#appendix-configuration-authorization">Authorization</a> for more information on the <code>Authorization.ViewersCanOnlySeeThemselves</code> setting.</p>
+<h3 id="full-support-for-all-saml-providers" class="anchored">Full support for all SAML providers</h3>
+<p>RStudio Connect 1.7.4 added <a href="https://blog.rstudio.com/2019/05/14/introducing-saml-in-rstudio-connect/">support for SAML-based authentication</a> and a subset of identity providers. The 1.7.6 release adds support for all SAML-based identity providers. Refer to the support article on <a href="https://support.rstudio.com/hc/en-us/articles/360022321494-Getting-Started-with-SAML-in-RStudio-Connect">Getting Started with SAML in RStudio Connect</a> for more information.</p>
+<h3 id="documentation-for-server-api-cookbook" class="anchored">Documentation for Server API Cookbook</h3>
+<p>The RStudio Connect <a href="https://docs.rstudio.com/connect/1.7.6/cookbook/">Server API Cookbook</a> has been made available as a separate guide and is no longer part of the User Guide.</p>
+<h2 id="security-authentication-changes" class="anchored">Security &amp; Authentication Changes</h2>
+<ul>
+<li><p><strong>Forgot Password Behavior</strong> - When using built-in Password authentication, requesting a password reset via the “forgot password” link no longer fails for non-existing users, to prevent malicious user enumeration.</p></li>
+<li><p><strong>Email Address Changes</strong> - Changes made to the email addresses in user profiles done manually or via Connect Server API will cause an email to be sent to the old email address, so the user is notified about the new email address in use.</p></li>
+<li><p><strong>Brute-Force Protection</strong> - A protection against brute-force attacks has been implemented for all authentication attempts against API calls to Connect using either API keys or tokens. After a failed authentication attempt, the user may have to wait longer before trying again.</p></li>
+<li><p><strong>Enforced Password Complexity</strong> - Use <code>Password.MinimumScore</code> to control how complex (secure) new passwords must be when using the password authentication provider. See the <a href="https://docs.rstudio.com/connect/1.7.6/admin/authentication.html#authenticaton-password">Password Authentication section</a> of the Administration Guide for details.</p></li>
+</ul>
+<h2 id="deprecations-breaking-changes" class="anchored">Deprecations &amp; Breaking Changes</h2>
+<ul>
+<li><p><strong>Breaking Change</strong> - <code>Authorization.UsersListingMinRole</code> has been deprecated and it should be removed from the configuration file. A warning will be issued during startup in the <code>rstudio-connect.log</code> if the setting is in use. In the next release, the presence of this setting will prevent RStudio Connect from starting up. Customers using this setting with any value other than the default (viewer) should use <code>Authorization.ViewersCanOnlySeeThemselves = true</code> instead.</p></li>
+<li><p><strong>Breaking Change</strong> - The <code>needs_config</code> field has been removed from the Content entity of the experimental Server API. All Content fields and endpoints to interact with content are provided in the Server API Reference.</p></li>
+</ul>
+<p>Refer to the <a href="https://docs.rstudio.com/connect/news/">full release notes</a> for more information on all of the changes and bug fixes in this release.</p>
+<h2 id="upgrade-planning" class="anchored">Upgrade Planning</h2>
+<blockquote>
+<p>If you use the <code>Authorization.UsersListingMinRole</code> setting, please take note of the changes described above and in the release notes. Aside from the deprecations and breaking changes above, there are no other special considerations and upgrading should require less than five minutes. If you are upgrading from an earlier version, be sure to consult the release notes for the intermediate releases, as well.</p>
+</blockquote>
+<h2 id="get-started-with-rstudio-connect" class="anchored">Get Started with RStudio Connect</h2>
+<p>If you haven’t yet had a chance to download and try <a href="https://rstudio.com/products/connect/">RStudio Connect</a>, we encourage you to do so. RStudio Connect is the best way to share all the work that you do in R (Shiny apps, R Markdown documents, plots, dashboards, Plumber APIs, etc.) with collaborators, colleagues, or customers.</p>
+<p>You can find more details or download a 45-day evaluation of the product at <a href="https://www.rstudio.com/products/connect/">https://www.rstudio.com/products/connect/</a>. Additional resources can be found below.</p>
+<ul>
+<li><a href="https://www.rstudio.com/products/connect/">RStudio Connect home page &amp; downloads</a></li>
+<li><a href="http://docs.rstudio.com/connect/admin/">RStudio Connect Administration Guide</a></li>
+<li><a href="http://docs.rstudio.com/connect/news/">Detailed news and changes between each version</a></li>
+<li><a href="https://www.rstudio.com/pricing/">Pricing</a></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

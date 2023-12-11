@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2017-01-24">
+
+<title>sparklyr 0.5: Livy and dplyr improvements</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">sparklyr 0.5: Livy and dplyr improvements</h1>
+
+<p class="date">2017-01-24</p>
+</header>
+
+<p>We’re happy to announce that version 0.5 of the <a href="https://cran.rstudio.com/package=sparklyr">sparklyr package</a> is now available on CRAN. The new version comes with many improvements over the first release, including:</p>
+<ul>
+<li><p><strong>Extended dplyr</strong> support by implementing: <code>do()</code> and <code>n_distinct()</code>.</p></li>
+<li><p><strong>New functions</strong> including <code>sdf_quantile()</code>, <code>ft_tokenizer()</code> and <code>ft_regex_tokenizer()</code>.</p></li>
+<li><p><strong>Improved compatibility</strong>, sparklyr now respects the value of the ‘na.action’ R option and <code>dim()</code>, <code>nrow()</code> and <code>ncol()</code>.</p></li>
+<li><p><strong>Experimental</strong> support for <a href="http://livy.io/">Livy</a> to enable clients, including <a href="https://www.rstudio.com/products/rstudio/">RStudio</a>, to connect remotely to <a href="http://spark.apache.org/">Apache Spark</a>.</p></li>
+<li><p><strong>Improved connections</strong> by simplifying initialization and providing error diagnostics.</p></li>
+<li><p><strong>Certified</strong> sparklyr, <a href="https://www.rstudio.com/products/rstudio-server-pro2/">RStudio Server Pro</a> and <a href="https://www.rstudio.com/products/shiny-server-pro/">ShinyServer Pro</a> with <a href="http://www.cloudera.com/">Cloudera</a>.</p></li>
+<li><p><strong>Updated</strong> <a href="http://spark.rstudio.com">spark.rstudio.com</a> with new <a href="https://spark.rstudio.com/deployment_examples.html">deployment examples</a> and a sparklyr <a href="https://spark.rstudio.com/images/sparklyr-cheatsheet.pdf">cheatsheet</a>.</p></li>
+</ul>
+<p>Additional changes and improvements can be found in the <a href="https://github.com/rstudio/sparklyr/blob/master/NEWS.md">sparklyr NEWS</a> file.</p>
+<p>For questions or feedback, please feel free to open a <a href="https://github.com/rstudio/sparklyr/issues">sparklyr github issue</a> or a <a href="http://stackoverflow.com/questions/tagged/sparklyr">sparklyr stackoverflow question</a>.</p>
+<h2 id="extended-dplyr-support" class="anchored">Extended dplyr support</h2>
+<p><code>sparklyr 0.5</code> adds supports for <code>n_distinct()</code> as a faster and more concise equivalent of <code>length(unique(x))</code> and also adds support for <code>do()</code> as a convenient way to perform multiple serial computations over a <code>group_by()</code> operation:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>mtcars_tbl <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, mtcars, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>by_cyl <span class="ot">&lt;-</span> <span class="fu">group_by</span>(mtcars_tbl, cyl)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>fit_sparklyr <span class="ot">&lt;-</span> by_cyl <span class="sc">%&gt;%</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">do</span>(<span class="at">mod =</span> <span class="fu">ml_linear_regression</span>(mpg <span class="sc">~</span> disp, <span class="at">data =</span> .))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># display results</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>fit_sparklyr<span class="sc">$</span>mod</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In this case, <code>.</code> represents a Spark DataFrame, which allows us to perform operations at scale (like this linear regression) for a small set of groups. However, since each group operation is performed sequentially, it is not recommended to use <code>do()</code> with a large number of groups. The code above performs multiple linear regressions with the following output:</p>
+<pre><code>[[1]]
+Call: ml_linear_regression(mpg ~ disp, data = .)
+
+Coefficients:
+ (Intercept)         disp
+19.081987419  0.003605119
+
+[[2]]
+Call: ml_linear_regression(mpg ~ disp, data = .)
+
+Coefficients:
+(Intercept)        disp
+ 40.8719553  -0.1351418
+
+[[3]]
+Call: ml_linear_regression(mpg ~ disp, data = .)
+
+Coefficients:
+(Intercept)        disp
+22.03279891 -0.01963409</code></pre>
+<p>It’s worth mentioning that while <code>sparklyr</code> provides comprehensive support for <code>dplyr</code>, <code>dplyr</code> is not strictly required while using <code>sparklyr</code>. For instance, one can make use of <code>DBI</code> without <code>dplyr</code> as follows:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_copy_to</span>(sc, iris)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dbGetQuery</span>(sc, <span class="st">"SELECT * FROM iris LIMIT 4"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>  Sepal_Length Sepal_Width Petal_Length Petal_Width Species
+1          5.1         3.5          1.4         0.2  setosa
+2          4.9         3.0          1.4         0.2  setosa
+3          4.7         3.2          1.3         0.2  setosa
+4          4.6         3.1          1.5         0.2  setosa
+5          5.0         3.6          1.4         0.2  setosa</code></pre>
+<h2 id="new-functions" class="anchored">New functions</h2>
+<p>The new <code>sdf_quantile()</code> function computes approximate quantiles (to some relative error), while the new <code>ft_tokenizer()</code> and <code>ft_regex_tokenizer()</code> functions split a string by white spaces or regex patterns.</p>
+<p>For example, <code>ft_tokenizer()</code> can be used as follows:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janeaustenr)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>sc <span class="sc">%&gt;%</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spark_dataframe</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_tokenizer</span>(<span class="at">input.col =</span> <span class="st">"text"</span>, <span class="at">output.col =</span> <span class="st">"tokens"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Which produces the following output:</p>
+<pre><code>                   text                book     tokens
+                  &lt;chr&gt;               &lt;chr&gt;     &lt;list&gt;
+1 SENSE AND SENSIBILITY Sense &amp; Sensibility &lt;list [3]&gt;
+2                       Sense &amp; Sensibility &lt;list [1]&gt;
+3        by Jane Austen Sense &amp; Sensibility &lt;list [3]&gt;
+4                       Sense &amp; Sensibility &lt;list [1]&gt;</code></pre>
+<p>Tokens can be further processed through, for instance, <a href="http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.ml.feature.HashingTF">HashingTF</a>.</p>
+<h2 id="improved-compatibility" class="anchored">Improved compatibility</h2>
+<p>‘na.action’ is a parameter accepted as part of the ‘ml.options’ argument, which defaults to <code>getOption("na.action", "na.omit")</code>. This allows <code>sparklyr</code> to match the behavior of R while processing NA records, for instance, the following linear model drops NA record appropriately:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>flights_clean <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(<span class="fu">copy_to</span>(sc, flights))</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_linear_regression</span>(</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  flights_tbl</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">response =</span> <span class="st">"dep_delay"</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">features =</span> <span class="fu">c</span>(<span class="st">"arr_delay"</span>, <span class="st">"arr_time"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>* Dropped 9430 rows with 'na.omit' (336776 =&gt; 327346)
+Call: ml_linear_regression(flights_tbl, response = "dep_delay",
+                           features = c("arr_delay", "arr_time"))
+
+Coefficients:
+ (Intercept)    arr_delay     arr_time
+6.1001212994 0.8210307947 0.0005284729</code></pre>
+<p>In addition, <code>dim()</code>, <code>nrow()</code> and <code>ncol()</code> are now supported against Spark DataFrames.</p>
+<h2 id="livy-connections" class="anchored">Livy connections</h2>
+<p><a href="http://livy.io/">Livy</a>, <em>“An Open Source REST Service for Apache Spark (Apache License)”</em>, is now available in <code>sparklyr 0.5</code> as an <strong>experimental</strong> feature. Among many scenarios, this enables connections from the RStudio desktop to Apache Spark when Livy is available and correctly configured in the remote cluster.</p>
+<h2 id="livy-running-locally" class="anchored">Livy running locally</h2>
+<p>To work with Livy locally, <code>sparklyr</code> supports <code>livy_install()</code> which installs Livy in your local environment, this is similar to <code>spark_install()</code>. Since Livy is a service to enable remote connections into Apache Spark, the service needs to be started with <code>livy_service_start()</code>. Once the service is running, <code>spark_connect()</code> needs to reference the running service and use <code>method = "Livy"</code>, then <code>sparklyr</code> can be used as usual. A short example follows:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">livy_install</span>()</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">livy_service_start</span>()</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"http://localhost:8998"</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">method =</span> <span class="st">"livy"</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">copy_to</span>(sc, iris)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="fu">livy_service_stop</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2 id="livy-running-in-hdinsight" class="anchored">Livy running in HDInsight</h2>
+<p><a href="https://azure.microsoft.com/">Microsoft Azure</a> supports Apache Spark clusters configured with Livy and protected with basic authentication in <a href="https://azure.microsoft.com/en-us/services/hdinsight/">HDInsight clusters</a>. To use <code>sparklyr</code> with HDInsight clusters through Livy, first create the HDInsight cluster with Spark support:</p>
+<p><img src="https://rstudioblog.files.wordpress.com/2017/01/hdinsight-azure.png" class="img-fluid" alt="hdinsight-azure">Creating Spark Cluster in Microsoft Azure HDInsight</p>
+<p>Once the cluster is created, you can connect with <code>sparklyr</code> as follows:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>config <span class="ot">&lt;-</span> <span class="fu">livy_config</span>(<span class="at">user =</span> <span class="st">"admin"</span>, <span class="at">password =</span> <span class="st">"password"</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"https://dm.azurehdinsight.net/livy/"</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">method =</span> <span class="st">"livy"</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                    <span class="at">config =</span> config)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">copy_to</span>(sc, iris)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>From a desktop running RStudio, the remote connection looks like this:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2017/01/rstudio-hdinsight-azure.png" class="img-fluid"></p>
+<p></p><figcaption>rstudio-hdinsight-azure.png</figcaption><p></p>
+</figure>
+</div>
+<h2 id="improved-connections" class="anchored">Improved connections</h2>
+<p><code>sparklyr 0.5</code> no longer requires internet connectivity to download additional <a href="https://spark-packages.org/">Apache Spark packages</a>. This enables connections in secure clusters that do not have internet access or while on the go.</p>
+<p>Some community members reported a generic <em>“Ports file does not exists”</em> error while connecting with <code>sparklyr 0.4</code>. In <code>0.5</code>, we’ve deprecated the ports file and improved error reporting. For instance, the following invalid connection example throws: a descriptive error, the <code>spark-submit</code> parameters and logging information that helps us troubleshoot connection issues.</p>
+<pre><code>&gt; library(sparklyr)
+&gt; sc &lt;- spark_connect(master = "local",
+                      config = list("sparklyr.gateway.port" = "0"))
+Error in force(code) :
+  Failed while connecting to sparklyr to port (0) for sessionid (5305):
+  Gateway in port (0) did not respond.
+  Path: /spark-1.6.2-bin-hadoop2.6/bin/spark-submit
+  Parameters: --class, sparklyr.Backend, 'sparklyr-1.6-2.10.jar', 0, 5305
+
+---- Output Log ----
+16/12/12 12:42:35 INFO sparklyr: Session (5305) starting
+
+---- Error Log ----</code></pre>
+<p>Additional technical details can be found in the <a href="https://github.com/rstudio/sparklyr/pull/238">sparklyr gateway socket</a> pull request.</p>
+<h2 id="cloudera-certification" class="anchored">Cloudera certification</h2>
+<p><a href="https://cran.rstudio.com/package=sparklyr">sparklyr</a> 0.4, sparklyr 0.5, <a href="https://www.rstudio.com/products/rstudio-server-pro2/">RStudio Server Pro 1.0</a> and <a href="https://www.rstudio.com/products/shiny-server-pro/">ShinyServer Pro 1.5</a> went through <a href="http://www.cloudera.com/partners/certified-technology.html">Cloudera’s certification</a> and are now certified with <a href="http://www.cloudera.com/">Cloudera</a>. Among various benefits, authentication features like <a href="https://en.wikipedia.org/wiki/Kerberos_(protocol)">Kerberos</a>, have been tested and validated against secured clusters.</p>
+<p>For more information see <a href="http://www.cloudera.com/partners/partners-listing.html?q=rstudio">Cloudera’s partner listings</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

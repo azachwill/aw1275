@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-01-06">
+<meta name="description" content="In this post, I continue our series on how to create your own Google Analytics dashboard in R. Using the data we downloaded in our last post, we’ll now create a simple dashboard showing blog page views over time and highlighting the most popular ones.">
+
+<title>Custom Google Analytics Dashboards with R: Building The Dashboard</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+<script src="../../site_libs/core-js-2.5.3/shim.min.js"></script>
+<script src="../../site_libs/react-17.0.0/react.min.js"></script>
+<script src="../../site_libs/react-17.0.0/react-dom.min.js"></script>
+<script src="../../site_libs/reactwidget-1.0.0/react-tools.js"></script>
+<script src="../../site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="../../site_libs/reactable-0.4.3/reactable.css" rel="stylesheet">
+<script src="../../site_libs/reactable-binding-0.4.3/reactable.js"></script>
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Custom Google Analytics Dashboards with R: Building The Dashboard</h1>
+
+<p class="date">2021-01-06</p>
+</header>
+
+<p><sup>Photo by <a href="https://unsplash.com/@abiglow?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Alan Biglow</a> on <a href="https://unsplash.com/s/photos/tesla-dashboard?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a> </sup></p>
+<style type="text/css"> 
+img.screenshot { border: 0.5px solid #888; padding: 5px; background-color: #eee;}
+</style>
+<p>Back in November, I took readers step by step through the somewhat long process of <a href="https://blog.rstudio.com/2020/11/27/google-analytics-part1/" target="_blank" rel="noopener noreferrer">authenticating and downloading Google Analytics web site data into R</a>. This post will be much simpler; I’m going to walk you through creating a dashboard showing blog post popularity using the <code>flexdashboard</code> package.</p>
+<p>Before we go there, however, I want to re-emphasize a correction that we made to the original credentials post. Mark Edmonston, the author of the terrific <code>googleAnalyticsR</code> package, has created a new version of his package that eliminates the need for OAUTH credentials when running on a server. Once that update is available on CRAN, I’ll update this post to document the simpler process of only submitting service account credentials. In the meantime, though, we’ll continue using both OAUTH and service account credentials.</p>
+<h2 id="where-to-find-the-code-and-data" class="anchored">Where to Find The Code and Data</h2>
+<p>All the code and data presented in this post is in a GitHub repository at <a href="https://github.com/rstudio/a-flexdashboard-for-google-analytics/" target="_blank" rel="noopener noreferrer">https://github.com/rstudio/a-flexdashboard-for-google-analytics</a> in the <em>Part2</em> folder. The code from Part 1 of this blog series is also available in the <em>Part1</em> folder; however, users should be aware that they’ll need to provide their own authentication secrets for that code to work. My previous article, <a href="https://blog.rstudio.com/2020/11/27/google-analytics-part1/" target="_blank" rel="noopener noreferrer">Custom Google Analytics Dashboards with R: Downloading Data</a>, provides detailed instructions for how to obtain those credentials.</p>
+<p>To make it easy for readers to reproduce this dashboard, I’ve constructed a synthetic set of Google Analytics data named <em>clickbait_GA_data.csv</em> for a hypothetical blog at the address <em>clickbait.com</em>. At the time of this writing, that domain was currently for sale and therefore shouldn’t be confused with any real blog. While the synthetic traffic comes from the Google Analytics log from an actual blog, the titles and URLs of all the articles are made up (although I wish I could find out the <em>3 Ways That Birds Are Confused About Bacon</em>). The dataset contains more than 32,000 visits and 105,000 page views conducted over one month.</p>
+<h1 id="creating-our-dashboard">Creating Our Dashboard</h1>
+<p>So let’s begin building our dashboard. To do this, we’re going to open a new <code>flexdashboard</code> R file. We do that by selecting File &gt; New File &gt; R Markdown…. as shown below.</p>
+<p><img class="screenshot" style="width: 477px;" src="01-menu-rmarkdown.jpg"></p>
+<p>We next select From Template &gt; Flex Dashboard.</p>
+<p><img class="screenshot" src="02-from-template.jpg" style="width: 477px;"></p>
+<p>That selection yields a new file which looks like this:</p>
+<p><img class="screenshot" src="03-flexdashboard-template.jpg" style="width: 298px;"></p>
+<p>If you <em>knit</em> that file, you end up with this output in your Preview window.</p>
+<p><img class="screenshot" src="04-flexdashboard-template-result.jpg" style="width: 468px;"></p>
+<p>The preconfigured template has provided us with window panes in which to put our Google Analytics graphs and tables. We simply have to fill them in!</p>
+<p>Our process for building our Google Analytics (GA) dashboard will go like this:</p>
+<ol type="1">
+<li>Read in the Google Analytics data in the setup chunk of our document.</li>
+<li>Use <code>dplyr</code> and <code>ggplot2</code> to create a graph of pageviews by day for Chart A.</li>
+<li>Build a table of the top 10 most popular titles in Chart B using the <code>reactable</code> package.</li>
+<li>Delete the R Markdown code for Chart C.</li>
+</ol>
+<p>So let’s build this dashboard.</p>
+<h2 id="reading-in-the-data" class="anchored">Reading in the Data</h2>
+<p>We begin our dashboard by reading in the data from Google Analytics. <a href="https://blog.rstudio.com/2020/11/27/google-analytics-part1/" target="_blank" rel="noopener noreferrer">In our last post</a>, we built code to authenticate and read in the GA data using the Google Analytics API. In a production dashboard, we would put that code in the setup section here.</p>
+<p>However, because we have our synthetic data in a .csv file, reading in the data will be a much simpler process. We will simply load the libraries we intend to use, apply the <em>read_csv</em> function from the <code>readr</code> package to our dataset, and put all of this in the <em>setup</em> chunk of our R Markdown file as shown below. I’ve shown the first few lines of the output to provide a sense of what that content looks like.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(flexdashboard)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reactable)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>gadata <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./data/clickbait_GA_data.csv"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">show</span>(gadata <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">7</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 × 5
+  date       pageviews users pageTitle                                   landi…¹
+  &lt;date&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;                                       &lt;chr&gt;  
+1 2020-12-01         2     2 3 Ways That Turtles Aren't Crazy About Kit… www.cl…
+2 2020-12-01         2     1 3 Ways That Turtles Aren't Crazy About Kit… www.cl…
+3 2020-12-01         3     3 Shocking Finding: Women Observe Cats        www.cl…
+4 2020-12-01         1     1 Unexpected Research Results: Birds Deal wi… www.cl…
+5 2020-12-01        11    10 Unexpected Research Results: Birds Need Fr… www.cl…
+6 2020-12-01         1     1 3 Ways That Europeans Are Confused About R… www.cl…
+7 2020-12-01         2     2 Why Monkeys Deal with Aardvarks             www.cl…
+# … with abbreviated variable name ¹​landingPagePath</code></pre>
+</div>
+</div>
+<h2 id="plotting-blog-traffic-by-day" class="anchored">Plotting Blog Traffic by Day</h2>
+<p>With the GA data in a tibble, we can use <code>dplyr</code> to group and sum the page views by day and then plot the data over time with <code>ggplot2</code>. This code will go in the R chunk under the heading <em>Chart A</em>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>())</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>gadata_by_day <span class="ot">&lt;-</span> gadata <span class="sc">%&gt;%</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(date) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">pagesums =</span> <span class="fu">sum</span>(pageviews))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(gadata_by_day, <span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> pagesums)) <span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>() <span class="sc">+</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">""</span>, <span class="at">title =</span> <span class="st">""</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="fu">show</span>(g)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<h2 id="building-a-table-of-the-most-popular-results" class="anchored">Building a Table of the Most Popular Results</h2>
+<p>We’d also like to present a table of the most popular blog posts on our blog. We could do this with a variety of packages such as <code>kable</code> or <code>DT</code>, but for this example, we’ll use the <code>reactable</code> package. <code>Reactable</code> gives users interactive features such as the ability to search and sort the table. All this is done using client-side Javascript, which makes the table interactive without requiring server involvement.</p>
+<p>We can compute and display the most popular blog posts by inserting this code into the chunk under <em>Chart B</em>. We added arguments to change the column names, specify the widths of the columns, and permit scrolling, searching, and striping just to make it prettier. Those could have been omitted if we weren’t fussy about the formatting.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>gadata_most_popular <span class="ot">&lt;-</span> gadata <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(pageTitle, <span class="at">wt =</span> pageviews, <span class="at">sort=</span><span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="do">## For those who aren't as comfortable with the options in count, the following</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="do">## code would also work</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># gadata_most_popular &lt;- gadata %&gt;% </span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   group_by(pageTitle) %&gt;% </span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   summarize(n = sum(pageviews)) %&gt;% </span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#   arrange(desc(n))</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">reactable</span>(gadata_most_popular,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">columns =</span> <span class="fu">list</span>(<span class="at">pageTitle     =</span> <span class="fu">colDef</span>(<span class="at">name =</span> <span class="st">"Title"</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">align =</span> <span class="st">"left"</span>, </span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">maxWidth =</span> <span class="dv">250</span>),</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>                          <span class="at">n             =</span> <span class="fu">colDef</span>(<span class="at">name =</span> <span class="st">"Page Views"</span>,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">maxWidth =</span> <span class="dv">100</span>)),</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">pagination =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">searchable =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>            <span class="at">striped =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="htmlwidget-476f3e6450c9e721a242" class="reactable html-widget" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-476f3e6450c9e721a242">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"pageTitle":["Amazing Ways That Elephants Embrace Squirrels","Unexpected Research Results: Pandas Don't Comprehend Puppies","3 Ways That Birds Avoid Friends","New Discovery: Americans Experience Friends","3 Ways That Birds Are Confused About Bacon","Unexpected Research Results: Birds Like Birthdays","New Discovery: Monkeys Observe Their Past","13 Ways That Koalas Observe Carbs","Discover How Dogs Can't Get Enough of Carbs","Learn How Cats Embrace Kittens"],"n":[16412,8888,6015,4858,3751,2823,2741,2452,2270,2220]},"columns":[{"id":"pageTitle","name":"Title","type":"character","maxWidth":250,"align":"left"},{"id":"n","name":"Page Views","type":"numeric","maxWidth":100}],"searchable":true,"pagination":false,"striped":true,"dataKey":"16e259512924592430cdbe8e1f230d08"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<h2 id="the-final-result" class="anchored">The Final Result</h2>
+<p>Finally, we change the heading of our R Markdown code to have a meaningful title, rename the headings from Chart A and Chart B to something more reasonable, delete the heading and chunk for Chart C, and add some explanatory text about what our dashboard is about. Our finished dashboard R Markdown code should look like the code in <a href="https://github.com/rstudio/a-flexdashboard-for-google-analytics/blob/main/Part2/dashboard1.Rmd" target="_blank" rel="noopener noreferrer">dashboard1.Rmd</a></p>
+<p>When we knit the results, we see this:</p>
+<p><img class="screenshot" src="05-dashboard-final.jpg" style="width: 600px"></p>
+<p>If we have access to an RStudio Connect server, we can publish this dashboard to that server by clicking the <em>Publish</em> button at the top right of the Viewer window. On the RStudio Connect server, we can schedule the dashboard to regularly download and analyze the Google Analytics data and allow others to interact with it. We can literally go from a desktop R Markdown document to a dashboard running in production for others to see in just a few clicks.</p>
+<h1 id="conclusions">Conclusions</h1>
+<p>This post shows how:</p>
+<ol type="1">
+<li><strong>A little R Markdown code can create a Google Analytics dashboard.</strong> Overall, the process of creating this dashboard is not really any more difficult than creating a report in R Markdown. The <code>flexdashboard</code> framework uses the same headings and code chunk structure as a regular R Markdown document. This means that we don’t have to learn a new language to build our dashboard.</li>
+<li><strong>Flexdashboard allows us to exploit other tools we already know.</strong> The R Markdown template for <code>flexdashboard</code> provides visual containers into which we can drop code that uses other packages that we know such as <code>ggplot2</code>, <code>dplyr</code>, and <code>reactable</code>. Again, we don’t have to learn new and unfamiliar tools to create our dashboard.</li>
+<li><strong>We can publish our dashboard and add new features incrementally.</strong> For organizations with an RStudio Connect server, we can put our dashboard into scheduled production with only a few clicks. Any time we wish to add another insight or plot to our dashboard, we simply change the R Markdown document on our desktop and republish the result.</li>
+</ol>
+<p>However, while we’ve successfully created a simple Google Analytics dashboard, we haven’t tackled the question that kicked off this series of blog posts, namely:</p>
+<blockquote>
+<p>Which of your blog articles received the most views in the first 15 days they were posted?</p>
+</blockquote>
+<p>That’s the question we’ll tackle in part 3 of this series, where we’ll derive the dates of publication for our blog posts and create a dashboard that ranks blog posts on the basis of a 15-day window of visitors. This approach will ensure that we don’t favor older blog posts that have just had more time to gather views.</p>
+<h2 id="for-more-information" class="anchored">For More Information</h2>
+<p>If you would like to learn more about some of the packages and products we’ve used, we recommend:</p>
+<ul>
+<li><a href="https://rmarkdown.rstudio.com/flexdashboard/" target="_blank" rel="noopener noreferrer">flexdashboard: Easy interactive dashboards for R</a>, a web site that gives a broad overview of the many capabilities of the <code>flexdashboard</code> package.</li>
+<li><a href="https://rmarkdown.rstudio.com" target="_blank" rel="noopener noreferrer">R Markdown</a>, RStudio’s web site that describes the many ways you can use R Markdown to create reports, slides, web sites, and more.</li>
+<li><a href="https://rstudio.com/products/connect/" target="_blank" rel="noopener noreferrer">RStudio Connect</a>, RStudio’s publishing platform for R and Python, which provides push-button publishing from the RStudio IDE, scheduled execution of reports, and a host of other production capabilities.</li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

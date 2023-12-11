@@ -1,0 +1,38 @@
+@layer utilities {
+    .link,
+    .link-over-dark,
+    .link-over-light {
+        @apply text-18;
+    }
+
+    .link-sm,
+    .link-sm-over-dark,
+    .link-sm-over-light {
+        @apply text-14;
+    }
+
+    .link-lg,
+    .link-lg-over-dark,
+    .link-lg-over-light {
+        @apply text-24;
+    }
+
+    .link,
+    .link-sm,
+    .link-lg,
+    .link-over-light,
+    .link-sm-over-light,
+    .link-lg-over-light {
+        @apply cursor-pointer text-blue3 uppercase border-b border-blue3
+        hover:text-neutral-dark hover:bg-turquoise-light hover:border-neutral-dark
+        active:text-blue1 active:bg-transparent active:border-blue1;
+    }
+
+    .link-over-dark,
+    .link-sm-over-dark,
+    .link-lg-over-dark {
+        @apply cursor-pointer text-blue5 uppercase border-b border-blue5
+        hover:text-blue1 hover:bg-turquoise-light hover:border-turquoise-light
+        active:text-neutral-light active:bg-transparent active:border-neutral-light;
+    }
+}

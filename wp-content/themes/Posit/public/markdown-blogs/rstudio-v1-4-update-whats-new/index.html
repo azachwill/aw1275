@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-06-09">
+<meta name="description" content="The RStudio 1.4 “Juliet Rose” update includes many improvements for users of the open source desktop IDE, including support for R 4.1 and Apple Silicon, Python improvements, memory usage stats, a document context menu, command palette upgrades, and more.">
+
+<title>RStudio v1.4 Update: What’s New</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio v1.4 Update: What’s New</h1>
+
+<p class="date">2021-06-09</p>
+</header>
+
+<p><sup>Photo by <a href="https://unsplash.com/@arizz?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">jurissa yanoria</a> on <a href="https://unsplash.com/s/photos/flower-bloom?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></sup></p>
+<p>We’ve just covered the recent <a href="https://www.rstudio.com/blog/announcing-rstudio-workbench/">name change from RStudio Server Pro to RStudio Workbench</a> we made in the last RStudio update, and the <a href="https://www.rstudio.com/blog/rstudio-workbench-vscode-sessions/">improvements we’ve made to VS Code sessions</a>. However, this update (codenamed “Juliet Rose”) comes with a lot of other small features, too, available to open source users as well as those who use RStudio’s professional suite of products. Today we’re taking a look at some of these smaller features.</p>
+<h3 id="r-4.1-support" class="anchored">R 4.1 Support</h3>
+<p>First, we’ve <strong>added support for R 4.1</strong>. This update to the core R language adds more features than usual, and previous versions of RStudio are not compatible with these changes, so this RStudio update is <strong>required</strong> if you plan to work with the new version of R.</p>
+<h4 id="new-native-pipe-operator" class="anchored">New Native Pipe Operator, |&gt;</h4>
+<p>R 4.1 adds a <a href="https://developer.r-project.org/blosxom.cgi/R-devel/NEWS/2020/12/04">native pipe operator</a>, <code>|&gt;</code>. Many R users will be be familiar with pipe operators already; they were popularized in R by the <a href="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html">magrittr package</a>’s <code>%&gt;%</code> pipe and have become a <a href="https://style.tidyverse.org/pipes.html">fixture in the tidyverse</a>.</p>
+<p>RStudio now supports this new native pipe operator. If you’re working primarily in code that uses the new <code>|&gt;</code> operator, you’ll want to change RStudio’s <em>Insert Pipe</em> command (Cmd/Ctrl + Shift + M) so that it inserts native pipes instead of matrittr-style pipes. To do this, go to <em>Options -&gt; Code -&gt; Editing</em> and check <em>Use native pipe operator</em>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="pipe-operator-option.png" class="img-fluid"></p>
+<p></p><figcaption>Screenshot of the RStudio Options dialog showing the Use Native Pipe Operator preference highlighted</figcaption><p></p>
+</figure>
+</div>
+<p>Also, if you’re using a ligature font like <a href="https://github.com/tonsky/FiraCode">FiraCode</a> or <a href="https://www.jetbrains.com/lp/mono/">JetBrains Mono</a> with RStudio, you’ll see a nice triangle glyph representing the new operator.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="native-pipe.png" class="img-fluid"></p>
+<p></p><figcaption>Screenshot of an RStudio code editor showing triangle-shaped ligatures for the native pipe operator</figcaption><p></p>
+</figure>
+</div>
+<h4 id="new-anonymous-function-syntax-x" class="anchored">New Anonymous Function Syntax, (x)</h4>
+<p>R 4.1 also adds new syntax for anonymous functions; you can write <code>\(x) ..</code> instead of the more cumbersome <code>function (x) ...</code>). RStudio now supports this syntax.</p>
+<p>Read more about <a href="https://www.jumpingrivers.com/blog/new-features-r410-pipe-anonymous-functions/">the new pipe operator and anonymous functions in R 4.1</a>.</p>
+<h4 id="new-graphics-engine" class="anchored">New Graphics Engine</h4>
+<p>Finally, R 4.1 adds a <a href="https://developer.r-project.org/Blog/public/2020/07/15/new-features-in-the-r-graphics-engine/">new graphics engine</a>. This graphics engine isn’t compatible with previous releases of RStudio (crashes will ensue when using ggplot2 or other grid-based graphics), which is the primary reason you need this RStudio update to work with R 4.1. Here’s RStudio demonstrating support for linear gradient fills, one of the new graphics engine features:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="grid-graphics.png" class="img-fluid"></p>
+<p></p><figcaption>Screenshot of RStudio demonstrating a linear gradient plot generated by the new graphics engine</figcaption><p></p>
+</figure>
+</div>
+<p>Note that if you want to use the new graphics device features, you’ll need to use the Cairo graphics backend on most platforms; you can enable it in <em>Options -&gt; General -&gt; Graphics</em>.</p>
+<h3 id="python-improvements" class="anchored">Python Improvements</h3>
+<p>We’re continuing to improve support for Python in RStudio. There are a bunch of improvements in this update, but chief among them is that we now show you the version of Python you’re working with, right in the Console tab. Python environment configuration is <a href="https://xkcd.com/1987/">notoriously tricky</a>, and this makes it just a <em>little</em> easier to see what you’re working with.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="python.png" class="img-fluid"></p>
+<p></p><figcaption>Screenshot of RStudio’s improved python support, showing the version information and stop button</figcaption><p></p>
+</figure>
+</div>
+<p>We’ve also made it possible to interrupt Python when it’s running (in other words, the Stop button works now), improved detection of Python environments on the system, made sure that Python versions match up when you’re knitting and publishing, put Python on <code>$PATH</code> on the Terminal, and lots more.</p>
+<p>Note that to take full advantage of all of the Python improvements, you’ll need the <a href="https://cran.r-project.org/web/packages/reticulate/index.html">latest version of the reticulate package</a> (1.20 or higher).</p>
+<h3 id="apple-silicon-support" class="anchored">Apple Silicon Support</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="apple-m1.jpg" class="img-fluid"></p>
+<p></p><figcaption>Logo depicting Apple’s M1 processor</figcaption><p></p>
+</figure>
+</div>
+<p>RStudio for macOS now works with the <a href="https://cran.r-project.org/bin/macosx/">native arm64 builds of R</a>, meaning you’ll now experience the full benefits of the M1’s <a href="https://www.cpubenchmark.net/cpu.php?cpu=Apple+M1+8+Core+3200+MHz&amp;id=4104">considerable processing power</a> when running your R code inside RStudio.</p>
+<p>Note that, while the components of RStudio that interface with R are now fully native, the front end is still compiled only for Intel and runs under Rosetta2 due to upstream dependencies that don’t yet have binaries available for the new architecture. We will produce a fully native version of RStudio for Apple Silicon in an upcoming release.</p>
+<h3 id="visualizing-memory-usage" class="anchored">Visualizing Memory Usage</h3>
+<p>RStudio’s Environment pane now includes a small widget that shows both how much memory your R session is using and how much free memory is available on your system.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="memory-usage.png" class="img-fluid"></p>
+<p></p><figcaption>Screenshot of RStudio showing memory usage in the Environment Pane</figcaption><p></p>
+</figure>
+</div>
+<p>Clicking on this widget will generate a memory usage report that gives you more information about available memory. It’s a helpful tool for understanding how much memory your data is taking up, and letting you know that you’re approaching the limit if you’re using RStudio in a memory-constrained environment. Read more about <a href="https://support.rstudio.com/hc/en-us/articles/1500005616261-Understanding-Memory-Usage-in-RStudio">understanding memory usage in RStudio</a>.</p>
+<h3 id="document-context-menu" class="anchored">Document Context Menu</h3>
+<p>Document tabs in RStudio now have a context menu, which makes it more convenient to take actions on the file/tab directly instead of going through the top-level menus. Right-click on the file’s name in the tab to invoke the context menu.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="document-tab-menu.png" class="img-fluid"></p>
+<p></p><figcaption>Screenshot of RStudio’s document tab context menu, showing actions that can be taken on the document</figcaption><p></p>
+</figure>
+</div>
+<h3 id="command-palette-upgrade" class="anchored">Command Palette Upgrade</h3>
+<p>The <a href="https://blog.rstudio.com/2020/10/14/rstudio-v1-4-preview-command-palette/">Command Palette</a> was one of the most popular features we introduced in RStudio 1.4. With this update, we’ve upgraded it with a new Most Recently Used (MRU) section at the top.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="command-palette-mru.png" class="img-fluid"></p>
+<p></p><figcaption>Screenshot of RStudio’s command palette showing a list of recently used commands</figcaption><p></p>
+</figure>
+</div>
+<p>This puts your most recently used commands within easier reach. They also match first in searches, so just a letter or two is often enough to recall one. And – for the extremely <strike>lazy</strike> efficient – you can just hit Enter in the Palette to re-run the most recent command.</p>
+<p>You can clear this list using the <em>Clear Recently Executed Command List</em> command, or turn off the feature if you’d like the Palette to be pristine every time you use it by disabling the <em>Remember Recently Used Items in Command Palette</em> setting. This setting is only accessible via the Command Palette itself.</p>
+<p>There’s lots more in this release, and it’s <a href="https://www.rstudio.com/products/rstudio/download/">available for download today</a>. You can read about all the features and bugfixes in the “Juliet Rose” update in the <a href="https://www.rstudio.com/products/rstudio/release-notes/">RStudio Release Notes</a>, and we’d love to hear your feedback about the new release on our <a href="https://community.rstudio.com/c/rstudio-ide/9">community forum</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

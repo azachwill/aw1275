@@ -1,0 +1,70 @@
+@layer utilities {
+    /* The container must be positioned relative: */
+    .select-dropdown {
+        @apply relative body-md-regular;
+    }
+
+    .select-dropdown select {
+        display: none; /*hide original SELECT element: */
+    }
+
+    .select-items div {
+        @apply cursor-pointer p-[16px] border-t-[1px] border-gray4 border-solid text-blue1/[0.62];
+    }
+
+    .select-items div:first-of-type {
+        @apply rounded-none border-none p-[16px] border-t-0;
+    }
+
+    /* Style the arrow inside the select element: */
+    .select-selected:after {
+        @apply absolute top-[18px] right-[24px] bottom-[18px] w-0 h-0;
+        content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M1.5 4L6 8L10.5 4' stroke='%2317212B' stroke-opacity='0.62' stroke-linejoin='bevel'/%3E%3C/svg%3E");
+    }
+
+    .select-selected.select-arrow-active {
+        @apply rounded-bl-none rounded-br-none border-b-0;
+    }
+
+    /* Point the arrow upwards when the select box is open (active): */
+    .select-selected.select-arrow-active:after {
+        @apply transition-all;
+        content: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9.5 5L5 1L0.5 5' stroke='%2317212B' stroke-linejoin='bevel'/%3E%3C/svg%3E%0A");
+    }
+
+    /* style the items (options), including the selected item: */
+    .select-selected {
+        @apply cursor-pointer relative block border border-gray4 rounded overflow-hidden py-[18px] pl-[24px];
+    }
+
+    .select-selected:focus-within,
+    .select-selected:focus-visible,
+    .select-selected:focus {
+        @apply border-blue3 outline-none shadow-select-focus;
+    }
+
+    /* Style items (options): */
+    .select-items {
+        @apply absolute top-[100%] left-0 right-0 z-[1] bg-neutral-light transition-all text-blue1/[.62] border border-t-0 border-gray4 rounded-bl-[4px] rounded-br-[4px] p-[8px];
+    }
+
+    /* Hide the items when the select box is closed: */
+    .select-hide {
+        @apply hidden ease-in-out duration-150;
+    }
+
+    .select-items div:hover {
+        @apply bg-gray4/[0.2] text-blue1;
+    }
+
+    .same-as-selected {
+        @apply bg-blue3/[0.1] !text-blue1;
+    }
+
+    select {
+        @apply appearance-none bg-transparent bg-no-repeat;
+        background-position-x: 96%;
+        background-position-y: 50%;
+        background-image: url("data:image/svg+xml,%3Csvg width='10' height='5' viewBox='0 0 10 5' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.5 0.5L5 4.5L9.5 0.5' stroke='%2317212B' stroke-opacity='0.62' stroke-linejoin='bevel'/%3E%3C/svg%3E");
+    }
+}

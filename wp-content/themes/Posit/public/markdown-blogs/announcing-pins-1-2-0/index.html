@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.340">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2023-05-18">
+<meta name="description" content="The new version of pins allows you to read and write pins with parquet, read from Connect vanity URLs, and provides support for avoiding duplicate pins.">
+
+<title>posit-blogs - Announcing pins 1.2.0</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Announcing pins 1.2.0</h1>
+
+<p class="date">2023-05-18</p>
+</header>
+
+<p>I’m delighted to announce that <a href="https://pins.rstudio.com/">pins for R 1.2.0</a> is now available on CRAN, and that <a href="https://rstudio.github.io/pins-python/">pins for Python 0.8.1</a> is available from PyPI. The pins package publishes data, models, and other R or Python objects, making it easy to share them across projects and with your colleagues. You can pin objects to a variety of pin boards, including folders (to share on a networked drive or with services like DropBox), Posit Connect, Amazon S3, Azure blob storage, and Google Cloud Storage. Pins can be versioned, making it straightforward to track changes, re-run analyses on historical data, and undo mistakes.</p>
+<p>You can install pins for R with:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"pins"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You can install pins for Python with:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>python <span class="op">-</span>m pip install pins</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This post highlights several important improvements we want to make sure you know about. To see all the changes in pins, including more minor maintenance and bug fixes, check out the release notes <a href="https://github.com/rstudio/pins-r/releases">for R</a> and <a href="https://github.com/rstudio/pins-python/releases">for Python</a>.</p>
+<h2 id="read-and-write-pins-with-parquet" class="anchored">Read and write pins with Parquet</h2>
+<p>The pins package supports writing in different file formats, such as <code>.rds</code> or <code>.joblib</code> for binary objects, JSON, and CSV. The R package has had support for Arrow for a long time, but this release adds Parquet as well. I personally have been confused at times about the <a href="https://arrow.apache.org/blog/2022/10/05/arrow-parquet-encoding-part-1/">differences between Parquet and Arrow</a>, so I’ll add here that Arrow is primarily an in-memory format, whereas Parquet is a storage format. With pins, we are all about storage, so it makes sense to use Parquet!</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pins)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>board <span class="ot">&lt;-</span> <span class="fu">board_folder</span>(<span class="st">"parquet-demo"</span>, <span class="at">versioned =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>board <span class="sc">|&gt;</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pin_write</span>(</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">head</span>(palmerpenguins<span class="sc">::</span>penguins), </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"my-favorite-penguins"</span>, </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">"parquet"</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>    Creating new version '20230518T175308Z-ea043'
+    Writing to pin 'my-favorite-penguins'</code></pre>
+<p>The Palmer penguins dataset includes factor, integer, and numeric columns. When we store it using Parquet rather than a plain-text format like CSV, these types are all maintained for us and can even be read from Python!</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pins <span class="im">import</span> board_folder</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>board <span class="op">=</span> board_folder(<span class="st">"parquet-demo"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>board.pin_read(<span class="st">"my-favorite-penguins"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>      species     island  bill_length_mm  ...  body_mass_g     sex  year
+    0  Adelie  Torgersen            39.1  ...       3750.0    male  2007
+    1  Adelie  Torgersen            39.5  ...       3800.0  female  2007
+    2  Adelie  Torgersen            40.3  ...       3250.0  female  2007
+    3  Adelie  Torgersen             NaN  ...          NaN     NaN  2007
+    4  Adelie  Torgersen            36.7  ...       3450.0  female  2007
+    5  Adelie  Torgersen            39.3  ...       3650.0    male  2007
+
+    [6 rows x 8 columns]</code></pre>
+<p>Check out <a href="https://pins.rstudio.com/articles/pins.html#reading-and-writing-data">our advice</a> (which also <a href="https://rstudio.github.io/pins-python/getting_started.html#reading-and-writing-data">applies to Python</a>) about choosing how to store your pins.</p>
+<h2 id="read-from-connect-vanity-urls" class="anchored">Read from Connect vanity URLs</h2>
+<p>Many users of our professional publishing platform <a href="https://posit.co/products/enterprise/connect/">Posit Connect</a> take advantage of pins to share data and models. One change in the new version of the R package is the addition of <code>board_connect_url()</code> for <a href="https://docs.posit.co/connect/user/content-settings/#custom-url">Connect vanity URLs</a>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>board2 <span class="ot">&lt;-</span> <span class="fu">board_connect_url</span>(<span class="fu">c</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">my_vanity_url_pin =</span> <span class="st">"https://colorado.posit.co/rsc/great-numbers/"</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>board2 <span class="sc">|&gt;</span> <span class="fu">pin_read</span>(<span class="st">"my_vanity_url_pin"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>     [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+<p>You can use any preferred name here instead of <code>my_vanity_url_pin</code>. The Connect vanity URL does not need to be public, and instead, this new board type uses <code>connect_auth_headers()</code> to pass in your Posit Connect authentication. This new board was made possible by a change to <code>board_url()</code> to add a <code>headers</code> argument, which also allows you to read from <a href="https://pins.rstudio.com/reference/board_url.html#authentication-for-board-url-">pins in a private GitHub repo or on GitHub Enterprise</a>.</p>
+<p>The <code>board_url()</code> function in Python doesn’t yet support passing headers directly, so if this is something you would like to see as a Python user, please <a href="https://github.com/rstudio/pins-python/issues">open an issue</a>!</p>
+<h2 id="avoid-writing-duplicate-pins" class="anchored">Avoid writing duplicate pins</h2>
+<p>We have heard from users that it can be frustrating to write pins, perhaps as part of a reporting or ETL pipeline, that fill up a disk with duplicate versions of the same pin. In this new version of the R package, the <code>pin_write()</code> function gains a new argument <code>force_identical_write</code> which defaults to <code>FALSE</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>board <span class="sc">|&gt;</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pin_write</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">head</span>(palmerpenguins<span class="sc">::</span>penguins), </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"my-favorite-penguins"</span>, </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">"parquet"</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>    ! The hash of pin "my-favorite-penguins" has not changed.
+    • Your pin will not be stored.</code></pre>
+<p>It didn’t write! The pins package now checks the hash of the pin contents and will not write an additional version of the pin contents that have not changed. The pin metadata is not hashed or checked, so if I want to update the metadata even when the pin contents are not changed, now I need to do this:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>board <span class="sc">|&gt;</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pin_write</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">head</span>(palmerpenguins<span class="sc">::</span>penguins), </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"my-favorite-penguins"</span>, </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">"parquet"</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">force_identical_write =</span> <span class="cn">TRUE</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>    Creating new version '20230518T175311Z-ea043'
+    Writing to pin 'my-favorite-penguins'</code></pre>
+<p>This argument can be used anytime you <em>do</em> want to write a new version of a pin, even with identical pin contents. This is a breaking change, with new behavior compared to how pins behaved before, but we have already heard from pins users that this quality-of-life improvement is welcome! In pins for Python, there is not yet an argument to control duplicate writes, so please <a href="https://github.com/rstudio/pins-python/issues">open an issue</a> if this is important to your work.</p>
+<h2 id="acknowledgements" class="anchored">Acknowledgements</h2>
+<p>We’d like to thank all the folks who have contributed to the pins R and Python packages since their last releases, whether via filing issues or contributing code or documentation:</p>
+<ul>
+<li><p>R package: <a href="https://github.com/amashadihossein"><span class="citation" data-cites="amashadihossein">@amashadihossein</span></a>, <a href="https://github.com/hadley"><span class="citation" data-cites="hadley">@hadley</span></a>, <a href="https://github.com/jennybc"><span class="citation" data-cites="jennybc">@jennybc</span></a>, <a href="https://github.com/juliasilge"><span class="citation" data-cites="juliasilge">@juliasilge</span></a>, <a href="https://github.com/MichaelSchatz"><span class="citation" data-cites="MichaelSchatz">@MichaelSchatz</span></a>, <a href="https://github.com/mzorko"><span class="citation" data-cites="mzorko">@mzorko</span></a>, <a href="https://github.com/nick-youngblut"><span class="citation" data-cites="nick-youngblut">@nick-youngblut</span></a>, <a href="https://github.com/RachaelDempsey"><span class="citation" data-cites="RachaelDempsey">@RachaelDempsey</span></a>, <a href="https://github.com/slodge"><span class="citation" data-cites="slodge">@slodge</span></a>, <a href="https://github.com/tsharaf"><span class="citation" data-cites="tsharaf">@tsharaf</span></a>, and <a href="https://github.com/wibeasley"><span class="citation" data-cites="wibeasley">@wibeasley</span></a></p></li>
+<li><p>Python package: <a href="https://github.com/AnthonyTedde"><span class="citation" data-cites="AnthonyTedde">@AnthonyTedde</span></a>, <a href="https://github.com/edavidaja"><span class="citation" data-cites="edavidaja">@edavidaja</span></a>, <a href="https://github.com/henningsway"><span class="citation" data-cites="henningsway">@henningsway</span></a>, <a href="https://github.com/hhp94"><span class="citation" data-cites="hhp94">@hhp94</span></a>, <a href="https://github.com/isabelizimm"><span class="citation" data-cites="isabelizimm">@isabelizimm</span></a>, <a href="https://github.com/juliasilge"><span class="citation" data-cites="juliasilge">@juliasilge</span></a>, <a href="https://github.com/kellobri"><span class="citation" data-cites="kellobri">@kellobri</span></a>, <a href="https://github.com/machow"><span class="citation" data-cites="machow">@machow</span></a>, <a href="https://github.com/mxblsdl"><span class="citation" data-cites="mxblsdl">@mxblsdl</span></a>, <a href="https://github.com/ni2scmn"><span class="citation" data-cites="ni2scmn">@ni2scmn</span></a>, <a href="https://github.com/robinsones"><span class="citation" data-cites="robinsones">@robinsones</span></a>, and <a href="https://github.com/SamEdwardes"><span class="citation" data-cites="SamEdwardes">@SamEdwardes</span></a></p></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+
+
+
+</body></html>

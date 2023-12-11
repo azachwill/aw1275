@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2015-06-22">
+
+<title>New Shiny cheat sheet and video tutorial</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">New Shiny cheat sheet and video tutorial</h1>
+
+<p class="date">2015-06-22</p>
+</header>
+
+<p>We’ve added two new tools that make it even easier to learn Shiny.</p>
+<h2 id="video-tutorial" class="anchored">Video tutorial</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/05/01-how-to-start-002.png" class="img-fluid"></p>
+<p></p><figcaption>01-How-to-start</figcaption><p></p>
+</figure>
+</div>
+<p>The <a href="https://shiny.rstudio.com/tutorial">How to Start with Shiny training video</a> provides a new way to teach yourself Shiny. The video covers everything you need to know to build your own Shiny apps. You’ll learn:</p>
+<ul>
+<li><p>The architecture of a Shiny app</p></li>
+<li><p>A template for making apps quickly</p></li>
+<li><p>The basics of building Shiny apps</p></li>
+<li><p>How to add sliders, drop down menus, buttons, and more to your apps</p></li>
+<li><p>How to share Shiny apps</p></li>
+<li><p>How to control reactions in your apps to</p>
+<ul>
+<li><p>update displays</p></li>
+<li><p>trigger code</p></li>
+<li><p>reduce computation</p></li>
+<li><p>delay reactions</p></li>
+</ul></li>
+<li><p>How to add design elements to your apps</p></li>
+<li><p>How to customize the layout of an app</p></li>
+<li><p>How to style your apps with CSS</p></li>
+</ul>
+<p>Altogether, the video contains two hours and 25 minutes of material organized around a navigable table of contents.</p>
+<p>Best of all, the video tutorial is completely free. The video is the result of our recent How to Start Shiny <a href="https://www.rstudio.com/resources/webinars/">webinar series</a>. Thank you to everyone who attended and made the series a success!</p>
+<p>Watch the new video tutorial <a href="https://shiny.rstudio.com/tutorial">here</a>.</p>
+<h2 id="new-cheat-sheet" class="anchored">New cheat sheet</h2>
+<p>The <a href="https://www.rstudio.com/resources/cheatsheets/">new Shiny cheat sheet</a> provides an up-to-date reference to the most important Shiny functions.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/05/shiny-cheatsheet.png" class="img-fluid"></p>
+<p></p><figcaption>shiny-cheatsheet</figcaption><p></p>
+</figure>
+</div>
+<p>The cheat sheet replaces the previous cheat sheet, adding new sections on single-file apps, reactivity, CSS and more. The new sheet also gave us a chance to apply some of the things we’ve learned about making cheat sheets since the original Shiny cheat sheet came out.</p>
+<p>Get the new Shiny cheat sheet <a href="https://www.rstudio.com/resources/cheatsheets/">here</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

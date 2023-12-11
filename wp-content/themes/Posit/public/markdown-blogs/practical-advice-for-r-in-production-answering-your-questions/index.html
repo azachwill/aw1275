@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-08-27">
+<meta name="description" content="This is a guest post by Colin Gillespie from Jumping Rivers answering your questions from their most recent series of webinars, Practical Advice for Putting R in Production.">
+
+<title>Practical Advice for R in Production - Answering Your Questions</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Practical Advice for R in Production - Answering Your Questions</h1>
+
+<p class="date">2021-08-27</p>
+</header>
+
+<p><em>This is a guest post by Colin Gillespie from <a href="https://www.jumpingrivers.com/">Jumping Rivers</a>, a Full Service RStudio Partner.</em></p>
+<p>Earlier this month, Jack Walton and I delivered a webinar with RStudio on the benefits of putting R into production environments, and how to do it successfully. We received tons of questions from participants, ranging from package management, to team organization, and container best practices. Below is a summary of our answers to your questions.</p>
+<h2 id="watch-both-webinars-here" class="anchored"><em>Watch both webinars here:</em></h2>
+<h2 id="practical-advice-for-putting-r-in-production-part-1-why-and-part-2-how" class="anchored"><em>Practical Advice for Putting R in Production, <a href="https://www.rstudio.com/resources/webinars/practical-advice-for-r-in-production-1-why/">Part 1: Why</a> and <a href="https://www.rstudio.com/resources/webinars/practical-advice-for-r-in-production-2-how/">Part 2: How</a></em></h2>
+<ul>
+<li><a href="#q1">Do you have a preferred tool or package for package version management or CRAN snapshots?</a></li>
+<li><a href="#q2">It seems someone needs to take charge of the data engineering pipeline and process. Who would you put in charge of it? IT or DS?</a></li>
+<li><a href="#q3">Are there any conversation-starters IT leaders cannot ignore?</a></li>
+<li><a href="#q4">Do you think R in production is mature?</a></li>
+<li><a href="#q5">How would you handle different R versions, packages etc., because a pipeline from 5 years ago still has to be reproduced? Docker?</a></li>
+<li><a href="#q6">Which infrastructure do you usually use to put R into production in an organisation? I saw RStudio Connect, but how about Azure ML Studio? Experience with that tool?</a></li>
+<li><a href="#q7">Thoughts on containers / Kubernetes instead of RStudio Connect?</a></li>
+</ul>
+<h3 id="colin-many-thanks-for-your-presentation-do-you-have-a-preferred-tool-or-package-for-package-version-management-or-cran-snapshots" class="anchored"><a name="q1">Colin, many thanks for your presentation! Do you have a preferred tool or package for package version management or CRAN snapshots?</a></h3>
+<p>At <a href="https://www.jumpingrivers.com">Jumping Rivers</a> we use a combination of tools. For distributing and installing R packages, we use <a href="https://www.rstudio.com/products/package-manager/">RStudio Package Manager</a> (RSPM), in addition to the R package <code>drat</code>.</p>
+<ul>
+<li>RSPM is excellent for accessing particular CRAN snapshots and binary R packages. You simply <a href="https://packagemanager.rstudio.com/client/#/repos/1/overview">select the date</a> - and you’ve pinned it to CRAN. For our day to day work, these features are essential.</li>
+<li>The <a href="https://cran.r-project.org/web/packages/drat/index.html"><code>drat</code></a> R package is a handy little package that makes creating R repositories easy. Since <code>drat</code> is an R package, we have complete flexibility with customization. For example, we have an internal workflow that dynamically creates repositories based on a Git branch name. Dynamically creating repos allows us to work on a separate development stream efficiently. Our primary use case for dynamic repos is when a Shiny app depends on several internal packages.</li>
+</ul>
+<p>In terms of package versioning, we tackle this in multiple ways.</p>
+<ul>
+<li>For internal packages, when a package changes, the version number and NEWS file must be updated. The rule is enforced via continuous integration.</li>
+<li>Where appropriate, we use <code>renv</code>. While this solves (some) reproducibility problems, it can cause other issues. We’ve recently taken on maintaining a few Shiny applications for clients. The Shiny application had been pinned to R v3.5 and the associated packages for that R release. This pinning causes upgrade issues and potential security issues (Javascript!).</li>
+</ul>
+<p>Finally, for our training material, the notes are always built with a current version of R and the current version of CRAN. When we run a course, participants are likely to use the latest versions of these packages. This can cause issues when the notes fail to build. But it’s better that the CI pipeline complains than course participants!</p>
+<h3 id="it-seems-someone-needs-to-take-charge-of-the-data-engineering-pipeline-and-process.-who-would-you-put-in-charge-of-it-it-or-ds" class="anchored"><a name="q2">It seems someone needs to take charge of the data engineering pipeline and process. Who would you put in charge of it? IT or DS?</a></h3>
+<p>Pragmatically, the person in charge is the person paying the bill! While R is free, nothing is “free” for large organisations. Everything takes time and resources.</p>
+<p>Typically, IT does the bulk of the work. That is, installing, upgrading, and maintaining R/RStudio. But Data Scientists, as the end-users, should have input into what they want. Communication is the key. When we work with organisations, we often provide that translation layer. We convert DS requirements into IT deliverables.</p>
+<p>I’m making a hard distinction between IT and DS, but I acknowledge that this isn’t clear-cut in many organisations. But my overall feeling is that many DS teams don’t (typically) do well maintaining, patching and upgrading systems. They are too busy building models, reports and dashboards!</p>
+<p><img src="mechanic.png" alt="Jumping Rivers cloud mechanic to the rescue!" class="center"></p>
+<h3 id="are-there-any-conversation-starters-it-leaders-cannot-ignore" class="anchored"><a name="q3">Are there any conversation-starters IT leaders cannot ignore?</a></h3>
+<p>That’s an excellent question, and I suspect I would be a rich man if I knew the answer! There isn’t any evidence to suggest R is less secure than other standard environments. When we work with an organisation, we always start with a scoping project. This exercise assesses the organisations’ needs and, more importantly, provides different options with associated costs.</p>
+<p>For example, take the question: how much does it cost to deploy an RStudio IDE across an organisation?</p>
+<ul>
+<li><a href="https://www.rstudio.com/products/rstudio/">RStudio Open Source IDE</a>: Free, but it would take IT X hours (assuming experience) to deploy and maintain. Furthermore, scaling and security are much more complicated.</li>
+<li><a href="https://www.rstudio.com/products/workbench/">RStudio Workbench</a> (Pro): £Y, but reduces the cost of implementing scaling and security.</li>
+<li><a href="https://www.jumpingrivers.com/consultancy/managed-rstudio-rsconnect-cloud-production/">Maintained RStudio Workbench by Jumping Rivers</a>: £Y + £Z, but the cost to IT is now tiny.</li>
+</ul>
+<p>Each point has different implications and different costs. But the organisation needs to be in the position to make a choice.</p>
+<h3 id="do-you-think-r-in-production-is-mature" class="anchored"><a name="q4">Do you think R in production is mature?</a></h3>
+<p>Yes! See <a href="https://github.com/ThinkR-open/companies-using-r">this list of companies</a>, as well as <a href="https://www.rstudio.com/about/customer-stories/">this list of RStudio customers</a>.</p>
+<img src="quote.png" alt="What is production anyway? Mark Sellors at rstudio::conf(2019)" class="center">
+<div style="text-align:right;">
+<sup>Screenshot from inspirational-r-quotes.com</sup>
+</div>
+<h3 id="how-would-you-handle-different-r-versions-packages-etc.-because-a-pipeline-from-5-years-ago-still-has-to-be-reproduced-docker" class="anchored"><a name="q5">How would you handle different R versions, packages etc., because a pipeline from 5 years ago still has to be reproduced? Docker?</a></h3>
+<p>I feel your pain! One of our regular roles for clients is to take over and maintain workflows. Typically, this means using Docker to ensure that an existing pipeline doesn’t break.</p>
+<p>However, we also have our eye on the future. Five years is starting to get painful in terms of R maintenance. From the beginning, we’ll actively plan an upgrade strategy. This plan is always centred around continuous integration and unit testing. Once this is in place, we have the nascent framework of an upgrade pathway.</p>
+<h3 id="which-infrastructure-do-you-usually-use-to-put-r-into-production-in-an-organisation-i-saw-rstudio-connect-but-how-about-azure-ml-studio-experience-with-that-tool" class="anchored"><a name="q6">Which infrastructure do you usually use to put R into production in an organisation? I saw RStudio Connect, but how about Azure ML Studio? Experience with that tool?</a></h3>
+<p>The infrastructure we provide for an organisation is always carefully chosen to suit an organisation’s particular needs and use-cases. As such, we have experience deploying R solutions to several different production environments, including Azure-based environments.</p>
+<p>Azure Machine Learning is, as the name suggests, first-and-foremost a platform for building machine learning pipelines, rather than a more general content hosting platform (as RStudio Connect is). Azure Machine learning supports several “drag-and-drop” no-code workflows (in addition to code-first workflows), making it an inclusive development platform for team members with low-code backgrounds.</p>
+<p>We have also helped organisations migrate R pipelines onto the Databricks platform. Databricks makes it easy to scale R jobs across spark clusters which are created and scaled on demand. Both Azure and AWS support Databricks deployments, making it simpler to assimilate this tool into existing cloud-based environments.</p>
+<blockquote>
+<p>While R is free, nothing is “free” for large organisations. Everything takes time and resources.</p>
+<p>- Colin Gillespie, Jumping Rivers</p>
+</blockquote>
+<h3 id="thoughts-on-containers-kubernetes-instead-of-rstudio-connect" class="anchored"><a name="q7">Thoughts on containers / Kubernetes instead of RStudio Connect? </a></h3>
+<p>The two technologies are a bit tricky to compare. RStudio Connect takes the pain out of application deployment. With a single click (or CI process), applications magically appear on a server. The user doesn’t need to worry about servers, containers or deployment.</p>
+<p>Containers/Kubernetes are something that the average user doesn’t need to know about. They’re lurking in the background, ready to provide aid deployment or scale-up resources as needed. You can use containers to deploy Shiny applications, but that has to be combined with other technologies.</p>
+<p><a class="btn btn-primary btn-lg mt-4" href="https://www.jumpingrivers.com/">Learn more about Jumping Rivers</a></p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2014-06-19">
+
+<title>Interactive documents: An incredibly easy way to use Shiny</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Interactive documents: An incredibly easy way to use Shiny</h1>
+
+<p class="date">2014-06-19</p>
+</header>
+
+<p>R Markdown’s new <a href="https://rmarkdown.rstudio.com/authoring_shiny.html">interactive documents</a> provide a quick, light-weight way to use <a href="https://shiny.rstudio.com">Shiny</a>. An interactive document embeds Shiny elements in an <a href="http://rmarkdown.rstudio.com">R Markdown</a> report. The report becomes “live”, a choose your own adventure that readers can control and explore. Interactive documents are easy to create and easy to share.</p>
+<h2 id="create-an-interactive-document" class="anchored">Create an interactive document</h2>
+<p>To create an interactive document use RStudio to create a new R Markdown file, choose the Shiny document template, then click “Run Document” to show a preview:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2014/06/storms-002.png" class="img-fluid"></p>
+<p></p><figcaption>storms.002</figcaption><p></p>
+</figure>
+</div>
+<p><a href="https://rmarkdown.rstudio.com/authoring_rcodechunks.html">Embed R code chunks</a> in your report where you like. Interactive documents use the same syntax as R Markdown and <a href="http://yihui.name/knitr/">knitr</a>. Set <code>echo = FALSE</code>. Your reader won’t see the code, just its results.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2014/06/storms2-001.png" class="img-fluid"></p>
+<p></p><figcaption>storms2.001</figcaption><p></p>
+</figure>
+</div>
+<p>Include <a href="https://shiny.rstudio.com/gallery/widgets-gallery.html">Shiny widgets</a> and <a href="https://rmarkdown.rstudio.com/authoring_shiny.html#inputs-and-outputs">outputs</a> in your code chunks. R Markdown will insert the widgets directly into your final document. When a reader toggles a widget, the parts of the document that depend on it will update instantly.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2014/06/storms-003.png" class="img-fluid"></p>
+<p></p><figcaption>storms.003</figcaption><p></p>
+</figure>
+</div>
+<p>That’s it! No extra files are needed.</p>
+<p>Note that in order to use interactive documents you should be running the <a href="https://www.rstudio.com/products/rstudio/">latest version</a> of RStudio (v0.98.932 or higher). Alternatively if you are not using RStudio be sure to follow the directions <a href="https://rmarkdown.rstudio.com/authoring_shiny.html#prerequisites">here</a> to install all of the required components.</p>
+<h2 id="share-your-document" class="anchored">Share your document</h2>
+<p>Interactive documents can be run locally on the desktop or be deployed Shiny Server v1.2 or <a href="http://shinyapps.io/">ShinyApps</a> just like any other Shiny application. See the RMarkdown v2 website for more details on <a href="https://rmarkdown.rstudio.com/authoring_shiny.html#deployment">deploying interactive documents</a>.</p>
+<h2 id="use-pre-packaged-tools" class="anchored">Use pre-packaged tools</h2>
+<p>Interactive documents make it easy to insert powerful tools into a report. For example, you can insert a kmeans clustering tool into your document with one line of code, as below. <code>kmeans_cluster</code> is a widget built from a Shiny app and intended for use in interactive documents.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2014/06/storms-004.png" class="img-fluid"></p>
+<p></p><figcaption>storms.004</figcaption><p></p>
+</figure>
+</div>
+<p>You can <a href="https://rmarkdown.rstudio.com/authoring_shiny_widgets.html">build your own widgets</a> with <code>shinyApp</code>, a new function that repackages Shiny apps as functions. <code>shinyApp</code> is easy to use. Its first argument takes the code that appears in an app’s ui.R file. The second argument takes the code that appears in the app’s server.R file. The <a href="https://github.com/rstudio/rmdexamples/blob/master/R/kmeans_cluster.R">source</a> of <code>kmeans_cluster</code> reveals how simple this is.</p>
+<h2 id="be-a-hero" class="anchored">Be a hero</h2>
+<p>Ready to be a hero? You can use the <code>shinyApp</code> function to make out of the box widgets that students, teachers, and data scientists will use everyday. Widgets can</p>
+<ul>
+<li><p>fit models</p></li>
+<li><p>compare distributions</p></li>
+<li><p>visualize data</p></li>
+<li><p>demonstrate teaching examples</p></li>
+<li><p>act as quizzes or multiple choice questions</p></li>
+<li><p>and more</p></li>
+</ul>
+<p>These widgets are not made yet, they are low hanging fruit for any Shiny developer. If you know how to program with Shiny (or want to learn), and would like to make your mark on R, consider authoring a package that makes widgets available for interactive documents.</p>
+<h2 id="get-started" class="anchored">Get started!</h2>
+<p>To learn more about interactive documents visit <a href="https://rmarkdown.rstudio.com/authoring_shiny.html" class="uri">https://rmarkdown.rstudio.com/authoring_shiny.html</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

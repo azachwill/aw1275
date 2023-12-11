@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-12-16">
+
+<title>RStudio Connect 1.8.6 - Server API</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Connect 1.8.6 - Server API</h1>
+
+<p class="date">2020-12-16</p>
+</header>
+
+<h2 id="audit-server-content-with-the-rstudio-connect-api" class="anchored">Audit Server Content with the RStudio Connect API</h2>
+<p>In 1.8.6, RStudio Connect administrators have the ability to create reports that track and manage the content on their servers. If you’ve ever wanted the answers to questions like:</p>
+<ul>
+<li>How do I produce a list of all the content we have published to RStudio Connect?</li>
+<li>Which applications can be accessed by which people and which groups?</li>
+<li>Which versions of R and Python are actually being used, and by which publishers?</li>
+<li>How much unpublished content is on the server, and can it be removed?</li>
+<li>Which vanity URLs do we have in use across the server, and how do I list them out?</li>
+</ul>
+<p>You’re not alone. We’ve had a flood of requests for making the APIs for accessing this information publicly available. Using an API key and the content enumeration endpoint, RStudio Connect administrators can now build custom reports to answer all these questions and more.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="reports-186.gif" class="img-fluid"></p>
+<p></p><figcaption>RStudio Connect Server API Showcase</figcaption><p></p>
+</figure>
+</div>
+<p><strong>Visit the RStudio Connect <a href="https://solutions.rstudio.com/examples/rsc-server-api-overview/">Server API Showcase</a> for access to code examples and template reports that can be deployed straight to Connect.</strong></p>
+<h3 id="content-enumeration-api" class="anchored">Content Enumeration API</h3>
+<p>Retrieve detailed information about the content that is available on your Connect instance using the <code>GET /v1/content/</code> endpoint. Administrators can retrieve all content items regardless of visibility and permissions.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="content-report.png" class="img-fluid"></p>
+<p></p><figcaption>Example Content Audit Report</figcaption><p></p>
+</figure>
+</div>
+<ul>
+<li><strong>Get the code for a <a href="https://solutions.rstudio.com/examples/rsc-apis/basic-audit-report">Basic Server Content Audit Report</a></strong></li>
+</ul>
+<p>Read more about content enumeration in the <a href="https://docs.rstudio.com/connect/1.8.6/cookbook/content/#content-listing">RStudio Connect API Cookbook</a>.</p>
+<h3 id="content-permissions-api" class="anchored">Content Permissions API</h3>
+<p>This set of endpoints will let you manage the user permissions associated with a content item:</p>
+<ul>
+<li>List the permissions for a specified content item with <code>GET /v1/content/{guid}/permissions</code></li>
+<li>Grant access to a user or group for a content item with <code>POST /v1/content/{guid}/permissions</code></li>
+</ul>
+<p>These permissions are used when the content item’s <code>access_type</code> is <code>acl</code> (Access Control List).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="acl-report.png" class="img-fluid"></p>
+<p></p><figcaption>Example Content Access Audit Report</figcaption><p></p>
+</figure>
+</div>
+<ul>
+<li><strong>Get the code for a <a href="https://solutions.rstudio.com/examples/rsc-apis/acl-audit-report">Content Access Settings Audit Report</a></strong></li>
+</ul>
+<p>Read more about managing content access in the <a href="https://docs.rstudio.com/connect/1.8.6/cookbook/sharing">RStudio Connect API Cookbook</a>.</p>
+<h3 id="vanity-auditing-and-management-apis" class="anchored">Vanity Auditing and Management APIs</h3>
+<p>All RStudio Connect content receives a URL that includes its numerical ID at the time of deployment. Administrators and publishers (if allowed) can create “vanity paths” for content which make the content available at an additional, customized URL.</p>
+<p><code>GET /v1/vanities</code> can be used to list all defined vanity URLs on a server. You must have an API key with administrator privileges to call this endpoint.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="vanity-report.png" class="img-fluid"></p>
+<p></p><figcaption>Example Vanity URL Audit Report</figcaption><p></p>
+</figure>
+</div>
+<ul>
+<li><strong>Get the code for a <a href="https://solutions.rstudio.com/examples/rsc-apis/vanity-audit-report">Vanity URL Audit Report</a></strong></li>
+</ul>
+<p>In addition to auditing vanity URLs, there are also API methods for setting and deleting vanities on individual content items:</p>
+<ul>
+<li>Use <code>GET /v1/content/{guid}/vanity</code> to get the vanity URL, if any, for a single content item.</li>
+<li>Use <code>PUT /v1/content/{guid}/vanity</code> to set the vanity URL for a content item.</li>
+<li>Use <code>DELETE /v1/content/{guid}/vanity</code> to remove the vanity URL for a content item and revert to using its numerical ID for URL construction.</li>
+</ul>
+<p>If <code>Authorization.PublishersCanManageVanities</code> is enabled, publishers can set and delete the vanity URL for content items that they have permission to change. Otherwise, administrator permissions are required.</p>
+<p>Read more about content organization and vanity URL management in the <a href="https://docs.rstudio.com/connect/1.8.6/cookbook/organizing/#vanities">RStudio Connect API Cookbook</a>.</p>
+<h3 id="tag-auditing-and-management-apis" class="anchored">Tag Auditing and Management APIs</h3>
+<p>Tags are the primary content organization concept available in RStudio Connect. Tags and content items have a many-to-many relationship: any content item may be associated with multiple tags, and any tag may be associated with multiple content items. This gives you the flexibility to group and organize your content in whatever way best suits your organization.</p>
+<p>The new tag API endpoints introduce management tools for tags as well as their associations with content items.</p>
+<h4 id="tag-and-tagged-content-auditing" class="anchored">Tag and Tagged Content Auditing:</h4>
+<ul>
+<li>List all tags with <code>GET /v1/tags</code></li>
+<li>List all of the content for a specified tag with <code>GET /v1/tags/{id}/content</code></li>
+<li>List all the tags for a specified content item with <code>GET /v1/content/{guid}/tags</code></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="tag-report.png" class="img-fluid"></p>
+<p></p><figcaption>Example Tag Usage Audit Report</figcaption><p></p>
+</figure>
+</div>
+<ul>
+<li><strong>Get the code for a <a href="https://solutions.rstudio.com/examples/rsc-apis/tag-audit-report">Tag Usage Audit Report</a></strong></li>
+</ul>
+<p>Read more about content organization and tag management in the <a href="https://docs.rstudio.com/connect/1.8.6/cookbook/organizing/#tags">RStudio Connect API Cookbook</a>.</p>
+<blockquote>
+<h4 id="rstudio-connect-1.8.6" class="anchored">RStudio Connect 1.8.6</h4>
+<ul>
+<li>Return to the general announcement post to learn about more features and <a href="https://blog.rstudio.com/2020/12/16/rstudio-connect-1-8-6/">updates here</a>.</li>
+<li>For upgrade planning notes, continue reading <a href="https://blog.rstudio.com/2020/12/16/rstudio-connect-1-8-6-admin-digest/">more here</a>.</li>
+</ul>
+</blockquote>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

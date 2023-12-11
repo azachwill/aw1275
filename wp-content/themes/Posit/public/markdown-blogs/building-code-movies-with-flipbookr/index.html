@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-11-08">
+<meta name="description" content="This post introduces flipbookr, a package that creates flipbooks, or “code movies”, from code. Flipbooks show how incremental additions in code pipelines change the output, helping audiences digest what is happening in each step.">
+
+<title>Building Code Movies With flipbookr</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/fitvids-2.1.1/fitvids.min.js"></script>
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Building Code Movies With flipbookr</h1>
+
+<p class="date">2021-11-08</p>
+</header>
+
+<div style="padding: 35px 0 35px 0;">
+
+Photo by <a href="https://unsplash.com/@alexlitvin?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Alex Litvin</a> on <a href="https://unsplash.com/?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a>
+
+</div>
+<div class="cell">
+
+</div>
+<blockquote>
+<p>This is a guest post from <a href="https://twitter.com/evamaerey" target="_blank" rel="noopener noreferrer">Gina Reynolds </a> with contributions from Rachel Goodman, Luca Picci, Conner Surrency, and Brit Woodrum, who provided research assistance while completing their Masters’ at the University of Denver’s Josef Korbel School of International Studies. Gina taught research methodology at University of Denver from 2018 to 2020 and currently teaches statistics and probability at West Point. Her research focuses on tools for proximate comparison and translation for data analysis and visualization.</p>
+</blockquote>
+<p>Have you heard of “code movies” or “code flipbooks”? Maybe not? This blog post will tell you what they are, introduce the flipbookr package to help build them in R, and showcase student work as examples.</p>
+<p>I use the terms ‘code movies’ and ‘flipbooks’ interchangeably.</p>
+<h1 id="what-are-flipbooks"><font size="4">What Are Flipbooks?</font></h1>
+<p>Flipbooks help you demonstrate how to get from ‘A’ to ‘B’ in data manipulation, analysis, or visualization code pipelines. When using R Markdown or Jupyter notebooks, we usually only see the initial input and final output for a pipeline of steps. Having the inputs and outputs close to one another helps communicate the big picture of what is being accomplished with a chunk of code.</p>
+<p>But you might have trouble figuring out what the <em>individual steps</em> in a pipeline accomplish. This is where flipbooks come in! They seek to illuminate what’s going on in <em>each</em> step of the pipeline or plot. Flipbooks show the <em>within</em>-pipeline output for every line of code.</p>
+<p>Here’s an example where we build a ggplot with the mtcars dataset. We build the plot and then add an annotation to describe the components of a boxplot.</p>
+<p>Click in the frame below and use arrows or swipe to go through the slideshow and see the plot build with each new line of code.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="shareagain" style="min-width:300px;margin:1em auto;" data-exeternal="1">
+<iframe src="https://colorado.posit.co/rsc/content/aa570b5a-2bbd-4c81-8c59-e2bc5ae2c7c3" width="1600" height="900" style="border:2px solid currentColor;" loading="lazy" allowfullscreen=""></iframe>
+<script>fitvids('.shareagain', {players: 'iframe'});</script>
+</div>
+</div>
+</div>
+<h1 id="code-movie-examples"><font size="4">Code Movie Examples</font></h1>
+<p>You may have seen code movies in coding presentations. Presenting pipelines as a movie helps audiences digest workflows, so it’s worth choreographing a set of slides to break down them. If the alignment between slides is good — and if we don’t have disruptive slide transitions (wipes, spins, fades) — we get to enjoy a little movie: the coordinated evolution of code and output! Here are some examples:</p>
+<ul>
+<li><a href="https://youtu.be/DhDOTxojQ3k?t=350" target="_blank" rel="noopener noreferrer"><em>Forecasting</em> - Mitchelle O’Hara Wild </a></li>
+<li><a href="https://pkg.garrickadenbuie.com/gentle-ggplot2/#40" target="_blank" rel="noopener noreferrer"><em>A Gentle Guide to the Grammar of Graphics with ggplot2</em> - Garrick Aden-Buie </a></li>
+<li><a href="https://youtu.be/sB8CYGlPN0o?t=158" target="_blank" rel="noopener noreferrer"><em>3D mapping, plotting, and printing with rayshader</em> - Tyler Morgan-Wall </a></li>
+</ul>
+<h1 id="building-flipbooks-quickly-and-reliably-with-flipbookr"><font size="4">Building Flipbooks Quickly and Reliably With flipbookr</font></h1>
+<p>While code movies deliver helpful insight to audiences, it can be time consuming to put together the experience. There’s a lot of copy-and-paste that has to happen to create the right partial code sequence — and you can mix yourself up trying to coordinate it (I’ve been there!).</p>
+<p>The <a href="https://evamaerey.github.io/flipbookr/" target="_blank" rel="noopener noreferrer">flipbookr </a> package’s goal is to help create these easy-to-follow, step-by-step experiences — without the copy-and-paste pain! All you need to do is write your pipeline once. Then, you can let flipbookr take over to create a flipbook that shows the code and its corresponding output.</p>
+<p>Together with the R Markdown slideshow package <a href="https://github.com/yihui/xaringan" target="_blank" rel="noopener noreferrer">xaringan </a>, flipbookr does four things:</p>
+<ol type="1">
+<li>Parses an .Rmd code pipeline from the chunk you indicate (you name the chunk),</li>
+<li>Identifies good break points in that code chunk pipeline (the default is finding balanced parentheses at the ends of lines),</li>
+<li>Spawns a bunch of code chunks with these <em>partial builds of code</em>, separated by slide breaks, and</li>
+<li>Displays partial code in HTML slides.</li>
+</ol>
+<p>The slides are shown side-by-side and sequentially, giving us a movie-like experience.</p>
+<p>There is so much decision-making packed into our code pipelines. The flipbookr project makes it easy to bring those decisions to light so they can be appreciated, examined, and discussed!</p>
+<h1 id="taking-flipbookr-for-a-spin"><font size="4">Taking flipbookr for a Spin</font></h1>
+<p>After installing flipbookr with <code>install.packages("flipbookr")</code>, there are a couple of ways to get started:</p>
+<ol type="1">
+<li>Use the <a href="https://evamaerey.github.io/flipbooks/flipbook_recipes#1" target="_blank" rel="noopener noreferrer">Easy Flipbook Recipes </a> guide. You can put together a basic flipbook with step-by-step instructions.</li>
+</ol>
+<!-- there's also a [video companion guide](https://www.youtube.com/watch?v=07xEB4q8bXo&feature=youtu.be) to the recipes book.  -->
+<ol start="2" type="1">
+<li>Use the “A Minimal Flipbook” template that comes with the flipbookr package. After installation, you can request the basic template in the RStudio IDE by going to <code>File -&gt; New File -&gt; R Markdown -&gt; From Template -&gt; A Minimal Flipbook</code>.</li>
+</ol>
+<!-- In the future, we hope to deliver a new mode of creating embedded mini flipbooks from *within Rmarkdown files* themselves. You will be able to create instant mini flipbooks with the function `flipbookr::embed_flipbook()`. You (or your students!) will be able to create flipbooks with less fuss than ever before!  Stay tuned or, if you are feeling brave and helpful, check out the [functions](https://github.com/EvaMaeRey/flipbookr/blob/master/R/h_write_instant_flipbook.R) or [examples template](https://github.com/EvaMaeRey/flipbookr/blob/master/inst/rmarkdown/templates/flipbook-embed/skeleton/skeleton.Rmd).   -->
+<h1 id="what-to-expect-flipbookr-examples"><font size="4">What to Expect: flipbookr Examples</font></h1>
+<p>Before you start building your own flipbooks, it might also be useful to see some examples from some other folks.</p>
+<p>Four of my graduate research assistants at the <a href="https://korbel.du.edu/" target="_blank" rel="noopener noreferrer">University of Denver’s Korbel School of International Studies </a>, with the support of an <a href="https://www.r-consortium.org/" target="_blank" rel="noopener noreferrer">R Consortium </a> grant, have built excellent flipbooks that showcase ggplot2 mapping, tmap, magick, and gganimate.</p>
+<!-- So writing code for to create flipbooks is a little different than writing code only to accomplish a task.  It is more like choreographing an experience.  As much as possible, the creators should try to write the code so that their is feedback as code is revealed.    -->
+<p>Rachel demos how to <a href="https://evamaerey.github.io/rstudio_education_blog/Idaho_Mapping/Idaho_mapping.html" target="_blank" rel="noopener noreferrer">build maps with ggplot2 </a> by looking at the political landscape in Idaho. She uses several thematic elements with the <code>theme()</code> function. Her flipbook displays the incremental effect of each thematic decision.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="shareagain" style="min-width:300px;margin:1em auto;" data-exeternal="1">
+<iframe src="https://colorado.posit.co/rsc/content/db11f0d2-1357-4223-82fb-854bebe5cea0" width="1600" height="900" style="border:2px solid currentColor;" loading="lazy" allowfullscreen=""></iframe>
+<script>fitvids('.shareagain', {players: 'iframe'});</script>
+</div>
+</div>
+</div>
+<p>Rachel also contributed this comment about how building plots intended for a flipbook differs from the usual build:</p>
+<blockquote>
+<p>“The process of producing a flipbook pushed me to think differently about both data wrangling and data visualization. It required me to be more deliberate in how I wrote and ordered my code, and it revealed redundancies and other inefficiencies in my script. The process also deepened my understanding of the commands that I employed by allowing me to see the output of each individual line of code.”</p>
+</blockquote>
+<p>Conner explores <a href="https://evamaerey.github.io/rstudio_education_blog/AUS_InteractMap/AUS_tmap.html" target="_blank" rel="noopener noreferrer">the tmap package </a> by showing city population sizes in Australia. He also dives into world map projections, cycling through various tmap projection options.</p>
+<!-- ` australia_reveal`  -->
+<div class="cell">
+<div class="cell-output-display">
+<div class="shareagain" style="min-width:300px;margin:1em auto;" data-exeternal="1">
+<iframe src="https://colorado.posit.co/rsc/content/385910e7-ce93-4d86-8d41-b33633d5d8d5" width="1600" height="900" style="border:2px solid currentColor;" loading="lazy" allowfullscreen=""></iframe>
+<script>fitvids('.shareagain', {players: 'iframe'});</script>
+</div>
+</div>
+</div>
+<p>Brit demos <a href="https://evamaerey.github.io/rstudio_education_blog/magick/magick.html" target="_blank" rel="noopener noreferrer">the magick package </a>, showing how image manipulation pipelines unfold.</p>
+<!-- ` magick_reveal` -->
+<div class="cell">
+<div class="cell-output-display">
+<div class="shareagain" style="min-width:300px;margin:1em auto;" data-exeternal="1">
+<iframe src="https://colorado.posit.co/rsc/content/358b0b0b-ee86-41fc-811c-5f35a501468a" width="1600" height="900" style="border:2px solid currentColor;" loading="lazy" allowfullscreen=""></iframe>
+<script>fitvids('.shareagain', {players: 'iframe'});</script>
+</div>
+</div>
+</div>
+<p>Finally, Luca <a href="https://evamaerey.github.io/rstudio_education_blog/unemployment/unemployment.html" target="_blank" rel="noopener noreferrer">visualizes changes in youth unemployment in Europe </a>, first by faceting in ggplot2 by year and then using gganimate.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="shareagain" style="min-width:300px;margin:1em auto;" data-exeternal="1">
+<iframe src=" https://colorado.posit.co/rsc/content/8b1b7f8a-cfae-4340-a3fa-fb0292385466" width="1600" height="900" style="border:2px solid currentColor;" loading="lazy" allowfullscreen=""></iframe>
+<script>fitvids('.shareagain', {players: 'iframe'});</script>
+</div>
+</div>
+</div>
+<hr>
+<h3 id="acknowledgments" class="anchored">Acknowledgments</h3>
+<p>The flipbookr package builds code movies using the wonderful xaringan, knitr, and R Markdown tools. It’s inspired by data manipulation and visualization tools that let you work incrementally, particularly ggplot2, dplyr, and magrittr.</p>
+<p>Lots of folks have helped build flipbookr, especially Emi Tanaka and Garrick Aden-Buie. Garrick’s code movie in <a href="https://pkg.garrickadenbuie.com/gentle-ggplot2/#40" target="_blank" rel="noopener noreferrer">‘A Gentle Guide to the Grammar of Graphics’ </a> is the first one I noticed and is not to be missed! Both Garrick and Emi Tanaka were inspired to work on automating the code movie build and helped get the flipbookr project off the ground.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

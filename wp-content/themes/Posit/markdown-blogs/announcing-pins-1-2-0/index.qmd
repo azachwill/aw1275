@@ -1,0 +1,216 @@
+---
+title: "Announcing pins 1.2.0"
+date: '2023-05-18'
+slug: announcing-pins-1-2-0
+tags:
+  - pins
+authors:
+  - Julia Silge
+description: The new version of pins allows you to read and write pins with parquet, read from Connect vanity URLs, and provides support for avoiding duplicate pins.
+alttext: Add alt text for header image.
+blogcategories:
+  - Open Source
+  - Products and Technology
+events: blog
+---
+
+I’m delighted to announce that [pins for R
+1.2.0](https://pins.rstudio.com/) is now available on CRAN, and that
+[pins for Python 0.8.1](https://rstudio.github.io/pins-python/) is
+available from PyPI. The pins package publishes data, models, and other
+R or Python objects, making it easy to share them across projects and
+with your colleagues. You can pin objects to a variety of pin boards,
+including folders (to share on a networked drive or with services like
+DropBox), Posit Connect, Amazon S3, Azure blob storage, and Google Cloud
+Storage. Pins can be versioned, making it straightforward to track
+changes, re-run analyses on historical data, and undo mistakes.
+
+You can install pins for R with:
+
+``` r
+install.packages("pins")
+```
+
+You can install pins for Python with:
+
+``` python
+python -m pip install pins
+```
+
+This post highlights several important improvements we want to make sure
+you know about. To see all the changes in pins, including more minor
+maintenance and bug fixes, check out the release notes [for
+R](https://github.com/rstudio/pins-r/releases) and [for
+Python](https://github.com/rstudio/pins-python/releases).
+
+## Read and write pins with Parquet
+
+The pins package supports writing in different file formats, such as
+`.rds` or `.joblib` for binary objects, JSON, and CSV. The R package has
+had support for Arrow for a long time, but this release adds Parquet as
+well. I personally have been confused at times about the [differences
+between Parquet and Arrow](https://arrow.apache.org/blog/2022/10/05/arrow-parquet-encoding-part-1/), so I’ll add here that Arrow is primarily an
+in-memory format, whereas Parquet is a storage format.
+With pins, we are all about storage, so it makes sense to use Parquet!
+
+``` r
+library(pins)
+board <- board_folder("parquet-demo", versioned = TRUE)
+board |> 
+  pin_write(
+    head(palmerpenguins::penguins), 
+    "my-favorite-penguins", 
+    type = "parquet"
+  )
+```
+
+```
+    Creating new version '20230518T175308Z-ea043'
+    Writing to pin 'my-favorite-penguins'
+```
+
+The Palmer penguins dataset includes factor, integer, and numeric
+columns. When we store it using Parquet rather than a plain-text format
+like CSV, these types are all maintained for us and can even be read
+from Python!
+
+``` python
+from pins import board_folder
+
+board = board_folder("parquet-demo")
+board.pin_read("my-favorite-penguins")
+```
+
+```
+      species     island  bill_length_mm  ...  body_mass_g     sex  year
+    0  Adelie  Torgersen            39.1  ...       3750.0    male  2007
+    1  Adelie  Torgersen            39.5  ...       3800.0  female  2007
+    2  Adelie  Torgersen            40.3  ...       3250.0  female  2007
+    3  Adelie  Torgersen             NaN  ...          NaN     NaN  2007
+    4  Adelie  Torgersen            36.7  ...       3450.0  female  2007
+    5  Adelie  Torgersen            39.3  ...       3650.0    male  2007
+
+    [6 rows x 8 columns]
+```
+
+Check out [our
+advice](https://pins.rstudio.com/articles/pins.html#reading-and-writing-data)
+(which also [applies to
+Python](https://rstudio.github.io/pins-python/getting_started.html#reading-and-writing-data))
+about choosing how to store your pins.
+
+## Read from Connect vanity URLs
+
+Many users of our professional publishing platform [Posit
+Connect](https://posit.co/products/enterprise/connect/) take advantage
+of pins to share data and models. One change in the new version of the R
+package is the addition of `board_connect_url()` for [Connect vanity
+URLs](https://docs.posit.co/connect/user/content-settings/#custom-url).
+
+``` r
+board2 <- board_connect_url(c(
+  my_vanity_url_pin = "https://colorado.posit.co/rsc/great-numbers/"
+))
+
+board2 |> pin_read("my_vanity_url_pin")
+```
+
+```
+     [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+You can use any preferred name here instead of `my_vanity_url_pin`. The
+Connect vanity URL does not need to be public, and instead, this new board
+type uses `connect_auth_headers()` to pass in your Posit Connect
+authentication. This new board was made possible by a change to
+`board_url()` to add a `headers` argument, which also allows you to read
+from [pins in a private GitHub repo or on GitHub
+Enterprise](https://pins.rstudio.com/reference/board_url.html#authentication-for-board-url-).
+
+The `board_url()` function in Python doesn’t yet support passing headers
+directly, so if this is something you would like to see as a Python
+user, please [open an
+issue](https://github.com/rstudio/pins-python/issues)!
+
+## Avoid writing duplicate pins
+
+We have heard from users that it can be frustrating to write pins,
+perhaps as part of a reporting or ETL pipeline, that fill up a disk with
+duplicate versions of the same pin. In this new version of the R
+package, the `pin_write()` function gains a new argument
+`force_identical_write` which defaults to `FALSE`:
+
+``` r
+board |> 
+  pin_write(
+    head(palmerpenguins::penguins), 
+    "my-favorite-penguins", 
+    type = "parquet"
+  )
+```
+
+```
+    ! The hash of pin "my-favorite-penguins" has not changed.
+    • Your pin will not be stored.
+```
+
+It didn’t write! The pins package now checks the hash of the pin
+contents and will not write an additional version of the pin contents that
+have not changed. The pin metadata is not hashed or checked, so if I
+want to update the metadata even when the pin contents are not changed,
+now I need to do this:
+
+``` r
+board |> 
+  pin_write(
+    head(palmerpenguins::penguins), 
+    "my-favorite-penguins", 
+    type = "parquet",
+    force_identical_write = TRUE
+  )
+```
+
+```
+    Creating new version '20230518T175311Z-ea043'
+    Writing to pin 'my-favorite-penguins'
+```
+
+This argument can be used anytime you *do* want to write a new version
+of a pin, even with identical pin contents. This is a breaking change,
+with new behavior compared to how pins behaved before, but we have
+already heard from pins users that this quality-of-life improvement is
+welcome! In pins for Python, there is not yet an argument to control
+duplicate writes, so please [open an
+issue](https://github.com/rstudio/pins-python/issues) if this is
+important to your work.
+
+## Acknowledgements
+
+We’d like to thank all the folks who have contributed to the pins R and
+Python packages since their last releases, whether via filing issues or
+contributing code or documentation:
+
+-   R package: [@amashadihossein](https://github.com/amashadihossein),
+    [@hadley](https://github.com/hadley),
+    [@jennybc](https://github.com/jennybc),
+    [@juliasilge](https://github.com/juliasilge),
+    [@MichaelSchatz](https://github.com/MichaelSchatz),
+    [@mzorko](https://github.com/mzorko),
+    [@nick-youngblut](https://github.com/nick-youngblut),
+    [@RachaelDempsey](https://github.com/RachaelDempsey),
+    [@slodge](https://github.com/slodge),
+    [@tsharaf](https://github.com/tsharaf), and
+    [@wibeasley](https://github.com/wibeasley)
+
+-   Python package: [@AnthonyTedde](https://github.com/AnthonyTedde),
+    [@edavidaja](https://github.com/edavidaja),
+    [@henningsway](https://github.com/henningsway),
+    [@hhp94](https://github.com/hhp94),
+    [@isabelizimm](https://github.com/isabelizimm),
+    [@juliasilge](https://github.com/juliasilge),
+    [@kellobri](https://github.com/kellobri),
+    [@machow](https://github.com/machow),
+    [@mxblsdl](https://github.com/mxblsdl),
+    [@ni2scmn](https://github.com/ni2scmn),
+    [@robinsones](https://github.com/robinsones), and
+    [@SamEdwardes](https://github.com/SamEdwardes)

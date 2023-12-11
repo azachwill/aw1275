@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-12-07">
+
+<title>RStudio Package Manager 1.2.0 - Bioconductor &amp; PyPI</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Package Manager 1.2.0 - Bioconductor &amp; PyPI</h1>
+
+<p class="date">2020-12-07</p>
+</header>
+
+<p>Packages are the heart of open source data science, but we know they aren’t always easy. Data scientists need access to ever-evolving tools to do their best work, and IT needs to understand the risk of new software while providing a stable environment for reproducible work. <a href="https://rstudio.com/products/package-manager">RStudio Package Manager</a> helps teams work together to accomplish these goals. Today we are excited to announce a greatly expanded focus, enabling teams to realize these benefits across languages and ecosystems by adding support for Bioconductor, beta support for Python packages from PyPI, and new options for managing historical CRAN snapshots.</p>
+<p>Ready to start? Visit the <a href="https://packagemanager.rstudio.com">RStudio Public Package Manager</a>, a free and hosted service, or <a href="https://rstudio.com/products/package-manager">evaluate Package Manager</a> for use within your organization.</p>
+<h2 id="bioconductor" class="anchored">Bioconductor</h2>
+<p>1.2.0 adds <a href="https://docs.rstudio.com/rspm/1.2.0/admin/getting-started/configuration/#quickstart-bioconductor">first class support for Bioconductor</a>, an ecosystem of R packages used in the life sciences. This release makes it possible for data scientists in regulated or restricted environments to install and manage Bioconductor, even in environments without direct internet access. Teams can access Bioconductor packages using the <code>BiocManager</code> client, or they can use <code>install.packages</code>. Bioconductor packages can be combined with local packages and CRAN packages seamlessly. Package Manager also makes Bioconductor analyses more reproducible, by helping combine a Bioconductor release with a corresponding CRAN snapshot. You no longer have to manually manage incompatibilities between older Bioconductor releases and rolling CRAN updates.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/bioc-in-rspm.png" class="img-fluid"></p>
+<p></p><figcaption>Bioconductor in Package Manager</figcaption><p></p>
+</figure>
+</div>
+<h2 id="beta-support-for-pypi" class="anchored">Beta Support for PyPI</h2>
+<p>This release adds <a href="https://docs.rstudio.com/rspm/1.2.0/admin/getting-started/configuration/#quickstart-pypi-packages">beta support for mirroring Python packages</a> from PyPI. By adding PyPI support, we intend to make it much easier for multilingual teams to work together, and mitigate the challenges IT organizations face in maintaining their own PyPI mirrors. One exciting capability of Package Manager’s PyPI support is the addition of PyPI snapshots, enabling teams to time travel in Python just like they can in R. You can also search for Python packages explore documentation, and track package downloads. Package Manager is fully compatible with <code>pip</code> and tools like <code>virtualenv</code> and <code>pyenv</code>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<figure>
+<img src="images/Screen%20Shot%202020-10-22%20at%2012.21.44%20PM.png" title="PyPI in Package Manager" class="img-fluid">
+</figure>
+<p></p><figcaption>PyPI in Package Manager</figcaption><p></p>
+</figure>
+</div>
+<p>PyPI support is in Beta. We hope you will try the feature and give us your feedback, but please be cautious about integrating with production systems. There are a few known limitations we will be addressing: adding the option to share local Python packages and enabling fully air-gapped users.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<figure>
+<img src="images/Screen%20Shot%202020-10-22%20at%2012.29.39%20PM.png" title="PyPI package description in Package Manager" class="img-fluid">
+</figure>
+<p></p><figcaption>PyPI package description in Package Manager</figcaption><p></p>
+</figure>
+</div>
+<h2 id="historic-cran-snapshots" class="anchored">Historic CRAN Snapshots</h2>
+<p>In this release, we’ve made <a href="https://docs.rstudio.com/rspm/1.2.0/admin/getting-started/configuration/#quickstart-cran">significant improvements for teams navigating CRAN</a>. It is now possible to have granular control over which CRAN snapshots are available, allowing administrators to present CRAN as it existed on certain days. This addition unlocks new management strategies. For instance, you can provide regular updates, but always stay one week behind the latest changes.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<figure>
+<img src="images/Screen%20Shot%202020-10-22%20at%2012.20.07%20PM.png" title="Curated CRAN Activity Log" class="img-fluid">
+</figure>
+<p></p><figcaption>Curated CRAN Activity Log</figcaption><p></p>
+</figure>
+</div>
+<p>More granular snapshot access also makes it easier to start using Package Manager. Many teams have an existing set of packages they installed from MRAN or a package library they created when they installed R, and now you can easily recreate the same set in Package Manager.</p>
+<p>When compatible, we’ve also enabled date-based URLs, making it more intuitive for data scientists to install packages from an understood point in time.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<figure>
+<img src="images/Screen%20Shot%202020-10-22%20at%2012.19.26%20PM.png" title="Date Indexed CRAN Repository" class="img-fluid">
+</figure>
+<p></p><figcaption>Date Indexed CRAN Repository</figcaption><p></p>
+</figure>
+</div>
+<p>These changes all extend to curated subsets of CRAN as well, so that admins can provide approved packages from any point in time.</p>
+<p>There are many additional improvements and bug fixes in this release, please review the <a href="https://docs.rstudio.com/rspm/news">full release notes</a>.</p>
+<blockquote>
+<h4 id="upgrade-planning" class="anchored">Upgrade Planning</h4>
+<p>Upgrading to 1.2.0 from 1.1.6 is a major upgrade. The upgrade will be automatic, but we recommend reviewing the release notes and ensuring the new desired capabilities are applied along with any relevant upgrades to storage requirements. If you are upgrading from an earlier version, be sure to consult the release notes for the intermediate releases, as well.</p>
+</blockquote>
+<h4 id="new-to-rstudio-package-manager" class="anchored">New to RStudio Package Manager?</h4>
+<p><a href="https://rstudio.com/products/package-manager/">Download</a> the 45-day evaluation today to see how RStudio Package Manager can help you, your team, and your entire organization access and organize R packages. Or take a look at the free <a href="https://packagemanager.rstudio.com">Public Package Manager</a>.</p>
+<p>To stay up to date with new releases of RStudio products, as well as information on minor updates, patches, and potential security notifications, we encourage you to subscribe to the Product Information email list at https://rstudio.com/about/subscription-management/</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

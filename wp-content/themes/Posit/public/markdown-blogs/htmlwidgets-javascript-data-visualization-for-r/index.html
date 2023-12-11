@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2014-12-18">
+
+<title>htmlwidgets: JavaScript data visualization for R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">htmlwidgets: JavaScript data visualization for R</h1>
+
+<p class="date">2014-12-18</p>
+</header>
+
+<p>Today we’re excited to announce <a href="http://www.htmlwidgets.org">htmlwidgets</a>, a new framework that brings the best of JavaScript data visualization libraries to R. There are already several packages that take advantage of the framework (<a href="http://www.htmlwidgets.org/showcase_leaflet.html">leaflet</a>, <a href="http://www.htmlwidgets.org/showcase_dygraphs.html">dygraphs</a>, <a href="http://www.htmlwidgets.org/showcase_networkD3.html">networkD3</a>, <a href="http://www.htmlwidgets.org/showcase_datatables.html">DataTables</a>, and <a href="http://www.htmlwidgets.org/showcase_threejs.html">rthreejs</a>) with hopefully many more to come.</p>
+<p>An <strong>htmlwidget</strong> works just like an R plot except it produces an interactive web visualization. A line or two of R code is all it takes to produce a D3 graphic or Leaflet map. Widgets can be used at the R console as well as embedded in <a href="http://rmarkdown.rstudio.com">R Markdown</a> reports and <a href="https://shiny.rstudio.com">Shiny</a> web applications. Here’s an example of using leaflet directly from the R console:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2014/12/rconsole-2x.png" class="img-fluid"></p>
+<p></p><figcaption>rconsole.2x</figcaption><p></p>
+</figure>
+</div>
+<p>When printed at the console the leaflet widget displays in the RStudio Viewer pane. All of the tools typically available for plots are also available for widgets, including history, zooming, and export to file/clipboard (note that when not running within RStudio widgets will display in an external web browser).</p>
+<p>Here’s the same widget in an R Markdown report. Widgets automatically print as HTML within R Markdown documents and even respect the default knitr figure width and height.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2014/12/rmarkdown-2x.png" class="img-fluid"></p>
+<p></p><figcaption>rmarkdown.2x</figcaption><p></p>
+</figure>
+</div>
+<p>Widgets also provide Shiny output bindings so can be easily used within web applications. Here’s the same widget in a Shiny application:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2014/12/shiny-2x.jpg" class="img-fluid"></p>
+<p></p><figcaption>shiny.2x</figcaption><p></p>
+</figure>
+</div>
+<h3 id="bringing-javascript-to-r" class="anchored"><strong>Bringing JavaScript to R</strong></h3>
+<p>The <strong>htmlwidgets</strong> framework is a collaboration between Ramnath Vaidyanathan (rCharts), Kenton Russell (Timely Portfolio), and RStudio. We’ve all spent countless hours creating bindings between R and the web and were motivated to create a framework that made this as easy as possible for all R developers.</p>
+<p>There are a plethora of libraries available that create attractive and fully interactive data visualizations for the web. However, the programming interface to these libraries is JavaScript, which places them outside the reach of nearly all statisticians and analysts. <strong>htmlwidgets</strong> makes it extremely straightforward to create an R interface for any JavaScript library.</p>
+<p>Here are a few widget libraries that have been built so far:</p>
+<ul>
+<li><p><a href="http://www.htmlwidgets.org/showcase_leaflet.html">leaflet</a>, a library for creating dynamic maps that support panning and zooming, with various annotations like markers, polygons, and popups.</p></li>
+<li><p><a href="http://www.htmlwidgets.org/showcase_dygraphs.html">dygraphs</a>, which provides rich facilities for charting time-series data and includes support for many interactive features including series/point highlighting, zooming, and panning.</p></li>
+<li><p><a href="http://www.htmlwidgets.org/showcase_networkD3.html">networkD3</a>, a library for creating D3 network graphs including force directed networks, Sankey diagrams, and Reingold-Tilford tree networks.</p></li>
+<li><p><a href="http://www.htmlwidgets.org/showcase_datatables.html">DataTables</a>, which displays R matrices or data frames as interactive HTML tables that support filtering, pagination, and sorting.</p></li>
+<li><p><a href="http://www.htmlwidgets.org/showcase_threejs.html">rthreejs</a>, which features 3D scatterplots and globes based on WebGL.</p></li>
+</ul>
+<p>All of these libraries combine visualization with direct interactivity, enabling users to explore data dynamically. For example, time-series visualizations created with dygraphs allow dynamic panning and zooming:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="http://rstudio.github.io/dygraphs/gallery-range-selector.html"><img src="https://rstudioblog.files.wordpress.com/2014/12/newhaventemps.png" class="img-fluid"></a></p>
+<p></p><figcaption>NewHavenTemps</figcaption><p></p>
+</figure>
+</div>
+<h3 id="learning-more" class="anchored"><strong>Learning More</strong></h3>
+<p>To learn more about the framework and see a showcase of the available widgets in action check out the <a href="http://www.htmlwidgets.org">htmlwidgets web site</a>. To learn more about building your own widgets, install the <strong>htmlwidgets</strong> package from CRAN and check out the <a href="http://www.htmlwidgets.org/develop_intro.html">developer documentation</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

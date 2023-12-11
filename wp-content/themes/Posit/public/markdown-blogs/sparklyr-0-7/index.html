@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2018-01-29">
+
+<title>sparklyr 0.7: Spark Pipelines and Machine Learning</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">sparklyr 0.7: Spark Pipelines and Machine Learning</h1>
+
+<p class="date">2018-01-29</p>
+</header>
+
+<p>We are excited to share that <a href="https://cran.r-project.org/web/packages/sparklyr/index.html">sparklyr 0.7</a> is now available on CRAN! Sparklyr provides an R interface to Apache Spark. It supports dplyr syntax for working with Spark DataFrames and exposes the full range of machine learning algorithms available in Spark. You can also learn more about Apache Spark and sparklyr in <a href="http://spark.rstudio.com">spark.rstudio.com</a> and our new <a href="https://www.rstudio.com/resources/webinars/introducing-an-r-interface-for-apache-spark/">webinar series on Apache Spark</a>. Features in this release:</p>
+<ul>
+<li>Adds support for <strong>ML Pipelines</strong> which provide a uniform set of high-level APIs to help create, tune, and deploy machine learning pipelines at scale.</li>
+<li>Enhances <strong>Machine Learning</strong> capabilities by supporting the full range of ML algorithms and feature transformers.</li>
+<li>Improves <strong>Data Serialization</strong>, specifically by adding support for date columns.</li>
+<li>Adds support for <a href="https://spark.rstudio.com/guides/connections/#cluster-mode">YARN cluster mode</a> connections.</li>
+<li>Adds various other improvements as listed in the <a href="https://spark.rstudio.com/news/">NEWS</a> file.</li>
+</ul>
+<p>In this blog post, we highlight Pipelines, new ML functions, and enhanced support for data serialization. To follow along in the examples below, you can upgrade to the latest stable version from CRAN with:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"sparklyr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2 id="ml-pipelines" class="anchored">ML Pipelines</h2>
+<p>The <a href="https://spark.apache.org/docs/latest/ml-pipeline.html">ML Pipelines</a> API is a high-level interface for building ML workflows in Spark. Pipelines provide a uniform approach to compose feature transformers and ML routines, and are interoperable across the different Spark APIs (R/sparklyr, Scala, and Python.)</p>
+<p>First, let’s go over a quick overview of terminology. A <code>Pipeline</code> consists of a sequence of stages—<code>PipelineStage</code>s—that act on some data in order. A <code>PipelineStage</code> can be either a <code>Transformer</code> or an <code>Estimator</code>. A <code>Transformer</code> takes a data frame and returns a transformed data frame, whereas an <code>Estimator</code> take a data frame and returns a <code>Transformer</code>. You can think of an <code>Estimator</code> as an algorithm that can be fit to some data, e.g.&nbsp;the ordinary least squares (OLS) method, and a <code>Transformer</code> as the fitted model, e.g.&nbsp;the linear formula that results from OLS. A <code>Pipeline</code> is itself a <code>PipelineStage</code> and can be an element in another <code>Pipeline</code>. Lastly, a <code>Pipeline</code> is always an <code>Estimator</code>, and its fitted form is called <code>PipelineModel</code> which is a <code>Transformer</code>.</p>
+<p>Let’s look at some examples of creating pipelines. We establish a connection and copy some data to Spark:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># If needed, install Spark locally via `spark_install()`</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>iris_tbl <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, iris)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># split the data into train and validation sets</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>iris_data <span class="ot">&lt;-</span> iris_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sdf_partition</span>(<span class="at">train =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="at">validation =</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="at">seed =</span> <span class="dv">123</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then, we can create a new <code>Pipeline</code> with <code>ml_pipeline()</code> and add stages to it via the <code>%&gt;%</code> operator. Here we also define a transformer using dplyr transformations using the newly available <code>ft_dplyr_transformer()</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pipeline <span class="ot">&lt;-</span> <span class="fu">ml_pipeline</span>(sc) <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_dplyr_transformer</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    iris_data<span class="sc">$</span>train <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">Sepal_Length =</span> <span class="fu">log</span>(Sepal_Length),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">Sepal_Width =</span> Sepal_Width <span class="sc">^</span> <span class="dv">2</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_string_indexer</span>(<span class="st">"Species"</span>, <span class="st">"label"</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>pipeline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## Pipeline (Estimator) with 2 stages
+## &lt;pipeline_c75757b824f&gt; 
+##   Stages 
+##   |--1 SQLTransformer (Transformer)
+##   |    &lt;dplyr_transformer_c757fa84cca&gt; 
+##   |     (Parameters -- Column Names)
+##   |--2 StringIndexer (Estimator)
+##   |    &lt;string_indexer_c75307cbfec&gt; 
+##   |     (Parameters -- Column Names)
+##   |      input_col: Species
+##   |      output_col: label
+##   |     (Parameters)
+##   |      handle_invalid: error</code></pre>
+<p>Under the hood, <code>ft_dplyr_transformer()</code> extracts the SQL statements associated with the input and creates a Spark <code>SQLTransformer</code>, which can then be applied to new datasets with the appropriate columns. We now fit the <code>Pipeline</code> with <code>ml_fit()</code> then transform some data using the resulting <code>PipelineModel</code> with <code>ml_transform()</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pipeline_model <span class="ot">&lt;-</span> pipeline <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_fit</span>(iris_data<span class="sc">$</span>train)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># pipeline_model is a transformer</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>pipeline_model <span class="sc">%&gt;%</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_transform</span>(iris_data<span class="sc">$</span>validation) <span class="sc">%&gt;%</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## Observations: ??
+## Variables: 6
+## $ Petal_Length &lt;dbl&gt; 1.4, 1.3, 1.3, 1.0, 1.6, 1.9, 3.3, 4.5, 1.6, 1.5,...
+## $ Petal_Width  &lt;dbl&gt; 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 1.0, 1.7, 0.2, 0.2,...
+## $ Species      &lt;chr&gt; "setosa", "setosa", "setosa", "setosa", "setosa",...
+## $ Sepal_Length &lt;dbl&gt; 1.482, 1.482, 1.482, 1.526, 1.548, 1.569, 1.589, ...
+## $ Sepal_Width  &lt;dbl&gt; 8.41, 9.00, 10.24, 12.96, 10.24, 11.56, 5.76, 6.2...
+## $ label        &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 0, 2, 1, 1, 1, 0, 1, 1, 1, 1, 1...</code></pre>
+<h3 id="a-predictive-modeling-pipeline" class="anchored">A predictive modeling pipeline</h3>
+<p>Now, let’s try to build a classification pipeline on the <code>iris</code> dataset.</p>
+<p>Spark ML algorithms require that the label column be encoded as numeric and predictor columns be encoded as one vector column. We’ll build on the pipeline we created in the previous section, where we have already included a <code>StringIndexer</code> stage to encode the label column.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define stages</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># vector_assember will concatenate the predictor columns into one vector column</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>vector_assembler <span class="ot">&lt;-</span> <span class="fu">ft_vector_assembler</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  sc, </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">input_cols =</span> <span class="fu">setdiff</span>(<span class="fu">colnames</span>(iris_data<span class="sc">$</span>train), <span class="st">"Species"</span>), </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">output_col =</span> <span class="st">"features"</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>logistic_regression <span class="ot">&lt;-</span> <span class="fu">ml_logistic_regression</span>(sc)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># obtain the labels from the fitted StringIndexerModel</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>labels <span class="ot">&lt;-</span> pipeline_model <span class="sc">%&gt;%</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_stage</span>(<span class="st">"string_indexer"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_labels</span>()</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># IndexToString will convert the predicted numeric values back to class labels</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>index_to_string <span class="ot">&lt;-</span> <span class="fu">ft_index_to_string</span>(sc, <span class="st">"prediction"</span>, <span class="st">"predicted_label"</span>, </span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">labels =</span> labels)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co"># construct a pipeline with these stages</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>prediction_pipeline <span class="ot">&lt;-</span> <span class="fu">ml_pipeline</span>(</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  pipeline, <span class="co"># pipeline from previous section</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  vector_assembler, </span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  logistic_regression,</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  index_to_string</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co"># fit to data and make some predictions</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>prediction_model <span class="ot">&lt;-</span> prediction_pipeline <span class="sc">%&gt;%</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_fit</span>(iris_data<span class="sc">$</span>train)</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> prediction_model <span class="sc">%&gt;%</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_transform</span>(iris_data<span class="sc">$</span>validation)</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>predictions <span class="sc">%&gt;%</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Species, label<span class="sc">:</span>predicted_label) <span class="sc">%&gt;%</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## Observations: ??
+## Variables: 7
+## $ Species         &lt;chr&gt; "setosa", "setosa", "setosa", "setosa", "setos...
+## $ label           &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 0, 2, 1, 1, 1, 0, 1, 1, 1, 1...
+## $ features        &lt;list&gt; [&lt;1.482, 8.410, 1.400, 0.200&gt;, &lt;1.482, 9.000,...
+## $ rawPrediction   &lt;list&gt; [&lt;-67.48, 2170.98, -2103.49&gt;, &lt;-124.4, 2365.8...
+## $ probability     &lt;list&gt; [&lt;0, 1, 0&gt;, &lt;0, 1, 0&gt;, &lt;0, 1, 0&gt;, &lt;0, 1, 0&gt;, ...
+## $ prediction      &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 0, 2, 1, 1, 1, 0, 1, 1, 1, 1...
+## $ predicted_label &lt;chr&gt; "setosa", "setosa", "setosa", "setosa", "setos...</code></pre>
+<h3 id="model-persistence" class="anchored">Model persistence</h3>
+<p>Another benefit of pipelines is reusability across programing languages and easy deployment to production. We can save a pipeline from R as follows:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_save</span>(prediction_model, <span class="st">"path/to/prediction_model"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>When you call <code>ml_save()</code> on a <code>Pipeline</code> or <code>PipelineModel</code> object, all of the information required to recreate it will be saved to disk. You can then load it in the future to, in the case of a <code>PipelineModel</code>, make predictions or, in the case of a <code>Pipeline</code>, retrain on new data.</p>
+<h2 id="machine-learning" class="anchored">Machine learning</h2>
+<p>Sparklyr 0.7 introduces more than 20 new feature transformation and machine learning functions to include the full set of <a href="https://spark.rstudio.com/reference/#section-spark-machine-learning">Spark ML</a> algorithms. We highlight just a couple here.</p>
+<h3 id="bisecting-k-means" class="anchored">Bisecting K-means</h3>
+<p>Bisecting k-means is a variant of k-means that can sometimes be much faster to train. Here we show how to use <code>ml_bisecting_kmeans()</code> with <code>iris</code> data.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">ml_bisecting_kmeans</span>(iris_tbl, Species <span class="sc">~</span> Petal_Length <span class="sc">+</span> Petal_Width, <span class="at">k =</span> <span class="dv">3</span>, <span class="at">seed =</span> <span class="dv">123</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">ml_predict</span>(model, iris_tbl) <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cluster =</span> <span class="fu">as.factor</span>(prediction))</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(predictions, <span class="fu">aes</span>(</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> Petal_Length, </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> Petal_Width, </span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">color =</span> predictions<span class="sc">$</span>cluster)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span> </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="unnamed-chunk-7-1.png" class="img-fluid"></p>
+<h3 id="frequent-pattern-mining" class="anchored">Frequent pattern mining</h3>
+<p><code>ml_fpgrowth()</code> enables <a href="https://en.wikipedia.org/wiki/Association_rule_learning">frequent pattern mining</a> at scale using the FP-Growth algorithm. See the <a href="https://spark.apache.org/docs/2.2.0/ml-frequent-pattern-mining.html">Spark ML documentation</a> for more details. Here we briefly showcase the sparklyr API.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create an item purchase history dataset</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>items <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">items =</span> <span class="fu">c</span>(<span class="st">"1,2,5"</span>, <span class="st">"1,2,3,5"</span>, <span class="st">"1,2"</span>),</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># parse into vector column</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>items_tbl <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, items) <span class="sc">%&gt;%</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">items =</span> <span class="fu">split</span>(items, <span class="st">","</span>))</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># fit the model</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>fp_model <span class="ot">&lt;-</span> items_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_fpgrowth</span>(<span class="at">min_support =</span> <span class="fl">0.5</span>, <span class="at">min_confidence =</span> <span class="fl">0.6</span>)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co"># use the model to predict related items based on</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co">#  learned association rules</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>fp_model <span class="sc">%&gt;%</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_transform</span>(items_tbl) <span class="sc">%&gt;%</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_all</span>(<span class="cf">function</span>(x) <span class="fu">sapply</span>(x, paste0, <span class="at">collapse =</span> <span class="st">","</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## # A tibble: 3 x 2
+##   items   prediction
+##   &lt;chr&gt;   &lt;chr&gt;     
+## 1 1,2,5   ""        
+## 2 1,2,3,5 ""        
+## 3 1,2     5</code></pre>
+<h2 id="data-serialization" class="anchored">Data serialization</h2>
+<p>Various improvements were made to better support serialization and collection of data frames. Most notably, dates are now supported:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">copy_to</span>(sc, nycflights13<span class="sc">::</span>flights) <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(carrier, flight, time_hour)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## # Source:   lazy query [?? x 3]
+## # Database: spark_connection
+##    carrier flight time_hour          
+##    &lt;chr&gt;    &lt;int&gt; &lt;dttm&gt;             
+##  1 UA        1545 2013-01-01 05:00:00
+##  2 UA        1714 2013-01-01 05:00:00
+##  3 AA        1141 2013-01-01 05:00:00
+##  4 B6         725 2013-01-01 05:00:00
+##  5 DL         461 2013-01-01 06:00:00
+##  6 UA        1696 2013-01-01 05:00:00
+##  7 B6         507 2013-01-01 06:00:00
+##  8 EV        5708 2013-01-01 06:00:00
+##  9 B6          79 2013-01-01 06:00:00
+## 10 AA         301 2013-01-01 06:00:00
+## # ... with more rows</code></pre>
+<p>We can’t wait to see what you’ll build with the new features! As always, comments, issue reports, and contributions are welcome on the <a href="https://github.com/rstudio/sparklyr">sparklyr GitHub repo</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

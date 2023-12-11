@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2015-04-13">
+
+<title>RStudio v0.99 Preview: Code Snippets</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio v0.99 Preview: Code Snippets</h1>
+
+<p class="date">2015-04-13</p>
+</header>
+
+<p>We’re getting close to shipping the next version of RStudio (v0.99) and this week will continue our series of posts describing the major new features of the release (previous posts have already covered <a href="https://blog.rstudio.com/2015/02/23/rstudio-v0-99-preview-code-completion/">code completion</a>, the revamped<a href="https://blog.rstudio.com/2015/02/24/rstudio-v0-99-preview-data-viewer-improvements/">data viewer</a>, and improvements to <a href="https://blog.rstudio.com/2015/02/23/rstudio-0-99-preview-vim-mode-improvements/">vim mode</a>). Note that if you want to try out any of the new features now you can do so by downloading the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio Preview Release</a>.</p>
+<h3 id="code-snippets" class="anchored">Code Snippets</h3>
+<p>Code snippets are text macros that are used for quickly inserting common snippets of code. For example, the <code>fun</code> snippet inserts an R function definition:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/04/screen-shot-2015-04-07-at-10-39-50-am.png" class="img-fluid"></p>
+<p></p><figcaption>Insert Snippet</figcaption><p></p>
+</figure>
+</div>
+<p>If you select the snippet from the completion list it will be inserted along with several text placeholders which you can fill in by typing and then pressing <strong>Tab</strong> to advance to the next placeholder:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/04/screen-shot-2015-04-07-at-10-44-39-am.png" class="img-fluid"></p>
+<p></p><figcaption>Screen Shot 2015-04-07 at 10.44.39 AM</figcaption><p></p>
+</figure>
+</div>
+<p>Other useful snippets include:</p>
+<ul>
+<li><p><code>lib</code>, <code>req</code>, and <code>source</code> for the library, require, and source functions</p></li>
+<li><p><code>df</code> and <code>mat</code> for defining data frames and matrices</p></li>
+<li><p><code>if</code>, <code>el</code>, and <code>ei</code> for conditional expressions</p></li>
+<li><p><code>apply</code>, <code>lapply</code>, <code>sapply</code>, etc. for the apply family of functions</p></li>
+<li><p><code>sc</code>, <code>sm</code>, and <code>sg</code> for defining S4 classes/methods.</p></li>
+</ul>
+<p>Snippets are a great way to automate inserting common/boilerplate code and are available for R, C/C++, JavaScript, and several other languages.</p>
+<h3 id="inserting-snippets" class="anchored">Inserting Snippets</h3>
+<p>As illustrated above, code snippets show up alongside other code completion results and can be inserted by picking them from the completion list. By default the completion list will show up automatically when you pause typing for 250 milliseconds and can also be manually activated via the <strong>Tab</strong> key. In addition, if you have typed the character sequence for a snippet and want to insert it immediately (without going through the completion list) you can press <strong>Shift+Tab</strong>.</p>
+<h3 id="customizing-snippets" class="anchored">Customizing Snippets</h3>
+<p>You can edit the built-in snippet definitions and even add snippets of your own via the <strong>Edit Snippets</strong> button in <strong>Global Options</strong> -&gt; <strong>Code</strong>:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/04/screen-shot-2015-04-07-at-10-48-40-am.png" class="img-fluid"></p>
+<p></p><figcaption>Edit Snippets</figcaption><p></p>
+</figure>
+</div>
+<p>Custom snippets are defined using the <code>snippet</code> keyword. The contents of the snippet should be indented below using the <code>&lt;tab&gt;</code> key (rather than with spaces). Variables can be defined using the form <code>{1:varname}</code>. For example, here’s the definition of the <code>setGeneric</code> snippet:</p>
+<pre><code>snippet sg
+  setGeneric("${1:generic}", function(${2:x, ...}) {
+    standardGeneric("${1:generic}")
+  })</code></pre>
+<p>Once you’ve customized snippets for a given language they are written into the <code>~/.R/snippets</code> directory. For example, the customized versions of R and C/C++ snippets are written to:</p>
+<pre><code>~/.R/snippets/r.snippets
+~/.R/snippets/c_cpp.snippets</code></pre>
+<p>You can edit these files directly to customize snippet definitions or you can use the <strong>Edit Snippets</strong> dialog as described above. If you need to move custom snippet definitions to another system then simply place them in <code>~/.R/snippets</code> and they’ll be used in preference to the built-in snippet definitions.</p>
+<h3 id="try-it-out" class="anchored">Try it Out</h3>
+<p>You can give code snippets a try now by downloading the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio Preview Release</a>. If you run into problems or have feedback on how we could make things better let us know on our <a href="https://support.rstudio.com">Support Forum</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

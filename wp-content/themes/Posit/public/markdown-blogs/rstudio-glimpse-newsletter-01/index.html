@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-07-14">
+<meta name="description" content="Welcome to the rstudio::glimpse() newsletter. Get a glimpse into our tools and how to use them.">
+
+<title>rstudio::glimpse() Newsletter</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">rstudio::glimpse() Newsletter</h1>
+
+<p class="date">2022-07-14</p>
+</header>
+
+<div class="lt-gray-box">
+<p>Tracy Teal is the Open Source Program Director at RStudio.<br></p>
+</div>
+<p>It’s the lead up to rstudio::conf(2022), and I’m quickly learning what ‘conf-driven development’ means. There’s a lot going on, and more to come at conf!</p>
+<p>I’ve been here about a year now as the Open Source Program Director, and am excited about what we do everyday. To share that excitement and provide a <code>glimpse()</code> into our tools and how to use them, I’m kicking off this newsletter. I’ll share highlights, new releases, learning resources and some quick tips and tricks. I hope this helps keep you up to date, learn some things, and have some fun too.</p>
+<p>This is my first newsletter, so I’m trying out the format and topic areas. I’d love to hear from you what you think and what you might like to see. Comment in RStudio Community and follow along at our <a href="https://twitter.com/rstudio_glimpse" target="_blank"><span class="citation" data-cites="rstudio_glimpse">@rstudio_glimpse</span> Twitter account</a> too.</p>
+<h2 id="roundup" class="anchored">Roundup</h2>
+<ul>
+<li><strong><a href="https://www.tidyverse.org/blog/2022/06/announce-vetiver/">MLOps in R and Python</a>.</strong> We’re thrilled to <a href="https://www.rstudio.com/blog/announce-vetiver/">announce vetiver</a> to provide fluent tooling to version, share, deploy, and monitor a trained model. Using <a href="http://vetiver.rstudio.com/">vetiver</a> for MLOps lets you use the tools you are comfortable with, in R or Python, for exploratory data analysis and model training/tuning, and provides a flexible framework for the parts of a model lifecycle not served as well by current approaches.</li>
+<li><strong><a href="https://www.tidyverse.org/blog/2022/06/actions-2-0-0/">GitHub actions for R developers v2</a>.</strong> The <a href="https://github.com/r-lib/actions#readme">r-lib/actions repo</a> has a number of reusable actions that perform common R-related tasks that makes continuous integration for R package development easier. <a href="https://www.tidyverse.org/blog/2022/06/actions-2-0-0/#what-is-new">Updates</a> include simpler workflows, snapshots as artifacts, and more!</li>
+<li><strong>Try out <a href="https://www.tidyverse.org/blog/2022/05/case-weights/">case weights in tidymodels</a>.</strong> Case weights are non-negative numbers used to specify how much each observation influences the estimation of a model. This has been in the works for awhile, and the tidymodels team would love feedback.</li>
+<li><strong>Easier installation for TinyTex and tinytex.</strong> TinyTex and tinytex have <a href="https://yihui.org/en/2022/05/tinytex-changes/#migrating-to-the-rstudio-org-on-github">moved GitHub organizations</a> to make it safer to build, install, and manage future contributions. TinyTeX users, you can<a href="https://yihui.org/en/2022/05/tinytex-full/">install the full TeX Live now</a> if you prefer! It’s a few gigabytes and contains all possible LaTeX packages.</li>
+<li><strong>Need to test a Shiny app?</strong> <a href="https://github.com/rstudio/shinytest2">shinytest2</a> provides a streamlined toolkit for <a href="http://schloerke.com/presentation-2022-04-27-appsilon-shinytest2/#0">unit testing Shiny applications</a> and seamlessly integrates with the popular <a href="https://github.com/r-lib/testthat">testthat</a> framework for unit testing R code.</li>
+<li><strong><a href="https://www.rstudio.com/conference/">rstudio::conf(2022)</a> is coming July 25th!</strong> See the <a href="https://www.rstudio.com/conference/2022/schedule/">full schedule</a>. There’s still time to <a href="https://na.eventscloud.com/ereg/newreg.php?eventid=665183&amp;">sign up</a> for in-person workshops or the conference. Head to the <a href="https://www.rstudio.com/conference/">conference page</a> to participate virtually and watch the live streams. You’ll also be able to catch recordings after the conference. There will be so much for all of us to share with each other!</li>
+</ul>
+<h2 id="learn.-teach.-share." class="anchored">Learn. Teach. Share.</h2>
+<ul>
+<li><strong>Playing games with Shiny.</strong> Dragons, numbers and Shiny, what could be better! Jesse Mostipak and Barret Schloerke <a href="https://www.youtube.com/watch?v=sD39WAZo99A&amp;t=216s">live code some Shiny games</a>. Come for the Shiny games, stay for the awesome example of paired coding.</li>
+<li><strong>Wordle with Shiny.</strong> Winston Chang created a Shiny Wordle app, and shows how in this <a href="https://www.youtube.com/playlist?list=PL9HYL-VRX0oQnWIeY_ydYBdU76iQ-tchU">three-part video</a>. I loved it so much, I <a href="https://www.rstudio.com/blog/shiny-wordle-journey/">created my own</a> too!</li>
+<li><strong>Tables. Tables. Tables.</strong> Looking to up your table game, or get started with tables? See the great examples from the <a href="https://community.rstudio.com/c/table-gallery/64">table gallery</a> and Rich Iannone and Jesse Mostipak’s <a href="https://www.youtube.com/playlist?list=PL9HYL-VRX0oR-ISYQHemal6VgxaXHS_GT">amazing tables videos</a> including tables battles, making beautiful tables, and new features in <a href="https://gt.rstudio.com/">gt</a>.</li>
+<li><strong>Torch outside the box.</strong> Sometimes, a software’s best feature is the one you’ve added yourself. See an example of why you <a href="https://blogs.rstudio.com/ai/posts/2022-04-27-torch-outside-the-box/">may want to extend torch</a>, how to proceed, and an <a href="https://blogs.rstudio.com/ai/posts/2022-05-18-torchopt/">example of torchopt</a>.</li>
+<li><strong>Getting started with deep learning in R.</strong> Announcing the <a href="https://blogs.rstudio.com/ai/posts/2022-05-31-deep-learning-with-r-2e/">release of “Deep Learning with R, 2nd Edition,”</a> from François Chollet, Tomasz Kalinowski and J. J. Allaire. The book is over a third longer, with more than 75% new content, so basically a new book! It shows you how to get started with deep learning in R, even if you have no background in mathematics or data science.</li>
+<li><strong>Teaching the tidyverse in 2021.</strong> Mine Çetinkaya-Rundel continues her great series on <a href="https://www.tidyverse.org/blog/2021/08/teach-tidyverse-2021/">teaching the tidyverse</a> and has tips for folks who might want to update their teaching materials to include the last year’s changes in the tidyverse.</li>
+</ul>
+<h2 id="highlighted-how-tos" class="anchored">Highlighted How-To’s</h2>
+<p><a href="https://www.rstudio.com/blog/how-i-use-stories-to-share-data-at-meetings/">How I Use Stories to Share Data at Meetings</a> by Ryan Estrellado. Learn how Ryan more effectively communicates information for data-driven decision making, using the Palmer penguins dataset as an example!</p>
+<p><a href="https://www.rstudio.com/blog/r-markdown-tips-and-tricks-3-time-savers/">R Markdown Tips and Tricks #3: Time-savers and Troubleshooters</a> by Brendan Cullen, Alison Hill and Isabella Velásquez. There’s even more in <a href="https://www.rstudio.com/blog/r-markdown-tips-tricks-1-rstudio-ide/">Part 1: Working in the RStudio IDE</a> and <a href="https://www.rstudio.com/blog/r-markdown-tips-tricks-2-cleaning-up-your-code/">Part 2: Cleaning up your code</a>.</p>
+<h2 id="selected-new-releases" class="anchored">Selected new releases</h2>
+<p><b><a href="https://www.rstudio.com/blog/pins-for-python/">pins for Python</a></b><br> We’re excited to announce the release of pins for Python! pins removes the hassle of managing data across projects, colleagues, and teams by providing a central place for people to store, version and retrieve data. If you’ve ever chased a CSV through a series of email exchanges, or had to decide between data-final.csv and data-final-final.csv, then pins is for you.</p>
+<p><b><a href="https://rstudio.github.io/reticulate/news/index.html">reticulate 1.25</a></b><br> The <a href="https://rstudio.github.io/reticulate/">reticulate</a> package provides a comprehensive set of tools for interoperability between Python and R. New release fixes some issues and has some exception handling changes.</p>
+<p><b><a href="https://www.rstudio.com/blog/changes-for-the-better-in-gt-0-6-0/">gt 0.6.0</a></b><br> <a href="https://gt.rstudio.com/">gt</a> 0.6.0 is here, along with several new functions! Join <a href="https://twitter.com/riannone">Rich Iannone</a> on a tour of these functions and how they work in <a href="https://t.co/vD7YUUi5rN">the release video</a>.</p>
+<p><b><a href="https://github.com/rstudio/distill/releases/tag/v1.4">distill 1.4</a></b><br> New release of <a href="https://rstudio.github.io/distill/">distill</a> fixes some outstanding issues and improves highlighting and code folding.</p>
+<p><b><a href="https://blogs.rstudio.com/ai/posts/2022-06-09-tf-2-9/">TensorFlow and Keras 2.9</a></b><br> These releases bring many refinements that allow for more idiomatic and concise R code.</p>
+<h3 id="tidyverse" class="anchored">tidyverse</h3>
+<p><b><a href="https://www.tidyverse.org/blog/2022/06/dbplyr-2-2-0/">dbplyr 2.2.0</a></b><br> <a href="https://dbplyr.tidyverse.org/">dbplyr</a> is a database backend for dplyr that allows you to use a remote database as if it was a collection of local data frames: you write ordinary dplyr code and dbplyr translates it to SQL for you. This release has improvements to SQL translations and support for dplyr’s <code>row_</code> function.</p>
+<p><b><a href="https://www.tidyverse.org/blog/2022/04/haven-2-5-0/">haven 2.5.0</a></b><br> <a href="https://haven.tidyverse.org/">haven</a> allows you to read and write SAS, SPSS, and Stata data formats from R, thanks to the wonderful ReadStat C library written by Evan Miller.</p>
+<p><b><a href="https://github.com/r-lib/pkgload/releases/tag/v1.3.0">pkgload 1.3.0</a></b><br> The goal of <a href="https://pkgload.r-lib.org/">pkgload</a> is to simulate the process of installing and loading a package, without actually doing the complete process, and hence making package iteration much faster. The main feature in this release is that devtools::load_all() now prompts you to install missing dev deps with pak.</p>
+<p><b><a href="https://github.com/r-lib/rig/releases">rig 0.5.0</a></b><br> <a href="https://github.com/r-lib/rig">rig</a> lets you install and manage multiple #rstats versions on macOS, Windows or Linux. Many exciting new features in this and previous releases, including a macOS menu bar app.</p>
+<p><b><a href="https://rlang.r-lib.org/news/index.html">rlang 1.0.4</a></b><br> <a href="https://rlang.r-lib.org/">rlang</a> is a collection of frameworks and APIs for programming with R. New releases feature an opt-in new display for backtraces that we are considering enabling by default in the future. This new display shows more frames by default and uses colours to deemphasise the parts that were previously hidden.</p>
+<p><b><a href="https://www.tidyverse.org/blog/2022/05/roxygen2-7-2-0/">roxygen2 7.2.0</a></b><br> <a href="https://roxygen2.r-lib.org/">roxygen2</a> allows you to write specially formatted R comments that generate R documentation files (<code>man/*.Rd</code>) and the NAMESPACE file.</p>
+<p><b><a href="https://www.tidyverse.org/blog/2022/04/scales-1-2-0/">scales 1.2.0</a></b><br> The <a href="https://scales.r-lib.org/">scales</a> package provides much of the infrastructure that underlies <a href="https://ggplot2.tidyverse.org/">ggplot2’s</a> scales, and using it allows you to customize the transformations, breaks, and labels used by ggplot2.</p>
+<h3 id="tidymodels" class="anchored">tidymodels</h3>
+<p><b><a href="https://www.tidyverse.org/blog/2022/06/bonsai-0-1-0/">bonsai 0.1.0</a></b><br> This is the first release of the bonsai package on CRAN. bonsai is a parsnip extension package for tree-based models.</p>
+<p><b><a href="http://censored.tidymodels.org/">censored 0.1.0</a></b><br> This is a new package! <a href="http://censored.tidymodels.org/">censored</a> is a parsnip extension package for survival models.</p>
+<p><b><a href="https://www.tidyverse.org/blog/2022/05/recipes-update-05-20222/">recipes extension</a></b><br> <a href="https://recipes.tidymodels.org/">recipes</a> is a package for preprocessing data before using it in models or visualizations. You can think of it as a mash-up of model.matrix() and dplyr.</p>
+<p><b><a href="https://www.tidyverse.org/blog/2022/06/spatialsample-0-2-0/">spatialsample 0.2.0</a></b><br> spatialsample is a package for spatial resampling, extending the rsample framework to help create spatial extrapolation between your analysis and assessment data sets.</p>
+<p><b><a href="https://github.com/tidymodels/stacks">stacks 1.0.0</a></b><br> stacks is on CRAN, enabling stacked ensemble modeling with tidy data principles. See more in this <a href="https://joss.theoj.org/papers/10.21105/joss.04471">short paper on the package published in JOSS</a>.</p>
+<h3 id="shiny" class="anchored">Shiny</h3>
+<p><b><a href="https://rstudio.github.io/chromote/">chromote</a></b><br> chromote is an R implementation of the full Chrome dev tools protocol, providing a headless Chrome Remote Interface. The website has a TON of usage examples!</p>
+<p><b><a href="https://rstudio.github.io/shinytest2/">shinytest2</a></b><br> shinytest2 provides a streamlined toolkit for unit testing Shiny applications and seamlessly integrates with the popular testthat framework for unit testing R code.</p>
+<p><b><a href="http://rstudio.github.io/webshot2">webshot2</a></b><br> webshot2 enables you to take screenshots of web pages from R, replacing webshot by using chromote instead of PhantomJS.</p>
+<h2 id="wrapping-up" class="anchored">Wrapping Up</h2>
+<p>Thank you for reading our first rstudio::glimpse() newsletter. Let me know if you have any comments, ideas or suggestions for what you’d like to see in the newsletter by talking about this post on RStudio Community!</p>
+<p>And finally:</p>
+<details>
+<summary>
+How do computers like their snacks?
+</summary>
+Byte size.
+</details>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

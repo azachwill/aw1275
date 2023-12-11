@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-08-17">
+<meta name="description" content="From design philosophies to current development priorities, R with RStudio is a wonderful environment for anyone who seeks understanding through the analysis of data. Here’s why.">
+
+<title>R &amp; RStudio - The Interoperability Environment for Data Analytics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">R &amp; RStudio - The Interoperability Environment for Data Analytics</h1>
+
+<p class="date">2020-08-17</p>
+</header>
+
+<p>On the RStudio Developer Blog we’ve recently written a series on <a href="https://blog.rstudio.com/2020/07/07/interoperability-july/" target="_blank">interoperability and R</a>, including why <a href="https://blog.rstudio.com/2020/07/15/interoperability-maximize-analytic-investments/" target="_blank">enterprises should embrace workflows that are open to diverse toolsets</a>.</p>
+<p>The designers of R, from its very beginnings, have dealt directly with how best to tap into other tools. Statisticians, analysts, and data scientists have long been challenged to bring together all the statistical methods and technologies required to perform the analysis the situation calls for—and this challenge has grown as more tools, libraries, and frameworks become available.</p>
+<p>John Chambers writing on the design philosophy behind the S programming language, the predecessor to R,</p>
+<blockquote>
+“[W]e wanted to be able to begin in an interactive environment, where they did not consciously think of themselves as programming. Then as their needs become clearer and their sophistication increased, they should be able to slide gradually into programming, when the language and system aspects would become more important.”
+</blockquote>
+<p>Part of this design philosophy is to minimize the amount of effort and overhead required to get your analytics work done. It is not fair to assume that every data scientist is programming all day, or coming from a computer science background, but they still need to implement some of the most sophisticated tools programmers use.</p>
+<p>The ecosystem around R has striven to strike the right balance between a domain specific environment optimized for data science workflows and output, and a general programming environment. For example CRAN, Bioconductor, rOpenSci, and GitHub provide collections of packages written with data science in mind, which extend core R’s functionality, letting you tap into (and share) statistical methods and field-specific tools — when and only when you need them.</p>
+<p>Many of the most popular packages offer interfaces to tools in other languages. For example, most tidyverse packages include compiled (C/C++) code. Interestingly, core R itself connects you to tooling mostly written in other programming languages. As of R 4.0.2 over 75% of the lines in core R’s codebase are written C or Fortran (C 43%, Fortran 33%, &amp; R 23.9%).</p>
+<h2 id="rstudio---design-philosophy-and-development-priorities" class="anchored">RStudio - design philosophy and development priorities</h2>
+<p>Our <a href="https://rstudio.com/about/" target="_blank">mission</a> at RStudio is to create free and open source software for data science, scientific research, and technical communication. R is a wonderful environment for data analysis, and we’ve focused on making it easier to use. We do this through our IDE and <a href="https://rstudio.com/about/pbc-report/" target="_blank">open sources packages</a>, such as the tidyverse. We also do this by making data science easier to learn through <a href="https://rstudio.com/products/cloud/" target="_blank">RStudio Cloud</a> and our support for <a href="https://education.rstudio.com/" target="_blank">data science education</a>. And we help make R easier to manage and scale out across an organization through our <a href="https://rstudio.com/products/team/" target="_blank">our professional products</a>, supporting best practices for data science in the enterprise through our <a href="https://solutions.rstudio.com/" target="_blank">solutions team</a>.</p>
+<p>As part of this effort, we have focused heavily on enabling and supporting interoperability between R and other tools. We recently outlined in a <a href="https://blog.rstudio.com/2020/07/07/interoperability-july/" target="_blank">recent blog post</a> how the RStudio IDE allows you to embed many different languages in RMarkdown documents, including:</p>
+<ul>
+<li><strong>Using R &amp; Python together</strong> through the <code>reticulate</code> package</li>
+<li><strong>SQL code</strong> for accessing databases,</li>
+<li><strong>BASH code</strong> for shell scripts,</li>
+<li><strong>C and C++ code</strong> using the <code>Rcpp</code> package,</li>
+<li><strong>STAN code</strong> with <code>rstan</code> for Bayesian modeling,</li>
+<li><strong>Javascript</strong> for doing web programming,</li>
+<li><strong>and many more languages</strong>. You can find a complete list of the many platforms supported in the language engines chapter of the book, <a href="https://bookdown.org/yihui/rmarkdown/language-engines.html" target="_blank">R Markdown: The Definitive Guide</a>.</li>
+</ul>
+<p>And we work with the community to support:</p>
+<ul>
+<li>Bilingual data science teams, by providing a single platform for data scientists to develop in R or Python (<a href="https://rstudio.com/products/rstudio-server-pro/" target="_blank">RStudio Server Pro</a>), and to deploy applications built with either (through <a href="https://rstudio.com/products/connect/" target="_blank">RStudio Connect</a>)</li>
+<li>Making it easy to create web applications with shiny or put models into production via plumber APIs</li>
+<li>Supporting easy access to data sources, such <code>odbc</code>, <code>DBI</code>, and <code>dbplyr</code> for <a href="https://db.rstudio.com/" target="_blank">database access and wrangling</a>.</li>
+<li>Incubating <a href="https://ursalabs.org/" target="_blank">Ursa Labs</a>, which is focused on building the next generation of cross language tools, leveraging the Apache Arrow project.</li>
+<li>Integration from R with other modeling frameworks, including <a href="https://tensorflow.rstudio.com/" target="_blank">TensorFlow</a> and <a href="https://spark.rstudio.com/mlib/" target="_blank">SparkMLlib</a></li>
+<li>Using <a href="https://spark.rstudio.com/" target="_blank">Sparklyr</a> and <a href="https://docs.rstudio.com/rsp/integration/launcher-kubernetes/" target="_blank">Launcher with kubernetes</a> to distribute your calculations or modeling operations over many machines, <em>which we will be discussing in more depth in an upcoming blog post</em>.</li>
+</ul>
+<p>This list goes on and on and grows by the week.</p>
+<p>R with RStudio is a wonderful environment for anyone who seeks understanding through the analysis of data. It does this by finding a balance between a domain specific environment and a general programming language that doesn’t prioritize data scientists. That is, it strives to be an environment optimized for analytics workflows and output. At the fulcrum of this balance is extensive interoperability, the ability to pull in interfaces into other technologies as they are needed, and a vibrant community sustaining these. This has been the goal for R since initial design principles, through the extensive work shared by the R community, and significant continued investment by RStudio.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

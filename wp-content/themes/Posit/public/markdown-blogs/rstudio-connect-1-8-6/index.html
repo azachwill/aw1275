@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-12-16">
+
+<title>RStudio Connect 1.8.6</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Connect 1.8.6</h1>
+
+<p class="date">2020-12-16</p>
+</header>
+
+<p>RStudio Connect helps teams of all sizes operationalize their data science work, and provides a single point of access to data products for decision makers. In this release, we have emphasized features that will help address maturing DevOps requirements within organizations seeking to deploy and scale data science.</p>
+<p>This release of RStudio Connect builds on the existing Server API, making experimental endpoints officially supported and introducing a brand new slate of API improvements based on feedback we’ve received from the community.</p>
+<ul>
+<li><strong>Automate Deployments</strong> Learn how to implement CI/CD pipelines or programmatic publishing with the RStudio Connect Server API … <a href="https://blog.rstudio.com/2020/12/16/rstudio-connect-1-8-6-deployment-api/">read more</a></li>
+<li><strong>Audit Server Content</strong> Explore new auditing and content management workflows with the RStudio Connect Server API … <a href="https://blog.rstudio.com/2020/12/16/rstudio-connect-1-8-6-server-api/">read more</a></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="template-report-showcase.png" class="img-fluid"></p>
+<p></p><figcaption>RStudio Connect Server API - Report Showcase Examples</figcaption><p></p>
+</figure>
+</div>
+<h5 align="center" class="anchored">
+Visit the <a href="https://solutions.rstudio.com/examples/rsc-server-api-overview/">RStudio Connect Server API Showcase</a> for access to code examples and template reports that can be deployed straight to your own Connect server.
+</h5>
+<ul>
+<li><strong>Bokeh and Streamlit</strong> support has now moved from Beta to being Generally Available … <a href="https://blog.rstudio.com/2020/12/16/rstudio-connect-1-8-6-python-update/">read more</a></li>
+<li><strong>LDAP / Active Directory</strong> Groups will now be synchronized via a background process on a scheduled interval. This change enables support for <code>session$groups</code> in Shiny applications … <a href="https://blog.rstudio.com/2020/12/16/rstudio-connect-1-8-6-admin-digest/">read more</a></li>
+</ul>
+<h3 align="center" class="anchored">
+<a href="https://rstudio.chilipiper.com/book/rsc-demo">See RStudio Connect in Action</a>
+</h3>
+<blockquote>
+<p>Note: This release includes some deprecations and breaking changes. Please read <a href="https://blog.rstudio.com/2020/12/16/rstudio-connect-1-8-6-admin-digest/">more here</a>, or review the <a href="https://docs.rstudio.com/connect/news/#rstudio-connect-186">release notes</a>.</p>
+</blockquote>
+<p>To receive email notifications for RStudio professional product releases, patches, security information, and general product support updates, subscribe to the <strong>Product Information</strong> list by visiting the RStudio <a href="https://rstudio.com/about/subscription-management/">subscription management portal</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

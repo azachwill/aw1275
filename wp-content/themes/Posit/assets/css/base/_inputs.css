@@ -1,0 +1,49 @@
+@layer utilities {
+    .label-on-dark,
+    .label-on-light {
+        @apply mb-[8px];
+    }
+
+    .label-on-dark {
+        @apply flex flex-col ui-small text-neutral-light uppercase;
+    }
+
+    .label-on-light {
+        @apply flex flex-col ui-small text-blue1 uppercase;
+    }
+
+    .input-on-light,
+    .input-on-dark {
+        @apply h-full w-full rounded-[4px] py-[18px] px-[24px] body-md-regular border outline-none
+        placeholder:body-md-regular
+        focus:outline-none;
+    }
+
+    .input-on-light {
+        @apply bg-neutral-light text-blue1/[.62] border-gray4
+        placeholder:focus:text-blue1/[.62] placeholder-blue1/[.62]
+        hover:border-gray2
+        focus:border-blue3 focus:ring focus:ring-inset focus:ring-blue4/20
+        disabled:border-gray4 disabled:bg-blue1/10;
+    }
+
+    .input-on-dark {
+        @apply bg-blue1/60 text-neutral-light/60 border-neutral-light/40
+        placeholder:focus:text-neutral-light/60 placeholder-neutral-light/60
+        hover:border-neutral-light/80
+        focus:border-blue4 focus:ring focus:ring-inset focus:ring-blue4/20
+        disabled:border-neutral-light/40 disabled:bg-neutral-light/10;
+    }
+
+    input.invalid {
+        @apply border-orange ring ring-inset ring-orange/20 focus:ring-inset focus:ring-orange/20 !important;
+    }
+
+    .input-error {
+        @apply invisible text-orange body-xs-regular mt-[8px];
+    }
+
+    .input-error.invalid {
+        @apply visible;
+    }
+}

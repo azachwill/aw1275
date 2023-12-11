@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2018-09-12">
+
+<title>posit-blogs - Getting started with deep learning in R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Getting started with deep learning in R</h1>
+
+<p class="date">2018-09-12</p>
+</header>
+
+<blockquote>
+<p class="body-md-regular body-sm-regular">
+Please note that the information presented in this post reflects the package as it stood when initially released, and may now be outdated. For the most up-to-date information, kindly refer to <a href="https://blogs.rstudio.com/ai/posts/2022-05-31-deep-learning-with-r-2e/" class="uri">https://blogs.rstudio.com/ai/posts/2022-05-31-deep-learning-with-r-2e/</a>.
+</p>
+</blockquote>
+<p>There are good reasons to get into deep learning: Deep learning has been outperforming the respective “classical” techniques in areas like image recognition and natural language processing for a while now, and it has the potential to bring interesting insights even to the analysis of tabular data. For many R users interested in deep learning, the hurdle is not so much the mathematical prerequisites (as many have a background in statistics or empirical sciences), but rather how to get started in an efficient way.</p>
+<p>This post will give an overview of some materials that should prove useful. In the case that you don’t have that background in statistics or similar, we will also present a few helpful resources to catch up with “the math”.</p>
+<h2 id="keras-tutorials" class="anchored">Keras tutorials</h2>
+<p>The easiest way to get started is using the Keras API. It is a high-level, declarative (in feel) way of specifying a model, training and testing it, originally developed in <a href="http://keras.io">Python</a> by Francois Chollet and ported to R by JJ Allaire.</p>
+<p>Check out the tutorials on the <a href="https://tensorflow.rstudio.com/keras/">Keras website</a>: They introduce basic tasks like classification and regression, as well as basic workflow elements like saving and restoring models, or assessing model performance.</p>
+<ul>
+<li><p><a href="https://tensorflow.rstudio.com/keras/articles/tutorial_basic_classification.html">Basic classification</a> gets you started doing image classification using the <em>Fashion MNIST</em> dataset.</p></li>
+<li><p><a href="https://tensorflow.rstudio.com/keras/articles/tutorial_basic_text_classification.html">Text classification</a> shows how to do sentiment analysis on movie reviews, and includes the important topic of how to preprocess text for deep learning.</p></li>
+<li><p><a href="https://tensorflow.rstudio.com/keras/articles/tutorial_basic_regression.html">Basic regression</a> demonstrates the task of predicting a continuous variable by example of the famous Boston housing dataset that ships with Keras.</p></li>
+<li><p><a href="https://tensorflow.rstudio.com/keras/articles/tutorial_overfit_underfit.html">Overfitting and underfitting</a> explains how you can assess if your model is under- or over-fitting, and what remedies to take.</p></li>
+<li><p>Last but not least, <a href="https://tensorflow.rstudio.com/keras/articles/tutorial_save_and_restore.html">Save and restore models</a> shows how to save checkpoints during and after training, so you don’t lose the fruit of the network’s labor.</p></li>
+</ul>
+<p>Once you’ve seen the basics, the website also has more advanced information on implementing custom logic, monitoring and tuning, as well as using and adapting pre-trained models.</p>
+<h2 id="videos-and-book" class="anchored">Videos and book</h2>
+<p>If you want a bit more conceptual background, the <a href="https://bit.ly/2oPtXWv">Deep Learning with R in motion</a> video series provides a nice introduction to basic concepts of machine learning and deep learning, including things often taken for granted, such as derivatives and gradients.</p>
+<figure>
+<a href="https://bit.ly/2oPtXWv"> <img src="https://blogs.rstudio.com/tensorflow/posts/2018-09-07-getting-started/images/dl_in_motion.png" style="border: 1px solid rgba(0, 0, 0, 0.2);"> </a>
+<figcaption>
+<em>Example from Deep Learning with R in motion, video 2.7, From Derivatives to Gradients</em>
+</figcaption>
+</figure>
+<p>The first 2 components of the video series (<a href="https://bit.ly/2oPtXWv">Getting Started</a> and the <a href="https://bit.ly/2MY6YHj">MNIST Case Study</a>) are free. The remainder of the videos introduce different neural network architectures by way of detailed case studies.</p>
+<p><a href="https://www.amazon.com/Deep-Learning-R-Francois-Chollet/dp/161729554X"> <img src="https://blogs.rstudio.com/tensorflow/posts/2018-09-07-getting-started/images/dlwR.png" style="width: 15%; border: 1px solid rgba(0, 0, 0, 0.2); float:right; margin-left: 20px; margin-right: 40px;"> </a></p>
+<p>The series is a companion to the <a href="https://www.amazon.com/Deep-Learning-R-Francois-Chollet/dp/161729554X">Deep Learning with R</a> book by Francois Chollet and JJ Allaire.</p>
+<p>Like the videos, the book has excellent, high-level explanations of deep learning concepts. At the same time, it contains lots of ready-to-use code, presenting examples for all the major architectures and use cases (including fancy stuff like variational autoencoders and GANs).</p>
+<p><br></p>
+<h2 id="inspiration" class="anchored">Inspiration</h2>
+<p>If you’re not pursuing a specific goal, but in general curious about what can be done with deep learning, a good place to follow is the <a href="https://blogs.rstudio.com/tensorflow/">TensorFlow for R Blog</a>. There, you’ll find applications of deep learning to business as well as scientific tasks, as well as technical expositions and introductions to new features.</p>
+<figure>
+<a href="https://blogs.rstudio.com/tensorflow/"> <img src="2018-09-12-tensorflow-blog.png" style="border: 1px solid rgba(0, 0, 0, 0.2);"> </a>
+</figure>
+<p>In addition, the <a href="https://blogs.rstudio.com/tensorflow/gallery.html">TensorFlow for R Gallery</a> highlights several case studies that have proven especially useful for getting started in various areas of application.</p>
+<h2 id="reality" class="anchored">Reality</h2>
+<p>Once the ideas are there, realization should follow, and for most of us the question will be: Where can I actually <em>train</em> that model? As soon as real-world-size images are involved, or other kinds of higher-dimensional data, you’ll need a modern, high performance GPU so training on your laptop won’t be an option any more.</p>
+<p>There are a few different ways you can train in the cloud:</p>
+<ul>
+<li><p>RStudio provides <a href="https://tensorflow.rstudio.com/tools/cloud_server_gpu.html">Amazon EC2 AMIs for cloud GPU instances</a>. The AMI has both RStudio Server and the R TensorFlow package suite preinstalled.</p></li>
+<li><p>You can also try out <a href="https://tensorflow.rstudio.com/tools/cloud_desktop_gpu.html">Paperspace cloud GPU desktops</a> (again with the RStudio and the R TensorFlow package suite preinstalled).</p></li>
+<li><p>The <em>cloudml</em> package provides an <a href="https://tensorflow.rstudio.com/tools/cloudml/articles/getting_started.html">interface to the Google Cloud Machine Learning engine</a>, which makes it easy to submit batch GPU training jobs to CloudML.</p></li>
+</ul>
+<h2 id="more-background" class="anchored">More background</h2>
+<p>If you don’t have a very “mathy” background, you might feel that you’d like to supplement the concepts-focused approach from <em>Deep Learning with R</em> with a bit more low-level basics (just as some people feel the need to know at least a bit of C or Assembler when learning a high-level language).</p>
+<p>Personal recommendations for such cases would include Andrew Ng’s <a href="https://www.coursera.org/specializations/deep-learning">deep learning specialization</a> on Coursera (videos are free to watch), and the book(s) and recorded lectures on linear algebra by <a href="https://ocw.mit.edu/courses/mathematics/18-06-linear-algebra-spring-2010/video-lectures/">Gilbert Strang</a>.</p>
+<p>Of course, the ultimate reference on deep learning, as of today, is the <a href="https://www.deeplearningbook.org">Deep Learning</a> textbook by Ian Goodfellow, Yoshua Bengio and Aaron Courville. The book covers everything from background in linear algebra, probability theory and optimization via basic architectures such as CNNs or RNNs, on to unsupervised models on the frontier of the very latest research.</p>
+<h2 id="getting-help" class="anchored">Getting help</h2>
+<p>Last not least, should you encounter problems with the software (or with mapping your task to runnable code), a good idea is to create a GitHub issue in the respective repository, e.g., <a href="https://github.com/rstudio/keras/">rstudio/keras</a>.</p>
+<p>Best of luck for your deep learning journey with R!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+
+
+
+</body></html>

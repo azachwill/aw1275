@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="RStudio Workbench’s 2022.02 release includes several new features and updates to provide increased security, automated session suspension, new launcher functionality, and more.">
+
+<title>RStudio Workbench 2022.02.0 Release</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Workbench 2022.02.0 Release</h1>
+
+<p class="date">2022-02-22T01:20:00-06:00</p>
+</header>
+
+<p>RStudio Workbench’s 2022.02 release, code-named Prairie Trillium, includes many new and exciting features and updates. Today we’ll highlight a few noteworthy features:</p>
+<ul>
+<li><p><a href="#specifying-r-versions-in-the-ad-hoc-launcher">Specifying R Versions in the Ad Hoc Job Launcher</a></p></li>
+<li><p><a href="#session-suspension">Session Suspension</a></p></li>
+<li><p><a href="#ssl-communication-between-rstudio-workbench-and-launcher-sessions">SSL Communication Between RStudio Workbench and Launcher Sessions</a></p></li>
+<li><p><a href="#new-job-launcher-release">New Job Launcher Release</a>.</p></li>
+</ul>
+<p>To read about all of the new features and updates available in this release, check out the latest <a href="https://www.rstudio.com/products/rstudio/release-notes/" target="_blank">Release Notes</a>. For more detailed explanations, visit the <a href="https://docs.rstudio.com/ide/server-pro" target="_blank">RStudio Workbench Admin Guide</a>.</p>
+<h1 id="specifying-r-versions-in-the-ad-hoc-launcher">Specifying R Versions in the Ad Hoc Launcher</h1>
+<p>You are now able to select the R version your script will run with when running a script as a launcher job. From the Environment tab, simply select the version from the new R version drop-down menu, as shown below. The default option is “(Use System Default)”, which is the version that was used prior to this new option. <img src="./rVersionLauncher.png" class="img-fluid" alt="The “Run Script as Launcher Job” modal in RStudio Workbench"></p>
+<p>If you’ve configured the script to run in a different cluster or with a different image from your active RStudio session, a “User-specified…” option will be available in the menu. Selecting this option displays a free-form text field where you can type the <code>R_HOME</code> path of the R version you’d like the script to run with.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="rVersionOtherEnvironment.png" class="img-fluid"></p>
+<p></p><figcaption>The “Run Script as Launcher Job” modal in RStudio Workbench with the “User specified…” “R version” option selected</figcaption><p></p>
+</figure>
+</div>
+<h1 id="session-suspension">Session Suspension</h1>
+<p>RStudio sessions now provide more insight into session states that will prevent a session from auto-suspending. This is particularly useful for RStudio Cloud users, or other RStudio Server or RStudio Workbench environments where users are charged for the amount of time a session is active.</p>
+<p>To indicate that RStudio is doing something that will prevent auto-suspension, a new icon (<img src="suspendBlocked.png" class="img-fluid" alt="Session suspend blocked icon">) appears in the console toolbar. A mouse-over the icon will list everything that is currently blocking auto-suspension:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="./sessionAutoSuspendBlocked.png" class="img-fluid"></p>
+<p></p><figcaption>Session auto-suspend paused due to an R script job running</figcaption><p></p>
+</figure>
+</div>
+<p>By default, the icon will appear 5 seconds after a suspension-blocking task begins. This behavior can be configured or disabled in the Global Options Console pane.</p>
+<h2 id="session-welcome-message" class="anchored">Session Welcome Message</h2>
+<p>When returning to a session that is either active or was suspended, you are now greeted with a welcome message in the R console.</p>
+<p>For example, when returning to a session that was suspended, you will see a message like the following:</p>
+<pre><code>Session restored from your saved work on 2022-Feb-19 11:26:00 UTC (2 days ago)</code></pre>
+<p>And when returning to a session that has been active, you will see a message like this:</p>
+<pre><code>Connected to your session in progress, last started 2022-Feb-11 15:36:00 UTC (4 hours ago)</code></pre>
+<h2 id="session-suspend-logs" class="anchored">Session Suspend Logs</h2>
+<p>Server logs can be generated each time a session is blocked from suspending. These can be useful in determining why a session did not suspend. To view them, ask your System Administrator to enable Information-level logging and look for the <code>SessionTimeoutSuspendBlocked</code> message.</p>
+<h1 id="ssl-communication-between-rstudio-workbench-and-launcher-sessions">SSL Communication Between RStudio Workbench and Launcher Sessions</h1>
+<p>This release adds secure socket communication between RStudio Workbench and sessions running in Kubernetes or Slurm clusters. This applies to all session types: RStudio, VS Code, and Jupyter. It’s enabled by default using automatically provisioned certificates, created per job. Read more in the <a href="https://docs.rstudio.com/ide/server-pro/latest/access_and_security/secure_sockets.html#secure-session-communication" target="_blank">RStudio Workbench Admin Guide</a>.</p>
+<h1 id="new-job-launcher-release">New Job Launcher Release</h1>
+<p>RStudio Workbench 2022.02 comes bundled with our latest release of the Job Launcher. The new release adds an exciting new feature - Kubernetes Templating. You have complete control over how the Launcher submits jobs and services to Kubernetes, by editing them using a format similar to <a href="https://helm.sh/" target="_blank">Helm Charts</a>. This Helm-style format provides conditional logic to allow you to change fields on the job like annotations, labels, as well as providing you the ability to run user-defined functions for complete integration with outside business logic.</p>
+<p>This new feature can be enabled by setting <code>use-templating=1</code> in <code>launcher.kubernetes.conf</code>. This feature completely supersedes the job-json-overrides feature, which is now deprecated. See the <a href="https://docs.rstudio.com/job-launcher/kube.html" target="_blank">Kubernetes plugin documentation</a> for more details.</p>
+<p>Thank you for taking the time to read about a few of the features we’re most excited about in the 2022.02 RStudio Workbench release! For detailed instructions on upgrading from a prior release or RStudio Open Source, visit <a href="https://docs.rstudio.com/rsw/upgrade/" target="blank_">Upgrade RStudio Workbench</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-06-28">
+<meta name="description" content="Announcing the 1.8.0 release of the RStudio Professional Drivers, with a fully supported Snowflake driver, a more compatible NTLMv2 support for the Microsoft SQLServer driver, and other updated drivers.">
+
+<title>RStudio Professional Drivers 1.8.0</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Professional Drivers 1.8.0</h1>
+
+<p class="date">2021-06-28</p>
+</header>
+
+<h2 id="announcing-full-support-for-the-snowflake-driver" class="anchored">Announcing full support for the Snowflake driver</h2>
+<p>In the <a href="https://blog.rstudio.com/2021/03/10/pro-drivers-1-7-0-release/">previous release</a> we included a preview of the Snowflake driver. This new release provides full ODBC, <code>dbplyr</code>, and Python support for Snowflake, as well as corrects some issues that occurred on new installations.</p>
+<p>This release makes working with the Snowflake data cloud as easy as working with other <a href="https://docs.rstudio.com/pro-drivers/">supported data sources</a>. For example, the same <a href="https://dplyr.tidyverse.org/"><code>dplyr</code></a> syntax used with data in R will also work with data in Snowflake. In the code below, data from the <a href="https://cran.r-project.org/web/packages/nycflights13/index.html"><code>nycflights13</code></a> package were pre-loaded into a Snowflake data warehouse and then queried from R using the Snowflake ODBC driver. Notice that the same <code>dplyr</code> syntax used here will also work on an R data frame. The results from the query were then collected into R and visualized with <a href="https://ggplot2.tidyverse.org/"><code>ggplot2</code></a>. For more information on using databases with R, see <a href="https://db.rstudio.com/">db.rstudio.com</a>.</p>
+<pre><code>library(DBI)
+library(dplyr)
+library(ggplot2)
+
+con &lt;- dbConnect(odbc::odbc(), "Snowflake")
+
+tbl(con, "FLIGHTS") %&gt;%
+  filter(distance &gt; 75) %&gt;%
+  group_by(origin, hour) %&gt;%
+  summarise(delay = mean(dep_delay, na.rm = TRUE)) %&gt;%
+  collect() %&gt;%
+  ggplot(aes(hour, delay, color = origin)) + geom_line()</code></pre>
+<p><img align="center" style="padding: 35px:" src="viz-snowflake-flights.png"></p>
+<h2 id="enhancements-for-microsoft-sql-server-and-ntlm-authentication" class="anchored">Enhancements for Microsoft SQL Server and NTLM authentication</h2>
+<p>This release of the drivers includes an updated version of the SQL Server driver that supports environments using exclusively NTLM v2 authentication. Please refer to the <a href="https://docs.rstudio.com/pro-drivers/documentation/#version-180">documentation</a> for the SQL Server driver in this release for additional details.</p>
+<h2 id="fixed-issues-with-mysql-commands" class="anchored">Fixed issues with MySQL commands</h2>
+<p>The previous release of the drivers introduced a regression for certain MySQL commands such as <code>USE &lt;database&gt;</code> and <code>LOAD DATA INFILE</code>. This new release restores that functionality.</p>
+<h2 id="updating-the-rstudio-pro-drivers" class="anchored">Updating the RStudio Pro Drivers</h2>
+<p><em>We strongly encourage all customers to upgrade to the 1.8.0 release of the RStudio Professional Drivers</em>. This release contains important updates that will help keep your data connections secure and easy to manage. <a href="https://docs.rstudio.com/pro-drivers/upgrade/">Upgrading drivers</a> literally takes minutes and can help prevent future security and administrative issues. For a full list of changes in this release refer to the <a href="https://docs.rstudio.com/drivers/1.8.0/release-notes/">release notes</a>.</p>
+<h2 id="about-the-rstudio-pro-drivers" class="anchored">About the RStudio Pro Drivers</h2>
+<p>RStudio offers ODBC database drivers to all current customers using our professional products at no additional charge, so that data scientists and organizations can take full advantage of their data. The drivers are an important part of our effort to promote <a href="https://blog.rstudio.com/2020/07/15/interoperability-maximize-analytic-investments/">interoperability</a> between systems and data science languages like R and Python. The <a href="https://rstudio.com/products/drivers/">RStudio Pro Drivers</a> are commercially licensed and covered by our <a href="https://www.rstudio.com/about/support-agreement/">support program</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

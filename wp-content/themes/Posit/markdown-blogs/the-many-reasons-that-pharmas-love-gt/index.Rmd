@@ -1,0 +1,307 @@
+---
+title: "The many reasons that pharmas love {gt}"
+date: '2023-08-23'
+slug: the-many-reasons-that-pharmas-love-gt
+tags:
+  - gt
+authors:
+  - Alexandra Lauer
+description: We've vastly improved the `summary_rows()` and `grand_summary_rows()` functions in {gt} version 0.9.0.
+alttext: Add alt text for header image.
+blogcategories:
+  - Open Source
+  - Products and Technology
+events: blog
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE)
+library(tidyverse)
+library(gt)
+data("rx_adsl", package = "gt")
+```
+
+There is hardly anybody in the pharmaceutical industry who still argues that R is not a fit-for-purpose programming language for statistical analyses. An abundance of packages for statistical procedures and graphical displays make it easy to use R for all applications, from descriptive statistics to advanced analytics. In their daily job, biostatisticians plan and conduct analyses to draw inferences from clinical study data. In this context, the presentation of outcomes for result dissemination is an integral part of the statistical analyses. 
+
+Tables play an essential role in all statistical applications, ranging from exploratory analyses, internal insights generation, and the clinical study report to the final study submission package to be shared with regulatory bodies. The most important output formats for the pharmaceutical industry, however, aren't to be found in interactive Shiny applications, but rather static PDF, RTF, and Word formats. The complexity of these tables then lies in their structure and the data aggregation steps required.
+
+A variety of R packages for the generation of tables exists in the R ecosystem. One of the most widely used ones by far is [gt](https://gt.rstudio.com/), written by Rich Iannone. While a lot of people think that **gt** was an acronym for Grammar of Tables, the package name truly originates from Rich's love for cars. `gtcars`, one of the package's built-in datasets, gives you a hint!
+
+While **gt** seems to be widely used across several industries, the package's strength with regard to the creation of pharma-specific clinical tables has never been too strongly promoted. The brilliant features facilitating the creation of complex tables simply weren't showcased on the package homepage. When I had the chance to talk to Rich at R in Pharma 2022, I addressed this point with him and we immediately started to draft an article for clinical tables. This was exciting!
+
+## There's even more to love with v0.9.0
+
+Version v0.9.0 now contains two CDISC ADaM-flavored datasets and an article about [clinical tables](https://gt.rstudio.com/articles/case-study-clinical-tables.html), which shows users how to create a basic demographic table, a responder table (with subgroups), and a summary of protocol deviations. None of these tables are hard to create, thanks to **gt**'s very declarative user interface, but the data wrangling up front needs to be right (mainly because ADaM data is anything but tidy, but never mind).
+
+
+Two new dummy clinical trial datasets were added with the last release: `rx_adsl` and `rx_addv`. `rx_adsl` contains subject-level demographic information from `r nrow(rx_adsl)` dummy participants, randomized to either an active treatment or placebo in a clinical trial. `rx_addv` contains information about protocol deviations during the course of the trial. The data, as well as the **GT01** study referenced, are simulated without any connection to a real clinical trial, but it allows us to explore **gt**'s many strengths for table creation from ADaM(-like) data.
+
+The many new and exciting features, however, deserve the greatest attention. In this blog post, I would like to highlight a couple of them.
+
+## Summary rows
+
+Summary rows in clinical (and a lot of other) tables are usually placed at the top of the group. While it was not possible to change the location of the summary row in former **gt** versions, `summary_rows()` now has the option to choose between `side = "bottom"` (default) and `side = "top"`.
+
+```{r summary_row_ex}
+gt::rx_adsl |>
+  dplyr::filter(RANDFL == "N") |>
+  dplyr::select(USUBJID, SCRFREAS) |>
+  gt() |>
+  tab_row_group(label = "Subjects not randomized:",
+                rows = everything()) |>
+  summary_rows(
+    columns = "USUBJID",
+    fns = list("Screen Failures" ~ paste0("n=", dplyr::n())),
+    side = "top"
+  )
+```
+
+## More flexibility with `cols_merge*()`
+
+I particularly love the `cols_merge*()` functions and think they are a main strength of **gt**. Why? Because they allow you to combine data from several columns in the output table without loss of underlying information on a data frame level by means of rounding or even conversion of numbers to strings. Gone are the days of my inflationary use of `sprintf()`!
+
+Think of a cell in your table displaying the number of patients with a certain condition along with corresponding percentages in relation to the overall number of patients. **gt** allows you to retain all information about unrounded and unformatted information of percentages in case these are needed for a data frame comparison, say, but combine numbers and percentages in a nicely formatted cell in your table. 
+
+v0.9.0 now provides more flexibility for `cols_merge*()` in the presence of columns with `NA`s. Let's look into an example. This could come from a standard demographic table:
+
+```{r}
+demo_df <- tibble::tribble(
+      ~variable,               ~lbl, ~col_n, ~col_median, ~col_q1, ~col_q3,
+  "Age (years)",                 NA,     NA,          NA,      NA,      NA,
+            " ",                "n",      7,          NA,      NA,      NA,
+            " ", "Median (Q1 - Q3)",     NA,          42,      31,      55
+  )
+
+demo_df |>
+  gt() |>
+  cols_merge(columns = c("col_n", "col_median", "col_q1", "col_q3"),
+             pattern = "<<{1}>><<{2} ({3} - {4})>>") |>
+  cols_label("col_n" = "Drug 1")
+```
+
+See how `<< >>` lets you choose which values to omit in the case of `NA`s and which values to combine? For the `n` row in the table, only the column `col_n` should be displayed and the content from other columns should not be shown at all. Likewise, columns `col_median`, `col_q1`, and `col_q3` are merged wherever the three values aren't missing, and content from the empty `col_n` is omitted. I really love this new feature!
+
+
+If you're not that much into the `<<>>` notation, you might like `cols_merge()`'s new `rows` argument. This argument specifies which body cells get merged together. You can end up with the same table as above with two rounds of `cols_merge()` (but no angle brackets used) and a little help from `sub_missing()`.
+
+```{r}
+demo_df |>
+  gt() |>
+  cols_merge(
+    columns = c("col_median", "col_q1", "col_q3"),
+    pattern = "{1} ({2} - {3})",
+    rows = lbl == "Median (Q1 - Q3)"
+  ) |>
+  sub_missing(missing_text = "") |>
+  cols_merge(columns = c(col_n, col_median)) |>
+  cols_label("col_n" = "Drug 1")
+```
+
+
+## Function argument for `cols_label()`
+
+Imagine we're creating a clinical table, and our table body contains cell values derived from one ADaM dataset, while the header should display the usual information about the arm, together with the number of subjects `N`, which usually comes from the subject-level analysis dataset ADSL.
+
+In this case, we would start with the table header generation, off of ADSL, counting the number of subjects per arm in our population of interest. We would save this information in a list, which is then passed to **gt**'s `cols_label()`. The latest update to `cols_label()` now allows us to apply functions like `md()` or `html()` to the elements of the table header list, giving the user more flexibility for formatting.
+
+```{r}
+my_header <- gt::rx_adsl |>
+  dplyr::filter(ITTFL == "Y") |>
+  dplyr::group_by(TRTA) |>
+  dplyr::summarize(HEADER_LBL = sprintf("%s<br>(N=%i)", 
+                                        unique(TRTA), 
+                                        dplyr::n()),
+                   .groups = "drop") 
+
+### This is the list of treatment arms as per the TRTA column and header labels with patient counts
+
+header_list <- as.list(my_header$HEADER_LBL)
+names(header_list) <- my_header$TRTA
+
+### Let's create a simple table for subjects with at least one protocol deviation
+
+rx_addv |>
+  dplyr::filter(PARAMCD == "PDANYM") |>
+  dplyr::group_by(TRTA, PARAM) |>
+  dplyr::summarize(N = sum(AVAL),
+                   .groups = "drop") |>
+  tidyr::pivot_wider(names_from = TRTA,
+                     values_from = N) |>
+  gt() |>
+  cols_label(.list = header_list,
+             .fn = html)
+```
+
+This is a great new feature. The function supplied through the argument `.fn` is applied to all elements of the list `header_list` and saves us a ton of manual coding.
+
+## Colors and interactivity - food for thought
+
+I have never been a big fan of listings, but sometimes there is just no way around them. Let's look into an example of an arbitrary questionnaire outcome, more specifically, ratings on a Visual Analogue Scale (VAS) and their utility score. The VAS measurements take values between 0 and 100, with 0 corresponding to the poorest quality of life imaginable and 100 corresponding to the perfect quality of life. Let's assume the utility score corresponding to the VAS score took values between zero and one, with higher values indicating better quality of life. This is an arbitrary questionnaire, which is why all derivations below are purely illustrative and are not in line with any scoring manual of a real Health-Related Quality of Life instrument. We are reporting both values, as well as changes from the baseline for the VAS Score and the utility score.
+
+The below example shows how to create a listing that could be found in every single study.
+
+```{r}
+set.seed(314159265)
+vas_lst <- tibble::tribble(
+  ~USUBJID    ,  ~SITEID,     ~TRT01A,     ~VISIT,    ~AVISIT,           ~ADT,
+      "GT1080", "GBR-04",    "Placebo",   "DAY 1", "Baseline",   "2023-01-15",
+      "GT1080", "GBR-04",    "Placebo", "WEEK 12",  "Week 12",   "2023-04-10",
+      "GT1080", "GBR-04",    "Placebo", "WEEK 24",  "Week 24",   "2023-07-12",
+      "GT1082",  "US-12",    "Placebo",   "DAY 1", "Baseline",   "2023-01-28",
+      "GT1082",  "US-12",    "Placebo", "WEEK 12",  "Week 12",   "2023-04-22",
+      "GT1082",  "US-12",    "Placebo", "WEEK 24",  "Week 24",   "2023-07-21",
+      "GT1166", "GER-07",     "Drug 1",   "DAY 1", "Baseline",   "2022-10-04",
+      "GT1166", "GER-07",     "Drug 1", "WEEK 12",  "Week 12",   "2023-01-02",
+      "GT1166", "GER-07",     "Drug 1", "WEEK 24",  "Week 24",   "2023-03-01"
+  ) |> 
+  dplyr::mutate(
+    across(ADT, as.Date),
+    AVAL_VAS = 100 * rbeta(
+      n = dplyr::n(),
+      shape1 = .7,
+      shape2 = .3
+    ),
+    BASE_VAS = sum(ifelse(AVISIT == "Baseline", AVAL_VAS, NA_real_), na.rm = TRUE),
+    CHG_VAS = ifelse(AVISIT == "Baseline", NA_real_, AVAL_VAS - BASE_VAS),
+    AVAL_UT = AVAL_VAS ^ 2 / 10000,
+    CHG_UT = ifelse(AVISIT == "Baseline", NA_real_, AVAL_UT - BASE_VAS ^
+                      2 / 10000),
+    SIGN_CHG = sign(CHG_VAS),
+    .by = c(USUBJID, TRT01A)
+  )
+
+vas_lst |>
+  dplyr::mutate(TRT01A = ifelse(seq_along(TRT01A) == 1, TRT01A, ""),
+                .by = TRT01A) |>
+  dplyr::mutate(USUBJID = ifelse(seq_along(USUBJID) == 1, USUBJID, NA_character_),
+                .by = "USUBJID") |>
+  gt() |>
+  tab_header(title = "x: Subject Data Listing",
+             subtitle = "Listing x.x: Visual Analogue Scale - FAS") |>
+  opt_align_table_header(align = "left") |>
+  tab_source_note(source_note = paste("Source: ADQS", Sys.Date())) |>
+  fmt_date(columns = ADT,
+           date_style = "yMMMd") |>
+  fmt_number(columns = c(AVAL_VAS, CHG_VAS),
+             decimals = 0) |>
+  fmt_number(columns = c(AVAL_UT, CHG_UT),
+             decimals = 3) |>
+  cols_merge(columns = c(SITEID, USUBJID),
+             pattern = "<<{1}/{2}>>") |>
+  cols_move(columns = everything(),
+            after = TRT01A) |>
+  cols_label(
+    .list = list(
+      "TRT01A" = "Treatment",
+      "SITEID" = "Site ID/<br>Subject ID",
+      "VISIT" = "Visit",
+      "AVISIT" = "Analysis<br>Visit",
+      "ADT" = "Date of<br>Completion",
+      "AVAL_VAS" = "Value",
+      "CHG_VAS" = "Change<br>from<br>Baseline",
+      "AVAL_UT" = "Value",
+      "CHG_UT" = "Change<br>from<br>Baseline"
+    ),
+    .fn = md
+  ) |>
+  tab_spanner(label = "VAS Score",
+              columns = c(AVAL_VAS, CHG_VAS)) |>
+  tab_spanner(label = "Utility Score",
+              columns = c(AVAL_UT, CHG_UT)) |>
+  cols_hide(columns = c(BASE_VAS, "SIGN_CHG")) |>
+  sub_missing(columns = c(AVAL_VAS, CHG_VAS, AVAL_UT, CHG_UT),
+              missing_text = "") |>
+  cols_align(align = "left") |>
+  tab_options(
+    table.font.names = "Courier new",
+    table.font.size = 9,
+    page.orientation = "portrait",
+    page.footer.use_tbl_notes = TRUE
+  )
+```
+
+Again, I was never convinced that static listings really provide a declarative and comprehensible overview of patient-level data. Especially for studies with many patients and more follow-up visits, this display seems quaint and overwhelming to me. But what if we could use interactive filters, allowing us to quickly identify patients with a certain characteristic of interest? What if we could refrain from the classic black-and-white format and turn to something more dynamic and colorful? 
+
+Note that the below code for the table style, apart from the color and interactive features, is almost identical to the one for the static table above. I intentionally did not alter the Treatment and Subject ID columns for the sake of the filter functionality. But the main difference just lies in the application of `data_color()` and `opt_interactive()`.
+
+```{r}
+vas_lst |>
+  gt() |>
+  tab_header(title = "x: Subject Data Listing",
+             subtitle = "Listing x.x: Visual Analogue Scale - FAS") |>
+  opt_align_table_header(align = "left") |>
+  tab_source_note(source_note = paste("Source: ADQS", Sys.Date())) |>
+  fmt_date(columns = ADT,
+           date_style = "yMMMd") |>
+  fmt_number(columns = c(AVAL_VAS, CHG_VAS),
+             decimals = 0) |>
+  fmt_number(columns = c(AVAL_UT, CHG_UT),
+             decimals = 3) |>
+  cols_merge(columns = c(SITEID, USUBJID),
+             pattern = "<<{1}/{2}>>") |>
+  cols_move(columns = everything(),
+            after = TRT01A) |>
+  cols_label(
+    .list = list(
+      "TRT01A" = "Treatment",
+      "SITEID" = "Site ID/<br>Subject ID",
+      "VISIT" = "Visit",
+      "AVISIT" = "Analysis<br>Visit",
+      "ADT" = "Date of<br>Completion",
+      "AVAL_VAS" = "VAS<br>Score<br>Value",
+      "CHG_VAS" = "VAS<br>Score<br>Change<br>from<br>Baseline",
+      "AVAL_UT" = "Utility<br>Score<br>Value",
+      "CHG_UT" = "Utility<br>Score<br>Change<br>from<br>Baseline"
+    ),
+    .fn = md
+  ) |>
+  cols_hide(columns = c(BASE_VAS, "SIGN_CHG")) |>
+  sub_missing(columns = c(AVAL_VAS, CHG_VAS, AVAL_UT, CHG_UT),
+              missing_text = "") |>
+  cols_align(align = "left") |>
+  data_color(
+    columns = AVAL_VAS,
+    method = "numeric",
+    palette = "BrBG",
+    domain = c(0, 100)
+  ) |>
+  data_color(
+    columns = AVAL_UT,
+    method = "numeric",
+    palette = "BrBG",
+    domain = c(0, 1)
+  ) |>
+  data_color(
+    columns = "SIGN_CHG",
+    target_columns = c("CHG_VAS", "CHG_UT"),
+    palette  = c("#DFC27D", "#C7EAE5"),
+    na_color = "white"
+  ) |>
+  opt_interactive(
+    use_search = TRUE,
+    use_filters = TRUE,
+    use_resizers = TRUE,
+    use_highlight = TRUE,
+    use_compact_mode = TRUE,
+    use_text_wrapping = TRUE,
+    use_page_size_select = TRUE
+  )
+```
+
+There are two things to mention here: 
+
+- **gt** currently does not support the replacement of repeating values with empty strings. This is the reason why for the black-and-white static table, I used **dplyr** to achieve the desired design but I left the Treatment and Unique Subject ID columns as they are in the interactive example.
+
+- In an ideal scenario, we would like to apply more sophisticated filters to numeric column data. The current implementation of `opt_interactive()` relies on functionality from **reactable**, which, at the moment, only supports text-based filtering. Thus, it is currently only possible to filter for values of exactly zero (or any chosen number after formatting), but the user cannot specify a range by specifying both an upper and a lower limit.
+
+The above example is a very simplistic application of `data_color()` and `opt_interactive()`. You can think of it as an appetizer. If you're hungry for more, check out Rich's [blog post on Data coding in  {gt} 0.9.0](https://posit.co/blog/color-coding-your-data-in-gt-0-9-0/) and this one about [Interactive Tables](https://posit.co/blog/new-in-gt-0-9-0-interactive-tables/).
+
+## Summary
+
+This is only a very brief overview, and the majority of existing and new awesome features are not even shown here. When I started using **gt**, table creation wasn't exactly my strongest suit. Still, I gave it a whirl and found the package and its extensive help super declarative. The slope of my learning curve was significant with the triple asterisk - sorry about the stats joke.
+
+I soon found myself in discussions with Rich about new features and improvements tailored to the needs of clinical table creation. Rich is probably the best thing about **gt**: As the package author, he's nice, responsive, always open to hearing the user's perspective, and eager to build advancements, making **gt** even easier to use. 
+
+Needless to say, that I learned a lot during this time, which was fun! Even during the work on this blog post, I noticed Rich had implemented a new feature for the column labels, using the `labels` attribute as the column label, if present. We had talked about this months ago, I never opened an issue, but here it was!
+
+Finally, if you're just getting started with **gt** or clinical tables but come across ideas for improvements, new applications, or encounter bugs, you can open an issue on [GitHub](https://github.com/rstudio/gt). If you're not sure if something actually qualifies as an issue, but you would really like to get the community's feedback, take it to the [discussions](https://github.com/rstudio/gt/discussions) tab and ask a question or pitch a new idea. And really finally, you can also join Rich's [{gt} package discord server](https://discord.gg/3XQxZ7FZ) to ask questions, get help from the community, see what kind of cool stuff other people are doing with **gt**, or just generally get in touch with other table enthusiasts.

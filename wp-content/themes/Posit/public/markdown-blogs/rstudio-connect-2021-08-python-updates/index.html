@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-08-30">
+<meta name="description" content="RStudio Connect introduces support for FastAPI and other ASGI-compliant frameworks. Learn how to hide input code cells in Jupyter Notebooks, for audiences where a cleaner or less code-heavy presentation would be useful.">
+
+<title>RStudio Connect 2021.08.0 Python Updates</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Connect 2021.08.0 Python Updates</h1>
+
+<p class="date">2021-08-30</p>
+</header>
+
+<h1 id="python-updates">Python Updates</h1>
+<p>At RStudio we know that many data science teams leverage both R and Python in their work, so it’s important that we build products to support the best tools available in both languages. For an overview of all the ways our pro products support data science teams using R and Python, check out our <a href="https://www.rstudio.com/solutions/r-and-python/">Single Home for R and Python</a> page.</p>
+<p>APIs are a key to integrating your data science results into other applications and processes (<a href="https://blog.rstudio.com/2021/05/04/rstudio-and-apis/">see this blog post</a> for more on APIs). With this RStudio Connect release, you can deploy, manage, and scale Python APIs built with FastAPI and several other ASGI-compliant frameworks. The list of supported Python content types has grown steadily over the last two years. This feature edition extends the capabilities even further with several options that enable asynchronous API development.</p>
+<h3 id="rstudio-connect-supported-python-content-types-in-2021" class="anchored">RStudio Connect Supported Python Content Types in 2021</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Content Type</th>
+<th>Framework</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Documents &amp; Notebooks</td>
+<td>Jupyter Notebooks</td>
+</tr>
+<tr class="even">
+<td>Interactive Applications</td>
+<td>Dash, Streamlit, Bokeh</td>
+</tr>
+<tr class="odd">
+<td>WSGI Frameworks</td>
+<td>Flask</td>
+</tr>
+<tr class="even">
+<td>ASGI Frameworks</td>
+<td>FastAPI, Quart, Falcon, Sanic</td>
+</tr>
+</tbody>
+</table>
+<h3 id="additional-python-updates" class="anchored">Additional Python Updates:</h3>
+<ul>
+<li><p><strong>New Feature</strong> Support for hiding input code cells in Jupyter Notebooks.</p></li>
+<li><p><strong>Announcement</strong> Support for the Python 2 in RStudio Connect will end in January 2022. Planning and migration recommendations are described in the post below.</p></li>
+</ul>
+<blockquote>
+<p>NOTE on versioning: As part of this release, we’ve moved to calendar-based versioning. <a href="https://blog.rstudio.com/2021/08/30/calendar-versioning-for-commercial-rstudio-products/">See this blog post</a> for details.</p>
+</blockquote>
+<div data-align="center">
+<a class="btn btn-primary btn-lg mt-5" href="https://www.rstudio.com/products/connect/">Click through to learn more about RStudio Connect</a>
+</div>
+<h2 id="new-content-type-fastapi" class="anchored">New Content Type: FastAPI</h2>
+<p><em>Support for Python ASGI frameworks in RStudio Connect.</em></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://fastapi.tiangolo.com/"><img src="fastapi.png" class="img-fluid"></a></p>
+<p></p><figcaption>FastAPI Logo</figcaption><p></p>
+</figure>
+</div>
+<p><a href="https://fastapi.tiangolo.com/">FastAPI</a> is a Python <a href="https://asgi.readthedocs.io/en/latest/">ASGI</a> web API framework. Endpoints in FastAPI are Python <code>async</code> functions, which means that multiple requests can be processed concurrently. This is useful when the response of a request depends on the results of other <code>async</code> functions.</p>
+<p>Example: If you use an asynchronous database client to access a remote database, your FastAPI endpoint function can <code>await</code> the results of the database query. This means that rather than getting blocked waiting for a response, new requests can begin to be processed while earlier requests are awaiting their results.</p>
+<p>Learn more about FastAPI in the <a href="https://docs.rstudio.com/connect/user/fastapi/">RStudio Connect User Guide</a>.</p>
+<h3 id="additional-asgi-frameworks" class="anchored">Additional ASGI Frameworks</h3>
+<p>Although ASGI is a standard, frameworks differ in the configuration settings required to support being deployed behind a proxy server (as is the case for APIs deployed within RStudio Connect). These frameworks have been validated for deployment in RStudio Connect:</p>
+<ul>
+<li><a href="https://gitlab.com/pgjones/quart">Quart</a></li>
+<li><a href="https://falconframework.org/">Falcon</a></li>
+<li><a href="https://sanicframework.org/en/">Sanic</a></li>
+</ul>
+<h3 id="new-jump-start-example" class="anchored">New Jump Start Example</h3>
+<p>The new FastAPI jump start example should look familiar to those who experimented with Flask. We’ve implemented the Stock Pricing Service example again in FastAPI so you can quickly see the differences between the two frameworks:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="fastapi-jumpstart.png" class="img-fluid"></p>
+<p></p><figcaption>RStudio Connect FastAPI Jump Start Example</figcaption><p></p>
+</figure>
+</div>
+<h3 id="get-started" class="anchored">Get Started</h3>
+<p>FastAPI and other ASGI-compatible APIs can be deployed to RStudio Connect with the <code>rsconnect-python</code> package. Follow the same <a href="https://docs.rstudio.com/connect/user/publishing/#publishing-python-apis">basic deployment steps</a> required from our other python content types:</p>
+<p>Pre-flight checks:</p>
+<ul>
+<li>Install (or upgrade) the <code>rsconnect-python</code> command line interface using <code>pip</code>.</li>
+<li>Add an RStudio Connect server for deployment by specifying the server URL and your API key.</li>
+<li>Verify that you have activated the <code>virtualenv</code> environment that you want to reproduce on the server.</li>
+<li>Ensure that you specify the <a href="https://docs.rstudio.com/connect/user/publishing/#publishing-rsconnect-python-entrypoint">correct app entrypoint</a>.</li>
+</ul>
+<p>Deploy your ASGI-compliant API with:</p>
+<pre><code>rsconnect deploy fastapi -n myServer MyApiPath/</code></pre>
+<div data-align="center">
+<a class="btn btn-primary btn-lg mt-5" href="https://docs.rstudio.com/rsconnect-python/#installation">Upgrade your rsconnect-python CLI</a>
+</div>
+<h2 id="jupyter-notebook-feature-hiding-code-cells" class="anchored">Jupyter Notebook Feature: Hiding Code Cells</h2>
+<p><em>Introduced in RStudio Connect 1.9.0.</em></p>
+<p>Hiding input code cells can be useful when preparing notebooks for audiences where a cleaner or less code-heavy presentation would be more appreciated.</p>
+<p>There are two options for hiding input code cells in Jupyter Notebooks published to RStudio Connect:</p>
+<ul>
+<li>Hide all input code cells</li>
+<li>Hide only selected input code cells</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://docs.rstudio.com/connect/user/jupyter-notebook/#hide-input"><img src="input-shownvhidden.png" class="img-fluid"></a></p>
+<p></p><figcaption>Hide input code cells</figcaption><p></p>
+</figure>
+</div>
+<p>If you’ve already set up the push-button publishing plugin for Jupyter Notebooks, make sure to upgrade <a href="https://docs.rstudio.com/rsconnect-jupyter/upgrading/">rsconnect-jupyter</a>, and <a href="https://docs.rstudio.com/rsconnect-python/#installation">rsconnect-python</a> so you can get access to the new publishing features.</p>
+<p>Learn more in the <a href="https://docs.rstudio.com/connect/user/jupyter-notebook/#hide-input">RStudio Connect User Guide</a>.</p>
+<h2 id="ending-support-for-python-2" class="anchored">Ending Support for Python 2</h2>
+<p><em>Starting January 2022, RStudio Connect will no longer support Python 2.</em></p>
+<p>Python 2.7 has reached end of life maintenance status. Support from the Python language governing body ended on January 1, 2020 and it is no longer receiving security patches.</p>
+<p>RStudio Connect has continued to support Python 2.7 beyond its EOL status, but we will join the community in ending support as of January 2022.</p>
+<p>Factors that have gone into our decision include the following:</p>
+<ul>
+<li>Python 3 is now widely adopted and is the actively-developed version of the Python language.</li>
+<li>In January 2021, the <code>pip</code> 21.0 release officially dropped support for Python 2.<br>
+</li>
+<li>A large number of projects pledged to drop support for Python 2 in 2020 including TensorFlow, scikit-learn, Apache Spark, pandas, XGBoost, NumPy, Bokeh, Matplotlib, IPython, and Jupyter notebook.</li>
+</ul>
+<h3 id="steps-for-planning-your-migration" class="anchored">Steps for planning your migration:</h3>
+<p><strong>Administrators</strong> should determine whether Python 2 content exists on your RStudio Connect server today.</p>
+<ul>
+<li>Customers who have RStudio Connect 1.8.6 or higher can audit the complete list of content items on their server and which versions of R/Python they use by deploying <a href="https://github.com/sol-eng/rsc-audit-reports/blob/main/environment-audit/environment-audit-report.Rmd">this report</a>.</li>
+</ul>
+<p><strong>Publishers</strong> should review the official porting guide and redeploy any mission critical content that currently relies on Python 2.</p>
+<ul>
+<li>Read the official <a href="https://docs.python.org/3/howto/pyporting.html">“Porting Python 2 Code to Python 3” guide</a> and the <a href="https://python3statement.org/practicalities/">Python 3 Statement Practicalities</a> for advice on how to sunset your Python 2 code.</li>
+</ul>
+<h2 id="upgrade-to-rstudio-connect-2021.08.0" class="anchored">Upgrade to RStudio Connect 2021.08.0</h2>
+<p>Before upgrading, please review the <a href="http://docs.rstudio.com/connect/news">full release notes</a>. This release contains additional features described in the Custom Branding <a href="https://blog.rstudio.com/2021/08/30/rstudio-connect-2021-08-custom-branding/">blog announcement</a>.</p>
+<blockquote>
+<h4 id="upgrade-planning" class="anchored">Upgrade Planning</h4>
+<p>Upgrading RStudio Connect should require less than five minutes. If you are upgrading from a version earlier than 1.9.0.1, be sure to consult the release notes for the intermediate releases, as well. As noted above, this release has features that require updates to <a href="https://docs.rstudio.com/rsconnect-python/#installation"><code>rsconnect-python</code></a> and, if applicable, <a href="https://docs.rstudio.com/rsconnect-jupyter/upgrading/"><code>rsconnect-jupyter</code></a>.</p>
+</blockquote>
+<p>To perform an RStudio Connect upgrade, download and run the installation script. The script installs a new version of Connect on top of the earlier one. Existing configuration settings are respected.</p>
+<pre><code># Download the installation script
+curl -Lo rsc-installer.sh https://cdn.rstudio.com/connect/installer/installer-v1.9.3.sh
+
+# Run the installation script
+sudo bash ./rsc-installer.sh 2021.08.0</code></pre>
+<div data-align="center">
+<a class="btn btn-primary btn-lg mt-5" href="https://rstudio.com/about/subscription-management/">Sign up for RStudio Professional Product Updates</a>
+</div>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

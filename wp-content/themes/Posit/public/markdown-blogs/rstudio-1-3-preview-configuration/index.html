@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-02-18">
+
+<title>RStudio 1.3 Preview: Configuration and Settings</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio 1.3 Preview: Configuration and Settings</h1>
+
+<p class="date">2020-02-18</p>
+</header>
+
+<p><em>This blog post is part of a series on new features in RStudio 1.3, currently available as a <a href="https://www.rstudio.com/products/rstudio/download/preview/">preview release</a>.</em></p>
+<p>Today, we’re going to talk about a number of improvements we’ve made to RStudio 1.3 around configuration and settings. To set the stage, here’s how you configure RStudio today:</p>
+<p><img align="center" src="global-options.png"></p>
+<p>This point-and-click dialog makes it easy for users to select the settings they want, but has a couple of limitations:</p>
+<ol type="1">
+<li>For users, there is no way to back up or save settings in e.g., a <a href="https://dotfiles.github.io/">dotfiles repo</a>, nor a way to view or manipulate preferences with external tools.</li>
+<li>For administrators, there is no way to establish defaults for users.</li>
+</ol>
+<p>In RStudio 1.3, we’ve overhauled the settings and configuration system to address both of these issues, and along the way we’ve made several portions of the IDE more amenable to configuration.</p>
+<h2 id="user-preferences" class="anchored">User Preferences</h2>
+<p>All the preferences in the Global Options dialog (and a number of other preferences that aren’t) are now saved in a simple, plain-text JSON file named <code>rstudio-prefs.json</code>. Here’s an example:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"posix_terminal_shell"</span><span class="fu">:</span> <span class="st">"bash"</span><span class="fu">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"editor_theme"</span><span class="fu">:</span> <span class="st">"Night Owl"</span><span class="fu">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"wrap_tab_navigation"</span><span class="fu">:</span> <span class="kw">false</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The example above instructs RStudio to use the <code>bash</code> shell for the <strong>Terminal</strong> tab, to apply the <em>Night Owl</em> theme to the IDE, and to avoid wrapping around when navigating through tabs. All other settings will have their default values.</p>
+<p>By default, this file lives in <code>AppData/Roaming/RStudio</code> on Windows, and <code>~/.config/rstudio</code> on other systems. While RStudio writes this file whenever you change a setting, you can also edit it yourself to change settings. You can back it up, or put it in a version control system. You’re in control!</p>
+<p>If you’re editing this file by hand, you’ll probably want a reference. A full list of RStudio’s settings, along with their data types, allowable values, etc., can be found in the <a href="https://docs.rstudio.com/ide/server-pro/1.3.820-1/session-user-settings.html">Session User Settings</a> section of the RStudio Server Professional Administration Guide.</p>
+<h2 id="administration-and-the-xdg-standard" class="anchored">Administration and the XDG Standard</h2>
+<p>If you’re an administrator of an RStudio Server, you can establish defaults for any setting by using a global set of user preferences, placed here:</p>
+<pre><code>/etc/rstudio/rstudio-prefs.json</code></pre>
+<p>RStudio’s new configuration system complies with the <a href="https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html">XDG Base Directory Specification</a>. This means that in addition to using XDG defaults for most directories, it is also possible to customize the location using environment variables. For example, you can set <code>XDG_CONFIG_HOME</code> for your users so that their configuration is loaded from somewhere other than <code>~/.config</code>, or <code>XDG_CONFIG_DIRS</code> to establish a different folder for server-wide configuration.</p>
+<h2 id="the-configuration-folder" class="anchored">The Configuration Folder</h2>
+<p>The user preferences aren’t the only thing that lives in the configuration folder. In RStudio 1.3, we’ve reorganized a number of user-level files and settings so that they’re all in the same place. This makes your RStudio configuration much more portable; simply unpacking a backup of this folder will make it possible to apply all of your RStudio customizations at once.</p>
+<p>Here’s what’s inside:</p>
+<table>
+<colgroup>
+<col style="width: 30%">
+<col style="width: 69%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>File/Folder</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>rstudio-prefs.json</code></td>
+<td>User preferences</td>
+</tr>
+<tr class="even">
+<td><code>dictionaries/</code></td>
+<td>Custom spelling dictionaries</td>
+</tr>
+<tr class="odd">
+<td><code>keybindings/</code></td>
+<td>Editor and workbench keybindings, in JSON format</td>
+</tr>
+<tr class="even">
+<td><code>snippets/</code></td>
+<td>Console and source snippets (<code>*.snippet)</code></td>
+</tr>
+<tr class="odd">
+<td><code>templates/</code></td>
+<td>Default content for new files</td>
+</tr>
+<tr class="even">
+<td><code>themes/</code></td>
+<td>Custom color themes (<code>*.rstheme</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Every one of these elements can now be configured both globally (in e.g., the <code>/etc/rstudio</code> configuration folder) and per-user (in e.g., the <code>~/.config/rstudio</code> folder).</p>
+<p>So, for example, an administrator could pre-install custom themes for their users by placing them in <code>/etc/rstudio/themes/</code>, and then instruct RStudio to default to one of the custom themes by changing the <code>editor_theme</code> setting in <code>/etc/rstudio/rstudio-prefs.json</code>. Or, they could establish a system-wide default template for <code>.R</code> files in <code>/etc/rstudio/templates/default.R</code>.</p>
+<p>More information is available in the Administration Guide here:</p>
+<p><a href="https://docs.rstudio.com/ide/server-pro/1.3.820-1/r-sessions.html#customizing-session-settings">Customizing Session Settings</a></p>
+<h2 id="try-it-out" class="anchored">Try it Out!</h2>
+<p>If you’d like to give the new configuration system a spin, we’d very much welcome your feedback on our <a href="https://community.rstudio.com/c/rstudio-ide">community forum</a>. You can download the RStudio 1.3 preview here:</p>
+<p><a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio 1.3 Preview</a></p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

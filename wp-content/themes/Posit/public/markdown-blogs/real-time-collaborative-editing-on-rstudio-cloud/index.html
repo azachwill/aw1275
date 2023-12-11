@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-05-23">
+<meta name="description" content="We are excited to announce real-time collaborative editing on RStudio Cloud. Users can join the same project, edit code, and immediately see each other’s changes.">
+
+<title>Real-Time Collaborative Editing on RStudio Cloud</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Real-Time Collaborative Editing on RStudio Cloud</h1>
+
+<p class="date">2022-05-23</p>
+</header>
+
+<p>We are excited to announce real-time collaborative editing on RStudio Cloud! Administrators or moderators of a space can open a project that another user is working on to join that user in the project. Users can edit code and immediately see changes made by others.</p>
+<script src="https://fast.wistia.com/embed/medias/irh36tnh77.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:50.0% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_irh36tnh77 videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<center>
+<i>
+
+Pair Programming <a href="https://bookdown.org/roy_schumacher/r4ds/pipes.html#use-the-pipe" target="_blank">magrittr pipes</a> Example in RStudio Cloud
+
+</i>
+</center>
+<p>Collaborative editing is currently a beta feature. If you are a Premium, Instructor, or Organization account holder, you can enable collaborative editing for your account.</p>
+<h2 id="access-and-edit-an-rstudio-cloud-project-at-the-same-time" class="anchored">Access and edit an RStudio Cloud project at the same time</h2>
+<p>Up to five users can now access and edit an RStudio Cloud project in real-time. Entering a project allows users to see who is in the same space. Once a file is saved in the project, users can concurrently edit the script (similar to Google Docs).</p>
+<p>As part of the roll out of collaborative editing, the RStudio Cloud team changed the way user files are stored within projects. Specifically, each user that opens a project will be provided with their own private home directory, as well as their own R session state. This was necessary to support multi-user collaborative editing, as well as to enhance the security of user-specific files.</p>
+<p>If collaborative editing is enabled, all collaborators on a project will continue to have access to files in the project directory. However, each user will now have their own R session data, which includes console and R command histories and R environment state. As a consequence of this change, Admins or Moderators opening projects belonging to another user in a space will not see the session data from that user.</p>
+<p>If collaborative editing is not enabled, users accessing the project will see the same behavior as before. Only a single user can access a project at a time, and all users share the same R session, home directory, history, and environment. Learn more in this <a href="https://community.rstudio.com/t/important-changes-related-to-r-sessions-in-rstudio-projects/136423" target="_blank">community thread</a>.</p>
+<h2 id="work-together-review-code-and-resolve-issues" class="anchored">Work together, review code, and resolve issues</h2>
+<p>Collaborative editing creates a supportive environment for active learning and social interaction. Working on the same project encourages users to work with each other. They have the opportunity to demonstrate skills, brainstorm new techniques, and share best practices.</p>
+<p>During a session, users have the opportunity to continuously review code and resolve issues. Programmers can work together to inspect the problem, walk through the debugging process, and try out solutions.</p>
+<script src="https://fast.wistia.com/embed/medias/8e87w3z7hb.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:50.0% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_8e87w3z7hb videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<center>
+<i>
+
+Instructor-Student Project Interaction in RStudio Cloud
+
+</i>
+</center>
+<h2 id="learn-more" class="anchored">Learn more</h2>
+<p>We hope that RStudio Cloud’s collaborative editing feature is helpful to your work.</p>
+<ul>
+<li>Learn more about <a href="https://www.rstudio.com/products/cloud/" target="_blank">RStudio Cloud</a>.</li>
+<li>Read <a href="https://rstudio.cloud/learn/whats-new" target="_blank">what’s new in RStudio Cloud</a> and read more on <a href="https://rstudio.cloud/learn/guide#project-collaborative-editing" target="_blank">Collaborative Editing</a>.</li>
+<li>Interested in using RStudio Cloud in the classroom? Join Mine Çetinkaya-Rundel &amp; Maria Tackett on July 25-26 at rstudio::conf for <strong>Designing the Data Science Classroom</strong>. This workshop equips educators with concrete information on content, workflows, and infrastructure for introducing modern computation with R and RStudio. Learn more on the <a href="https://www.rstudio.com/conference/2022/workshops/teach-ds/" target="_blank">workshop page</a>.</li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

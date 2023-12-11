@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2015-02-23">
+
+<title>RStudio v0.99 Preview: Vim Mode Improvements</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio v0.99 Preview: Vim Mode Improvements</h1>
+
+<p class="date">2015-02-23</p>
+</header>
+
+<p>RStudio’s code editor includes a set of lightweight <a href="http://en.wikipedia.org/wiki/Vim_%28text_editor%29">Vim</a> key bindings. You can turn these on in Tools | Global Options | Code | Editing:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/02/screen-shot-2015-02-23-at-9-33-49-am.png" class="img-fluid"></p>
+<p></p><figcaption>global options</figcaption><p></p>
+</figure>
+</div>
+<p>For those not familiar, Vim is a popular text editor built to enable efficient text editing. It can take some practice and dedication to master Vim style editing but those who have done so typically swear by it. RStudio’s “vim mode” enables the use of many of the most common keyboard operations from Vim right inside RStudio.</p>
+<p>As part of the <a href="https://www.rstudio.com/products/rstudio/download/preview/">0.99 preview release</a>, we’ve included an upgraded version of the <a href="http://ace.c9.io/">ACE editor</a>, which has a completely revamped Vim mode. This mode extends the range of Vim key bindings that are supported, and implements a number of Vim “power features” that go beyond basic text motions and editing. These include:</p>
+<ul>
+<li><p><strong>Vertical block selection</strong> via <code>Ctrl + V</code>. This integrates with the new multiple cursor support in ACE and allows you to type in multiple lines at once.</p></li>
+<li><p><strong>Macro playback and recording</strong>, using <code>q{register}</code> / <code>@{register}</code>.</p></li>
+<li><p><strong>Marks</strong>, which allow you drop markers in your source and jump back to them quickly later.</p></li>
+<li><p><strong>A selection of Ex commands</strong>, such as <code>:wq</code> and <code>:%s</code> that allow you to perform editor operations as you would in native Vim.</p></li>
+<li><p><strong>Fast in-file search</strong> with e.g.&nbsp;<code>/</code> and <code>*</code>, and support for JavaScript regular expressions.</p></li>
+</ul>
+<p>We’ve also added a Vim quick reference card to the IDE that you can bring up at any time to show the supported key bindings. To see it, switch your editor to Vim mode (as described above) and type <code>:help</code> in Command mode.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/02/screen-shot-2015-02-23-at-11-03-00-am.png" class="img-fluid"></p>
+<p></p><figcaption>vim quick reference card</figcaption><p></p>
+</figure>
+</div>
+<p>Whether you’re a Vim novice or power user, we hope these improvements make the RStudio IDE’s editor a more productive and enjoyable environment for you. You can try the new Vim features out now by downloading the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio Preview Release</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

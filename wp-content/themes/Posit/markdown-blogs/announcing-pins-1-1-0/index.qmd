@@ -1,0 +1,84 @@
+---
+title: "Announcing pins 1.1.0"
+authors: 
+- Julia Silge
+date: '2022-12-20'
+slug: 'announcing-pins-1-1-0'
+blogcategories:
+  - Open Source
+tags:
+  - pins
+  - python
+description: 'We are delighted to announce pins 1.1.0 is now available on CRAN.
+  You can use pins to publish, version, and share objects such as
+  datasets and models.'
+alttext: "The pin hex sticker on a blurred hex wall."
+events: blog
+execute:
+  freeze: true
+---
+
+I'm delighted to announce that [pins](https://pins.rstudio.com/) 1.1.0 for R is now available on CRAN. The pins package publishes data, models, and other R objects, making it easy to share them across projects and with your colleagues. You can pin objects to a variety of pin boards, including folders (to share on a networked drive or with services like DropBox), Posit Connect, Amazon S3, Azure blob storage, and as of this new release, Google Cloud Storage! Pins can be versioned, making it straightforward to track changes, re-run analyses on historical data, and undo mistakes.
+
+You can install pins with:
+
+```r
+install.packages("pins")
+```
+
+About 18 months ago, we [released pins 1.0.0](https://www.rstudio.com/blog/pins-1-0-0/) with a major overhaul of the user interface for the package. We continue to build on this new interface as our community uses pins in more complex ways on both our own professional tools and other platforms as well.
+
+This post highlights several important improvements we want to make sure you know about. To see all the changes in pins 1.1.0, including a few minor breaking changes, check out the [release notes](https://pins.rstudio.com/news/index.html#pins-110).
+
+## Support for Google Cloud Storage
+
+After the release of pins 1.0.0, one of the features most requested by the community was [support for using pins on Google Cloud Storage](https://github.com/rstudio/pins-r/issues/572). This is now available in pins 1.1.0!
+
+```r
+library(pins)
+board <- board_gcs("pins-testing")
+board %>% pin_write(1:10, "nice-numbers", type = "json")
+```
+
+```bash
+#> Creating new version '20230123T190421Z-c3943'
+#> Writing to pin 'nice-numbers'
+```
+
+Like `board_s3()` for AWS S3 and `board_azure()` for Azure blob storage, this allows you to both write to and read from an existing bucket that you have access to. Together with [pins for Python](https://www.rstudio.com/blog/pins-for-python/), which we announced last year, this means that you can read and write on any of the AWS, Microsoft, or Google platforms in either R or Python. To read the pin we just wrote from R, I can use Python:
+
+```python
+import pins
+
+board = pins.board_gcs("pins-testing")
+board.pin_read("nice-numbers")
+```
+
+```bash
+#> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+```
+
+You can use pins for multilingual data science and R/Python interoperability!
+
+## Reading from boards on the web
+
+The pins package has had support for [`board_url()`](https://pins.rstudio.com/reference/board_url.html) for a long time, but we have realized that it didn't always work how users wanted or expected. This new release adds support for you as a publisher creating a [manifest file](https://pins.rstudio.com/reference/write_board_manifest.html) to go along with your board so that your collaborators can consume pins from the board in a more straightforward way.
+
+Take a look [at our new vignette](https://pins.rstudio.com/articles/using-board-url.html) on how to set up `board_url()` for easy collaboration, and many thanks to Ian Lyttle for contributing both the vignette and many of the ideas behind this new functionality. Ian has also created a small R package demonstrating how to share a dataset via pins directly from your pkgdown site using the new `board_url()`. [Check it out!](https://github.com/ijlyttle/pkgpins)
+
+## Improvements for Posit Connect
+
+Many users of our professional publishing platform [Posit Connect](https://posit.co/products/enterprise/connect/) take advantage of pins to share data and models. Several changes in this release focus on making the experience of these users better.
+
+When you use Connect, the pins package keeps track of how to identify specific pieces of content and Connect users in a [cache](https://en.wikipedia.org/wiki/Cache_(computing)). If you're familiar with caching, you probably know the saying attributed to Phil Karlton:
+
+> There are only two hard things in computer science: cache invalidation and naming things.
+
+The previous incarnation of the content and user caches, unfortunately, demonstrated how hard this really can be, and our Connect customers sometimes experienced their caches getting into a bad state when the situation on the server changed. In this release, we changed the cache approach from using files on disk to an [environment](https://adv-r.hadley.nz/environments.html) in R, so caches no longer persist between sessions. What this means for you is that these caches will be much less likely to end up in a broken state, and you can fix any cache problems by restarting R. It also means that in a new session, pins will need to look up some of these relationships between content and users. 
+
+This release also improved the pins code preview on Connect and updated the function for creating a board for Connect to `board_connect()`, following our rebranding from RStudio to Posit.
+
+## Acknowledgements
+
+We'd like to thank all 66 folks who have contributed to pins since the 1.0.0 release, whether via filing issues or contributing code or documentation: 
+[&#x0040;9Rahulsharma](https://github.com/9Rahulsharma), [&#x0040;afshinmhCLG](https://github.com/afshinmhCLG), [&#x0040;akgold](https://github.com/akgold), [&#x0040;AkthemRehab](https://github.com/AkthemRehab), [&#x0040;atusy](https://github.com/atusy), [&#x0040;augustohassel](https://github.com/augustohassel), [&#x0040;AYu1804](https://github.com/AYu1804), [&#x0040;biggiemikkie](https://github.com/biggiemikkie), [&#x0040;bjfletcher](https://github.com/bjfletcher), [&#x0040;christian-million](https://github.com/christian-million), [&#x0040;chrisumphlett](https://github.com/chrisumphlett), [&#x0040;cl00wny](https://github.com/cl00wny), [&#x0040;cnemarich](https://github.com/cnemarich), [&#x0040;colearendt](https://github.com/colearendt), [&#x0040;daattali](https://github.com/daattali), [&#x0040;dewoller](https://github.com/dewoller), [&#x0040;duju211](https://github.com/duju211), [&#x0040;edavidaja](https://github.com/edavidaja), [&#x0040;erwinlares](https://github.com/erwinlares), [&#x0040;fh-mthomson](https://github.com/fh-mthomson), [&#x0040;FMKerckhof](https://github.com/FMKerckhof), [&#x0040;gardiners](https://github.com/gardiners), [&#x0040;guzu92](https://github.com/guzu92), [&#x0040;hadley](https://github.com/hadley), [&#x0040;harell](https://github.com/harell), [&#x0040;hongooi73](https://github.com/hongooi73), [&#x0040;ijlyttle](https://github.com/ijlyttle), [&#x0040;IndrajeetPatil](https://github.com/IndrajeetPatil), [&#x0040;innir](https://github.com/innir), [&#x0040;jameshunterbr](https://github.com/jameshunterbr), [&#x0040;joelgsponer](https://github.com/joelgsponer), [&#x0040;jonthegeek](https://github.com/jonthegeek), [&#x0040;juliasilge](https://github.com/juliasilge), [&#x0040;justinmillar](https://github.com/justinmillar), [&#x0040;kmasiello](https://github.com/kmasiello), [&#x0040;laurejo1](https://github.com/laurejo1), [&#x0040;machow](https://github.com/machow), [&#x0040;maglet](https://github.com/maglet), [&#x0040;mattwarkentin](https://github.com/mattwarkentin), [&#x0040;michkam89](https://github.com/michkam89), [&#x0040;minimenchmuncher](https://github.com/minimenchmuncher), [&#x0040;MislavSag](https://github.com/MislavSag), [&#x0040;oguchihy](https://github.com/oguchihy), [&#x0040;ojziff](https://github.com/ojziff), [&#x0040;raisin-toast](https://github.com/raisin-toast), [&#x0040;ramiromagno](https://github.com/ramiromagno), [&#x0040;rjake](https://github.com/rjake), [&#x0040;rmccombie](https://github.com/rmccombie), [&#x0040;Sade154](https://github.com/Sade154), [&#x0040;SaJaToGu](https://github.com/SaJaToGu), [&#x0040;salim-b](https://github.com/salim-b), [&#x0040;samterfa](https://github.com/samterfa), [&#x0040;scherbakovdmitri](https://github.com/scherbakovdmitri), [&#x0040;schmalte04](https://github.com/schmalte04), [&#x0040;sellorm](https://github.com/sellorm), [&#x0040;slodge](https://github.com/slodge), [&#x0040;slohr](https://github.com/slohr), [&#x0040;taiyanl](https://github.com/taiyanl), [&#x0040;thomaszwagerman](https://github.com/thomaszwagerman), [&#x0040;tomasjanikds](https://github.com/tomasjanikds), [&#x0040;tomsing1](https://github.com/tomsing1), [&#x0040;TylerGrantSmith](https://github.com/TylerGrantSmith), [&#x0040;vdamico](https://github.com/vdamico), [&#x0040;vgXhc](https://github.com/vgXhc), [&#x0040;wurli](https://github.com/wurli), and [&#x0040;yacaslimi](https://github.com/yacaslimi).

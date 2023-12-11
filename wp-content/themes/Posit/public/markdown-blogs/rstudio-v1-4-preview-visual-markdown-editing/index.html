@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-09-30">
+
+<title>RStudio v1.4 Preview: Visual Markdown Editing</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio v1.4 Preview: Visual Markdown Editing</h1>
+
+<p class="date">2020-09-30</p>
+</header>
+
+<p>Today we’re excited to announce availability of our first <a href="https://www.rstudio.com/products/rstudio/download/preview/">Preview Release</a> for RStudio 1.4, a major new release which includes the following new features:</p>
+<ul>
+<li>A <a href="https://rstudio.github.io/visual-markdown-editing">visual markdown editor</a> that provides improved productivity for composing longer-form articles and analyses with R Markdown.</li>
+<li>New <a href="https://github.com/rstudio/rstudio/pull/6862">Python capabilities</a>, including display of Python objects in the Environment pane, viewing of Python data frames, and tools for configuring Python versions and conda/virtual environments.</li>
+<li>The ability to add <a href="https://github.com/rstudio/rstudio/pull/7339">source columns</a> to the IDE workspace for side-by-side text editing.</li>
+<li>A new <a href="https://github.com/rstudio/rstudio/pull/6848">command palette</a> (accessible via <kbd>Ctrl+Shift+P</kbd>) that provides easy keyboard access to all RStudio commands, add-ins, and options.</li>
+<li>Support for <a href="https://github.com/rstudio/rstudio/pull/7027">rainbow parentheses</a> in the source editor (enabled via <strong>Options -&gt; Code -&gt; Display).</strong></li>
+<li>New RStudio Server Pro features including SAML authentication, local launcher load-balancing, and support for project sharing when using the launcher.</li>
+<li>Dozens of other small improvements and bugfixes.</li>
+</ul>
+<p>You can try out these new features now in the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio v1.4 Preview Release</a>.</p>
+<p>Over the next few weeks we’ll be blogging about each of these new features in turn. Today we’ll take a quick tour of the new visual markdown editor (see the full <a href="https://rstudio.github.io/visual-markdown-editing">Visual Markdown Editing</a> documentation for more details).</p>
+<h2 id="visual-markdown-editing" class="anchored">Visual Markdown Editing</h2>
+<p>R Markdown users frequently tell us that they’d like to see more of their content changes in real-time as they write, both to reduce the time required by the edit/preview cycle, and to improve their flow of composition by having a clearer view of what they’ve already written.</p>
+<p>To switch into visual mode for a markdown document, use the <kbd><img src="images/visual_mode_2x.png" width="15" height="13"></kbd> button with the compass icon at the top-right of the editor toolbar:</p>
+<p><img src="images/visual-editing.png" width="700"></p>
+<p>With visual mode, we’ve tried to create a <a href="https://en.wikipedia.org/wiki/WYSIWYM">WYSIWYM</a> editor for people that love markdown. The editor maintains a lightweight feel that emphasizes semantics over styling. You can also still use most markdown constructs (e.g., <code>##</code> or <code>**bold**</code>) directly for formatting, and when switching between visual and source mode your editing location and undo/redo state are fully preserved:</p>
+<p><img src="images/visualmode-demo.gif" style="border-top: 1px solid black; border-bottom: 1px solid black;" width="700"></p>
+<p>You can also configure visual mode to write markdown using <a href="https://rhodesmill.org/brandon/2012/one-sentence-per-line/">one sentence per-line</a>, which makes working with markdown files on GitHub much easier (enabling line-based comments for sentences and making diffs more local to the actual text that has changed). See the documentation on markdown <a href="https://rstudio.github.io/visual-markdown-editing/#/markdown?id=writer-options">writing options</a> for additional details.</p>
+<p>Anything you can express in pandoc markdown (including tables, footnotes, attributes, etc.) can be edited in visual mode. Additionally, there are many productivity enhancements aimed at authoring technical content like embedded code, equations, citations, cross-references, and inline HTML/LaTeX.</p>
+<h2 id="embedded-code" class="anchored">Embedded Code</h2>
+<p>R, Python, SQL and other code chunks can be edited using the standard RStudio source editor. You can execute the currently selected code chunk using either the run button at the top right of the code chunk or using the <kbd>Cmd+Shift+Enter</kbd> keyboard shortcut:</p>
+<p><img src="images/visual-editing-execute-code.png" width="700"></p>
+<p>Chunk output is displayed inline (you can switch to show the output in the console instead using the Options toolbar button, accessible via the gear icon), and all of the customary commands from source mode for executing multiple chunks, clearing chunk output, etc. are available.</p>
+<h2 id="tables" class="anchored">Tables</h2>
+<p>You can insert a table using the <strong>Table</strong> menu. You can then use either the main menu or a context menu to insert and delete table rows and columns:</p>
+<p><img src="images/visual-editing-table-context.png" width="700"></p>
+<p>Note that if you select multiple rows or columns the Insert or Delete command will behave accordingly. For example, to insert two rows first select two rows then use the Insert command.</p>
+<p>Try editing a table in visual mode then see what it looks like in source mode: all of the table columns will be perfectly aligned (with cell text wrapped as required).</p>
+<h2 id="citations" class="anchored">Citations</h2>
+<p>Visual mode uses the standard Pandoc markdown representation for citations (e.g.&nbsp;<code>[@citation]</code>). Citations can be inserted from a variety of sources:</p>
+<ol type="1">
+<li>Your document bibliography.</li>
+<li><a href="#citations-from-zotero">Zotero</a> personal or group libraries.</li>
+<li><a href="#citations-from-dois">DOI</a> (Document Object Identifier) references.</li>
+<li>Searches of <a href="https://www.crossref.org/">Crossref</a>, <a href="https://datacite.org/">DataCite</a>, or <a href="https://pubmed.ncbi.nlm.nih.gov/">PubMed</a>.</li>
+</ol>
+<p>Use the <kbd><img src="images/citation_2x.png" width="15" height="14"></kbd> toolbar button or the <kbd>Cmd+Shift+F8</kbd> keyboard shortcut to show the <strong>Insert Citation</strong> dialog:</p>
+<p><img src="images/visual-editing-citation-search.png" class="illustration" width="700"></p>
+<p>If you insert citations from Zotero, DOI look-up, or a search, they are automatically added to your document bibliography.</p>
+<p>You can also insert citations directly using markdown syntax (e.g.&nbsp;<code>[@cite]</code>). When you do this a completion interface is provided for searching available citations:</p>
+<p><img src="images/visual-editing-citations.png" width="700"></p>
+<h2 id="equations" class="anchored">Equations</h2>
+<p>LaTeX equations are authored using standard Pandoc markdown syntax (the editor will automatically recognize the syntax and treat the equation as math). When you aren’t directly editing an equation it will appear as rendered math:</p>
+<p><img src="images/visual-editing-math.png" width="700"></p>
+<p>As shown above, when you select an equation with the keyboard or mouse you can edit the equation’s LaTeX. A preview of the equation will be shown below it as you type.</p>
+<h2 id="images" class="anchored">Images</h2>
+<p>You can insert images using either the <strong>Insert -&gt; Image</strong> command (<kbd>Ctrl+Shift+I</kbd> keyboard shortcut) or by dragging and dropping images from the local filesystem. If an image isn’t already in your markdown document’s directory, it will be copied to an <code>images/</code> folder in your project.</p>
+<p>Select an image to re-size it in place (automatically preserving their aspect ratio if you wish):</p>
+<p><img src="images/visual-editing-images.png" width="700"></p>
+<h2 id="cross-references" class="anchored">Cross References</h2>
+<p>The <a href="https://bookdown.org">bookdown</a> package includes markdown extensions for cross-references and part headers. The <a href="https://bookdown.org/yihui/blogdown/">blogdown</a> package also supports bookdown style cross-references, as does the <a href="https://rstudio.github.io/distill/">distill</a> package.</p>
+<p>Bookdown cross-references enable you to easily link to figures, equations, and even arbitrary labels within a document. In raw markdown, you would for example write a cross-reference to a figure like this: <code>\@ref(fig:label)</code>, where the <code>label</code> is the name of the code chunk used to make the figure. For figure cross-referencing to work, you’ll also need to add a figure caption to the same code chunk using the knitr chunk option <code>fig.cap</code>, such as <code>fig.cap="A good plot"</code>.</p>
+<p>Cross-references are largely the same in visual mode, but you don’t need the leading <code>\</code> (which in raw markdown is used to escape the <code>@</code> character). For example:</p>
+<p><img src="images/visual-editing-xref.png" width="700"></p>
+<p>As shown above, when entering a cross-reference you can search across all cross-references in your project to easily find the right reference ID.</p>
+<p>Similar to hyperlinks, you can also navigate to the location of a cross-reference by clicking the popup link that appears when it’s selected:</p>
+<p><img src="images/visual-editing-xref-navigate.png" width="700"></p>
+<p>You can also navigate directly to any cross-reference using IDE global search:</p>
+<p><img src="images/visual-editing-xref-search.png" class="illustration" width="700"></p>
+<p>See the bookdown documentation for more information on <a href="https://bookdown.org/yihui/bookdown/cross-references.html">cross-references</a>.</p>
+<h2 id="footnotes" class="anchored">Footnotes</h2>
+<p>You can include footnotes using the <strong>Insert -&gt; Footnote</strong> command (or the <kbd>Cmd+Shift+F7</kbd> keyboard shortcut). Footnote editing occurs in a pane immediately below the main document:</p>
+<p><img src="images/visual-editing-footnote.png" class="illustration" width="700"></p>
+<h2 id="emojis" class="anchored">Emojis</h2>
+<p>To insert an emoji, you can use either the <strong>Insert</strong> menu or use the requisite markdown shortcut plus auto-complete:</p>
+
+<table>
+<thead>
+<tr class="header">
+<th>
+<p>
+<strong>Insert -&gt; Special Characters -&gt; Emoji…</strong>
+</p>
+</th>
+<th>
+<p>
+Markdown Shortcut
+</p>
+<p>
+</p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>
+<p>
+<img src="images/visual-editing-emoji-dialog.png">
+</p>
+</td>
+<td>
+<p>
+<img src="images/visual-editing-emoji-completion.png">
+</p>
+</td>
+</tr>
+</tbody>
+
+</table>
+<p>For markdown formats that support text representations of emojis (e.g.&nbsp;<code>:grinning:</code>), the text version will be written. For other formats the literal emoji character will be written. Currently, GitHub Flavored Markdown and Hugo (with <code>enableEmjoi = true</code> in the site config) both support text representation of emojis.</p>
+<h2 id="latex-and-html" class="anchored">LaTeX and HTML</h2>
+<p>You can include raw LaTeX commands or HTML tags when authoring in visual mode. The raw markup will be automatically recognized and syntax highlighted. For example:</p>
+<p><img src="images/visual-editing-raw.png" width="700"></p>
+<p>The above examples utilize <em>inline</em> LaTeX and HTML. You can also include blocks of raw content using the commands on the <strong>Format -&gt; Raw</strong> menu. For example, here is a document with a raw LaTeX block:</p>
+<p><img src="images/visual-editing-latex-block.png" width="700"></p>
+<h2 id="learning-more" class="anchored">Learning More</h2>
+<p>See the <a href="https://rstudio.github.io/visual-markdown-editing">Visual Markdown Editing</a> documentation to learn more about using visual mode.</p>
+<p>You can try out the visual editor by installing the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio 1.4 Preview Release</a>. If you do, please let us know how we can make it better on the <a href="https://community.rstudio.com/c/rstudio-ide">community forum</a>!</p>
+
+<style type="text/css">
+p {
+  hyphens: none !important;
+}
+
+table {
+  margin-top: 0;
+  border-top: none;
+  border-bottom: none;
+}
+
+thead th {
+  text-align: left;
+  padding-left: 8px;
+}
+
+th, td {
+  padding: 1px;
+}
+
+table thead th {
+  border-bottom: none;
+}
+
+.illustration {
+  border: 1px solid rgb(230, 230, 230);
+}
+
+kbd {
+  display: inline-block;
+  margin: 0;
+  padding: 0.25em 0.25em;
+  border: 1px solid rgb(230, 230, 230);
+  border-radius: 3px;
+  background: #f9f9f9;
+  font-family: monospace;
+  font-size: 1em;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: 1;
+  color: inherit;
+}
+</style>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,146 @@
+---
+title: Announcing pins for Python
+authors:
+- Michael Chow
+date: '2022-06-02'
+slug: pins-for-python
+blogcategories:
+  - Open Source
+tags:
+  - pins
+  - python
+description: We are so happy to announce the release of pins for Python. You can use pins to publish, version, and share objects such as datasets and models.
+alttext: "Two hex stickers: the pins hex sticker, orange with a pin, the Python logo, two intertwining snakes. The background is a fuzzy collage of other hex stickers."
+events: blog
+---
+
+
+```{r}
+#| echo: false
+reticulate::use_virtualenv("~/.virtualenvs/pins-python")
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+We're excited to announce the release of [pins](https://rstudio.github.io/pins-python/) for Python!
+
+pins removes the hassle of managing data across projects, colleagues, and teams by
+providing a central place for people to store, version and retrieve data.
+If you've ever chased a CSV through a series of email exchanges, or had to decide between
+`data-final.csv` and `data-final-final.csv`, then pins is for you.
+
+pins stores data on a **board**, which can be a local folder, or on RStudio Connect or a cloud provider like Amazon S3.
+Each individual object (such as a dataframe, model, or another pickle-able Python object), together with some metadata, is called a pin.
+
+The Python pins library works with its [R counterpart](https://pins.rstudio.com/),
+so that teams working across R and Python have a unified strategy for sharing data.
+This work emerged as part of RStudio's investment in Python open source, in order to
+support bilingual data science teams.
+
+<h2>Getting Started</h2>
+
+The first step to using pins is installing it from PyPI.
+
+```shell
+python -m pip install pins
+```
+
+In the examples below, I'll walk through the basics of pins using a temporary directory
+for a board, with `board_temp()`. This gets deleted after you close Python, so it is
+not ideal for collaboration! You can use other boards, like `board_rsconnect()`, 
+`board_folder()`, and `board_s3()`, in more realistic settings.
+
+
+```{python}
+import pins
+from pins.data import mtcars
+
+board = pins.board_temp()
+```
+
+You can "pin" (save) data to a board with the `.pin_write()` method. It requires three
+arguments: an object, a name, and a pin type:
+
+```{python}
+board.pin_write(mtcars.head(), "mtcars", type="csv")
+```
+
+Above, we saved the data as a CSV, but depending on
+what you’re saving and who else you want to read it, you might use the
+`type` argument to instead save it as a `feather`, `parquet`, or `joblib` file.
+
+You can later retrieve the pinned data with `.pin_read()`:
+
+```{python}
+board.pin_read("mtcars")
+```
+
+You can search for data using `.pin_search()` and `.pin_list()`.
+
+```{python}
+# prints out a list of all pins
+# board.pin_list()
+
+# searches for pins containing "cars"
+board.pin_search("cars")
+```
+
+Two more pieces of important functionality exist:
+
+* `.pin_write()` won't delete existing data, but versions your data.
+* `.pin_read()` caches your data, so subsequent reads are much faster.
+
+See [getting started](https://rstudio.github.io/pins-python/getting_started.html) in the
+pins documentation for more information.
+
+<h2>Interoperability with R pins</h2>
+
+Pins stored with Python can be read with R, and vice-versa.
+
+For example, here is R code that reads the `mtcars` pin we wrote to the board above.
+Note that `TEMP_PATH` refers to the temporary directory we created in this blog post for our Python board.
+
+```{r, echo=FALSE, results="hide"}
+TEMP_PATH <- reticulate::py$board$board
+```
+
+
+```{r}
+library(pins)
+
+board <- board_folder(TEMP_PATH)
+board %>% pin_read("mtcars")
+```
+
+This is especially useful when colleagues prefer one language over the other. For real collaborative work like this, you would use a board like `board_rsconnect()` or `board_s3()`.
+
+<h2>Going further</h2>
+
+The real power of pins comes when you share a board with multiple people.
+To get started, you can use `board_folder()` with a directory on a shared
+drive or in DropBox, or if you use
+[RStudio Connect](https://www.rstudio.com/products/connect/) you can use
+`board_rsconnect()`:
+
+```python
+board = pins.board_rsconnect()
+board.pin_write(tidy_sales_data, "michael/sales-summary", type="csv")
+```
+
+Then, someone else (or an automated report) can read and use your
+pin:
+
+```python
+board = pins.board_rsconnect()
+board.pin_read("michael/sales-summary")
+```
+
+The pins package also includes boards that allow you to share data on
+services like Amazon’s S3 (`board_s3()`), with plans to support other backends such as Google Cloud Storage and Azure's blob storage.
+
+
+<h2>Get in touch</h2>
+
+We are so happy about releasing pins for Python, and we want
+to make sure it supports your workflow. Join our discussion on
+RStudio Community to let us know what you're working on,
+and how pins could help!

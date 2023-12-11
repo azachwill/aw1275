@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-04-22">
+
+<title>Getting to the Right Question</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Getting to the Right Question</h1>
+
+<p class="date">2020-04-22</p>
+</header>
+
+<h2 id="the-root-problem-we-dont-all-speak-the-same-language" class="anchored">The Root Problem: We Don’t All Speak the Same Language</h2>
+<p>Organizations across the modern business world recognize the critical importance of Data Science for competitive advantage. That recognition has driven Glassdoor to rate Data Scientist as <a href="https://www.glassdoor.com/List/Highest-Paying-Jobs-LST_KQ0,19.htm">one of the 25 top paying jobs in America in 2020</a>.</p>
+<p>However, many organizations struggle to put these data scientists’ knowledge to work in their businesses where they can actually have an impact on success. We hear data scientists say, “The business can’t really tell us what they want, so they waste a lot of our time.” And in return, business people often say, “Our data scientists are really smart, but the applications they build too often fall short of what we’re looking for.”</p>
+<p>The problem here is that data scientists and business people speak very different languages. Specifically, they struggle to understand each other around:</p>
+<ul>
+<li><strong>data.</strong> When a business person thinks about data associated with the business, they often are thinking about data that they can see in Web pages or spreadsheets. Data scientists, on the other hand, are usually looking for data that they can access using an Application Programming Interface or API.</li>
+<li><strong>process.</strong> When business people think about the process for analysis, they tend to think in people-centric terms along the lines of “Becky takes the order, and then transmits that data to George.” Data scientists, on the other hand, usually think of process as a series of automated programs that works without people.</li>
+<li><strong>results.</strong> Data scientists think of a result as an analysis running and producing correct output. Business people see a result as something that has an effect on the organization’s (usually financial) metrics. These are rarely the same thing, at least in the first version of a data science project.</li>
+</ul>
+<p>Both points of view are valid – they just aren’t the same, which creates a communications gap.</p>
+<h2 id="iterative-development-can-overcome-the-communications-gap" class="anchored">Iterative Development Can Overcome the Communications Gap</h2>
+<p><em>“An approximate answer to the right question is worth a great deal more than a precise answer to the wrong question.”</em> –John Tukey</p>
+<h3 id="astellas-aymen-waqar-discusses-the-analytics-communications-gap" class="anchored">Astellas’ Aymen Waqar discusses the analytics communications gap:</h3>
+<div style="padding: 15px 40px 35px 40px;text-align: center;">
+<script src="https://fast.wistia.com/embed/medias/iwmemji2xh.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<span class="wistia_embed wistia_async_iwmemji2xh popover=true popoverAnimateThumbnail=true videoFoam=true" style="display:inline-block;height:100%;position:relative;width:100%">&nbsp;</span>
+</div>
+</div>
+</div>
+<p>These communications gaps are part of a larger challenge of defining (and refining) the problem. While your business stakeholder might believe they have a clear definition of the problem they are trying to solve, they may not understand whether the data is available, how complex the modeling might be or how long building a model on large data might take, or what adjacent problems might be potentially more valuable and/or far simpler to solve. So, before starting the development process, the data scientist and the business stakeholder must explore and discuss the problem in enough detail to create a realistic development plan. And while data scientists and business people may struggle to understand each other’s words, they usually can agree if they can just see a working model. The difficult part is getting to that working model.</p>
+<h2 id="a-commonly-used-data-exploration-process-can-help" class="anchored">A Commonly Used Data Exploration Process Can Help</h2>
+<p>One way to get to agreement is to break down the project into simpler pieces and get agreement on each piece before moving on to the next. Garrett Grolemund and Hadley Wickham propose the following process below in their book <a href="https://r4ds.had.co.nz"><em>R for Data Science</em></a>. This process isn’t specific to any technology such as R or Python. Rather it’s a way to get your data scientist and business sponsor to come to consensus on what question they are attacking.</p>
+<p><img align="center" style="padding: 35px;" src="process2.jpg" alt="A visualization of the data science process"></p>
+<p>The four steps are</p>
+<ol type="1">
+<li><strong>Import</strong>. Identify the data you plan to use, and focus first on importing that data so you can work with it.</li>
+<li><strong>Tidy</strong>. Now that you have the data in hand, reshape and manipulate the data into a form that your analysis tools can easily work with.</li>
+<li><strong>Understand</strong>. This step is where your data scientists should be interacting most with sponsors by turning the data into visuals and models, and getting feedback about whether they satisfy the business needs.</li>
+<li><strong>Communicate</strong>. Once you have consensus on what you’re building, this is where you simplify and polish the result so that everyone will understand the result.</li>
+</ol>
+<h2 id="four-recommendations-for-applying-this-process" class="anchored">Four Recommendations For Applying This Process</h2>
+<p>Many data scientists (or at least those who have read <em>R for Data Science</em>) use this type of process for doing analysis. However, fewer think of using it as a communications tool to ensure they are answering the proper business questions. You can help your data scientists apply this approach; encourage them to:</p>
+<ul>
+<li><strong>Schedule check-ins at each step.</strong> Before you begin, set up regular check-ins with your business sponsors. Ideally, these should roughly correspond with the development phases listed above to ensure that everyone is in sync before moving on to the next phase.</li>
+<li><strong>Use rapid prototyping tools and languages.</strong> R and Python are the tools of choice for most data scientists because they are well-suited to the type of iterative development process being described here. Both languages speed development and have excellent visualization tools which will help drive consensus.</li>
+<li><strong>Document progress using public documents.</strong> Use a single Google Docs file to record each meeting and to record decisions. Don’t start a new document with each meeting, but simply prepend the date and the most recent meeting notes at top. By the time the project is done, you’ll have a record of the entire process from beginning to end which will help plan future projects.</li>
+<li><strong>Defer performance concerns until you have an agreed result.</strong> Too many projects get bogged down designing for full-scale deployment before they actually know what they are building. Instead, develop a prototype that everyone agrees is the right idea, and then revise it to scale up when you decide to put it into production. This approach simplifies early decision-making and doesn’t waste precious project time on premature optimizations.</li>
+</ul>
+<p>Once the application satisfies both your data scientists and business stakeholders, you’ll want to share the finished application with the wider business community. One of the easiest ways to do this is through <em>RStudio Connect</em>, which can help you rapidly refine your content during the prototyping phase, and share it widely and consistently in the production phase. We will talk more about that in our next blog post. Meanwhile, to learn more about how Connect can add push-button publishing, scheduled execution of reports, and flexible security policies to your team’s data science work, please visit the <a href="https://rstudio.com/products/connect/">RStudio Connect product page</a>.</p>
+<div style="padding: 25px 0 25px 0;">
+
+</div>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

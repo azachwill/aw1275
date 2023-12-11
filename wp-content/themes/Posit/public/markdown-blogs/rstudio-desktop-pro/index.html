@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2019-12-03">
+
+<title>RStudio’s Commercial Desktop License is now RStudio Desktop Pro</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio’s Commercial Desktop License is now RStudio Desktop Pro</h1>
+
+<p class="date">2019-12-03</p>
+</header>
+
+<p>We have good news for our commercial desktop IDE customers. We are giving the commercial version of our desktop IDE a new name and some great new features, including support for the RStudio Professional Drivers, at no additional cost to you.</p>
+<p>As part of this release, we are renaming RStudio Commercial Desktop License to RStudio Desktop Pro. Existing Commercial Desktop customers will be migrated as part of their next renewal. However, if you would like to migrate to the new release before then, or have any questions, please contact your RStudio Customer Success representative for more information.</p>
+<h2 id="updates-for-users" class="anchored">Updates for Users</h2>
+<p>As with the current Commercial Desktop License offering, RStudio Desktop Pro has all the great features of the RStudio Desktop Open Source Edition, plus a commercial license for organizations not able to use AGPL software, and access to priority support.</p>
+<p>Beyond that, RStudio Desktop Pro also provides:</p>
+<ul>
+<li><strong>RStudio Professional Drivers:</strong> These drivers provide ODBC data connectors for many of the most popular data sources. These drivers can be downloaded and configured directly from within RStudio Desktop Pro. See <a href="https://docs.rstudio.com/pro-drivers/">RStudio Pro Drivers Documentation</a> for details, and this <a href="https://blog.rstudio.com/2019/10/24/pro-drivers-1-6-0-release/">blog post</a> for the most recent updates.</li>
+<li><strong>License Activation and Management</strong>: To help users ensure compliance with their organization’s policies against AGPL software, RStudio Desktop Pro is a separate download from the RStudio Desktop Open Source Edition, with the AGPL license removed. A commercial license manager is integrated into the software, and the license itself is delivered as part of the purchase process. The usage of RStudio Desktop Pro is governed by a time-limited license tied to the renewal date. The time-limited license prevents users from accidentally reverting to the AGPL license if their subscription lapses.</li>
+</ul>
+<p>RStudio professional products are designed to work together. For example, RStudio Desktop Pro will use the same professional drivers as <a href="https://rstudio.com/products/rstudio-server-pro/">RStudio Server Pro</a> and <a href="https://rstudio.com/products/connect/">RStudio Connect</a>, ensuring a consistent user experience across platforms. We’d love to get your input on what you’d like to see in the future, to better integrate RStudio Desktop Pro with our other professional products. Please email sales@rstudio.com with your feedback.</p>
+<h2 id="for-more-information" class="anchored">For more information</h2>
+<ul>
+<li><a href="https://rstudio.com/products/rstudio/">RStudio Product Page</a></li>
+<li><a href="https://docs.rstudio.com/other/rdp/">RStudio Desktop Pro Documentation</a></li>
+<li><a href="https://docs.rstudio.com/pro-drivers/">RStudio Pro Drivers Documentation</a></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

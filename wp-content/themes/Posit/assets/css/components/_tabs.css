@@ -1,0 +1,24 @@
+.tabs {
+    scrollbar-width: none; /* for Firefox */
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+}
+
+.tabs::-webkit-scrollbar {
+    @apply hidden;
+}
+
+.tabs-content-container .container {
+    @apply px-0;
+}
+
+.tab.active {
+    @apply border-b-2 border-blue4;
+}
+
+.tab.active a {
+    @apply body-lg-semibold text-blue4;
+}
+
+.tab.active button {
+    @apply body-lg-semibold text-blue4;
+}

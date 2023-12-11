@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2016-02-09">
+
+<title>New Release of RStudio (v0.99.878)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">New Release of RStudio (v0.99.878)</h1>
+
+<p class="date">2016-02-09</p>
+</header>
+
+<p>We’re pleased to announce that a new release of RStudio (v0.99.878) is <a href="https://www.rstudio.com/products/rstudio/">available for download</a> now. Highlights of this release include:</p>
+<ul>
+<li><p>Support for registering custom <a href="http://rstudio.github.io/rstudioaddins/">RStudio Addins</a>.</p></li>
+<li><p>R Markdown editing improvements including outline view and inline UI for chunk execution.</p></li>
+<li><p>Support for multiple <a href="https://support.rstudio.com/hc/en-us/articles/207126217">source windows</a> (tear editor tabs off main window).</p></li>
+<li><p>Pane zooming for working distraction free within a single pane.</p></li>
+<li><p>Editor and IDE keyboard shortcuts can <a href="https://support.rstudio.com/hc/en-us/articles/206382178">now be customized</a>.</p></li>
+<li><p>New <a href="https://support.rstudio.com/hc/en-us/articles/210928128">Emacs keybindings</a> mode for the source editor.</p></li>
+<li><p>Support for <a href="https://rmarkdown.rstudio.com/developer_parameterized_reports.html">parameterized</a> R Markdown reports.</p></li>
+<li><p>Various improvements to RStudio Server Pro including <a href="https://support.rstudio.com/hc/en-us/articles/211789298">multiple concurrent R sessions</a>, use of <a href="https://support.rstudio.com/hc/en-us/articles/212364537">multiple R versions</a>, and <a href="https://support.rstudio.com/hc/en-us/articles/211659737">shared projects</a> for collaboration.</p></li>
+</ul>
+<p>There are lots of other small improvements across the product, check out the <a href="https://www.rstudio.com/products/rstudio/release-notes/">release notes</a> for full details.</p>
+<h3 id="rstudio-addins" class="anchored">RStudio Addins</h3>
+<p>RStudio Addins provide a mechanism for executing custom R functions interactively from within the RStudio IDE—either through keyboard shortcuts, or through the <em>Addins</em> menu. Coupled with the <a href="https://cran.rstudio.com/web/packages/rstudioapi/index.html">rstudioapi</a> package, users can now write R code to interact with and modify the contents of documents open in RStudio.</p>
+<p>An addin can be as simple as a function that inserts a commonly used snippet of text, and as complex as a Shiny application that accepts input from the user and uses it to transform the contents of the active editor. The sky is the limit!</p>
+<p>Here’s an example of addin that enables interactive subsetting of a data frame with live preview:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/12/subset-addin.gif" class="img-fluid"></p>
+<p></p><figcaption>subset-addin</figcaption><p></p>
+</figure>
+</div>
+<p>This addin is implemented using a <a href="https://shiny.rstudio.com/articles/gadgets.html">Shiny Gadget</a> (see the <a href="https://github.com/rstudio/addinexamples/blob/master/R/subsetAddin.R">source code</a> for more details). RStudio Addins are distributed as <a href="http://r-pkgs.had.co.nz/">R packages</a>. Once you’ve installed an R package that contains addins, they’ll be immediately become available within RStudio.</p>
+<p>You can learn more about using and developing addins here: <a href="http://rstudio.github.io/rstudioaddins/" class="uri">http://rstudio.github.io/rstudioaddins/</a>.</p>
+<h3 id="r-markdown" class="anchored">R Markdown</h3>
+<p>We’ve made a number of improvements to R Markdown authoring. There’s now an optional outline view that enables quick navigation across larger documents:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/12/screen-shot-2015-12-22-at-9-27-34-am.png" class="img-fluid"></p>
+<p></p><figcaption>Screen Shot 2015-12-22 at 9.27.34 AM</figcaption><p></p>
+</figure>
+</div>
+<p>We’ve also added inline UI to code chunks for running individual chunks, running all previous chunks, and specifying various commonly used knit options:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/12/screen-shot-2015-12-22-at-9-30-11-am.png" class="img-fluid"></p>
+<p></p><figcaption>Screen Shot 2015-12-22 at 9.30.11 AM</figcaption><p></p>
+</figure>
+</div>
+<h3 id="multiple-source-windows" class="anchored">Multiple Source Windows</h3>
+<p>There are two ways to open a new source window:</p>
+<p><strong>Pop out an editor</strong>: click the Show in New Window button in any source editor tab.</p>
+<p><img src="https://support.rstudio.com/hc/en-us/article_attachments/202540607/popout.png" class="img-fluid"></p>
+<p><strong>Tear off a pane:</strong> drag a tab out of the main window and onto the desktop; a new source window will be opened where you dropped the tab.</p>
+<p><img src="https://support.rstudio.com/hc/en-us/article_attachments/202617168/tabassign.gif" class="img-fluid"></p>
+<p>You can have as many source windows open as you like. Each source window has its own set of tabs; these tabs are independent of the tabs in RStudio’s main source pane.</p>
+<h3 id="customizable-keyboard-shortcuts" class="anchored">Customizable Keyboard Shortcuts</h3>
+<p>You can now customize keyboard shortcuts in RStudio – you can bind keys to execute RStudio application commands, editor commands, or even user-defined R functions.</p>
+<p>Access the keyboard shortcuts by clicking <code>Tools -&gt; Modify Keyboard Shortcuts...</code>:</p>
+<p>This will present a dialog that enables remapping of all available editor commands (commands that affect the current document’s contents, or the current selection) and RStudio commands (commands whose actions are scoped beyond just the current editor).</p>
+<p><img src="https://support.rstudio.com/hc/en-us/article_attachments/202570217/Screen_Shot_2015-07-31_at_12.52.59_PM.png" class="img-fluid"></p>
+<h2 id="emacs-keybindings" class="anchored">Emacs Keybindings</h2>
+<p>We’ve introduced a new keybindings mode to go along with the default bindings and Vim bindings already supported. Emacs mode provides a base set of keybindings for navigation and selection, including:</p>
+<ul>
+<li><p><code>C-p</code>, <code>C-n</code>, <code>C-b</code> and <code>C-f</code> to move the cursor up, down left and right by characters</p></li>
+<li><p><code>M-b</code>, <code>M-f</code> to move left and right by words</p></li>
+<li><p><code>C-a</code>, <code>C-e</code> to navigate to the start, or end, of line;</p></li>
+<li><p><code>C-k</code> to ‘kill’ to end of line, and <code>C-y</code> to ‘yank’ the last kill,</p></li>
+<li><p><code>C-s</code>, <code>C-r</code> to initiate an Emacs-style incremental search (forward / reverse),</p></li>
+<li><p><code>C-Space</code> to set/unset mark, and <code>C-w</code> to kill the marked region.</p></li>
+</ul>
+<p>There are some additional keybindings that <a href="http://ess.r-project.org/">Emacs Speaks Statistics (ESS)</a> users might find familiar:</p>
+<ul>
+<li><p><code>C-c C-v</code> displays help for the object under the cursor,</p></li>
+<li><p><code>C-c C-n</code> evaluates the current line / selection,</p></li>
+<li><p><code>C-x b</code> allows you to visit another file,</p></li>
+<li><p><code>M-C-a</code> moves the cursor to the beginning of the current function,</p></li>
+<li><p><code>M-C-e</code> moves to the end of the current function,</p></li>
+<li><p><code>C-c C-f</code> evaluates the current function.</p></li>
+</ul>
+<p>We’ve also introduced a number of keybindings that allow you to interact with the IDE as you might normally do in Emacs:</p>
+<ul>
+<li><p><code>C-x C-n</code> to create a new document,</p></li>
+<li><p><code>C-x C-f</code> to find / open an existing document,</p></li>
+<li><p><code>C-x C-s</code> to save the current document,</p></li>
+<li><p><code>C-x k</code> to close the current file.</p></li>
+</ul>
+<h3 id="section" class="anchored"></h3>
+<h3 id="rstudio-server-pro" class="anchored">RStudio Server Pro</h3>
+<p>We’ve introduced a number of significant enhancements to <a href="https://www.rstudio.com/products/rstudio-server-pro/">RStudio Server Pro</a> in this release, including:</p>
+<ul>
+<li>The ability to open multiple concurrent R sessions. Multiple concurrent sessions are useful for running multiple analyses in parallel and for switching between different tasks.</li>
+</ul>
+<p><img src="https://support.rstudio.com/hc/en-us/article_attachments/203432748/multipleRSessions3.png" class="img-fluid"></p>
+<ul>
+<li>Flexible use of multiple R versions on the same server. This is useful when you have some analysts or projects that require older versions of R or R packages and some that require newer versions.</li>
+</ul>
+<p><img src="https://support.rstudio.com/hc/en-us/article_attachments/203432008/mutlipleRVersions2.png" class="img-fluid"></p>
+<ul>
+<li>Project sharing for easy collaboration within workgroups. When you share a project, RStudio Server securely grants other users access to the project, and when multiple users are active in the project at once, you can see each others’ activity and work together in a shared editor.</li>
+</ul>
+<p><img src="https://support.rstudio.com/hc/en-us/article_attachments/203236337/Screen_Shot_2015-09-30_at_3.55.46_PM.png" class="img-fluid"></p>
+<p>See the updated <a href="https://www.rstudio.com/products/rstudio-server-pro/">RStudio Server Pro</a> page for additional details, including a set of videos which demonstrate the new features.</p>
+<h3 id="try-it-out" class="anchored">Try it Out</h3>
+<p>RStudio v0.99.878 is <a href="https://www.rstudio.com/products/rstudio/download/">available for download</a> now. We hope you enjoy the new release and as always please <a href="https://support.rstudio.com/">let us know</a> how it’s working and what else we can do to make the product better.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

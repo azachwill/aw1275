@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-12-16">
+
+<title>RStudio Connect 1.8.6 - Administrator Digest</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Connect 1.8.6 - Administrator Digest</h1>
+
+<p class="date">2020-12-16</p>
+</header>
+
+<h2 id="security-authentication" class="anchored">Security &amp; Authentication</h2>
+<h3 id="ldap-active-directory-changes" class="anchored">LDAP / Active Directory Changes</h3>
+<p>Group handling within RStudio Connect has significantly improved for LDAP / Active Directory within this release. Groups will now be synchronized via a background process on a scheduled interval. The group membership for a user is determined on login rather than at the time of content access, and permission checks will use synced data from the RStudio Connect database rather than making LDAP requests.</p>
+<p>LDAP Groups can be automatically populated upon user login if the <code>LDAP.GroupsAutoProvision</code> configuration option is enabled. This option is disabled by default to prevent an unexpectedly large number of groups from being pulled in unexpectedly. If the number of groups is not a concern, enabling this option is recommended for the optimal user experience.</p>
+<p>As a result of these changes, RStudio Connect will support <code>session$groups</code> (via the HTTP header <code>Shiny-Server-Credentials</code>) in Shiny apps when using LDAP or Active Directory. Groups are listed by name according to the setting <code>LDAP.GroupNameAttribute</code>. LDAP groups are also available to other content types via the HTTP header <code>RStudio-Connect-Credentials</code>.</p>
+<h3 id="groups-page-update" class="anchored">Groups Page Update</h3>
+<p>The Groups page will now be available in the RStudio Connect dashboard under the “People” tab for all authentication types except those that return Unique IDs instead of group names. Using the Groups page, authorized users can add, remove, and rename groups when necessary. The Groups page can also be used to inspect groups for their user membership lists and perform group searches.</p>
+<h2 id="deprecations-breaking-changes" class="anchored">Deprecations &amp; Breaking Changes</h2>
+<ul>
+<li><p><strong>Breaking Change</strong> The <code>Applications.TempMounting</code> configuration flag has been removed. Previously, disabling the flag would permit R processes to inspect the temporary data of other R processes.</p></li>
+<li><p><strong>Breaking Change</strong> When using Postgres, RStudio Connect verifies that a minimum version of 9.5 is used.</p></li>
+<li><p><strong>Breaking Change</strong> <code>GroupsByUniqueId</code> and <code>GroupsAutoProvision</code> cannot be enabled at the same time. IDs received from the authentication provider are not immediately useful for users when group auto provisioning is enabled. Please see this section of the Admin Guide for more information.</p></li>
+<li><p><strong>Deprecation</strong> The <code>Server.SourcePackageDir</code>setting is deprecated and will be removed in a future release. Administrators should consider migrating to RStudio Package Manager or set up a private package repository. Please review this section of the Admin Guide for <a href="https://docs.rstudio.com/connect/1.8.6/admin/r/package-management/#private-packages">instructions</a>.</p></li>
+<li><p><strong>Deprecation</strong> The following Groups management settings have been deprecated and will be removed in a future release:</p>
+<ul>
+<li><code>LDAP.GroupsAutoRemoval</code></li>
+<li><code>OAuth2.GroupsAutoRemoval</code></li>
+<li><code>Proxy.GroupsAutoRemoval</code></li>
+<li><code>SAML.GroupsAutoRemoval</code></li>
+</ul></li>
+</ul>
+<p>Please review the <a href="https://docs.rstudio.com/connect/news/#rstudio-connect-186">full release notes</a>.</p>
+<h2 id="upgrade-planning" class="anchored">Upgrade Planning</h2>
+<h3 id="upgrade-notes-for-ldap-active-directory-authentication" class="anchored">Upgrade Notes for LDAP / Active Directory Authentication</h3>
+<p>In RStudio Connect 1.8.6, LDAP user groups are determined on login, and group information is synced from the LDAP server to the Connect database in configured intervals.</p>
+<p><strong>What to expect when upgrading to the new LDAP Sync process:</strong></p>
+<ul>
+<li>RStudio Connect enters “upgrade mode”</li>
+<li>All LDAP users start without any group memberships</li>
+<li>Users are divided into batches sized according to the total number of users</li>
+<li>RStudio Connect will attempt to obtain group memberships for all batches within the configured update interval (default 4 hours), making the best effort to not disrupt users’ normal usage of the system</li>
+<li>Once all users are synced, RStudio Connect enters regular operation where users are updated throughout a configured interval (default 4 hours)</li>
+</ul>
+<p>In some cases, administrators may need to increase the update interval to be longer than 4 hours so that updates can be more spread out throughout the day.</p>
+<p><strong>Learn more about the changes and upgrades in the <a href="https://docs.rstudio.com/connect/admin/authentication/">updated Admin Guide</a>.</strong></p>
+<h3 id="upgrade-rstudio-connect" class="anchored">Upgrade RStudio Connect</h3>
+<p>To perform an upgrade, download and run the installation script. The script installs a new version of RStudio Connect on top of the earlier one. Existing configuration settings are respected. Additional documentation can be <a href="https://docs.rstudio.com/rsc/upgrade/">found here</a>.</p>
+<pre><code># Download the installation script
+curl -Lo rsc-installer.sh https://cdn.rstudio.com/connect/installer/installer-v1.5.1.sh
+
+# Run the installation script
+sudo bash ./rsc-installer.sh 1.8.6</code></pre>
+<hr>
+<p>To receive email notifications for RStudio professional product releases, patches, security information, and general product support updates, subscribe to the <strong>Product Information</strong> list by visiting the RStudio subscription management portal linked below.</p>
+<h3 align="center" class="anchored">
+<a href="https://rstudio.com/about/subscription-management/">Subscribe to RStudio Product Information Updates</a>
+</h3>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

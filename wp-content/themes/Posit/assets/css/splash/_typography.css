@@ -1,0 +1,65 @@
+@layer utilities {
+    .h1 {
+        @apply font-open-sans font-light text-44 md:text-80 leading-[110%] ls:text-44;
+    }
+
+    .h2 {
+        @apply font-open-sans font-light text-36 md:text-60 leading-[120%] ls:text-36;
+    }
+
+    .h3 {
+        @apply font-open-sans font-light text-28 md:text-40 leading-[120%] ls:text-28;
+    }
+
+    .h4 {
+        @apply font-open-sans font-light text-20 md:text-32 leading-[120%] ls:text-20;
+    }
+
+    .sh1 {
+        @apply font-open-sans font-bold text-32 md:text-40 leading-[120%] ls:text-32;
+    }
+
+    .sh2 {
+        @apply font-open-sans font-bold text-24 md:text-32 leading-[120%] ls:text-24;
+    }
+
+    .body-large {
+        @apply font-open-sans font-normal text-18 leading-[140%] tracking-wide;
+    }
+
+    .body-medium {
+        @apply font-open-sans font-normal text-16 leading-[140%] tracking-wide;
+    }
+
+    .body-small {
+        @apply font-open-sans font-normal text-12 leading-[140%] tracking-wider;
+    }
+
+    .ui-h1 {
+        @apply font-source-pro font-normal text-80 leading-[110%];
+    }
+
+    .ui-h2 {
+        @apply font-source-pro font-normal text-60 leading-[110%];
+    }
+
+    .ui-h3 {
+        @apply font-source-pro font-normal text-40 leading-[110%];
+    }
+
+    .ui-large {
+        @apply font-source-pro font-medium text-24 leading-[110%] tracking-wide;
+    }
+
+    .ui-medium {
+        @apply font-source-pro font-medium text-18 leading-[110%] tracking-wide;
+    }
+
+    .ui-small {
+        @apply font-source-pro font-medium text-14 leading-[110%] tracking-wide;
+    }
+
+    .ui-xsmall {
+        @apply font-source-pro font-medium text-10 leading-[110%] tracking-wide;
+    }
+}

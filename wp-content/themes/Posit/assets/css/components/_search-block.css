@@ -1,0 +1,57 @@
+.support-search {
+    margin-top: 2rem;
+    position: relative;
+    z-index: 1;
+
+    #rstudio-search-box {
+        @apply bg-gray4/[0.2];
+        display: block !important;
+        height: auto;
+        margin-top: 0 !important;
+        padding: 0;
+        position: relative !important;
+        width: 100%;
+
+        .ais-SearchBox {
+            .ais-SearchBox-form {
+                position: relative;
+
+                .icon {
+                    @apply text-blue1/[.62];
+                    left: 16px;
+                    position: absolute;
+                    transform: translateY(-50%);
+                    top: 50%;
+
+                    &--light {
+                        color: #fff;
+                    }
+                }
+            }
+
+            .ais-SearchBox-input {
+                @apply text-blue1/[.62];
+                background-color: #fff;
+                border: 1px solid #cfcfd1;
+                padding-left: 40px;
+
+                &:focus {
+                    color: #fff;
+                    padding-left: 16px;
+                }
+            }
+        }
+
+        #autocomplete {
+            /* @apply bg-gray4/[0.2]; */
+            width: 100%;
+        }
+
+        #rs-extended-search-modal {
+            .ais-SearchBox-input {
+                background-color: #17212b;
+                border: 1px solid #223d50;
+            }
+        }
+    }
+}

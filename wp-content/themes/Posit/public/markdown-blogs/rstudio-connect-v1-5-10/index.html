@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2017-12-01">
+
+<title>RStudio Connect v1.5.10</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Connect v1.5.10</h1>
+
+<p class="date">2017-12-01</p>
+</header>
+
+<p>We’re pleased to announce version 1.5.10 of RStudio Connect and the general availability of RStudio Connect Execution Servers. Execution Servers enable horizontal scaling and high availability for all the content you develop in R. The 1.5.10 release also includes important security improvements and bug fixes.</p>
+<p><strong>RStudio Connect Execution Servers</strong></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="rsc-ha.jpg" class="img-fluid"></p>
+<p></p><figcaption>HA Architecture</figcaption><p></p>
+</figure>
+</div>
+<p>Support for high availability and horizontal scaling is now generally available through RStudio Connect Execution Servers. Execution Servers enable RStudio Connect to run across a multi-node cluster.</p>
+<p>Today, Execution Servers act as identically configured Connect instances. Requests for Shiny applications and Plumber APIs are split across nodes by a load balancer. Scheduled R Markdown execution is distributed across the cluster through an internal job scheduler that distributes work evenly across nodes. Over time, more of Connect’s work will be handled by the internal scheduler, giving admins control over what nodes accomplish certain tasks.</p>
+<p>The <a href="https://docs.rstudio.com/connect/admin">admin guide</a> includes configuration instructions. Contact <a href="mailto:%20sales@rstudio.com">sales</a> for licensing information.</p>
+<p><strong>Other Improvements</strong></p>
+<ul>
+<li><p>For configurations using SQLite, the <strong>SQLite database is automatically backed up</strong> while Connect is running. By default, three backups are retained and a new backup is taken every 24 hours. To disable, setup <code>[Sqlite].Backup</code> to false in the server configuration file.</p></li>
+<li><p>RStudio Connect has always isolated user code from the file system. For example, application A can not access data uploaded with application B. In 1.5.10, <strong>R processes can now read from the <code>/tmp</code> and <code>/var/tmp</code> directories</strong>. This change enables shared files to be stored in <code>/tmp</code> and <code>/var/tmp</code> and helps facilitate Kerberos configurations. R processes still have isolated temporary directories provided at runtime and accessible with the <code>tempdir</code> function and <code>TMPDIR</code> environment variable. See <a href="http://docs.rstudio.com/connect/admin">section 12</a> of the admin guide for more details on process sandboxing.</p></li>
+<li><p>Improvements have been made in RStudio Connect and the <code>rsconnect</code> package to <strong>support deployments using proxied authentication</strong>. See the admin guide for details on setting up the proxy. Anonymous viewers and requests authenticated with API keys are also now supported with proxied auth.</p></li>
+<li><p>Scheduled reports are now re-run if execution is interrupted by a server restart. In a cluster, reports are automatically re-run if a node goes down, assuring high availability for scheduled renderings.</p></li>
+<li><p><code>AdminEditableUsernames</code> is disabled by default for compatibility with the <code>RequireExternalUsernames</code> flag introduced in 1.5.8. These changes increase security by preventing changes to data supplied by authentication providers.</p></li>
+<li><p>User session expiration is better enforced. All user browser sessions will need to login after the 1.5.10 upgrade.</p></li>
+<li><p>Runtime environments for <a href="https://rmarkdown.rstudio.com/authoring_shiny.html">Shiny R Markdown Documents</a> have changed to support <code>rmarkdown</code> versions 1.7+.</p></li>
+</ul>
+<p>You can see the full release notes for RStudio Connect 1.5.10 <a href="http://docs.rstudio.com/connect/news">here</a>.</p>
+<blockquote>
+<p><strong>Upgrade Planning</strong> There are no special precautions to be aware of when upgrading from 1.5.8 to 1.5.10. Installation and startup should take less than a minute.</p>
+</blockquote>
+<p>If you haven’t yet had a chance to download and try <a href="https://www.rstudio.com/products/connect/">RStudio Connect</a> we encourage you to do so. RStudio Connect is the best way to share all the work that you do in R (Shiny apps, R Markdown documents, plots, dashboards, Plumber APIs, etc.) with collaborators, colleagues, or customers.</p>
+<p>You can find more details or download a 45 day evaluation of the product at https://www.rstudio.com/products/connect/. Additional resources can be found below.</p>
+<ul>
+<li><a href="http://docs.rstudio.com/connect/admin">RStudio Connect Admin Guide</a></li>
+<li><a href="http://docs.rstudio.com/connect/news">Detailed Release Notes</a></li>
+<li><a href="https://rstudio.com/pricing">Pricing</a></li>
+<li><a href="https://beta.rstudioconnect.com">Online preview of RStudio Connect</a></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

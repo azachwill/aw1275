@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2017-08-22">
+
+<title>RStudio v1.1 Preview - Object Explorer</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio v1.1 Preview - Object Explorer</h1>
+
+<p class="date">2017-08-22</p>
+</header>
+
+<p><em>Today, we’re continuing our blog series on new features in RStudio 1.1. If you’d like to try these features out for yourself, you can <a href="https://www.rstudio.com/products/rstudio/download/preview/">download a preview release of RStudio 1.1</a>.</em></p>
+<h2 id="object-explorer" class="anchored">Object Explorer</h2>
+<p>You might already be familiar with the <strong>Data Viewer</strong> in RStudio, which allows for the inspection of data frames and other tabular R objects available in your R environment. With RStudio v1.1, it will be possible to inspect hierarchical (list-like) R objects as well, using the <strong>Object Explorer</strong>.</p>
+<h3 id="exploring-an-object" class="anchored">Exploring an Object</h3>
+<p>The same workflows you’re familiar with for opening the data viewer apply when opening the object explorer. Let’s start by inspecting some data returned by the GitHub API – we’ll inspect the latest commit made on the <a href="https://github.com/tidyverse/dplyr">dplyr</a> repository. First, let’s start by downloading and reading this data into R:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># read from the commits API endpoint</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>conn <span class="ot">&lt;-</span> <span class="fu">url</span>(<span class="st">"https://api.github.com/repos/hadley/dplyr/commits"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>content <span class="ot">&lt;-</span> <span class="fu">readLines</span>(conn, <span class="at">warn =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">close</span>(conn)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># convert from JSON to R list object</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> jsonlite<span class="sc">::</span><span class="fu">fromJSON</span>(content, <span class="at">simplifyDataFrame =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># extract the most recent commit</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>latest <span class="ot">&lt;-</span> data[[<span class="dv">1</span>]]</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Within the environment pane, explorable objects will be shown with a magnifying glass, and clicking on this icon will open the associated item in the object explorer. (Alternatively, such objects can also be opened by directly calling the <code>View()</code> function on the object of interest.)</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-08-22-explorer-environment-pane.png" class="img-fluid"></p>
+<p></p><figcaption>Object Explorer</figcaption><p></p>
+</figure>
+</div>
+<p>After clicking on this icon, the object explorer will open, and we can begin exploring the latest <code>dplyr</code> commit.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-08-22-explorer-open.png" class="img-fluid"></p>
+<p></p><figcaption>Object Explorer</figcaption><p></p>
+</figure>
+</div>
+<h3 id="interacting-with-the-object-explorer" class="anchored">Interacting with the Object Explorer</h3>
+<p>The object explorer displays information within a tree with three (resizable!) columns:</p>
+<ul>
+<li><strong>Name</strong>: Either the name of the element (when present); or the index of the element in its parent container;</li>
+<li><strong>Type</strong>: The underlying R type (or class) of a particular element, alongside its length;</li>
+<li><strong>Value</strong>: A brief description of the value for a particular element.</li>
+</ul>
+<p>Expandable nodes (e.g.&nbsp;sub-lists) can be expanded by clicking the blue arrow to the left of the expandable field. In the following image, the <code>commit</code> and <code>tree</code> sub-nodes are opened:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-08-22-explorer-expanded.png" class="img-fluid"></p>
+<p></p><figcaption>Object Explorer with Expanded Nodes</figcaption><p></p>
+</figure>
+</div>
+<p>You might also notice the text at the bottom left of the explorer, indicating the R code that can be used to access this particular object. If you mouse over a particular row in the object explorer, you’ll see an icon drawn on the right side of that row – this icon can be clicked to send that code to the R console.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-08-22-explorer-send-to-console.png" class="img-fluid"></p>
+<p></p><figcaption>Object Explorer with Send to Console Icon</figcaption><p></p>
+</figure>
+</div>
+<h2 id="filtering-with-the-explorer" class="anchored">Filtering with the Explorer</h2>
+<p>All kinds of R objects can be inspected within the object explorer – environments, S4 objects, R6 objects, R functions, and other base R objects. For example, we can explore the <code>readr</code> namespace, and learn a bit about the functions contained within. We’ll use the object explorer to explore the <code>read_csv()</code> function definition.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>readr <span class="ot">&lt;-</span> <span class="fu">asNamespace</span>(<span class="st">"readr"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(readr)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-08-22-explorer-readr.png" class="img-fluid"></p>
+<p></p><figcaption>Object Explorer with readr Namespace</figcaption><p></p>
+</figure>
+</div>
+<p>There are quite a few top-level objects in the <code>readr</code> namespace (189 in total). Rather than scrolling to find the <code>read_csv()</code> in the explorer, we can use the search box at the top-right of the explorer to quickly filter down to entries containing <code>read_csv</code> in their name:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-08-22-explorer-readr-read-csv.png" class="img-fluid"></p>
+<p></p><figcaption>Object Explorer readr Namespace Filtered</figcaption><p></p>
+</figure>
+</div>
+<p>Notice how the object explorer displays the <em>formals</em>, <em>body</em> and <em>environment</em> for an R function definition. This allows you to explore the ‘guts’ of an R function – for example, the expression tree associated with a function’s body, and the default parameter values associated with the function arguments. We can expand the <em>formals</em> entry to view the function arguments accepted by <code>read_csv()</code>:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-08-22-explorer-readr-read-csv-expanded.png" class="img-fluid"></p>
+<p></p><figcaption>Object Explorer readr Namespace Expanded</figcaption><p></p>
+</figure>
+</div>
+<h3 id="xml2-integration" class="anchored">xml2 Integration</h3>
+<p>The object explorer also comes with special handling for XML and HTML documents produced by the <code>xml2</code> package:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xml2)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>text <span class="ot">&lt;-</span> <span class="st">"&lt;parent&gt;&lt;child id='a'&gt;child 1&lt;/child&gt;&lt;child id='b'&gt;child 2&lt;/child&gt;&lt;/parent&gt;"</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>xml <span class="ot">&lt;-</span> xml2<span class="sc">::</span><span class="fu">read_xml</span>(text)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(xml)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-08-22-explorer-xml.png" class="img-fluid"></p>
+<p></p><figcaption>Object Explorer with XML Document</figcaption><p></p>
+</figure>
+</div>
+<p>Similarly, the generated code uses the <code>xml2</code> package APIs to access nodes from within the XML document.</p>
+<hr>
+<p>We hope you find the <strong>Object Explorer</strong> to be a useful tool in your workflows. If you’re interested in giving it a test drive, please <a href="https://www.rstudio.com/products/rstudio/download/preview/">download the RStudio 1.1 preview</a>.</p>
+<p>If you have any questions or feedback, please get in touch with us at the <a href="http://support.rstudio.com/hc/en-us">support forums</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

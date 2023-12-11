@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2016-03-09">
+
+<title>R on Travis-CI</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">R on Travis-CI</h1>
+
+<p class="date">2016-03-09</p>
+</header>
+
+<p>Support for building R projects on Travis has recently undergone improvements which we hope will make it an even better tool for the R community. Feature highlights include:</p>
+<ul>
+<li><p>Support for Travis’ <a href="https://docs.travis-ci.com/user/workers/container-based-infrastructure/">container-based infrastructure</a>.</p></li>
+<li><p>Package dependency caching (on the container-based builds).</p></li>
+<li><p>Building with multiple R versions (R-devel, R-release (3.2.3) and R-oldrel (3.1.3)).</p></li>
+<li><p>Log filtering to improve readability and hide less relevant information.</p></li>
+<li><p>Updated dependencies TexLive (2015) and pandoc (1.15.2).</p></li>
+</ul>
+<p>See the Travis documentation on <a href="https://docs.travis-ci.com/user/languages/r">building an R project</a> for complete details on the available options.</p>
+<p>Using the container-based infrastructure with package caching is now recommended for nearly all projects. There are more compute and network resources available for container based builds, which means they start processing in less time and run faster. The package caching makes package installation comparable or faster than using binary packages.</p>
+<p>A minimal .travis.yml file that is suitable for most cases is</p>
+<pre><code>language: r
+sudo: false
+cache: packages</code></pre>
+<p>New packages can omit <code>sudo: false</code>, as it is the default for new repositories. However older repositories will have to explicitly set <code>sudo: false</code> to use the container based infrastructure.</p>
+<p>If your package depends on development packages that are not on CRAN (such as GitHub) we recommend you use the <a href="https://github.com/hadley/devtools/blob/master/vignettes/dependencies.Rmd">Remotes:</a> annotation in your package <code>DESCRPITION</code> file. This will allow your package and dependencies to be easily installed by <code>devtools::install_github()</code> as well as on Travis (<a href="https://github.com/search?utf8=%E2%9C%93&amp;q=filename%3ADESCRIPTION+path%3A%2F+Remotes&amp;type=Code&amp;ref=searchresults">Examples</a>). It is generally no longer necessary to use <code>r_github_packages</code>, <code>r_packages</code>, <code>r_binary_packages</code>, etc. as this can be handled with <code>Remotes</code>.</p>
+<p>If you need system dependencies, first check to see if they’re available with the <a href="https://docs.travis-ci.com/user/installing-dependencies/#Installing-Packages-with-the-APT-Addon">apt-addon</a> and include them in your <code>.travis.yml</code>. This will allow you to install them without sudo and still use the container based infrastructure.</p>
+<pre><code>addons:
+  apt:
+    packages:
+      - libv8-dev</code></pre>
+<p>We hope these improvements will make your use of Travis with R simple and useful. Please file any issues found at <a href="https://github.com/travis-ci/travis-ci/issues" class="uri">https://github.com/travis-ci/travis-ci/issues</a> and mention <span class="citation" data-cites="craigcitro">@craigcitro</span>, <span class="citation" data-cites="hadley">@hadley</span> and <span class="citation" data-cites="jimhester">@jimhester</span> in the issue.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

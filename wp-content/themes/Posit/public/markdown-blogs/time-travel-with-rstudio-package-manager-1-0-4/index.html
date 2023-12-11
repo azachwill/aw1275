@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2019-01-30">
+
+<title>Time Travel with RStudio Package Manager 1.0.4</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Time Travel with RStudio Package Manager 1.0.4</h1>
+
+<p class="date">2019-01-30</p>
+</header>
+
+<p>We all love packages. We don’t love when broken package environments prevent us from reproducing our work. In version 1.0.4 of RStudio Package Manager, individuals and teams can navigate through repository checkpoints, making it easy to recreate environments and reproduce work. The new release also adds important security updates, improvements for Git sources, further access to retired packages, and beta support for Amazon S3 storage.</p>
+<h4 id="new-to-rstudio-package-manager" class="anchored">New to RStudio Package Manager?</h4>
+<p><a href="https://rstudio.com/products/package-manager/">Download</a> the 45-day evaluation today to see how RStudio Package Manager can help you, your team, and your entire organization access and organize R packages. Learn more with our <a href="https://demo.rstudiopm.com">online demo server</a> or <a href="https://resources.rstudio.com/webinars/introduction-to-the-rstudio-package-manager-sean-lopp">latest webinar</a>.</p>
+<p></p>
+<h2 id="updates" class="anchored">Updates</h2>
+<h3 id="time-travel" class="anchored">Time Travel</h3>
+<p>RStudio Package Manager automatically tracks every change to your repositories, whether you’re adding new packages to a curated source, syncing the latest data from CRAN, or building a new commit of your internal package. These changes are efficiently stored as checkpoints. By default, R users installing packages will get the latest and greatest, but they can also install packages from any point in the past.</p>
+<p>A <a href="https://demo.rstudiopm.com/client/#/repos/3/overview">new calendar</a> on a repository’s setup page can be used to travel backwards in time. If you last used a project in November, you can install packages as they existed <strong>in your repository</strong> from that moment, making it much easier to guarantee your work is reproducible.</p>
+<p></p>
+<p>Alternatively, it is also possible to preemptively pin a project to a frozen checkpoint. This can be really useful in cases where you know you’ll always want the same set of packages. For example, you can include a reference to a checkpoint inside of a Dockerfile to ensure anytime the Docker image is rebuilt, you’ll get the same packages and versions.</p>
+<pre><code>RUN Rscript -e 'install.packages(...,
+  repos = "https://rpkgs.example.com/cran/128")'</code></pre>
+<h3 id="new-storage-options" class="anchored">New Storage Options</h3>
+<p>Version 1.0.4 adds beta support for storing packages on Amazon S3 instead of local or shared storage. In addition, we’ve expanded the <a href="https://docs.rstudio.com/rspm/admin/appendix-configuration.html#appendix-configuration-filestorage">configuration options</a> for administrators to control exactly where and how Package Manager stores packages, data, and metrics.</p>
+<h3 id="retired-packages" class="anchored">Retired Packages</h3>
+<p>You may be familiar with archived packages - they are older versions of packages that are listed at the bottom of a package’s information page.</p>
+<p></p>
+<p>Did you know that CRAN packages can be retired? “Retirement” occurs when every version of a package is placed in the archive and no version remains current. Packages can be retired for a variety of reasons: perhaps the maintainer is no longer fixing breaking changes, or the functionality has been replaced by a new package. While retired packages are typically not used by new projects, it can be useful to see if a package you’re searching for is retired. Library management tools like <code>packrat</code> also make use of retired packages to recreate older environments. In 1.0.4, retired packages show up in a repository with a special page indicating their status.</p>
+<p></p>
+<h3 id="git-source-improvements" class="anchored">Git Source Improvements</h3>
+<p>RStudio Package Manager makes it easy to share R packages that live inside of Git, either internal packages or packages from GitHub. This release includes a number of quality of life improvements:</p>
+<ul>
+<li><p><strong>Subdirectories</strong> In verison 1.0.4, we’ve added support to build packages that live in sub-directories of a Git file system.</p></li>
+<li><p><strong>SSH keys</strong> We’ve added support for SSH keys that use a passphrase, and we’ve significantly improved how SSH keys are used to access Git repos.</p></li>
+<li><p><strong>Description Files</strong> Packages built from Git now have the commit SHA included in their DESCRIPTION file for reference.</p></li>
+</ul>
+<h2 id="deprecations-breaking-changes-and-security-updates" class="anchored">Deprecations, Breaking Changes, and Security Updates</h2>
+<ul>
+<li><p><strong>Breaking Change</strong> Version 1.0.4 introduces an important security enhancement that helps isolate package builds from the rest of Package Manager. If you are using packages from Git <strong>and</strong> running on RedHat/CentOS or inside of a Docker container, you may need to update your configuration. Follow <a href="https://docs.rstudio.com/rspm/1.0.4/admin/process-management.html">these instructions</a> for more information.</p></li>
+<li><p>The use of SSH keys for accessing Git repositories has been improved by adding support for passphrases and isolated SSH agents.</p></li>
+</ul>
+<p>Please review the <a href="https://docs.rstudio.com/rspm/news">full release notes</a>.</p>
+<blockquote>
+<h4 id="upgrade-planning" class="anchored">Upgrade Planning</h4>
+<p>Please note the breaking changes and deprecations above. Upgrading to 1.0.4 from 1.0.0 will take less than five minutes. If you are upgrading from an earlier beta version, be sure to consult the release notes for the intermediate releases, as well.</p>
+</blockquote>
+<p>Don’t see that perfect feature? Wondering why you should be worried about package management? Want to talk about other package management strategies? <a href="mailto:sales@rstudio.com">Email us</a>, our product team is happy to help!</p>
+<ul>
+<li><a href="https://docs.rstudio.com/rspm/admin">Admin Guide</a></li>
+<li><a href="https://www.rstudio.com/wp-content/uploads/2018/07/RStudio-Package-Manager-Overview.pdf">Overview PDF</a></li>
+<li><a href="https://resources.rstudio.com/webinars/introduction-to-the-rstudio-package-manager-sean-lopp">Introductory Webinar</a></li>
+<li><a href="https://demo.rstudiopm.com">Online Demo</a></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

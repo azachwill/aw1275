@@ -1,0 +1,6 @@
+@layer utilities {
+    .screen-reader-only {
+        clip: rect(0 0 0 0);
+        @apply absolute w-[1px] overflow-hidden whitespace-nowrap;
+    }
+}

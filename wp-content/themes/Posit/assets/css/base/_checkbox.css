@@ -1,0 +1,51 @@
+@layer utilities {
+    .dropdown-option:hover {
+        @apply bg-blue3/10;
+    }
+
+    .dropdown-option:focus {
+        @apply bg-blue3/20;
+    }
+
+    .checkbox-input:hover + label,
+    .checkbox-input:checked + label,
+    .checkbox-input:focus-within + label {
+        @apply text-blue1;
+    }
+
+    .checkbox-input + label:before {
+        @apply inline-block content-[''] h-[20px] w-[20px] min-w-[20px] mr-[10px] rounded-sm box-border border border-gray3;
+    }
+
+    .checkbox-input:hover + label:before {
+        @apply border border-gray2;
+    }
+
+    .checkbox-input:focus-within + label:before {
+        @apply border border-gray3 ring-[6px] ring-blue4/20;
+    }
+
+    .checkbox-input:checked + label:before {
+        @apply border border-blue3/10 bg-blue3/20;
+    }
+
+    .checkbox-input:checked:hover + label:before {
+        @apply border border-blue3/10 bg-blue3/40;
+    }
+
+    .checkbox-input:checked:focus-within + label:before {
+        @apply border border-blue3/10 bg-blue3/40 ring-[6px] ring-blue4/20;
+    }
+
+    .checkbox-input + label:after {
+        @apply content-[url("/wp-content/themes/Posit/assets/images/checkbox.png")] flex absolute left-[13px] mb-[6px];
+    }
+
+    .checkbox-input:not(:checked) + label:after {
+        @apply scale-0;
+    }
+
+    .checkbox-input:checked + label:after {
+        @apply scale-100;
+    }
+}

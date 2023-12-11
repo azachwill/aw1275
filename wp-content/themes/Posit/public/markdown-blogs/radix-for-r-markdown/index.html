@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2018-09-19">
+
+<title>Radix for R Markdown</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Radix for R Markdown</h1>
+
+<p class="date">2018-09-19</p>
+</header>
+
+<p>Today we’re excited to announce <a href="https://rstudio.github.io/radix/">Radix</a>, a new R Markdown format optimized for scientific and technical communication. Features of Radix include:</p>
+<ul>
+<li><p>Reader-friendly typography that adapts well to mobile devices.</p></li>
+<li><p>Flexible <a href="https://rstudio.github.io/radix/figures.html">figure layout</a> options (e.g.&nbsp;displaying figures at a larger width than the article text).</p></li>
+<li><p>Tools for making articles <a href="https://rstudio.github.io/radix/citations.html">easily citeable</a>, as well as for generating <a href="https://rstudio.github.io/radix/citations.html#google-scholar">Google Scholar</a> compatible citation metadata.</p></li>
+<li><p>The ability to incorporate JavaScript and D3-based <a href="https://rstudio.github.io/radix/interactivity.html">interactive visualizations</a>.</p></li>
+<li><p>A variety of ways to <a href="https://rstudio.github.io/radix/publish_article.html">publish articles</a>, including support for publishing sets of articles as a <a href="https://rstudio.github.io/radix/website.html">Radix website</a>.</p></li>
+<li><p>The ability to <a href="https://rstudio.github.io/radix/blog.html">create a blog</a> composed of a collection of Radix articles.</p></li>
+</ul>
+<p>Radix is based on the <a href="https://github.com/distillpub/template">Distill web framework</a>, which was originally created for use in the Distill Machine Learning Journal. Radix combines the technical authoring features of Distill with <a href="https://rmarkdown.rstudio.com/">R Markdown</a>.</p>
+<p>Below we’ll demonstrate some of the key features of Radix. To learn more about installing and using Radix, check out the <a href="https://rstudio.github.io/radix/">Radix for R Markdown</a> website.</p>
+<h2 id="figure-layout" class="anchored">Figure layout</h2>
+<p>Radix provides many flexible options for laying out figures. While the main text column in Radix articles is relatively narrow (optimized for comfortable reading), figures can occupy a larger region. For example:</p>
+<figure>
+<img src="2018-09-17-radix-wider-layouts.png" class="screenshot">
+</figure>
+<p>For figures you want to emphasize or that require lots of visual space, you can also create layouts that occupy the entire width of the screen:</p>
+<figure>
+<img src="2018-09-17-radix-fullscreen-layout.png" class="screenshot">
+</figure>
+<p>Of course, some figures and notes are only ancillary and are therefore better placed in the margin:</p>
+<figure>
+<img src="2018-09-17-radix-footnotes-and-asides.png" class="screenshot">
+</figure>
+<h2 id="citations-and-metadata" class="anchored">Citations and metadata</h2>
+<p>Radix articles support including citations and a corresponding bibliography using standard R Markdown citation syntax.</p>
+<p>In addition, when you provide a <code>citation_url</code> metadata field for your article, a citation appendix that makes it easy for others to cite your article is automatically generated:</p>
+<figure>
+<img src="https://rstudio.github.io/radix/images/citation.png" class="screenshot">
+</figure>
+<p>Radix also automatically includes standard <a href="http://ogp.me/">Open Graph</a> and <a href="https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/abouts-cards">Twitter Card</a> metadata. This makes links to your article display rich metadata when shared in various places:</p>
+<figure>
+<img src="2018-09-17-radix-metadata.png" class="screenshot">
+</figure>
+<h2 id="creating-a-blog" class="anchored">Creating a blog</h2>
+<p>You can publish a series of Radix articles as either a website or a blog. For example, the <a href="https://blogs.rstudio.com/tensorflow/">TensorFlow for R</a> blog is implemented using Radix:</p>
+<figure>
+<img src="2018-09-17-radix-blog.png" class="screenshot">
+</figure>
+<p>To learn more, see the article on <a href="https://rstudio.github.io/radix/blog.html">creating a blog with Radix</a>.</p>
+<h2 id="getting-started" class="anchored">Getting started</h2>
+<p>To create an <a href="https://rmarkdown.rstudio.com">R Markdown</a> document that uses the Radix format, first install the <strong>radix</strong> R package:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"rstudio/radix"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Using Radix requires Pandoc v2.0 or higher. If you are using RStudio then you should use RStudio v1.2.718 or higher (which comes bundled with Pandoc v2.0). You can download the preview release of RStudio v1.2 at <a href="https://www.rstudio.com/products/rstudio/download/preview/" class="uri">https://www.rstudio.com/products/rstudio/download/preview/</a>.</p>
+<p>Next, use the <strong>New R Markdown</strong> dialog within RStudio to create a new Radix article:</p>
+<figure>
+<img src="https://rstudio.github.io/radix/images/new_radix_article.png" class="screenshot">
+</figure>
+<p>This will give you a minimal new Radix document.</p>
+<p>Then, check out the <a href="https://rstudio.github.io/radix/">Radix for R Markdown</a> website to learn more about what’s possible. Happy authoring!</p>
+<style type="text/css">
+.screenshot {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+</style>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

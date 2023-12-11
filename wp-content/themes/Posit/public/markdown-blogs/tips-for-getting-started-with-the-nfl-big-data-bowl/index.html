@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-10-13">
+<meta name="description" content="The NFL Big Data Bowl is an annual competition that explores statistical innovations in football. The 2022 champions share how to get started with a winning submission.">
+
+<title>Tips for Getting Started With the NFL Big Data Bowl From the 2022 Winners</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Tips for Getting Started With the NFL Big Data Bowl From the 2022 Winners</h1>
+
+<p class="date">2022-10-13</p>
+</header>
+
+<p>In 2022, the Denver Broncos opted not to tender an offer to wide receiver Diontae Spencer and instead signed a new return man. The team is missing out. Among his 2020 peers, Diontae Spencer had the best decision-making ability to find and follow the optimal path to the end zone, according to an algorithm created by the 2022 <a href="https://operations.nfl.com/gameday/analytics/big-data-bowl/" target="_blank">NFL Big Data Bowl</a> winners, Robyn Ritchie, Brendan Kumagai, Ryker Moreau, and Elijah Cavan.</p>
+<p>For four years, the NFL Big Data Bowl has invited data scientists to explore statistical innovations in the NFL. Contestants work with <a href="https://nextgenstats.nfl.com/" target="_blank">Next Gen Stats</a> alongside traditional football data to develop data-driven solutions to a specific challenge. By combining their data science acumen with sports knowledge, participants advance how football is played and coached.</p>
+<p>The 2022 NFL Big Data Bowl called on contestants to devise new ways to analyze special teams in the NFL. The 2022 winners focused on quantifying the decision-making ability of the punt returner in each play by constructing an algorithm that determines their optimal path at any given frame. They used data science to answer questions like:</p>
+<ul>
+<li>If you were the punt returner, what should you look for after receiving the punt?</li>
+<li>Are punt returners making good decisions to increase yards (finding optimal gaps, assessing tackle risks, using their teammates, and following the blocks)?</li>
+<li>Who is the “best” returner based on the situation?</li>
+</ul>
+During a recent <a href="https://www.meetup.com/rstudio-enterprise-community-meetup/" target="_blank">RStudio Sports Analytics Meetup</a>, Robyn, Brendan, Ryker, and Elijah discussed their submission, shared their methodology and code, and advised this year’s entrants. Watch the full video to learn about the “math behind the path.” <br> <br>
+<center>
+<iframe width="650" height="365.625" src="https://www.youtube.com/embed/1sPSvt3wmxs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="">
+</iframe>
+</center>
+<p>We’ve summarized tips from the 2022 NFL Big Data Bowl winners on how to get started with the NFL Big Data Bowl, detailed in <a href="https://twitter.com/_RachaelDempsey/status/1569737664563142658" target="_blank">this Tweet</a> by Meetup organizer Rachael Dempsey. For each tip, we’ve highlighted resources from the team, as well as other leaders in the sports analytics space.</p>
+<h2 id="form-a-team-with-diverse-backgrounds-and-skill-sets" class="anchored">Form a team with diverse backgrounds and skill sets</h2>
+<p>The first step in winning the Big Data Bowl is forming a team. While the competition allows individual submissions, the 2022 winners knew there is strength in numbers.</p>
+<p>“A key aspect in building a team is having a good variety of backgrounds,” states Robyn. A statistician can understand models and the numbers behind them. A computer scientist can optimize code. The mixture of origin stories, skillsets, and departments brings different ideas to the table, enabling better analytics.</p>
+<p>The 2022 winners recommend reaching out to others in sports analytics communities to find diverse collaborators. Brendan found his 2021 Big Data Cup teammates on Twitter. He messaged one analyst, who invited a stats person, who contacted someone with a hockey background. They combined their varied skills and won the competition.</p>
+Other communities include the <a href="https://sportsdataverse.org/" target="_blank">SportsDataverse</a>, a community of developers building easy-to-use sports analytics packages and open-source data repositories. Saiem Gilani, Director of Data Science and Engineering for the Houston Rockets, introduced the SportsDataverse in a past RStudio Sports Analytics Meetup: <br> <br>
+<center>
+<iframe width="650" height="365.625" src="https://www.youtube.com/embed/-FuEXMVbh4o" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="">
+</iframe>
+</center>
+<h2 id="present-data-in-visual-and-intuitive-ways" class="anchored">Present data in visual and intuitive ways</h2>
+<p>The 2022 winners repeatedly mention the importance of presenting data in visual and intuitive ways. Explaining a concept like “optimal path” could be complicated and confusing. Instead, the team used a mix of colors, text, spatial representations, and animation to represent their algorithm:</p>
+<p><img src="images/image1.gif" class="img-fluid"></p>
+<p>To create these plots, the team recommends packages like <a href="https://ggplot2.tidyverse.org/" target="_blank">ggplot2</a> and <a href="https://gganimate.com/" target="_blank">gganimate</a>. “Those packages are just super awesome for making very nice, aesthetically pleasing plots with very little effort,” states Brendan.</p>
+<p>The team also created a <a href="https://rr-sportsstats.shinyapps.io/path_generator/" target="_blank">Shiny app</a> to make their work interactive. Users can explore different seasons, receivers, and plays. This allows for quick analysis without additional manual labor on the part of the creators.</p>
+<p><img src="images/image2.gif" class="img-fluid"></p>
+If you are interested in the intersection of data and design, check out Tegan Bunsu Ashby’s <a href="https://www.rstudio.com/data-science-hangout/" target="_blank">Data Science Hangout</a> below. As a Senior Software Developer for the Brooklyn Nets, Tegan talks about building applications and visualizations to empower front office decision-making and help win basketball games: <br> <br>
+<center>
+<iframe width="650" height="365.625" src="https://www.youtube.com/embed/OtxU4rc9lUY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="">
+</iframe>
+</center>
+<h2 id="learn-from-other-sports-and-previous-projects" class="anchored">Learn from other sports and previous projects</h2>
+<p>Data science projects from other sports and competitions were a source of inspiration for the 2022 winners. For instance, you can pick up methodology from <a href="https://www.rstudio.com/resources/rstudioconf-2020/r-tidyverse-in-sports/" target="_blank">hockey</a> and apply that knowledge to football.</p>
+Robyn specifically recommends getting comfortable with tracking data, the location-based coordinates of every player and the ball. If you are new to analyzing tracking data using R, Tom Bliss demonstrates how to get started using a previous NFL Big Data Bowl challenge: <br> <br>
+<center>
+<iframe width="650" height="365.625" src="https://www.youtube.com/embed/FggD93l7NmA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="">
+</iframe>
+</center>
+<h2 id="be-willing-to-adapt-and-change-paths-along-the-way" class="anchored">Be willing to adapt and change paths along the way</h2>
+<p>With such a broad challenge, how does a team narrow its focus? Start by playing around. “Get a general idea of how the data looks,” recommends Ryker. It might be unglamorous, but histograms and tables give you an idea of what’s possible. Once you find a promising topic, you can run with it (pun intended).</p>
+R users have many options for tackling exploratory data analysis. Priyanka Gagneja showcases several in an RStudio Enterprise Meetup: <br> <br>
+<center>
+<iframe width="650" height="365.625" src="https://www.youtube.com/embed/qvFeaPRgOns" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="">
+</iframe>
+</center>
+<p>The team stated that their submission took a lot of trial and error, and the biggest roadblock was the time it took to run code on the giant datasets. Luckily, the <a href="https://purrr.tidyverse.org/" target="_blank">purrr</a> and <a href="https://furrr.futureverse.org/" target="_blank">furrr</a> packages assisted in parallelizing the code. The team could iterate their analysis, even fixing an error they found a few days before the submission deadline.</p>
+The increasing volume, variety, and velocity of sports data are both great opportunities and challenges for data scientists working in sports. In a previous RStudio Sports Analytics Meetup, Alok Pattani demonstrates how to use R and Google’s BigQuery to scale analysis of NCAA basketball data: <br> <br>
+<center>
+<iframe width="650" height="365.625" src="https://www.youtube.com/embed/op4Q_z5juZc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="">
+</iframe>
+</center>
+<h2 id="learn-more" class="anchored">Learn more</h2>
+<p>We thank the 2022 NFL Big Data Bowl winners for presenting at the RStudio Sports Analytics Meetup. Follow them on their social media:</p>
+<ul>
+<li>Robyn Ritchie, Ph.D.&nbsp;Student |<a href="https://www.linkedin.com/in/robyn-ritchie-513b491b9/">Linkedin</a> | Twitter: @<a href="https://twitter.com/RR_SportsStats">RR_SportsStats</a></li>
+<li>Brendan Kumagai, MSc Student |<a href="https://www.linkedin.com/in/brendan-kumagai/">Linkedin</a> | Twitter: @<a href="https://twitter.com/BrendanKumagai">BrendanKumagai</a></li>
+<li>Ryker Moreau, MSc Student |<a href="https://www.linkedin.com/in/ryker-moreau/">Linkedin</a> | Twitter: @<a href="https://twitter.com/RMoreau18">RMoreau18</a></li>
+<li>Elijah Cavan, MSc Student |<a href="https://www.linkedin.com/in/elijah-cavan-msc-14b0bab1/">Linkedin</a> | Twitter: @<a href="https://twitter.com/cavan_elijah">cavan_elijah</a></li>
+</ul>
+<p>Learn more about their winning NFL Big Data Bowl submission:</p>
+<ul>
+<li><a href="https://www.kaggle.com/code/robynritchie/punt-returns-using-the-math-to-find-the-path" target="_blank">Kaggle notebook</a></li>
+<li><a href="https://github.com/ritchi12/punt_returns_using_the_math_to_find_the_path" target="_blank">GitHub repository</a></li>
+<li><a href="https://rr-sportsstats.shinyapps.io/path_generator/" target="_blank">Shiny app</a></li>
+</ul>
+<p>Are you interested in showcasing your data science skills to advance the sport of football? Sign up for the <a href="https://www.kaggle.com/competitions/nfl-big-data-bowl-2023" target="_blank">2023 NFL Big Data Bowl</a>. The challenge has just been released!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

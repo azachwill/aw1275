@@ -1,0 +1,147 @@
+html {
+    @apply grid grid-cols-12;
+}
+
+body {
+    @apply col-span-12 lg:col-span-8 lg:col-start-3 m-0 body-md-regular overflow-x-hidden;
+}
+
+#title-block-header {
+    @apply hidden;
+}
+
+h1 {
+    @apply h2;
+}
+
+h2 {
+    @apply h3 mt-[40px] md:mt-[60px] mb-[40x];
+}
+
+h3 {
+    @apply h5;
+}
+
+p {
+    @apply font-open-sans font-normal text-18 text-blue1 leading-[160%] tracking-wide mb-[8px] mt-[28px];
+}
+
+a {
+    @apply link-light !inline-flex !normal-case z-20;
+}
+
+:not(a) > img {
+    @apply !inline-flex !normal-case;
+}
+
+img {
+    @apply mt-[30px] mb-[30px] max-w-full;
+}
+
+ul li,
+ol li {
+    @apply font-open-sans font-normal text-18 text-blue1 leading-[160%] tracking-wide mx-[14px] my-[24px];
+}
+
+ul li::marker {
+    @apply text-blue4 mx-[8px];
+}
+
+ul {
+    list-style: disc;
+    @apply my-[16px];
+}
+
+ol {
+    list-style: decimal;
+    @apply my-[16px];
+}
+
+center {
+    @apply text-start mt-[16px] mb-[40px];
+}
+
+i {
+    @apply body-md-regular text-blue1/[.62] not-italic;
+}
+
+code {
+    @apply whitespace-pre-line;
+}
+
+[data-anchorjs-icon] {
+    @apply px-[8px];
+}
+
+figure {
+    @apply m-0;
+}
+
+figcaption {
+    @apply body-md-regular text-blue1/[.62] mt-[16px];
+}
+
+iframe {
+    @apply w-full h-auto aspect-video;
+}
+
+hr {
+    @apply h-[1px] bg-gray4 border-none;
+}
+
+details {
+    @apply body-sm-regular text-blue1/[.62] bg-gray4/[.20] rounded-[8px] p-[24px];
+}
+
+details summary {
+    @apply h6 text-blue1;
+}
+
+code {
+    @apply whitespace-pre-line bg-gray4/[.2] py-[5px] px-[10px] overflow-auto;
+}
+
+blockquote {
+    ul li,
+    i {
+        @apply text-neutral-light;
+    }
+
+    a {
+        @apply link-dark;
+    }
+}
+
+.references.csl-bib-body a {
+    text-indent: initial;
+}
+
+button {
+    @apply cursor-pointer;
+}
+
+button.tablinks {
+    @apply body-lg-semibold text-blue1/[.62] bg-neutral-light border-0 my-[25px] md:my-[40px];
+
+    &.active {
+        @apply text-blue4 !border-b-2 border-blue4 pb-[10px];
+    }
+}
+
+table {
+    @apply mt-[40px] rounded-[8px] w-full block overflow-x-auto;
+
+    thead tr th {
+        @apply bg-blue2 text-neutral-light p-[12px] body-md-semibold;
+    }
+
+    tbody tr {
+        &:nth-child(even) {
+            @apply bg-blue3/10;
+        }
+
+        td {
+            @apply p-[12px];
+        }
+    }
+}

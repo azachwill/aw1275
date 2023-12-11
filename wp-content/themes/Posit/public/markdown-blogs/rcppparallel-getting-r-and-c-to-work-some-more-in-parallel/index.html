@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2016-01-15">
+
+<title>RcppParallel: Getting R and C++ to work (some more) in parallel</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RcppParallel: Getting R and C++ to work (some more) in parallel</h1>
+
+<p class="date">2016-01-15</p>
+</header>
+
+<p>(Post by <a href="http://dirk.eddelbuettel.com/">Dirk Eddelbuettel</a> and <a href="https://github.com/jjallaire">JJ Allaire</a>)</p>
+<p>A common theme over the last few decades was that we could afford to simply sit back and let computer (hardware) engineers take care of increases in computing speed thanks to <a href="http://en.wikipedia.org/wiki/Moore%27s_law">Moore’s law</a>. That same line of thought now frequently points out that we are getting closer and closer to the physical limits of what Moore’s law can do for us.</p>
+<p>So the new best hope is (and has been) parallel processing. Even our smartphones have multiple cores, and most if not all retail PCs now possess two, four or more cores. Real computers, aka somewhat decent servers, can be had with 24, 32 or more cores as well, and all that is before we even consider GPU coprocessors or <a href="http://en.wikipedia.org/wiki/Xeon_Phi">other upcoming changes</a>.</p>
+<p>Sometimes our tasks are embarrassingly simple as is the case with many data-parallel jobs: we can use higher-level operations such as those offered by the base R package <a href="https://stat.ethz.ch/R-manual/R-devel/library/parallel/doc/parallel.pdf">parallel</a> to spawn multiple processing tasks and gather the results. Dirk covered all this in some detail in previous <a href="http://dirk.eddelbuettel.com/presentations.html">talks</a> on High Performance Computing with R (and you can also consult the <a href="http://cran.r-project.org/web/views/HighPerformanceComputing.html">CRAN</a><a href="http://cran.r-project.org/web/views/HighPerformanceComputing.html">Task View on High Performance Computing with R</a>).</p>
+<p>But sometimes we cannot use data-parallel approaches. Hence we have to redo our algorithms. Which is <em>really hard</em>. R itself has been relying on the (fairly mature) <a href="http://openmp.org/wp/">OpenMP</a> standard for some of its operations. <a href="http://www.rinfinance.com/agenda/2014/talk/LukeTierney.pdf">Luke Tierney’s</a><a href="http://www.rinfinance.com/agenda/2014/talk/LukeTierney.pdf">keynote</a> at the 2014 R/Finance conference mentioned some of the issues related to OpenMP, which works really well on Linux but currently not so well on other platforms. R is expected to make wider use of it in future versions once compiler support for OpenMP on Windows and OS X improves.</p>
+<p>In the meantime, the <a href="http://rcppcore.github.io/RcppParallel">RcppParallel</a> package provides a complete toolkit for creating portable, high-performance parallel algorithms without requiring direct manipulation of operating system threads. RcppParallel includes:</p>
+<ul>
+<li><p><a href="https://www.threadingbuildingblocks.org/">Intel Thread Building Blocks</a> (v4.3), a C++ library for task parallelism with a wide variety of parallel algorithms and data structures (Windows, OS X, Linux, and Solaris x86 only).</p></li>
+<li><p><a href="http://tinythreadpp.bitsnbites.eu/">TinyThread</a>, a C++ library for portable use of operating system threads.</p></li>
+<li><p><code>RVector</code> and <code>RMatrix</code> wrapper classes for safe and convenient access to R data structures in a multi-threaded environment.</p></li>
+<li><p>High level parallel functions (<code>parallelFor</code> and <code>parallelReduce</code>) that use Intel TBB as a back-end on systems that support it and TinyThread on other platforms.</p></li>
+</ul>
+<p>RcppParallel is <a href="https://cran.r-project.org/web/packages/RcppParallel/index.html">available on CRAN</a> now and several packages including <a href="https://cran.r-project.org/web/packages/dbmss/index.html">dbmss</a>, <a href="https://cran.r-project.org/web/packages/gaston/index.html">gaston</a>, <a href="https://cran.r-project.org/web/packages/markovchain/index.html">markovchain</a>, <a href="https://cran.r-project.org/web/packages/rPref/index.html">rPref</a>, <a href="https://cran.r-project.org/web/packages/SpatPCA/index.html">SpatPCA</a>, <a href="https://cran.r-project.org/web/packages/StMoSim/index.html">StMoSim</a>, and <a href="https://cran.r-project.org/web/packages/text2vec/index.html">text2vec</a> are already taking advantage of it (you can read more about the tex2vec implementation <a href="http://dsnotes.com/blog/text2vec/2016/01/09/fast-parallel-async-adagrad/">here</a>).</p>
+<p>For more background and documentation see the <a href="http://rcppcore.github.io/RcppParallel">RcppParallel web site</a> as well as the slides from the <a href="http://dirk.eddelbuettel.com/papers/rcpp_parallel_talk_jan2015.pdf">talk we gave on RcppParallel</a> at the Workshop for Distributed Computing in R.</p>
+<p>In addition, the <a href="http://gallery.rcpp.org/">Rcpp Gallery</a> includes several pieces demonstrating the use of RcppParallel, including:</p>
+<ul>
+<li><p><a href="http://gallery.rcpp.org/articles/parallel-matrix-transform">A parallel matrix transformation</a></p></li>
+<li><p><a href="http://gallery.rcpp.org/articles/parallel-vector-sum">A parallel vector summation</a></p></li>
+<li><p><a href="http://gallery.rcpp.org/articles/parallel-inner-product">A parallel inner product</a></p></li>
+<li><p><a href="http://gallery.rcpp.org/articles/parallel-distance-matrix">A parallel distance matrix calculation</a></p></li>
+</ul>
+<p>All four are interesting and demonstrate different aspects of parallel computing via <a href="http://rcppcore.github.io/RcppParallel">RcppParallel</a>. But the last article is key—it shows how a particular matrix distance metric (which is missing from R) can be implemented in a serial manner in both R, and also via Rcpp. The fastest implementation, however, uses both Rcpp and <a href="http://rcppcore.github.io/RcppParallel">RcppParallel</a> and thereby achieves a truly impressive speed gain as the gains from using compiled code (via Rcpp) and from using a parallel algorithm (via RcppParallel) are multiplicative. On a couple of four-core machines the RcppParallel version was between 200 and 300 times faster than the R version.</p>
+<p>Exciting times for parallel programming in R! To learn more head over to the <a href="http://rcppcore.github.io/RcppParallel">RcppParallel</a> package and start playing.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

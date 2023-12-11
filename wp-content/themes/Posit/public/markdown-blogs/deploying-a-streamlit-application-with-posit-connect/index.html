@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2023-06-14">
+<meta name="description" content="Description here.">
+
+<title>posit-blogs - Deploying a Streamlit application with Posit Connect</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Deploying a Streamlit application with Posit Connect</h1>
+
+<p class="date">2023-06-14</p>
+</header>
+
+<blockquote>
+<p class="body-md-regular body-sm-regular">
+<em>This is part 5 in our series of blog posts, “What can you do with Posit Connect?” </em>
+</p>
+<p class="body-md-regular body-sm-regular">
+<em><a href="https://posit.co/products/enterprise/connect/"><span style="color: #a2b8cb;">Posit Connect</span></a> is a publishing platform for the authenticated sharing of R and Python data products in one convenient place that brings the power of data science to your entire organization. On the last Wednesday of every month, we host a Posit Team demo and Q&amp;A session that is open to all. You can use <a href="https://pos.it/team-demo"><span style="color: #a2b8cb;">this link</span></a> to add the event to your calendar.<br> </em>
+</p>
+</blockquote>
+<p>Teams lose value, time, and money when data insights cannot be conveyed easily to decision-makers.</p>
+<p>With Posit Connect, it’s easy to share Shiny applications, Jupyter Notebooks, Quarto and R Markdown reports, Plumber and Flask APIs, Dash, Bokeh, Voilà, Streamlit applications, Quarto projects, dashboards, plots, and more in one convenient place to bring the power of data science to your entire organization.</p>
+<p>This example will walk through publishing a Streamlit app to Posit Connect. <a href="https://streamlit.io/">Streamlit</a> is a popular open-source framework for creating interactive web applications in Python and can easily be shared with viewers via Posit Connect. In this blog post, we’ll discuss how to publish a Streamlit app written in VS Code on Posit Workbench to Posit Connect.</p>
+<p>If you’re curious about the difference between <a href="https://shiny.posit.co/py/">Shiny for Python</a> and Streamlit, you can <a href="https://shiny.rstudio.com/py/docs/comp-streamlit.html">check that out here too</a>.</p>
+<h2 id="using-vs-code-in-posit-workbench" class="anchored">Using VS Code in Posit Workbench</h2>
+<p>For this session, we are deploying a Streamlit app from a VS Code instance in Posit Workbench.</p>
+<p><a href="https://posit.co/products/enterprise/workbench/">Posit Workbench</a> is the place for teams to collaboratively build open-source data science projects at scale. It supports R and Python, giving data scientists access to all the development environments they love, including RStudio, Jupyter Notebook, JupyterLab, and VS Code. Workbench provides enterprise-friendly features, such as centralized management, security, and commercial support. VS Code is a great all-purpose editor, and it is the IDE you will use today.</p>
+<h2 id="publishing-your-streamlit-app-to-posit-connect" class="anchored">Publishing your Streamlit app to Posit Connect</h2>
+<h3 id="step-1-download-the-example-streamlit-app-into-posit-workbench" class="anchored">Step 1: Download the example Streamlit app into Posit Workbench</h3>
+<p>First, you’ll need to open a VS Code session within Posit Workbench and create a new directory called <code>streamlit-demo</code>. Next, take all of the code for today’s session (<a href="https://github.com/rstudio-marketing/streamlit-example/tree/main">found here</a>) and place it within the newly created <code>streamlit-demo</code> directory.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img1.png" class="img-fluid" alt="Streamlit Python file in VS Code on Posit Workbench"></p>
+</figure>
+</div>
+<h3 id="step-2-install-the-correct-open-source-packages-and-versions" class="anchored">Step 2: Install the Correct Open-Source Packages and Versions</h3>
+<p>Open-source data science promotes a collective knowledge source where ideas and solutions are openly shared with other like-minded researchers and data enthusiasts. Often, these ideas are encapsulated within libraries which evolve over time.</p>
+<p>It’s usually a good idea to use a <a href="https://realpython.com/python-virtual-environments-a-primer/">virtual environment</a> to install packages for a particular project. Virtual environments are particularly important when deploying an application to Connect because they speed up deployments and ensure that your Python environment can be replicated on the Connect server.</p>
+<p>After running these commands you should see your command prompt change to <code>(.venv)</code> and you can [set your python interpreter](https://code.visualstudio.com/docs/python/environments#:~:text=your%20User%20Settings.-,To%20do%20so%2C%20open%20the%20Command%20Palette%20(Ctrl%2BShift,Settings%2C%20with%20the%20appropriate%20interpreter.) in VS Code to activate this environment when you open the project in VS Code.</p>
+<p>In Python, it’s common to document the currently used libraries within a file named <code>requirements.txt</code>. To create this document, forward the output of <code>pip freeze</code> to a <code>requirements.txt</code> file by running the following command in your terminal:</p>
+<pre><code>pip freeze &gt; requirements.txt</code></pre>
+<p>In our <code>streamlit-demo</code> directory, you’ll find such a file with various libraries and their corresponding version numbers listed.</p>
+<p>Here are the first 10 lines of our <code>requirements.txt</code> file:</p>
+<pre><code>aiofiles==22.1.0
+aiohttp==3.8.4
+aiosignal==1.3.1
+aiosqlite==0.18.0
+altair==4.2.2
+anyio==3.6.2
+appdirs==1.4.4
+argon2-cffi==21.3.0
+argon2-cffi-bindings==21.2.0
+arrow==1.2.3</code></pre>
+<p>To make sure these libraries are installed, we can run the following command within the Terminal of VS Code. Make sure you are running this command from within the same directory as the <code>requirements.txt</code> file:</p>
+<pre><code>pip install -r requirements.txt</code></pre>
+<h3 id="step-3-deploy-streamlit-app-to-posit-connect" class="anchored">Step 3: Deploy Streamlit app to Posit Connect</h3>
+<p>The last step is to deploy this application to Posit Connect using the <a href="https://pypi.org/project/rsconnect-python/">rsconnect-python</a> package. Install it by running:</p>
+<p>You will need to create and use an API key to deploy your Streamlit application. This is important because when you deploy to Posit Connect using the <code>rsconnect-python</code> package, Connect needs to know who’s trying to deploy it to make sure you have the necessary credentials and privileges to do so. This is the command you will use to deploy the example Streamlit application with the API key.</p>
+<pre><code>rsconnect deploy dash --server https://colorado.posit.co/rsc/ --api-key [api-key-goes-here] ./</code></pre>
+<p>So where do you find this API key? In your Posit Connect instance, click on your name in the top right-hand corner to see “API Keys.” After clicking on this, you can create a brand new API key that you will copy over to VS Code and paste into the command above.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img2.png" class="img-fluid" alt="Posit Connect Administrator settings"></p>
+</figure>
+</div>
+<p>Remember to always treat your API keys like passwords!</p>
+<p>The <code>./</code> syntax at the end of the above command tells <code>rsconnect-python</code> to look in our current working directory for an <code>app.py</code> file and publish it Posit Connect. Once you hit <code>ENTER</code> on your keyboard, the <code>rsconnect-python</code> package will validate the Connect server and making sure that the bundle looks good. If anything goes awry, it will print useful messages to help troubleshoot.</p>
+<p>But what’s happening as you deploy an application? It captures your environment, including what Python version you are using, what libraries you are using, and what versions of the libraries you are using- and it’s making sure Connect has that available to replicate your environment exactly as it is in VS Code.</p>
+<p>You did it. You’ve deployed your Dash application!</p>
+<center>
+<script src="https://fast.wistia.com/embed/medias/evd5g5v69l.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_embed wistia_async_evd5g5v69l" style="height:360px;position:relative;width:640px">
+<div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;">
+<img src="https://fast.wistia.com/embed/medias/evd5g5v69l/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;">
+</div>
+</div>
+</center>
+<h2 id="sharing-your-streamlit-app-on-posit-connect-with-others" class="anchored">Sharing your Streamlit app on Posit Connect with Others</h2>
+<p>Now that your application is hosted on Posit Connect, you can easily share it with others. Most importantly, the viewers of your app don’t need to know anything about Streamlit, Python, or Posit Connect; they can simply treat your application like any other website!</p>
+<p>Posit Connect allows you, as the publisher, to tightly control who has access to your Streamlit application. You can provide access to individual users, groups of users, or anyone with access to your Posit Connect instance. Tight control over who can view your application is important, especially if you have any sensitive data.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img3.png" class="img-fluid" alt="Posit Connect sharing permissions window"></p>
+</figure>
+</div>
+<h2 id="learn-more-about-deploying-streamlit-on-connect" class="anchored">Learn more about deploying Streamlit on Connect</h2>
+<p>This example covered publishing a Streamlit application to Posit Connect, but you have many options when it comes to data products that you can deploy to Connect.</p>
+<p>We’d love to have you join us at one of our monthly Posit Team Demos, where we walk through a different end-to-end data science workflow each month. They are on the last Wednesday of every month at 11 am ET on YouTube. You can add the event to your calendar here: <a href="pos.it/team-demo">pos.it/team-demo</a></p>
+<p>If you have any questions and would like to talk with our team, you can <a href="https://posit.co/schedule-a-call/?booking_calendar__c=RSC_Demo">schedule a time to chat here</a>.</p>
+<p>Interested in learning more about data workflows in Python or R? Join us at <a href="https://posit.co/conference/">posit::conf(2023)</a>! We have an amazing array of <a href="https://pos.it/conf-talks">workshops</a> and talks lined up. If you found this post interesting, check out these two options:</p>
+<ul>
+<li><a href="https://youtu.be/hiZQmnx8RXo">Data Science Workflows with Posit Tools — R Focus</a> led by Ryan Johnson and Katie Masiello: Ryan and Katie will discuss ways to improve your data science workflows! During the course, we will review packages for data validation, alerting, modeling, and more.</li>
+<li><a href="https://youtu.be/kq0b8cPttTc">Data Science Workflows with Posit Tools — Python Focus</a> led by Gagandeep Singh and Sam Edwardes: During the course, Gagandeep and Sam will review packages for data validation, alerting, modeling, and more.</li>
+</ul>
+<p><a href="https://reg.conf.posit.co/flow/posit/positconf23/reg/login">Register today</a>!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+
+
+
+</body></html>

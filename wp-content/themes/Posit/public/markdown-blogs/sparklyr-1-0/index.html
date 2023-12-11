@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2019-03-15">
+
+<title>sparklyr 1.0: Apache Arrow, XGBoost, Broom and TFRecords</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">sparklyr 1.0: Apache Arrow, XGBoost, Broom and TFRecords</h1>
+
+<p class="date">2019-03-15</p>
+</header>
+
+<p><img src="2019-03-15-sparklyr-1-0-sparklyr-arrow-spark-small.png" style="display: none;" alt="sparklyr spark_apply() performance with arrow"></p>
+<p>With much excitement built over the past three years, we are thrilled to share that <a href="https://github.com/rstudio/sparklyr">sparklyr</a> <code>1.0</code> is now available on <a href="https://CRAN.R-project.org/package=sparklyr">CRAN</a>!</p>
+<p>The <code>sparklyr</code> package provides an R interface to <a href="http://spark.apache.org">Apache Spark</a>. It supports <a href="https://dplyr.tidyverse.org/">dplyr</a>, <a href="https://spark.apache.org/mllib/">MLlib</a>, <a href="https://spark.rstudio.com/guides/streaming/">streaming</a>, <a href="https://spark.rstudio.com/extensions/">extensions</a> and many other features; however, this particular release enables the following new features:</p>
+<ul>
+<li><strong><a href="#arrow">Arrow</a></strong> enables <strong>faster</strong> and <strong>larger</strong> data transfers between Spark and R.</li>
+<li><strong><a href="#xgboost">XGBoost</a></strong> enables training <strong>gradient boosting</strong> models over distributed datasets.</li>
+<li><strong><a href="#broom">Broom</a></strong> converts Spark’s models into <strong>tidy</strong> formats that you know and love.</li>
+<li><strong><a href="#tfrecords">TFRecords</a></strong> writes TensorFlow records from Spark to support <strong>deep learning</strong> workflows.</li>
+</ul>
+<p>This release also brings support for <a href="https://spark.apache.org/releases/spark-release-2-4-0.html">Spark 2.4</a>, the ability to collect and copy in batches, increased Livy performance, and many more improvements listed in the sparklyr <a href="https://github.com/rstudio/sparklyr/blob/master/NEWS.md">NEWS</a> file. You can install <code>sparklyr 1.0</code> from CRAN as follows:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"sparklyr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2 id="arrow" class="anchored">Arrow</h2>
+<p><a href="https://arrow.apache.org/">Apache Arrow</a> is a cross-language development platform for in-memory data, you can read more about this in the <a href="https://blog.rstudio.com/2018/04/19/arrow-and-beyond/">Arrow and beyond</a> blog post. In <code>sparklyr 1.0</code>, we are embracing Arrow as an efficient bridge between R and Spark, conceptually:</p>
+<p>&lt;img src=“2019-03-15-sparklyr-1-0-sparklyr-arrow-spark.png” width=“70%”” alt=“sparklyr using Apache Arrow diagram”/&gt;</p>
+<p>In practice, this means faster data transfers and support for larger datasets; specifically, this improves <code>collect()</code>, <code>copy_to()</code> and <code>spark_apply()</code>. The following benchmarks make use of the <a href="http://bench.r-lib.org/">bench</a> package to measure performance with and without <code>arrow</code>.</p>
+<p>We will first benchmark <code>copy_to()</code> over a dataframe with 1M and 10M rows. Notice that, with the default memory configuration, <code>copy_to()</code> can’t handle 10M rows while <code>arrow</code> can.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>bench<span class="sc">::</span><span class="fu">press</span>(<span class="at">rows =</span> <span class="fu">c</span>(<span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>, <span class="dv">10</span><span class="sc">^</span><span class="dv">7</span>), {</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">arrow_on =</span> {</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">library</span>(arrow)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>      sparklyr_df <span class="ot">&lt;&lt;-</span> <span class="fu">copy_to</span>(sc, <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>rows), <span class="at">overwrite =</span> T)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">arrow_off =</span> <span class="cf">if</span> (rows <span class="sc">&lt;=</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>) {</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="st">"arrow"</span> <span class="sc">%in%</span> <span class="fu">.packages</span>()) <span class="fu">detach</span>(<span class="st">"package:arrow"</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>      sparklyr_df <span class="ot">&lt;&lt;-</span> <span class="fu">copy_to</span>(sc, <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span>rows), <span class="at">overwrite =</span> T)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cn">NULL</span>, <span class="at">iterations =</span> <span class="dv">4</span>, <span class="at">check =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="2019-03-15-sparklyr-1-0-copy-to.png" class="img-fluid"></p>
+<p>Next, we will benchmark <code>collect()</code> over 10M and 50M records; collecting 50M+ records is only possible with <code>arrow</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>bench<span class="sc">::</span><span class="fu">press</span>(<span class="at">rows =</span> <span class="fu">c</span>(<span class="dv">10</span><span class="sc">^</span><span class="dv">7</span>, <span class="dv">5</span> <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">7</span>), {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">arrow_on =</span> {</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">library</span>(arrow)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      collected <span class="ot">&lt;-</span> <span class="fu">sdf_len</span>(sc, rows) <span class="sc">%&gt;%</span> <span class="fu">collect</span>()</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">arrow_off =</span> <span class="cf">if</span> (rows <span class="sc">&lt;=</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">7</span>) {</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="st">"arrow"</span> <span class="sc">%in%</span> <span class="fu">.packages</span>()) <span class="fu">detach</span>(<span class="st">"package:arrow"</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>      collected <span class="ot">&lt;-</span> <span class="fu">sdf_len</span>(sc, rows) <span class="sc">%&gt;%</span> <span class="fu">collect</span>()</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cn">NULL</span>, <span class="at">iterations =</span> <span class="dv">4</span>, <span class="at">check =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="2019-03-15-sparklyr-1-0-collect.png" class="img-fluid"></p>
+<p>Last but not least, <code>spark_apply()</code> over 100K and 1M rows shows the most significant improvements. A <strong>40x speedup</strong> when running R on Spark, additional details are available in the Arrow project <a href="https://arrow.apache.org/blog/2019/01/25/r-spark-improvements/">post</a>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>bench<span class="sc">::</span><span class="fu">press</span>(<span class="at">rows =</span> <span class="fu">c</span>(<span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>, <span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>), {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">arrow_on =</span> {</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">library</span>(arrow)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sdf_len</span>(sc, rows) <span class="sc">%&gt;%</span> <span class="fu">spark_apply</span>(<span class="sc">~</span> .x <span class="sc">/</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">count</span>() <span class="sc">%&gt;%</span> collect</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">arrow_off =</span> <span class="cf">if</span> (rows <span class="sc">&lt;=</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>) {</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="st">"arrow"</span> <span class="sc">%in%</span> <span class="fu">.packages</span>()) <span class="fu">detach</span>(<span class="st">"package:arrow"</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sdf_len</span>(sc, rows) <span class="sc">%&gt;%</span> <span class="fu">spark_apply</span>(<span class="sc">~</span> .x <span class="sc">/</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">count</span>() <span class="sc">%&gt;%</span> collect</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cn">NULL</span>, <span class="at">iterations =</span> <span class="dv">4</span>, <span class="at">check =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="2019-03-15-sparklyr-1-0-spark-apply.png" class="img-fluid"></p>
+<p>To use <code>arrow</code>, you will first have to install the Apache Arrow runtime followed by installing the R <code>arrow</code> package, additional instructions are available under <a href="https://spark.rstudio.com/guides/arrow">spark.rstudio.com/guides/arrow</a>.</p>
+<h2 id="xgboost" class="anchored">XGBoost</h2>
+<p><a href="https://github.com/rstudio/sparkxgb">sparkxgb</a> is a new <code>sparklyr</code> extension that can be used to train <a href="https://xgboost.ai/">XGBoost</a> models in Spark. <code>sparkxgb</code> is available on CRAN and can be installed as follows:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"sparkxgb"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We can then use <code>xgboost_classifier()</code> to train and <code>ml_predict()</code> to predict over large datasets with ease:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparkxgb)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>iris <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, iris)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>xgb_model <span class="ot">&lt;-</span> <span class="fu">xgboost_classifier</span>(iris,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                                Species <span class="sc">~</span> .,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>                                <span class="at">num_class =</span> <span class="dv">3</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                                <span class="at">num_round =</span> <span class="dv">50</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                                <span class="at">max_depth =</span> <span class="dv">4</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>xgb_model <span class="sc">%&gt;%</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_predict</span>(iris) <span class="sc">%&gt;%</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Species, predicted_label, <span class="fu">starts_with</span>(<span class="st">"probability_"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>#&gt; Observations: ??
+#&gt; Variables: 5
+#&gt; Database: spark_connection
+#&gt; $ Species                &lt;chr&gt; "setosa", "setosa", "setosa", "setosa", "…
+#&gt; $ predicted_label        &lt;chr&gt; "setosa", "setosa", "setosa", "setosa", "…
+#&gt; $ probability_versicolor &lt;dbl&gt; 0.003566429, 0.003564076, 0.003566429, 0.…
+#&gt; $ probability_virginica  &lt;dbl&gt; 0.001423170, 0.002082058, 0.001423170, 0.…
+#&gt; $ probability_setosa     &lt;dbl&gt; 0.9950104, 0.9943539, 0.9950104, 0.995010…</code></pre>
+<p>You can read more about <code>sparkxgb</code> under its <a href="https://github.com/rstudio/sparkxgb#sparkxgb">README</a> file. Note that Windows is currently unsupported.</p>
+<h2 id="broom" class="anchored">Broom</h2>
+<p>While support for <a href="https://broom.tidyverse.org/">broom</a> in Spark through <code>sparklyr</code> has been under development for quite some time, this release marks the completion of all modeling functions. For instance, we can now augment using an ALS model with ease:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>movies <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">user   =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>),</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">item   =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">0</span>),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">rating =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">4</span>))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">copy_to</span>(sc, movies) <span class="sc">%&gt;%</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_als</span>(rating <span class="sc">~</span> user <span class="sc">+</span> item) <span class="sc">%&gt;%</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">augment</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code># Source: spark&lt;?&gt; [?? x 4]
+   user  item rating .prediction
+  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;
+1     2     2      5        4.86
+2     1     2      4        3.98
+3     0     0      4        3.88
+4     2     1      1        1.08
+5     0     1      2        2.00
+6     1     1      3        2.80</code></pre>
+<h2 id="tfrecords" class="anchored">TFRecords</h2>
+<p><a href="https://github.com/rstudio/sparktf">sparktf</a> is a new <code>sparklyr</code> extension allowing you to write TensorFlow records in Spark. This can be used to preprocess large amounts of data before processing them in GPU instances with Keras or TensorFlow. <code>sparktf</code> is now available on CRAN and can be installed as follows:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"sparktf"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You can simply preprocess data in Spark and write it as TensorFlow records using <code>spark_write_tf()</code>:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparktf)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">copy_to</span>(sc, iris) <span class="sc">%&gt;%</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_string_indexer_model</span>(</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Species"</span>, <span class="st">"label"</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"setosa"</span>, <span class="st">"versicolor"</span>, <span class="st">"virginica"</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spark_write_tfrecord</span>(<span class="at">path =</span> <span class="st">"tfrecord"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You can then use TensorFlow and Keras from R to load this recordset and train deep learning models; for instance, using <a href="https://tensorflow.rstudio.com/tools/tfdatasets/reference/tfrecord_dataset.html">tfrecord_dataset()</a>. Please read the <code>sparktf</code> <a href="https://github.com/rstudio/sparktf#sparktf">README</a> for more details.</p>
+<h2 id="moar" class="anchored"><a href="https://i.kym-cdn.com/entries/icons/original/000/000/574/moar-cat.jpg">Moar</a>?</h2>
+<p>When connecting to Spark running in YARN, RStudio’s connection pane can now launch YARN’s web application.</p>
+<p><img src="2019-03-15-sparklyr-1-0-rstudio-yarn.png" width="70%" style="margin-left: 15px;" alt="RStudio Connections Pane YARN action"></p>
+<p>We also made it possible to copy and collect larger datasets by using callbacks. For instance, you can collect data incrementally in batches of 100K rows; this is configurable through the <code>sparklyr.collect.batch</code> setting. The following example collects 300K rows using batches and prints the total records collected; in practice, you save and load from disk.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_len</span>(sc, <span class="dv">3</span> <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>) <span class="sc">%&gt;%</span> <span class="fu">collect</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">callback =</span> <span class="sc">~</span><span class="fu">message</span>(<span class="st">"("</span>, .y, <span class="st">") Collecting "</span>, <span class="fu">nrow</span>(.x), <span class="st">" rows."</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>(1) Collecting 100000 rows.
+(2) Collecting 100000 rows.
+(3) Collecting 100000 rows.</code></pre>
+<p>For Livy connections, performance is improved when setting the <code>spark_version</code> parameter in <code>livy_config()</code>, this allows <code>sparklyr</code> to start a connection using JARs instead of loading sources.</p>
+<p>In addition, <a href="https://spark.rstudio.com/extensions/#examples">extensions</a> are now also supported in Livy. For example, you can run pagerank with Livy and <a href="https://github.com/rstudio/graphframes">graphframes</a> as follows:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(graphframes)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">livy_service_start</span>()</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>, <span class="at">method =</span> <span class="st">"livy"</span>, <span class="at">version =</span> <span class="st">"2.4.0"</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_pagerank</span>(<span class="fu">gf_friends</span>(sc), <span class="at">tol =</span> <span class="fl">0.01</span>, <span class="at">reset_probability =</span> <span class="fl">0.15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>GraphFrame
+Vertices:
+  Database: spark_connection
+  $ id       &lt;chr&gt; "f", "g", "a", "e", "d", "b", "c"
+  $ name     &lt;chr&gt; "Fanny", "Gabby", "Alice", "Esther", "David", "Bob", "Charlie"
+  $ age      &lt;int&gt; 36, 60, 34, 32, 29, 36, 30
+  $ pagerank &lt;dbl&gt; 0.3283607, 0.1799821, 0.4491063, 0.3708523, 0.3283607, 2.6555078, 2.6878300
+Edges:
+  Database: spark_connection
+  $ src          &lt;chr&gt; "a", "b", "e", "e", "c", "a", "f", "d"
+  $ dst          &lt;chr&gt; "b", "c", "f", "d", "b", "e", "c", "a"
+  $ relationship &lt;chr&gt; "friend", "follow", "follow", "friend", "follow", "friend", "follow", "friend"
+  $ weight       &lt;dbl&gt; 0.5, 1.0, 0.5, 0.5, 1.0, 0.5, 1.0, 1.0</code></pre>
+<p>The <a href="https://github.com/rstudio/sparklyr/blob/master/NEWS.md">sparklyr NEWS</a> contains a complete list of changes and features for this release. To catch up on previously released features, you can read the blog posts that got us here:</p>
+<ul>
+<li><a href="https://blog.rstudio.com/2018/10/01/sparklyr-0-9/">sparklyr 0.9</a>: Streams and Kubernetes.</li>
+<li><a href="https://blog.rstudio.com/2018/05/14/sparklyr-0-8/">sparklyr 0.8</a>: Production pipelines and graphs.</li>
+<li><a href="https://blog.rstudio.com/2018/01/29/sparklyr-0-7/">sparklyr 0.7</a>: Spark Pipelines and Machine Learning.</li>
+<li><a href="https://blog.rstudio.com/2017/07/31/sparklyr-0-6/">sparklyr 0.6</a>: Distributed R and external sources.</li>
+<li><a href="https://blog.rstudio.com/2017/01/24/sparklyr-0-5/">sparklyr 0.5</a>: Livy and dplyr improvements.</li>
+<li><a href="https://blog.rstudio.com/2016/09/27/sparklyr-r-interface-for-apache-spark/">sparklyr 0.4</a>: R interface for Apache Spark.</li>
+</ul>
+<p>We hope you enjoy this exciting release!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

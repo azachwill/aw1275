@@ -1,0 +1,29 @@
+.menu-content {
+    @apply h-full;
+}
+
+.table-of-content li a.active {
+    @apply bg-blue3/[.1] text-blue1;
+}
+
+@screen lg {
+    .menu-content {
+        @apply overflow-y-scroll;
+        @apply h-[calc(100vh-78px)]; /* Important to update px if padding on main change (size of the navbar) */
+        scrollbar-width: none; /* for Firefox */
+        -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    }
+
+    .menu-content::-webkit-scrollbar {
+        @apply hidden;
+    }
+}
+
+/*Chrome and Safari only */
+@media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm) {
+    @screen lg {
+        .menu-content {
+            @apply h-[calc(100vh-120px)]; /* Important to update px if padding on main change (size of the navbar) + margin of list */
+        }
+    }
+}

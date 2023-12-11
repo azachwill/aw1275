@@ -1,0 +1,217 @@
+.blur-bg {
+    backdrop-filter: blur(16px);
+}
+
+.with-banner {
+    @apply lg:mr-[4px];
+}
+
+.mobile-nav.active {
+    @apply sticky h-screen top-0;
+}
+
+.navigation > .navigation-background,
+.mobile-nav-wrapper > .mobile-nav-background {
+    transform: scaleY(0);
+    @apply origin-top ease-in-out duration-150;
+}
+
+.items-container > .navbar-item > .navbar-tab > .arrow > svg > path {
+    @apply stroke-neutral-dark62;
+}
+
+.navigation.active > .navigation-background,
+.mobile-nav-wrapper.active > .mobile-nav-background {
+    transform: scaleY(1);
+}
+
+.navigation.active > div > a .logo > svg .masked-path,
+.mobile-nav-wrapper.active > div > a .logo > svg .masked-path {
+    @apply fill-neutral-light;
+}
+
+.items-container.active > .navbar-item > .navbar-tab > .title {
+    @apply text-neutral-light/60;
+}
+
+.items-container.active > .navbar-item > .navbar-tab > .arrow > svg > path {
+    stroke-opacity: 0.6;
+    @apply stroke-neutral-light;
+}
+
+.navigation.active .navbar-tab,
+.navigation.active .nav-search #rstudio-search-button {
+    @apply focus-visible:shadow-focus-nav-link focus-visible:border-neutral-light;
+}
+
+.navbar-tab {
+    @apply outline-0 rounded-[4px] border-[1px] border-transparent;
+}
+
+.navbar-tab:focus-visible {
+    @apply rounded-[4px] border-[1px] border-blue3;
+    box-shadow: 0 0 0 6px rgba(50, 118, 181, 0.2);
+}
+
+.navbar-tab.active > .title {
+    @apply text-neutral-light !important;
+}
+
+.navbar-tab.active > .arrow > svg {
+    @apply rotate-180;
+}
+
+.navbar-tab.active > .arrow > svg > path {
+    stroke-opacity: 100 !important;
+    @apply stroke-neutral-light !important;
+}
+
+.nav-modal.active {
+    @apply visible opacity-100 transition delay-[100ms];
+}
+
+.mobile-nav-modal.active {
+    @apply flex translate-x-0;
+}
+
+.nav-modal.active > div > .modal-content > div > div .left-description,
+.nav-modal.active > div > .modal-content > div > div .left-container > .related-link-column {
+    @apply lg:translate-y-0 lg:opacity-100;
+}
+
+.left-description,
+.left-container > .related-link-column {
+    @apply lg:opacity-0 lg:ease-in-out lg:duration-150 lg:transition lg:translate-y-[-40px];
+}
+
+.left-description,
+.left-container > .related-link-column:nth-child(1) {
+    @apply lg:delay-[.2s];
+}
+
+.left-container > .related-link-column:nth-child(2) {
+    @apply lg:delay-[.25s];
+}
+
+.left-container > .related-link-column:nth-child(3) {
+    @apply lg:delay-[.3s];
+}
+
+.left-container > .related-link-column:nth-child(4) {
+    @apply lg:delay-[.35s];
+}
+
+/* icons */
+
+.nav-search,
+.open-mobile-nav,
+.close-mobile-nav {
+    @apply rounded-lg;
+}
+
+.nav-search,
+.open-mobile-nav {
+    @apply hover:bg-gray4/40;
+}
+
+.close-mobile-nav,
+.mobile-nav-wrapper.active > div > .nav-search,
+.navigation.active > div > .nav-search {
+    @apply hover:bg-neutral-light/10;
+}
+
+.navigation.active > div > .nav-search > svg > path {
+    stroke-opacity: 100 !important;
+    @apply stroke-neutral-light !important;
+}
+
+/* links */
+
+.column-link {
+    @apply lg:before:content-[''] lg:before:absolute lg:before:w-0 lg:before:h-[1px] lg:before:bottom-0 lg:before:bg-neutral-light lg:before:ease-in-out lg:before:duration-150
+        lg:hover:before:w-full lg:focus:ease-in-out lg:focus:duration-150 outline-0 focus-visible:shadow-focus-nav-link;
+}
+
+.column-link > svg,
+.navbar-tab > .arrow > svg {
+    @apply ease-in-out duration-150;
+}
+
+.column-link:hover > svg {
+    @apply translate-x-2;
+}
+
+.related-link {
+    @apply rounded
+        active:bg-blue3/40
+        hover:text-neutral-light hover:bg-blue3/20
+        hover:ring-1 hover:ring-inset hover:ring-neutral-light/10
+        outline-0 focus-visible:shadow-focus-nav-link;
+}
+
+.nav-search #rs-search-button,
+.mobile-nav #rs-search-button-mobile {
+    @apply z-10 outline-0;
+}
+
+.close-mobile-nav,
+.open-mobile-nav,
+.nav-search {
+    @apply outline-0;
+}
+
+.open-mobile-nav:focus-visible,
+.nav-search:focus-visible {
+    box-shadow: 0 0 0 6px rgba(221, 225, 228, 0.6);
+}
+
+.mobile-nav-wrapper.active > div > .close-mobile-nav:focus-visible,
+.mobile-nav-wrapper.active > div > .nav-search:focus-visible {
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);
+}
+
+.nav-search #rs-search-button,
+.nav-search #rstudio-search-button,
+.mobile-nav #rs-search-button-mobile {
+    @apply w-[100%] h-[100%] absolute top-0 left-0 z-10;
+}
+
+.search-active {
+    @apply bg-blue1 !important;
+
+    div > a .logo > svg .masked-path {
+        @apply fill-neutral-light;
+    }
+
+    div > .nav-search > svg > path {
+        stroke-opacity: 100 !important;
+        @apply stroke-neutral-light !important;
+    }
+
+    .items-container > .navbar-item > .navbar-tab > .title {
+        @apply text-neutral-light/60;
+    }
+
+    .items-container > .navbar-item > .navbar-tab > .arrow > svg > path {
+        stroke-opacity: 0.6;
+        @apply stroke-neutral-light;
+    }
+
+    div > .open-mobile-nav > svg > rect {
+        @apply fill-neutral-light;
+    }
+
+    div > .nav-search,
+    div > .open-mobile-nav {
+        @apply hover:bg-gray4/10;
+    }
+}
+
+.mobile-nav-wrapper.active div > .nav-search > svg > path {
+    stroke-opacity: 100 !important;
+    @apply stroke-neutral-light !important;
+}
+
+.nav-search .fas {
+    display: none;
+}

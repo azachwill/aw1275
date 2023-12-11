@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2023-01-13">
+<meta name="description" content="In this post, we show how Quarto improves report automation and, when combined with Posit Connect, can result in automatically refreshed end-to-end reporting workflows.">
+
+<title>Python Made Easy With Posit Part 1: Reporting</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Python Made Easy With Posit Part 1: Reporting</h1>
+
+<p class="date">2023-01-13</p>
+</header>
+
+<p>Reporting is a necessity of professional life. PowerPoint, PDF, and Word are the standard document formats used to relay information to decision-makers. Many of us have placed our analysis in a report, cycled through multiple iterations, and finally sent it off to stakeholders, only to be asked to make additional changes or refresh the analysis months later. This typical reporting cycle can be tedious, causing many to use Python for report automation.</p>
+<p>While Python is a popular choice for report automation, there may be better options. For this reason, we will explore how Quarto improves report automation and, when combined with Posit Connect, can result in automatically refreshed end-to-end reporting workflows. Using Quarto and Posit Connect, less time will be spent reporting leaving more time available to do the exciting work!</p>
+<h2 id="reporting-with-code-is-cumbersome" class="anchored">Reporting with code is cumbersome</h2>
+<p>Automating reports using Python is often cumbersome, time-consuming, and challenging to maintain. This statement is especially true for complex, lengthy, or highly custom reports for a few reasons:</p>
+<ul>
+<li><p><strong>Too much code:</strong> Nearly every report’s details must be defined, causing simple tasks to require a lot of code resulting in lengthy codebases and rigid processes.</p></li>
+<li><p><strong>Different formats need different packages:</strong> PDF, Word, and PowerPoint are all generated using different packages. Rendering a single report to multiple formats requires disparate codebases.</p></li>
+<li><p><strong>Finding Object Coordinates:</strong> Several Python packages require objects to be precisely placed within the document. Finding the table number of page coordinates is a hassle.</p></li>
+<li><p><strong>Iterations are slow:</strong> Making changes and seeing the output requires the entire code base to be re-executed.</p></li>
+</ul>
+<p>Time to create some simple reports to demonstrate what creating reports using Python entails. As you go through them, consider how they would scale with a full report containing content and custom formatting - hundreds of lines of code could be necessary, even if report templates are used.</p>
+<div id="tab" class="tab">
+<button class="tablinks" onclick="clickHandle(event, 'Task 1_1', 'Task 1')" id="defaultOpen">
+PDF
+</button>
+<p><button class="tablinks" onclick="clickHandle(event, 'Task 1_2', 'Task 1')">PowerPoint</button> <button class="tablinks" onclick="clickHandle(event, 'Task 1_3', 'Task 1')">Word</button></p>
+</div>
+<div id="Task 1_1" class="tabcontent" style="display:block;">
+<details>
+<summary>
+PDF Code
+</summary>
+<p>
+</p>
+
+<pre>        <code>
+
+          from reportlab.lib.pagesizes import letter
+          from reportlab.pdfgen import canvas
+          from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+          from reportlab.lib.units import cm
+          from reportlab.platypus import SimpleDocTemplate, PageTemplate, Table, TableStyle, Flowable, Spacer
+          from reportlab.platypus.frames import Frame
+          from reportlab.lib import pagesizes, colors
+          from reportlab.platypus.paragraph import Paragraph
+          from functools import partial
+          from reportlab.lib.units import inch
+          from reportlab.lib.enums import TA_JUSTIFY
+
+          # Create Header and Footer - example based on stackoverflow answer
+          def header(canvas, doc, content):
+              canvas.saveState()
+              w, h = content.wrap(doc.width, doc.topMargin)
+              content.drawOn(canvas, doc.leftMargin, doc.height + doc.bottomMargin + doc.topMargin - h)
+              canvas.restoreState()
+
+          def footer(canvas, doc, content):
+              canvas.saveState()
+              w, h = content.wrap(doc.width, doc.bottomMargin)
+              content.drawOn(canvas, doc.leftMargin, h)
+              canvas.restoreState()
+
+          def header_and_footer(canvas, doc, header_content, footer_content):
+              header(canvas, doc, header_content)
+              footer(canvas, doc, footer_content)
+
+          doc = SimpleDocTemplate("test.pdf",pagesize=letter,
+                                  rightMargin=72,leftMargin=72,
+                                  topMargin=72,bottomMargin=18)
+                                  
+          header_text = Paragraph("TEST HEADER", styles['Normal'])
+          footer_text = Paragraph("TEST FOOTER", styles['Normal'])
+
+          head_foot_template = PageTemplate(id='test', frames=frame, onPage=partial(header_and_footer, header_content=header_text, footer_content=footer_text))
+
+          pdf.addPageTemplates([head_foot_template])
+
+          # Create Page One Content
+          pg1=[]
+          styles=getSampleStyleSheet()
+          styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
+          pg1.append(Paragraph('This is not as easy as it should be!', styles["Normal"]))
+          pg1.append(Spacer(1, 10))
+          pg1.append(Paragraph("Seriously, this is too much code to do something very simple...and we'll need more to do more", styles["Normal"]))
+          pg1.append(Spacer(1, 10))
+
+          # Create Table on Page 1 - example based on stackoverflow answer
+          tbl_data = [['00', '01', '02', '03', '04'],
+          ['10', '11', '12', '13', '14'],
+          ['20', '21', '22', '23', '24'],
+          ['30', '31', '32', '33', '34']]
+
+          tbl = Table(tbl_data,5*[0.4*inch], 4*[0.4*inch])
+          tbl.setStyle(TableStyle([('ALIGN',(1,1),(-2,-2),'CENTER'),
+          ('TEXTCOLOR',(1,1),(-2,-2),colors.black),
+          ('VALIGN',(0,0),(0,-1),'TOP'),
+          ('TEXTCOLOR',(0,0),(0,-1),colors.black),
+          ('ALIGN',(0,-1),(-1,-1),'CENTER'),
+          ('VALIGN',(0,-1),(-1,-1),'CENTER'),
+          ('TEXTCOLOR',(0,-1),(-1,-1),colors.black),
+          ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
+          ('BOX', (0,0), (-1,-1), 0.25, colors.black),
+          ]))
+
+          pg1.append(t)
+          # write the document to disk
+          pdf.build(pg1)
+        </code>
+      </pre>
+<p>
+</p>
+</details>
+<p>
+<img src="images/Screen%20Shot%202022-11-15%20at%209.58.39%20PM.png" class="img-fluid">
+</p>
+</div>
+<div id="Task 1_2" class="tabcontent" style="none">
+<details>
+<summary>
+PowerPoint Code
+</summary>
+<p>
+</p>
+
+<pre>        <code>
+          from pptx import Presentation
+          from pptx.enum.shapes import MSO_SHAPE
+          from pptx.util import Inches
+          from pptx.enum.text import PP_ALIGN
+
+          prs = Presentation()
+
+          # Create first slide
+          slide1_layout = prs.slide_layouts[5]
+          slide1 = prs.slides.add_slide(slide1_layout)
+          slide1.shapes.title.text = "Test Slide"
+
+          # Add text
+          textbox = slide1.shapes.add_textbox(Inches(2), Inches(1.5),Inches(6), Inches(1))
+          textframe = textbox.text_frame
+          paragraph = textframe.add_paragraph()
+          paragraph.text = "This is also too much work for a very simple report!"
+
+          # Add Table
+          x, y, cx, cy = Inches(2.5), Inches(2.5), Inches(2), Inches(1.5)
+          shape = slide1.shapes.add_table(2, 2 , x, y, cx, cy)
+          table = shape.table
+
+          # set column widths
+          table.columns[0].width = Inches(2.0)
+          table.columns[1].width = Inches(2.0)
+
+          # write column headings
+          table.cell(0, 0).text = 'Col A'
+          table.cell(0, 1).text = 'Col B'
+
+          # write body cells
+          table.cell(1, 0).text = 'AA'
+          table.cell(1, 1).text = 'BB'
+
+          # Center align table cells
+          for row in table.rows:
+            for cell in row.cells:
+              for paragraph in cell.text_frame.paragraphs:
+                paragraph.alignment = PP_ALIGN.CENTER
+
+          prs.save('test.pptx')
+        </code>
+      </pre>
+<p>
+</p>
+</details>
+<p><img src="images/paste-5B08F0B5.png" class="img-fluid"></p>
+</div>
+<div id="Task 1_3" class="tabcontent">
+<details>
+<summary>
+Word Code
+</summary>
+<p>
+</p>
+
+<pre>        <code>
+          from docx import Document
+          from docx.shared import Inches
+
+          doc = Document()
+
+          # Create Header
+          section = doc.sections[0]
+          header = section.header
+          paragraph = header.paragraphs[0]
+          paragraph.text = 'TEST HEADER'
+
+          # Create Footer
+          section = doc.sections[0]
+          footer = section.footer
+          paragraph = footer.paragraphs[0]
+          paragraph.text = 'TEST FOOTER'
+
+          # Create First Page
+          doc.add_heading('Wish I Used Quarto Instead!')
+          paragraph = doc.add_paragraph('Why do we need so many steps to create a very simple word document in Python?!')
+            
+          # Add a Table
+          table = doc.add_table(3,3)
+          table.style = 'Table Grid'
+          row_1 = table.rows[0]
+          row_1.cells[0].text = 'A'
+          row_1.cells[1].text = 'B'
+          row_1.cells[2].text = 'C'
+
+          row_2 = table.rows[1]
+          row_2.cells[0].text = 'AA'
+          row_2.cells[1].text = 'BB'
+          row_2.cells[2].text = 'CC'
+
+          row_3 = table.rows[2]
+          row_3.cells[0].text = 'AAA'
+          row_3.cells[1].text = 'BBB'
+          row_3.cells[2].text = 'CCC'
+
+          doc.save('test.docx')
+       
+        </code>
+      </pre>
+<p>
+</p>
+</details>
+<p>
+<img src="images/paste-89E4FF34.png" class="img-fluid">
+</p>
+</div>
+
+<script>
+ document.getElementById("defaultOpen").click();
+ function clickHandle(evt, tableNum, groupID) {
+   let i, tabcontent, tablinks;
+
+   // This is to clear the previous clicked content.
+   tabcontent = document.getElementsByClassName("tabcontent");
+   for (i = 0; i < tabcontent.length; i++) {
+     if (tabcontent[i].id.startsWith(groupID))
+       tabcontent[i].style.display = "none";
+   }
+
+   // Set the tab to be "active".
+   tablinks = document.getElementsByClassName("tablinks");
+   for (i = 0; i < tablinks.length; i++) {
+     if (tabcontent[i].id.startsWith(groupID)) 
+       tablinks[i].className = tablinks[i].className.replace(" active", "");
+   }
+
+   // Display the clicked tab and set it to active.
+   document.getElementById(tableNum).style.display = "block";
+   evt.currentTarget.className += " active";
+ }
+ </script>
+<p>Automating reports should be straightforward and not require a substantial amount of time. These examples have shown that this is not the case when using Python. That is not to say that these tools never have a place, but more often than not, they are not an ideal choice for report automation.</p>
+<h2 id="quarto-to-the-rescue" class="anchored">Quarto to the rescue</h2>
+<p>Ideally, the following would be achievable when automating reports:</p>
+<ul>
+<li>Add text, tables, images, figures, code, and charts in a consistent and simple manner</li>
+<li>Place objects within a grid system</li>
+<li>Execute code in individual cells within the IDE to preview code output</li>
+<li>Render to different document formats without creating disparate codebases</li>
+<li>Iterate through reports efficiently instead of re-executing the entire codebase</li>
+<li>Easily embed citations and cross-references</li>
+<li>Be able to reference and reuse content across reports</li>
+<li>Use with multiple IDEs</li>
+</ul>
+<p>With Quarto, we can have all of these things!</p>
+<p>Quarto is a publishing system that allows text and code to be seamlessly weaved together in a functional and easy-to-use package with many quality-of-life features. Quarto functions similarly to a Jupyter Notebook with added benefits such as saving to plain text, outputting to various formats, native layout options, and much more. Quarto can even render Jupyter Notebooks for those of you who are ride-or-die Jupyter!</p>
+<p>Quarto is a powerful tool for automating reports because it eliminates the need for code to be used in creating and structuring the report. Instead, it uses code in its proper place to generate output like dynamic tables and charts. Quarto can render reports in PDF, HTML, PowerPoint, Word, or ePub format while effortlessly integrating with Python and other languages. Let’s take a quick look at how Quarto can be used to automate our reporting!</p>
+<h3 id="the-ease-of-using-quarto" class="anchored">The ease of using Quarto</h3>
+<p>Creating the same simple pdf from our earlier example requires no code in Quarto. We can add a table using the visual editor (only available in RStudio - which fully supports Python). Even without the IDE’s visual editor, we can use a markdown table, which can be generated from various websites or hand-typed utilizing a series of <code>|</code> and <code>-</code> for columns and rows.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/image.jpg" class="img-fluid"></p>
+<p></p><figcaption>Quarto in RStudio</figcaption><p></p>
+</figure>
+</div>
+<p>For more dynamic tables and charts, we can embed a code chunk and programmatically generate the output to embed in our document. The code or code output can be integrated into our document and formatted using many native Quarto options.</p>
+<p><img src="images/Screen%20Shot%202022-12-11%20at%2010.08.26%20PM.png" class="img-fluid"></p>
+<h2 id="quarto-101" class="anchored">Quarto 101</h2>
+<p>Every Quarto document starts with a YAML header, where document-level options can be defined. For example, adding header and footer-linked images to each page would look like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>format<span class="sc">:</span> pdf</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>mainfont<span class="sc">:</span> Times New Roman</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>fontsize<span class="sc">:</span> 12pt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>margin<span class="sc">-</span>header<span class="sc">:</span> <span class="er">|</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">!</span>[Logo image](<span class="sc">/</span>img<span class="sc">/</span>logo.png)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>margin<span class="sc">-</span>footer<span class="sc">:</span> <span class="er">|</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="sc">!</span>[Logo image](<span class="sc">/</span>img<span class="sc">/</span>logo.png)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After setting up the report options, the report’s body is created using a combination of text, code, and whatever else is required. The example below shows text typed into the IDE and a code-generated chart. We can preview the chart before rendering the document by running the code cell - as we would in a Jupyter Notebook. Quarto special comments (<code>#|</code>) are used within the code cell to place the image and assign a caption.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/Screen%20Shot%202022-11-09%20at%2011.48.46%20PM.png" class="img-fluid"></p>
+<p></p><figcaption>Quarto in VS Code</figcaption><p></p>
+</figure>
+</div>
+<p>Quarto comes built-in with special comments(<code>#|</code>), short-code (<code>{{ }}</code>), extensions, and pre-defined attributes that make report customization quick and easy. We won’t cover all of these incredible features in detail, but let’s take a quick look at the example below to see how we can use attributes to determine the size, layout, and spacing of several images. We can organize these images exactly how we like with one line of quasi-code.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="sc">:::</span> {layout<span class="ot">=</span><span class="st">"[[1,1], [1]]"</span>}</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="sc">!</span>[Surus](surus.png)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="sc">!</span>[Hanno](hanno.png)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="sc">!</span>[Lin Wang](lin<span class="sc">-</span>wang.png)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="sc">:::</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img src="images/layout-attrib-negative.png" class="img-fluid"></p>
+<p>After finalizing our report, we may need to output it to multiple formats, which is done by changing the YAML header. For example, if we had a PDF with the following YAML header and wanted to change the format to word. We would go from this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>format<span class="sc">:</span> pdf</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>mainfont<span class="sc">:</span> Times New Roman</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>fontsize<span class="sc">:</span> 12pt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>to this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>format<span class="sc">:</span> docx</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>mainfont<span class="sc">:</span> Times New Roman</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>fontsize<span class="sc">:</span> 12pt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After changing the YAML header, we can re-render the document and get our report in the newly defined format. A single Quarto file can automate a report output to one or multiple file formats. Quarto makes report automation both easy and efficient!</p>
+<h2 id="there-is-even-more-to-quarto" class="anchored">There is even more to Quarto</h2>
+<p>Quarto has many other awesome features we did not cover in detail, such as:</p>
+<ul>
+<li>Multi-language support (Python, R, Julia, Observable JS)</li>
+<li>Multiple IDE Support (VS Code, Jupyter Notebooks, RStudio)</li>
+<li>Parameterized reports</li>
+<li>Dynamic variables</li>
+<li>Support for interactive components (Shiny for Python, Plotly)</li>
+<li>Extensions</li>
+<li>Git compatibility</li>
+<li>and much more!</li>
+</ul>
+<p>Be sure to explore the <a href="https://quarto.org/">Quarto website</a> to learn more and see fully developed report examples. Quarto makes reporting in Python easy. Don’t just take my word for it:</p>
+<p><img src="images/Unknown.jpeg" class="img-fluid"></p>
+<h2 id="sharing-with-posit-connect" class="anchored">Sharing with Posit Connect</h2>
+<p>After automating a report, the next step is to execute and share it. Using Posit Connect, Quarto reports and other data products (applications, dashboards, datasets, APIs, etc.) can be shared and refreshed on a schedule, conditionally, or on demand. Data products can be published manually through IDE push-button publishing, the command line, Git-backed publishing, or API-backed publishing.</p>
+<p><img src="images/paste-24EE0B6C.png" class="img-fluid"></p>
+<p>Posit Connect can deploy:</p>
+<ul>
+<li>Quarto</li>
+<li>Jupyter Notebooks</li>
+<li>Shiny for Python</li>
+<li>Streamlit</li>
+<li>Dash</li>
+<li>Tensorflow Model APIs</li>
+<li>Vetiver</li>
+<li>Bokeh</li>
+<li>Flask</li>
+<li>Plumber</li>
+<li>FastAPI</li>
+<li>Pins</li>
+<li>Tableau Analytics Extensions</li>
+</ul>
+<h3 id="posit-connect-changes-the-way-you-work-for-the-better" class="anchored">Posit Connect changes the way you work for the better</h3>
+<p>Imagine using Quarto to automate that manual daily report cobbled together using SQL and Excel and then deploying it to connect where it auto-executes and sends out each day at a set time, notifying you if there is a problem.</p>
+<p>…Or consider what it would be like not to stress when your managing director asks you to refresh that analysis you did six months ago by the end of the day because you can refresh and deploy at the push of a button.</p>
+<p>…How about living in a world where you can build and deploy a simple web app allowing your stakeholders to upload a spreadsheet with IDs and get the data they need without bothering you?</p>
+<p>Posit Connect can make all of this possible and so much more. It eases many of the burdens associated with professional life. <a href="https://posit.co/about/customer-stories/">Take a look at what current clients say about it</a> and see why many of the world’s largest organizations trust Posit Connect and other Posit enterprise tools.</p>
+<p><u>Overview of Posit Connect found</u></p>
+<p></p>
+<p>For more information or to request a demo visit the <a href="https://posit.co">Posit homepage</a>.</p>
+<p>If you enjoyed this post, <a href="https://posit.co/about/subscription-management/">subscribe for blog updates</a>. Don’t forget to subscribe to the <a href="https://www.youtube.com/c/RStudioPBC">Posit Youtube Page</a> for great demos and how-to videos.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

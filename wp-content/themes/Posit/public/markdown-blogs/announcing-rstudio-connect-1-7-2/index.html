@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2019-03-22">
+
+<title>RStudio Connect 1.7.2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Connect 1.7.2</h1>
+
+<p class="date">2019-03-22</p>
+</header>
+
+<p>RStudio Connect 1.7.2 is ready to download, and this release contains some long-awaited functionality that we are excited to share. Several authentication and user-management tooling improvements have been added, including the ability to change authentication providers on an existing server, new group support options, and the official introduction of SAML as a supported authentication provider (currently a beta feature*). But that’s not all… keep reading to learn about great additions to the RStudio Connect UI, updates to Python support, and a brand new Admin dashboard view for tracking scheduled content.</p>
+<p></p>
+<h2 id="updates" class="anchored">Updates</h2>
+<h3 id="authentication-migration-tools" class="anchored">Authentication Migration Tools</h3>
+<p>It is now possible to delete users, transfer content ownership, and change authentication mechanisms for users and groups in RStudio Connect. This enables several workflows that were previously impossible:</p>
+<ul>
+<li>Migrate authentication providers when prompted by IT</li>
+<li>Transition a Proof-of-Concept environment with “starter” authentication into a production context</li>
+<li>Clean up and remove users who are no longer relevant for the system</li>
+</ul>
+<p>All of this functionality is available with the <a href="https://docs.rstudio.com/connect/admin/cli.html#cli-usermanager">usermanager CLI tool</a>. A specific walkthrough of these workflows is available in the <a href="https://docs.rstudio.com/connect/admin/authentication.html#change-auth-provider">RStudio Connect Admin Guide</a>.</p>
+<h3 id="group-support-for-pam-and-proxied-authentication" class="anchored">Group Support for PAM and Proxied Authentication</h3>
+<p>Group support has been enabled for all authentication providers in RStudio Connect. The following grid illustrates the type of group support available for the different authentication providers:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Authentication Provider</th>
+<th>Local Groups</th>
+<th>Remote Groups</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Password</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>LDAP / Active Directory</td>
+<td></td>
+<td>Yes</td>
+</tr>
+<tr class="odd">
+<td>SAML</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Google OAuth2</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>PAM</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Proxied Authentication</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<p>LDAP and Active Directory groups are managed by the authentication provider (i.e., are configured and maintained in your LDAP or Active Directory server). For the other authentication providers, groups are stored and managed inside RStudio Connect. They can be managed in the groups UI (under People) or via the <a href="https://docs.rstudio.com/connect/api/#groups">RStudio Connect Server API</a>.</p>
+<h3 id="saml-authentication-beta-release" class="anchored">SAML Authentication (Beta Release)</h3>
+<p>RStudio Connect now supports using SAML as an authentication provider to support single sign-on (SSO). If you use SAML as an authentication provider, we encourage you to try this feature in your test environment by integrating with your SAML Identity Provider. Any feedback you have to share will be appreciated.</p>
+<blockquote>
+<p>*SAML integration is a Beta feature of RStudio Connect. Beta features are supported and unlikely to face breaking changes in a future release. Any issues found in the feature will be addressed during the regular release schedule; they will not result in immediate patches or hotfixes. We encourage customers to try these features and welcome any feedback, but recommend the feature not be used in production until it is in general availability.</p>
+</blockquote>
+<h3 id="view-scheduled-content" class="anchored">View Scheduled Content</h3>
+<p>Administrators can now review all scheduled content in the RStudio Connect dashboard. The Scheduled Content view helps you understand how server resources will be used over time. Scheduled content can be filtered by frequency of execution, letting you focus on the items that run most often.</p>
+<p></p>
+<h3 id="usage-metrics-summaries" class="anchored">Usage Metrics Summaries</h3>
+<p>A summary of recent usage is shown to content owners and administrators within the “Info” settings panel in the RStudio Connect dashboard. Metrics are displayed for Shiny applications and rendered/static content; they are not available for other content types.</p>
+<p></p>
+<p>Usage data for the content item is summarized to show the last 30 days of activity across all associated versions and variants. Document content items will display a chart of the daily visit count and a total visit counter for the past 30-day period. Shiny applications will have the same statistics displayed, plus a metric for total user interaction time.</p>
+<h3 id="python-support" class="anchored">Python Support</h3>
+<p>In case you missed it, <a href="https://www.rstudio.com/blog/announcing-rstudio-connect-1-7-0/">RStudio Connect 1.7.0</a> introduced support for publishing Jupyter Notebooks as well as Shiny applications, R Markdown reports, and plumber APIs that <a href="https://www.rstudio.com/wp-content/uploads/2019/01/Using-Python-with-RStudio-Connect-1.7.0.pdf">combine R and Python</a>. Today, we’re excited to share that publishing Jupyter Notebooks is easier than ever; start by downloading the <a href="https://pypi.org/project/rsconnect-jupyter/">rsconnect-jupyter</a> Notebook extension, now available on PyPi.</p>
+<p></p>
+<h2 id="additional-updates" class="anchored">Additional Updates</h2>
+<ul>
+<li><strong>Generate Diagnostic Reports and Support Bundles</strong> This diagnostic report can be used by administrators to verify the status and configuration of your RStudio Connect instance. The report also helps you work with our support team by collecting information and logs from your environment to help us quickly identify common issues and reduce the amount of time required to resolve them. See the <a href="https://docs.rstudio.com/connect/admin/getting-started.html#need-help">Getting Started section of the Admin Guide</a> for more information.</li>
+<li><strong>API Versioning Documentation</strong> The versioning scheme of the Connect Server API, including definitions for “experimental” endpoints and a deprecation strategy, is now included in the <a href="https://docs.rstudio.com/connect/api/">API Reference</a> documentation.</li>
+<li><strong>Expanded Content View</strong> (Screenshot in introduction) Expanded view shows content descriptions and images in addition to the information available in the familiar compact view. It is available to all users who can view the content list. This expanded view can help viewers navigate and discover the valuable data products your data science teams create.</li>
+</ul>
+<h2 id="security-authentication-changes" class="anchored">Security &amp; Authentication Changes</h2>
+<ul>
+<li><strong>Browser Configurations</strong> Fixed an issue where certain browser configurations caused environment variable values to be stored in the browser’s autofill cache.</li>
+<li><strong>OAuth2 Usernames</strong> Rules for generating OAuth2 usernames are documented in the Admin Guide section for <a href="https://docs.rstudio.com/connect/admin/authentication.html#authentication-oauth2">OAuth2</a>.</li>
+<li><strong>LDAP Usernames</strong> Login failures due to case-sensitivity handling in LDAP usernames have been fixed. This fix also applies to proxied authentication when using a UniqueID distinct from the username.</li>
+</ul>
+<h2 id="deprecations-breaking-changes-bug-fixes" class="anchored">Deprecations, Breaking Changes &amp; Bug Fixes</h2>
+<ul>
+<li><strong>Breaking Change</strong> Publishers can no longer create groups. The creation of groups by publishers without consent from an administrator made it harder to ensure limited access to content. All publisher-owned groups currently in existence will remain, but any new group creation by publishers will be blocked. To restore the previous behavior and allow publishers to create groups, use the new setting: <code>Authorization.PublishersCanOwnGroups</code></li>
+<li><strong>Breaking Change</strong> API requests with a malformed GUID in a path segment return a <code>400 Bad Request</code> HTTP status code rather than a <code>404 Not Found</code>.</li>
+<li><strong>Bug Fix</strong> Shiny App usage historical information had the <code>started</code> timestamp stored in the local timezone while the <code>end</code> timestamp was in UTC. Now both are stored in UTC; existing records will be adjusted automatically during the course of the upgrade.</li>
+</ul>
+<p>Please review the <a href="http://docs.rstudio.com/connect/news">full release notes</a></p>
+<blockquote>
+<h4 id="upgrade-planning" class="anchored">Upgrade Planning</h4>
+<p>If you rely on publisher-created groups in RStudio Connect, please make note of the breaking changes described above and in the release notes.</p>
+<p>Due to the bug fix on historical timestamp information for Shiny App usage, upgrades could take several minutes depending on the number of records to be adjusted.</p>
+<p>Aside from the breaking changes above, there are no other special considerations. If you are upgrading from an earlier version, be sure to consult the release notes for the intermediate releases, as well.</p>
+</blockquote>
+<p>If you haven’t yet had a chance to download and try <a href="https://rstudio.com/products/connect/">RStudio Connect</a>, we encourage you to do so. RStudio Connect is the best way to share all the work that you do in R (Shiny apps, R Markdown documents, plots, dashboards, Plumber APIs, etc.) with collaborators, colleagues, or customers.</p>
+<p>You can find more details or download a 45-day evaluation of the product at <a href="https://www.rstudio.com/products/connect/">https://www.rstudio.com/products/connect/</a>. Additional resources can be found below.</p>
+<ul>
+<li><a href="https://www.rstudio.com/products/connect/">RStudio Connect home page &amp; downloads</a></li>
+<li><a href="http://docs.rstudio.com/connect/admin/">RStudio Connect Admin Guide</a></li>
+<li><a href="http://docs.rstudio.com/connect/news/">Detailed news and changes between each version</a></li>
+<li><a href="https://www.rstudio.com/pricing/#ConnectPricing">Pricing</a></li>
+<li><a href="https://beta.rstudioconnect.com/connect/">An online preview of RStudio Connect</a></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

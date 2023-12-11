@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-10-21">
+
+<title>RStudio 1.4 Preview: Multiple Source Columns</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio 1.4 Preview: Multiple Source Columns</h1>
+
+<p class="date">2020-10-21</p>
+</header>
+
+<p><em>This post is part of a series on new features in RStudio 1.4, currently available as a <a href="https://www.rstudio.com/products/rstudio/download/preview/">preview release</a>.</em></p>
+<p>RStudio v1.4 introduces the capability to configure your workbench with multiple source columns. Multiple source columns give you the ability to view your source editors side-by-side and quickly reference code and data without switching tabs.</p>
+<h3 id="configuring-a-side-by-side-view" class="anchored">Configuring a Side-by-Side View</h3>
+<p>Your default RStudio view will not change after installing RStudio v1.4. Follow the instructions below to configure your new layout:</p>
+<ol type="1">
+<li><p>In the menu bar, open the “Tools” menu.</p></li>
+<li><p>From the drop down menu, choose “Global Options”.</p>
+<p><img src="toolsMenu.png" class="img-fluid"></p></li>
+<li><p>In the pane on the left hand side of the options window, click “Pane Layout”.</p></li>
+<li><p>To add a column, click on the “Add Column” button.</p>
+<ol type="1">
+<li><p>You’ll see a column labeled “Source” appear in the layout preview.</p></li>
+<li><p>You can add up to three additional columns.</p></li>
+</ol>
+<p><img src="globalOptions.png" class="img-fluid"></p></li>
+<li><p>Select “Apply” and you’ll see the columns appear on your workbench, each with an empty R Script open and ready to go.</p></li>
+<li><p>Select “Ok” to close the “Global Options” pane and start working with your new columns.</p></li>
+</ol>
+<p>Alternatively, you can quickly add columns with the new commands <em>Add Source Column</em> and <em>Open File in New Column</em>. <em>Add Source Column</em> can be accessed with the keyboard shortcut <code>Ctrl + F7</code> and can be found in the <em>View</em> menu under <em>Panes (View -&gt; Panes -&gt; Add Source Column).</em> To choose a specific file to open in a new column, navigate to the <em>File</em> menu <em>(File -&gt; Open File in New Column)</em>. If you want to be able to pull open the file chooser for a new column via the keyboard, we encourage you to <a href="https://support.rstudio.com/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts">use the Modify Keyboard Shortcuts command</a> to add one.</p>
+<h3 id="navigating-multiple-columns" class="anchored"><strong>Navigating Multiple Columns</strong></h3>
+<p>Within your new layout, you can easily move tabs between columns with the same drag and drop convention you use to organize tabs today. Any command you run outside of a specific column (e.g.&nbsp;via the menu bar or keyboard) interacts with the last column you used. For example, if you choose Open a New File, the file will be opened in that last column you’ve selected.</p>
+<p>We’ve added two commands to aid the experience of moving between columns: <em>Focus Next Pane</em> (<code>F6</code>) and <em>Focus Previous Pane</em> (<code>Shift + F6</code>). These commands not only enable you to move between source columns, they also move focus to any other pane you have open. <em>Focus Next Pane</em> gives focus to the pane to the right of your active one, while <em>Focus Previous Pane</em> moves focus to the left. We’ve added a new accessibility option which allows you to easily visualize which panel has focus; while it is off by default, you can turn it on in the “Global Options” pane (<em>Global Options -&gt; Accessibility -&gt; Highlight focused Panel</em>).</p>
+<h3 id="removing-source-columns" class="anchored"><strong>Removing Source Columns</strong></h3>
+<p>To remove a column, simply close or drag out all tabs within that column. Alternatively, you can close the columns as well as any open tabs by navigating to the <em>Pane Layout -&gt; Global Options</em> pane described above and choosing <em>Remove Column</em>. This closes the left most column and will prompt you to save any unsaved files.</p>
+<h3 id="try-it-out" class="anchored"><strong>Try it out!</strong></h3>
+<p>You can try out the new side-by-side source columns by installing the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio 1.4 Preview Release</a>. If you do, we very much welcome your feedback on our <a href="https://community.rstudio.com/c/rstudio-ide">community forum</a>!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

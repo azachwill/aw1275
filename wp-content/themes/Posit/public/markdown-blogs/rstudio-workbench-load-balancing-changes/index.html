@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-09-21">
+<meta name="description" content="As we’re putting the finishing touches on the RStudio Workbench 2021.09.0 “Ghost Orchid” release, we’d like to share one of the new sets of features we’re most excited about. We’ve revisited and revamped the administration experience for load balancing clusters.">
+
+<title>RStudio Workbench Load Balancing Changes</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Workbench Load Balancing Changes</h1>
+
+<p class="date">2021-09-21</p>
+</header>
+
+<p><sup> Photo by <a href="https://unsplash.com/@davidclode?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank" rel="noopener noreferrer">David Clode</a> on <a href="https://unsplash.com/?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a> </sup></p>
+<p>As we’re putting the finishing touches on the RStudio Workbench 2021.09.0 “Ghost Orchid” release, we’d like to share one of the new sets of features we’re most excited about. We’ve revisited and revamped the administration experience for load balancing clusters.</p>
+<p>Specifically, we’ve worked to improve the cluster management and troubleshooting. To make this possible, cluster data is now stored within the internal database. The load balancing configuration file no longer requires a list of each node in the cluster. In fact, the file can be completely empty - though its presence is required. This means nodes can join and leave the cluster without bringing down and re-configuring every node - scaling your cluster has never been easier!</p>
+<p>When provided an empty configuration file, RStudio Workbench predicts the address that other nodes can reach each node at. For more complicated configurations, we’ve included an escape hatch through the new <code>www-host-name</code> option which be can included in the file to instruct RStudio Workbench to use a specified hostname. A detailed explanation of the approach taken to determine each node’s address and the new option can be found in the <a href="https://docs.rstudio.com/ide/server-pro/latest/load_balancing/configuration.html" target="_blank" rel="noopener noreferrer">Admin Guide</a>.</p>
+<p>Furthermore, we’ve added several new commands to the <code>rstudio-server</code> admin tool to improve load balancing cluster management.</p>
+<p>The first command, <code>rstudio-server list-nodes</code> displays each node and information about its current status. It is intended to be use in conjunction with the existing status endpoint (accessed through <code>curl http://localhost:8787/load-balancer/status</code>) to monitor the status of your nodes and aid in identifying and addressing issues.</p>
+<p>The following is an example of this output:</p>
+<pre><code>$ sudo rstudio-server list-nodes
+Cluster
+-------
+Protocol
+Http
+
+Nodes
+-----
+ID  Host           IPv4           Port  Status                     Last Seen
+1   rsw-primary    172.98.8.241   80    Online                     2021-Sep-20 17:08:53
+2   rsw-secondary  172.98.14.255  80    Invalid secure cookie key  2021-Sep-20 17:10:25
+3   rsw-tertiary   172.98.6.205   80    Offline                    2021-Sep-20 17:10:34</code></pre>
+<p>Because load balancing now makes use of the internal database, each node validates its secure cookie key and configured protocol against the database before coming online. The first node online sets the values used for validation. The results of that validation are stored in the database and easily retrievable through the <code>rstudio-server list-nodes</code> command, allowing for easy troubleshooting when encountering unexpected issues with your cluster.</p>
+<p>We’ve added the command <code>rstudio-server reset-cluster</code> to reset the cluster’s state used for validation. This should be run after replacing the secure cookie key on each node or after updating the protocol the cluster is using (<code>http</code>, <code>https</code>, or <code>https-no-verify</code>). Again, the first node brought online or restarted after this reset will determine the configuration used for validation.</p>
+<p>Finally, the command <code>rstudio-server delete-node &lt;node-id&gt;</code> allows you to easily remove nodes from the cluster. The required <code>node-id</code> parameter can be retrieved from the output of the <code>rstudio-server list-nodes</code> command. When a node is deleted, the other nodes in the cluster will no longer try to contact that node; there is no need to restart the active nodes after running this. This command should only be used for nodes that are offline and will not be coming back online.</p>
+<p>There are many more features coming with this release. If you’re interested in giving them a try, check out the <a href="https://www.rstudio.com/products/rstudio/download/preview/" target="_blank" rel="noopener noreferrer">RStudio 2021.09.0 Preview</a> for the latest installers and release notes.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

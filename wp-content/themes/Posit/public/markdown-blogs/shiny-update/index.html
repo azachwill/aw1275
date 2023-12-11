@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2012-12-04">
+
+<title>An update on Shiny</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">An update on Shiny</h1>
+
+<p class="date">2012-12-04</p>
+</header>
+
+<p>Last month we released <a href="https://www.rstudio.com/shiny/">Shiny</a>, our new R package for creating interactive web applications. The response from the community has been extremely encouraging–we’ve received a lot of great feedback that has helped us to make significant improvements to the framework already!</p>
+<h4 id="shiny-0.2.3-on-cran" class="anchored">Shiny 0.2.3 on CRAN</h4>
+<p>Starting with Shiny 0.2.3, you can install the latest stable version of Shiny directly from CRAN. Since the initial release, we’ve added some interesting features to Shiny, most notably the ability to offer <a href="http://rstudio.github.com/shiny/tutorial/#downloads">on-the-fly file downloads</a>. We’ve also fixed some bugs, including an issue with runGist that caused it to fail on many Windows systems.</p>
+<p>Install or upgrade now by running: <code>install.packages('shiny')</code></p>
+<h4 id="coming-soon-shiny-server" class="anchored">Coming soon: Shiny Server</h4>
+<p>While Shiny works great today for running apps on your own machine, we indicated in our original blog post that for web-based deployment we’d be offering hosting services and a software package for deploying Shiny applications on a server.</p>
+<p>Today we have more details to share about Shiny Server, the software package which will allow you to deploy Shiny applications on your own server:</p>
+<ul>
+<li><p>Free and open source (<a href="http://www.gnu.org/licenses/agpl-3.0.txt">AGPLv3</a> license)</p></li>
+<li><p>Host multiple applications on the same port, with a different URL path per application</p></li>
+<li><p>Allows Shiny applications to work with Internet Explorer 8 and 9</p></li>
+<li><p>Automatically starts and stops R sessions as needed</p></li>
+<li><p>Detects and recovers from crashed R sessions</p></li>
+<li><p>Designed to serve applications directly to browsers, or be proxied behind another web server like Apache/Nginx</p></li>
+<li><p>Works across network gateways and proxies that don’t support websockets</p></li>
+</ul>
+<p>Our goal is to begin beta testing by the end of January. Shiny Server will require Linux at launch, though we will likely add Windows and Mac support later.</p>
+<p>While we previously said that Shiny Server would be commercial software, we’ve decided to make it free and open source instead. Later in 2013 we hope to introduce a paid edition of Shiny Server that will include additional features that are targeted at larger organizations.</p>
+<p>That’s all we have on the Shiny front for now. If you have questions, leave us a comment, or drop by our active and growing community at <a href="https://groups.google.com/group/shiny-discuss">shiny-discuss</a>!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

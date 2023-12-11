@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2015-05-28">
+
+<title>SparkR preview by Vincent Warmerdam</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">SparkR preview by Vincent Warmerdam</h1>
+
+<p class="date">2015-05-28</p>
+</header>
+
+<p>This is a guest post by Vincent Warmerdam of <a href="http://koaning.io​">koaning.io</a>.</p>
+<h1 id="sparkr-preview-in-rstudio">SparkR preview in Rstudio</h1>
+<p>Apache Spark is the hip new technology on the block. It allows you to write scripts in a functional style and the technology behind it will allow you to run iterative tasks very quickly on a cluster of machines. It’s benchmarked to be quicker than hadoop for most machine learning use cases (by a factor between 10-100) and soon Spark will also have support for the R language. As of April 2015, SparkR has been merged into Apache Spark and is shipping with a new version in an upcoming release (1.4) due early summer 2015. In the meanwhile, you can use this tutorial to go ahead and get familiar with the current version of SparkR.</p>
+<p><strong>Disclaimer</strong> : although you will be able to use this tutorial to write Spark jobs right now with R, the new api due this summer will most likely have breaking changes.</p>
+<h2 id="running-spark-locally" class="anchored">Running Spark Locally</h2>
+<p>The main feature of Spark is the resilient distributed dataset, which is a dataset that can be queried in memory, in parallel on a cluster of machines. You don’t need a cluster of machines to get started with Spark though. Even on a single machine, Spark is able to efficiently use any configured resources. To keep it simple we will ignore this configuration for now and do a quick one-click install. You can use devtools to download and install Spark with SparkR.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(devtools)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install_github</span>(<span class="st">"amplab-extras/SparkR-pkg"</span>, <span class="at">subdir=</span><span class="st">"pkg"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This might take a while. But after the installation, the following R code will run Spark jobs for you:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SparkR)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">sparkR.init</span>(<span class="at">master=</span><span class="st">"local"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>sc <span class="sc">%&gt;%</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">parallelize</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100000</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  count</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This small program generates a list, gives it to Spark (which turns it into an RDD, Spark’s Resilient Distributed Dataset structure) and then counts the number of items in it. SparkR exposes the RDD API of Spark as distributed lists in R, which plays very nicely with <strong>magrittr</strong>. As long as you follow the API, you don’t need to worry much about parallelizing for performance for your programs.</p>
+<h3 id="a-more-elaborate-example" class="anchored">A more elaborate example</h3>
+<p>Spark also allows for grouped operations, which might remind you a bit of dplyr.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>nums <span class="ot">=</span> <span class="fu">runif</span>(<span class="dv">100000</span>) <span class="sc">*</span> <span class="dv">10</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>sc <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">parallelize</span>(nums) <span class="sc">%&gt;%</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="cf">function</span>(x) <span class="fu">round</span>(x)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filterRDD</span>(<span class="cf">function</span>(x) x <span class="sc">%%</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="cf">function</span>(x) <span class="fu">list</span>(x, <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reduceByKey</span>(<span class="cf">function</span>(x,y) x <span class="sc">+</span> y, 1L) <span class="sc">%&gt;%</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  collect</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The Spark API will look very ‘functional’ to programmers used to functional programming languages (which should come to no suprise if you know that Spark is written in Scala). This script will do the following;</p>
+<ol type="1">
+<li><p>it will create a RRD Spark object from the original data</p></li>
+<li><p>it will map each number to a rounded number</p></li>
+<li><p>it will filter all even numbers out or the RDD</p></li>
+<li><p>next it will create key/value pairs that can be counted</p></li>
+<li><p>it then reduces the key value pairs (the 1L is the number of partitions for the resulting RDD)</p></li>
+<li><p>and it collects the results</p></li>
+</ol>
+<p>Spark will have started running services locally on your computer, which can be viewed at <code>http://localhost:4040/stages/</code>. You should be able to see all the jobs you’ve run here. You will also see which jobs have failed with the error log.</p>
+<h3 id="bootstrapping-with-spark" class="anchored">Bootstrapping with Spark</h3>
+<p>These examples are nice, but you can also use the power of Spark for more common data science tasks. Let’s sample a dataset to generate a large RDD, which we will then summarise via bootstrapping. Instead of parallelizing numbers, I will now parallelize dataframe samples.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">sparkR.init</span>(<span class="at">master=</span><span class="st">"local"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>sample_cw <span class="ot">&lt;-</span> <span class="cf">function</span>(n, s){</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(s)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  ChickWeight[<span class="fu">sample</span>(<span class="fu">nrow</span>(ChickWeight), n), ]</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>data_rdd <span class="ot">&lt;-</span> sc <span class="sc">%&gt;%</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">parallelize</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">200</span>, <span class="dv">20</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="cf">function</span>(s) <span class="fu">sample_cw</span>(<span class="dv">250</span>, s))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>For the <code>parallelize</code> function we can assign the number of partitions Spark can use for the resulting RDD. My <code>s</code> argument ensures that each partition will use a different random seed when sampling. This <code>data_rdd</code> is useful, because it can be reused for multiple purposes.</p>
+<p>You can use it to estimate the mean of the weight.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data_rdd <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="cf">function</span>(x) <span class="fu">mean</span>(x<span class="sc">$</span>weight)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  collect <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  as.numeric <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hist</span>(<span class="dv">20</span>, <span class="at">main=</span><span class="st">"mean weight, bootstrap samples"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Or you can use it to perform bootstrapped regressions.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>train_lm <span class="ot">&lt;-</span> <span class="cf">function</span>(data_in){</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(<span class="at">data=</span>data_in, weight <span class="sc">~</span> Time)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>coef_rdd <span class="ot">&lt;-</span> data_rdd <span class="sc">%&gt;%</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(train_lm) <span class="sc">%&gt;%</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="cf">function</span>(x) x<span class="sc">$</span>coefficients)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>get_coef <span class="ot">&lt;-</span> <span class="cf">function</span>(k) {</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  code_rdd <span class="sc">%&gt;%</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map</span>(<span class="cf">function</span>(x) x[k]) <span class="sc">%&gt;%</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    collect <span class="sc">%&gt;%</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    as.numeric</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">intercept =</span> <span class="fu">get_coef</span>(<span class="dv">1</span>), <span class="at">time_coef =</span> <span class="fu">get_coef</span>(<span class="dv">2</span>))</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>intercept <span class="sc">%&gt;%</span> <span class="fu">hist</span>(<span class="at">breaks =</span> <span class="dv">30</span>, <span class="at">main=</span><span class="st">"beta coef for intercept"</span>)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>time_coef <span class="sc">%&gt;%</span> <span class="fu">hist</span>(<span class="at">breaks =</span> <span class="dv">30</span>, <span class="at">main=</span><span class="st">"beta coef for time"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The slow part of this tree of operations is the creation of the data, because this has to occur locally through R. A more common use case for Spark would be to load a large dataset from S3 which connects to a large EC2 cluster of Spark machines.</p>
+<h3 id="more-power" class="anchored">More power?</h3>
+<p>Running Spark locally is nice and will already allow for parallelism, but the real profit can be gained by running Spark on a cluster of computers. The nice thing is that Spark automatically comes with a script that will automate the provisioning of a Spark cluster on Amazon AWS.</p>
+<p>To get a cluster started; start up an EC2 cluster with the supplied ec2 folder from <a href="https://github.com/apache/spark/">Apache’s Spark github repo</a>. A more elaborate tutorial can be found <a href="https://spark.apache.org/docs/latest/ec2-scripts.html">here</a>, but if you already are an Amazon user, provisioning a cluster on Amazon is as simple as calling a one-liner:</p>
+<pre><code>./spark-ec2 \
+--key-pair=spark-df \
+--identity-file=/path/spark-df.pem \
+--region=eu-west-1 \
+-s 3 \
+--instance-type c3.2xlarge \
+launch my-spark-cluster</code></pre>
+<p>If you ssh in the master node that has just been setup you can run the following code:</p>
+<pre><code>cd /root
+git clone https://github.com/amplab-extras/SparkR-pkg.git
+cd SparkR-pkg
+SPARK_VERSION=1.2.1 ./install-dev.sh
+cp -a /root/SparkR-pkg/lib/SparkR /usr/share/R/library/
+/root/spark-ec2/copy-dir /root/SparkR-pkg
+/root/spark/sbin/slaves.sh cp -a /root/SparkR-pkg/lib/SparkR /usr/share/R/library/</code></pre>
+<h3 id="launch-sparkr-on-a-cluster" class="anchored">Launch SparkR on a Cluster</h3>
+<p>Finally to launch SparkR and connect to the Spark EC2 cluster, we run the following code on the master machine:</p>
+<pre><code>MASTER=spark://:7077 ./sparkR</code></pre>
+<p>The hostname can be retrieved using:</p>
+<pre><code>cat /root/spark-ec2/cluster-url</code></pre>
+<p>You can check on the status of your cluster via Spark’s Web UI at <code>http://:8080</code>.</p>
+<h2 id="the-future" class="anchored">The future</h2>
+<p>Everything described in this document is subject to changes with the next Spark release, but should help you feel familiar on how Spark works. There will be R support for Spark, less so for low level RDD operations but more so for its distributed machine learning algorithms as well as DataFrame objects.</p>
+<p>The support for R in the Spark universe might be a game changer. R has always been great on doing exploratory and interactive analysis on small to medium datasets. With the addition of Spark, R can become a more viable tool for big datasets.</p>
+<p>June is the current planned release date for Spark 1.4 which will allow R users to run data frame operations in parallel on the distributed memory of a cluster of computers. All of which is completely open source.</p>
+<p>It will be interesting to see what possibilities this brings for the R community.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-04-20">
+<meta name="description" content="The latest version of the knitr package is now on CRAN. A highlight of the version 1.32 release is the ability to add alt text to figures produced by code chunks. Read on to learn more about how to improve the accessibility of your knitted HTML-based output.">
+
+<title>New in knitr: Improved Accessibility with Image Alt Text</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">New in knitr: Improved Accessibility with Image Alt Text</h1>
+
+<p class="date">2021-04-20</p>
+</header>
+
+<p>We are happy to share that <strong>knitr</strong> (<a href="https://yihui.org/knitr/" class="uri">https://yihui.org/knitr/</a>) version 1.32 is now on CRAN. <strong>knitr</strong> is a package that executes all code embedded within an <code>.Rmd</code> file, and prepares the code output to be displayed within the R Markdown output document.</p>
+<table>
+<colgroup>
+<col style="width: 100%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Latest release</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><img src="https://img.shields.io/badge/CRAN-1.32-brightgreen" class="img-fluid" alt="Last bookdown release 1.32 cran badge"></td>
+</tr>
+</tbody>
+</table>
+<p>You can install the latest version from CRAN:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"knitr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The latest version of the package includes an important new chunk option to add <a href="https://www.w3schools.com/tags/att_img_alt.asp">alternative text</a> to figures produced in code chunks. This improves the accessibility of your knitted HTML outputs, and in the rest of this post, we wanted to show users how to effectively use this new code chunk option.</p>
+<p>First of all, what is alt text? Here is the definition of alt text from <a href="https://webaim.org/techniques/alttext/">Webaim</a>:</p>
+<blockquote>
+<p>It is read by screen readers in place of images allowing the content and function of the image to be accessible to those with visual or certain cognitive disabilities.</p>
+<p>It is displayed in place of the image in browsers if the image file is not loaded or when the user has chosen not to view images.</p>
+<p>It provides a semantic meaning and description to images which can be read by search engines or be used to later determine the content of the image from page context alone.</p>
+</blockquote>
+<p>Here is an example from the <a href="https://www.a11yproject.com/">a11y project website</a>:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="a11y.png" class="img-fluid" alt="Screenshot of accessibility details for an image on a11yproject.com." style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>You can see that the alt text for the image highlighted in purple says:</p>
+<blockquote>
+<p>“Two stacked copies of the book, Accessibility for Everyone.”</p>
+</blockquote>
+<p>This works well, but what about adding alt text for figures you produce with code? Previously, with code chunks that produced figures, knitr used the figure caption to create the alt text, and there was no way to create a caption and alt text for figures separately. This <a href="https://github.com/rstudio/rmarkdown/issues/1867">feature</a> was originally requested by <a href="https://mdogucu.ics.uci.edu/">Dr.&nbsp;Mine Dogucu</a>.</p>
+<p>Why would you want to provide different caption and alt text for figures? As <a href="https://github.com/rstudio/rmarkdown/issues/1867#issuecomment-716200288">JooYoung Seo pointed out</a>, figure captions are used for relatively concise figure titles, whereas image alt text is intended to deliver more descriptive text-based information for assistive technologies like screen readers. Moreover, a screen reader will read both the caption and alt text, so using the same text for both can be frustrating to the user<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<h2 id="how-to-add-alt-text" class="anchored">How to add alt text</h2>
+<p>You can now set the alt text using the new knitr code chunk option <code>fig.alt</code> for HTML-based R Markdown output (we explain below what happens with <a href="#limitations">other output formats</a>). We’ll use data from the <a href="https://github.com/allisonhorst/palmerpenguins">palmerpenguins package</a> to illustrate usage with a <a href="https://ggplot2.tidyverse.org/">ggplot2</a> plot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install packages to run locally</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("palmerpenguins")</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("ggplot2")</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here is a scatterplot to start:</p>
+<pre><code>```{r, fig.alt = "Scatterplot of flipper length by bill length of 3 penguin species, where we show penguins with bigger flippers have bigger bills."}
+ggplot(data = penguins, aes(x = flipper_length_mm,
+                            y = bill_length_mm,
+                            color = species)) +
+  geom_point(aes(shape = species), alpha = 0.8) +
+  scale_color_manual(values = c("darkorange","purple","cyan4")) 
+```</code></pre>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="figures/penguins-1.png" class="img-fluid" alt="Scatterplot of flipper length by bill length of 3 penguin species, where we show penguins with bigger flippers have bigger bills." width="672"></p>
+</div>
+</div>
+<p>Here is a visual check of the alt text that a screen reader could access, using “Inspect Accessibility Properties” in Firefox:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="accessibility-props.png" class="img-fluid"></p>
+<p></p><figcaption>Image: Using “inspect accessibility properties” in browser on a knitr-produced plot</figcaption><p></p>
+</figure>
+</div>
+<p>You may use your browser inspector to check that the alt text is set properly. Browsers have specific Accessibility inspectors, for example:</p>
+<ul>
+<li><p>Firefox: <a href="https://developer.mozilla.org/en-US/docs/Tools/Accessibility_inspector" title="Firefox's Accessibility Inspector website">Accessibility Inspector</a></p></li>
+<li><p>Chrome: <a href="https://developer.chrome.com/docs/devtools/accessibility/reference/" title="Chrome's Accessibility features reference">Accessibility features reference</a></p></li>
+</ul>
+<p>This chunk option can take either a single string or a vector of strings as input as well, if a code chunk produces more than one plot. For example:</p>
+<pre><code>```{r, fig.alt = c("Informative alt text for plot 1", "Informative alt text for plot 2")}
+plot1
+plot2
+```</code></pre>
+<h2 id="combining-figure-captions-and-alt-text" class="anchored">Combining figure captions and alt text</h2>
+<p>By default, if you do not provide the <code>fig.alt</code> chunk option, the text in the figure caption provided by the <code>fig.cap</code> chunk option will be used as the alt text. You do not <em>have</em> to use <code>fig.cap</code> to use <code>fig.alt</code>- you may use each chunk option in isolation, but they will also work together.</p>
+<pre><code>```{r fig.cap="Bigger flippers, bigger bills", fig.alt = "Scatterplot of flipper length by bill length of 3 penguin species, where we show penguins with bigger flippers have bigger bills."}
+ggplot(data = penguins, aes(x = flipper_length_mm,
+                            y = bill_length_mm,
+                            color = species)) +
+  geom_point(aes(shape = species), alpha = 0.8) +
+  scale_color_manual(values = c("darkorange","purple","cyan4")) 
+```</code></pre>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="figures/penguins-1.png" class="img-fluid" alt="Scatterplot of flipper length by bill length of 3 penguin species, where we show penguins with bigger flippers have bigger bills." width="672"></p>
+<p></p><figcaption>Bigger flippers, bigger bills</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<h2 id="reusing-alt-text-across-chunks" class="anchored">Reusing alt text across chunks</h2>
+<p>Since <code>fig.alt</code> was introduced in an earlier knitr release (v1.31), it gave us the opportunity to get and respond to feedback from early adopters. One <a href="https://github.com/yihui/knitr/issues/1959">feature requested by Dr.&nbsp;Mine Çetinkaya-Rundel</a> was to make it possible to reuse alt text across code chunks. Many knitr users reuse code chunks using <code>ref.label</code> as a <a href="https://bookdown.org/yihui/rmarkdown-cookbook/reuse-chunks.html">chunk option</a>, and it would be nice for <code>fig.alt</code> (and other chunk options) to “come along for the ride” with the code.</p>
+<p>Let’s look at an example. Do you remember the penguins plot above? We can add a name to the code chunk so that we can reuse it later:</p>
+<pre><code>```{r penguins, fig.alt = "Scatterplot of flipper length by bill length of 3 penguin species, where we show penguins with bigger flippers have bigger bills.", fig.cap = "Bigger flippers, bigger bills"}
+# plotting code here 
+```</code></pre>
+<p>Elsewhere in your document, if you’d like to show the same plot, you can use <code>ref.label='chunk_label'</code> as a chunk option with an empty chunk. With <strong>knitr</strong> 1.32, if you’d like to show the same plot <em>with the same chunk options</em>, you can combine <code>ref.label='chunk_label'</code> and <code>opts.label = TRUE</code> to carry over the chunk options when reusing the chunk. It does not matter if the code chunks referenced are before or after the code chunk that uses <code>ref.label</code>. An early code chunk can reference a chunk later in the same document.</p>
+<p>For example, this empty chunk:</p>
+<pre><code>```{r ref.label = 'penguins', opts.label = TRUE}
+```</code></pre>
+<p>Produces this plot:</p>
+<div class="cell" data-opts.label="true">
+<div class="cell-output-display">
+<p><img src="figures/penguins-1.png" class="img-fluid" alt="Scatterplot of flipper length by bill length of 3 penguin species, where we show penguins with bigger flippers have bigger bills." width="672"></p>
+</div>
+</div>
+<p>By setting <code>opts.label = TRUE</code>, the plot and all its chunk options were carried over, including the caption and alt text. Without it, only the code chunk would have been reused. You can also override any of the previously used chunk options by setting them again in this new code chunk. For example, we can change the <code>fig.cap</code>:</p>
+<pre><code>```{r ref.label = 'penguins', opts.label = TRUE, fig.cap = "Penguin plot, take 3"}
+```</code></pre>
+<p>Produces this plot:</p>
+<div class="cell" data-opts.label="true">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="figures/penguins-1.png" class="img-fluid" alt="Scatterplot of flipper length by bill length of 3 penguin species, where we show penguins with bigger flippers have bigger bills." width="672"></p>
+<p></p><figcaption>Penguin plot, take 3</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>By adding <code>fig.cap</code>, we have overridden the figure caption initially set in the original chunk.</p>
+<p>To find out more, you may take a look at the <a href="https://github.com/yihui/knitr-examples/blob/master/121-ref-label.Rmd">new knitr example</a>. If you are not familiar with these options, you can find the documentation for knitr options at <a href="https://yihui.org/knitr/options/" class="uri">https://yihui.org/knitr/options/</a>. To learn more about saving and reusing sets of chunk options with knitr, you can read more about <code>opts.label</code> and options templates in the <a href="https://bookdown.org/yihui/rmarkdown-cookbook/opts-template.html">R Markdown cookbook</a>. The special value <code>opts.label = TRUE</code> shown above means <code>opts.label = ref.label</code>, i.e., to inherit chunk options from chunks referenced by the <code>ref.label</code> option.</p>
+<h2 id="alt-text-for-static-images" class="anchored">Alt text for static images</h2>
+<p>For static images, you can include a figure caption using Markdown syntax:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="al">![figure caption goes here](img.png)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>By default, this activates the <a href="https://pandoc.org/MANUAL.html#images">implicit_figures</a> extension from Pandoc with output formats like <code>html_document</code>. This will lead to the same text being used for both captions and alt text. Setting <a href="https://bookdown.org/yihui/rmarkdown/r-code.html#figures"><code>fig_caption: FALSE</code></a> in the YAML of your <code>html_document</code> would prevent the caption if you only wanted to set the alt text. However, then you cannot have figure captions. Unfortunately, Pandoc does not yet offer a way to differentiate between figure captions and alt text. To work around this limitation, the <code>fig.alt</code> code chunk option can be used with <code>knitr::include_graphics</code>:</p>
+<pre><code>```{r, fig.alt = "Crochet (not knitting!) needle with colorful yarn", out.width="25%"}
+knitr::include_graphics("thumbnail.jpg")
+```</code></pre>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="thumbnail.jpg" class="img-fluid" alt="Crochet (not knitting!) needle with colorful yarn" style="width:25.0%"></p>
+</div>
+</div>
+<h2 id="limitations" class="anchored">Limitations</h2>
+<p>There is one major limitation to this feature, which is that it is currently limited to HTML-based output formats. We mentioned earlier that the default behavior is to use the figure caption provided by the <code>fig.cap</code> chunk option if you do not provide the <code>fig.alt</code> chunk option. This is true still for non-HTML based output formats like Word <code>.docx</code> documents: they will only respect <code>fig.cap</code>. You can follow this <a href="https://github.com/yihui/knitr/issues/1967">issue on GitHub</a> to see our progress toward addressing this limitation in a future release.</p>
+<h2 id="alt-text-resources" class="anchored">Alt text resources</h2>
+<p>You may learn more about how to write more informative alt text for data visualization in this <a href="https://medium.com/nightingale/writing-alt-text-for-data-visualization-2a218ef43f81">Nightingale article</a>.</p>
+<p>Some additional resources:</p>
+<ul>
+<li><a href="https://www.a11yproject.com/posts/2013-01-14-alt-text/" title="Using alt text properly - a11yproject">Using alt text properly, from the a11yproject</a>.</li>
+<li><a href="https://www.wgbh.org/foundation/ncam/guidelines/guidelines-for-describing-stem-images">WGBH Guide Guidelines for describing STEM images</a></li>
+<li><a href="http://diagramcenter.org/making-images-accessible.html">Diagram Center Accessible Images</a></li>
+<li><a href="http://diagramcenter.org/accessible-math-tools-tips-and-training.html">Diagram Center Accessible Math Tricks and Tips</a></li>
+</ul>
+<p>Sincere thanks to <a href="http://www.doggenetics.com/">Liz Hare</a> for recommending <a href="https://twitter.com/DogGeneticsLLC/status/1375267373586976769?s=20">these and other resources on Twitter</a>, and to <a href="https://silvia.rbind.io/">Silvia Canelón</a> for sharing them with us.</p>
+<h2 id="acknowledgements" class="anchored">Acknowledgements</h2>
+<p>This latest release introduces numerous new features and bug fixes as well. You can read the <a href="https://github.com/yihui/knitr/releases">release notes</a> to review all of the changes. A big thanks to the other 55 contributors who helped with the previous two knitr releases by discussing problems, proposing features, and contributing code in the <a href="https://github.com/yihui/knitr"><strong>knitr</strong> repo on Github</a>:</p>
+<p><a href="https://github.com/abhsarma">@abhsarma</a>, <a href="https://github.com/alusiani">@alusiani</a>, <a href="https://github.com/andrew-fuller">@andrew-fuller</a>, <a href="https://github.com/apreshill">@apreshill</a>, <a href="https://github.com/arencambre">@arencambre</a>, <a href="https://github.com/aschersleben">@aschersleben</a>, <a href="https://github.com/atusy">@atusy</a>, <a href="https://github.com/beanumber">@beanumber</a>, <a href="https://github.com/Bisaloo">@Bisaloo</a>, <a href="https://github.com/bounlu">@bounlu</a>, <a href="https://github.com/cderv">@cderv</a>, <a href="https://github.com/cpsievert">@cpsievert</a>, <a href="https://github.com/cysouw">@cysouw</a>, <a href="https://github.com/davidwales">@davidwales</a>, <a href="https://github.com/deb-m">@deb-m</a>, <a href="https://github.com/dmenne">@dmenne</a>, <a href="https://github.com/dmurdoch">@dmurdoch</a>, <a href="https://github.com/egoipse">@egoipse</a>, <a href="https://github.com/ekatko1">@ekatko1</a>, <a href="https://github.com/elbersb">@elbersb</a>, <a href="https://github.com/englianhu">@englianhu</a>, <a href="https://github.com/GitHunter0">@GitHunter0</a>, <a href="https://github.com/gsrohde">@gsrohde</a>, <a href="https://github.com/hermandr">@hermandr</a>, <a href="https://github.com/iago-pssjd">@iago-pssjd</a>, <a href="https://github.com/iMarcello">@iMarcello</a>, <a href="https://github.com/jamarav">@jamarav</a>, <a href="https://github.com/jangorecki">@jangorecki</a>, <a href="https://github.com/jimhester">@jimhester</a>, <a href="https://github.com/jooyoungseo">@jooyoungseo</a>, <a href="https://github.com/julieinsan">@julieinsan</a>, <a href="https://github.com/karoliskoncevicius">@karoliskoncevicius</a>, <a href="https://github.com/kbvernon">@kbvernon</a>, <a href="https://github.com/kmcbest">@kmcbest</a>, <a href="https://github.com/knokknok">@knokknok</a>, <a href="https://github.com/krivit">@krivit</a>, <a href="https://github.com/ktrutmann">@ktrutmann</a>, <a href="https://github.com/LTLA">@LTLA</a>, <a href="https://github.com/matthewgson">@matthewgson</a>, <a href="https://github.com/mine-cetinkaya-rundel">@mine-cetinkaya-rundel</a>, <a href="https://github.com/MonteShaffer">@MonteShaffer</a>, <a href="https://github.com/msgoussi">@msgoussi</a>, <a href="https://github.com/muschellij2">@muschellij2</a>, <a href="https://github.com/NickCH-K">@NickCH-K</a>, <a href="https://github.com/phargarten2">@phargarten2</a>, <a href="https://github.com/rasyidstat">@rasyidstat</a>, <a href="https://github.com/rcst">@rcst</a>, <a href="https://github.com/rnorberg">@rnorberg</a>, <a href="https://github.com/rundel">@rundel</a>, <a href="https://github.com/StephenGerry">@StephenGerry</a>, <a href="https://github.com/thompsonsed">@thompsonsed</a>, <a href="https://github.com/tomschenkjr">@tomschenkjr</a>, <a href="https://github.com/TTT12-dumb-dumb">@TTT12-dumb-dumb</a>, <a href="https://github.com/XiangyunHuang">@XiangyunHuang</a>, and <a href="https://github.com/yihui">@yihui</a>.</p>
+
+<section class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1" role="doc-endnote"><p>See <a href="https://www.brandeis.edu/web-accessibility/understanding/images-alt-text.html" class="uri">https://www.brandeis.edu/web-accessibility/understanding/images-alt-text.html</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>
