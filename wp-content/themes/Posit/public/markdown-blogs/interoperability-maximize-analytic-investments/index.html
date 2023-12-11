@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-07-15">
+<meta name="description" content="No single platform meets all the analytic needs of every organization. To avoid productivity-sapping complexity and underutilized infrastructure, encourage Interoperability so that your data scientists can access everything they need from their native tools.">
+
+<title>Interoperability: Getting the Most Out of Your Analytic Investments</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Interoperability: Getting the Most Out of Your Analytic Investments</h1>
+
+<p class="date">2020-07-15</p>
+</header>
+
+<p><sup>Photo by <a href="https://unsplash.com/@federize?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank" rel="noopener noreferrer">Federico Beccari</a> on <a href="https://unsplash.com/s/photos/connection?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank" rel="noopener noreferrer">Unsplash</a></sup></p>
+<h3 id="the-challenges-of-complexity-and-underutilization" class="anchored">The Challenges of Complexity and Underutilization</h3>
+<p>Organizations typically have multiple different environments and frameworks to support their analytic work, with each tool providing specialized capabilities or serving different audiences. These usually include:</p>
+<ul>
+<li><strong>Spreadsheets</strong> created in Excel or Google Sheets,</li>
+<li><strong>Data science tools</strong> including R, Python, SPSS, SAS, and many others,</li>
+<li><strong>BI tools</strong> such as Tableau or PowerBI,</li>
+<li><strong>Data storage and management frameworks</strong> including databases and Spark clusters,</li>
+<li><strong>Job management clusters</strong> such as Kubernetes and Slurm.</li>
+</ul>
+<p>For example, in our most recent R Community Survey, we asked what tools and languages respondents used besides R. The results shown in Figure 1 illustrate the wide variety of tools that may be present in an organization.</p>
+<figure>
+<img align="center" style="padding: 35px;" src="tools-chart.jpg" alt="Tools Chart">
+<figcaption>
+Figure 1: Respondents we surveyed use a wide variety of tools in addition to R.
+</figcaption>
+</figure>
+<p>These tools and frameworks provide flexibility and power but can also have two unpleasant, unintended consequences: <strong>productivity-undermining complexity</strong> for various stakeholders and <strong>underutilization of expensive analytic frameworks</strong>.</p>
+<p>The stakeholders in the organization experience these consequences because:</p>
+<ul>
+<li><strong>Data scientists require multiple environments to get their work done.</strong> If data scientists have to leave their native tools to access other things they need such as a Spark cluster or a database, they have to switch contexts and remember how to use systems they might only rarely touch. Often, this means they won’t fully exploit the data and other resources available, or they waste time learning and relearning various systems, APIs, languages, and interfaces.</li>
+<li><strong>Data science leaders worry about productivity.</strong> When their teams struggle in this way, these leaders worry that their teams aren’t delivering the full value that they could. This inefficiency can make it more difficult to defend budgets and hire additional team members when needed. These leaders may also face criticism from other departments demanding to know why the data science team isn’t fully utilizing expensive BI deployments or powerful computing resources.</li>
+<li><strong>IT spends time and money supporting underutilized resources.</strong> Analytic infrastructures such as Spark or Kubernetes require considerable resources to set up and maintain. If these resources are being underutilized, IT will question their lack of ROI and whether they should continue to maintain them. These questions can lead to uncomfortable internal friction between departments, particularly depending on who requested the investments in the first place and what expectations were used to justify them.</li>
+</ul>
+<figure>
+<img align="center" style="padding: 35px;" src="interoperability.png" alt="Platforms diagram">
+<figcaption>
+Figure 2: Interoperability is a key strength of the R ecosystem.
+</figcaption>
+</figure>
+<h3 id="teams-need-interoperable-tools" class="anchored">Teams Need Interoperable Tools</h3>
+<p>Interoperable systems that give a data scientist direct access to different platforms from their native tools can help address these challenges. Everyone benefits from this approach because:</p>
+<ul>
+<li><strong>Data scientists keep working in their preferred environment.</strong> Rather than constantly switching between different tools and IDEs and interrupting their flow, data scientists can continue to work in the tools and languages they prefer. This makes the data scientist more productive and reduces the need to keep switching contexts.</li>
+<li><strong>Data science leaders get more productivity from their teams.</strong> When teams are more productive, they deliver more value to their organization. Delivered value helps them justify more training, tools, and team members. Easier collaboration and reuse of each other’s work further increases productivity. For example, if a data scientist who prefers R can easily call the Python script developed by a colleague from their preferred language, they avoid reimplementing the same work twice.</li>
+<li><strong>Teams make better use of IT resources.</strong> Since it is easier for data scientists to use the frameworks and other infrastructure IT has put in place, they use those resources more consistently. This higher utilization helps the organization achieve the expected ROI from these analytic investments.</li>
+</ul>
+<h2 id="encouraging-interoperability" class="anchored">Encouraging Interoperability</h2>
+<p>Interoperability is a mindset more than technology. You can encourage interoperability throughout your data science team with four initiatives:</p>
+<ol type="1">
+<li><strong>Embrace open source software.</strong> One of the advantages of open source software is the wide community providing specialized packages to connect to data sources, modeling frameworks, and other resources. If you need to connect to something, there is an excellent chance someone in the community has already built a solution. For example, as shown in Figure 2, the R ecosystem already provides interoperability with many different environments.</li>
+<li><strong>Make the data natively accessible.</strong> Good data science needs access to good up-to-date data. Direct access to data in the data scientist’s preferred tool, instead of requiring the data scientist to use specialized software, helps the data scientist be more productive and makes it easier to automate a data pipeline as part of a data product. Extensive resources exist to help, whether your data is in <a href="https://db.rstudio.com/" target="_blank" rel="noopener noreferrer">databases</a>, <a href="https://spark.rstudio.com/" target="_blank" rel="noopener noreferrer">Spark clusters</a>, or elsewhere.<br>
+</li>
+<li><strong>Provide connections to other data science or ML tools.</strong> Every data scientist has a preferred language or tool, and every data science tool has its unique strengths. By providing easy connections to other tools, you expand the reach of your team and make it easier to collaborate and benefit from the work of others. For example, the <a href="https://rstudio.github.io/reticulate/" target="_blank" rel="noopener noreferrer">reticulate</a> package allows an R user to call Python in a variety of ways, and the <a href="https://tensorflow.rstudio.com/" target="_blank" rel="noopener noreferrer">Tensorflow package</a> provides an interface to large-scale TensorFlow machine learning applications.</li>
+<li><strong>Make your compute environments natively accessible.</strong> Most data scientists aren’t familiar with job management clusters such as Kubernetes and Slurm and often struggle to use them. By making these environments available directly from their native tools, your data scientists are far more likely to use them. For example, <a href="https://rstudio.com/products/rstudio-server-pro/" target="_blank" rel="noopener noreferrer">RStudio Server Pro</a> allows a data scientist to run a script on a Kubernetes or Slurm cluster directly from within their familiar IDE.</li>
+</ol>
+<p>Eric Nantz, a Research Scientist at Eli Lilly and Company, spoke at rstudio::conf 2020 about the importance of interoperability in R:</p>
+<script src="https://fast.wistia.com/embed/medias/jyk6q0svdy.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_jyk6q0svdy videoFoam=true" style="height:100%;position:relative;width:100%">
+<div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;">
+<img src="https://fast.wistia.com/embed/medias/jyk6q0svdy/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;">
+</div>
+</div>
+</div>
+</div>
+<h2 id="learn-more-about-interoperability" class="anchored">Learn more about Interoperability</h2>
+<p>In future posts, we will expand on this idea of Interoperability, with a particular focus on teams using R and Python, and how open source data science can complement BI tools.</p>
+<p>If you’d like to learn more about Interoperability, we recommend these resources:</p>
+<ul>
+<li><a href="https://blog.rstudio.com/2020/07/07/interoperability-july/" target="_blank" rel="noopener noreferrer">In this recent blog post</a>, we introduced the idea of interoperability with an example of calling multiple different languages from the RStudio IDE.</li>
+<li><a href="https://rstudio.com/about/customer-stories/brown-forman/" target="_blank" rel="noopener noreferrer">In this recent customer spotlight</a>, Paul Ditterline, Manager Data Science at Brown-Forman, describes how RStudio products helped their data science team “turn into application developers and data engineers without learning any new languages or computer science skills.”</li>
+<li><a href="https://solutions.rstudio.com/production/integrations/" target="_blank" rel="noopener noreferrer">This article</a> describes how RStudio products integrate with many different frameworks, including databases, Spark, Kubernetes, Slurm, Git, etc.</li>
+<li><a href="https://rstudio.com/solutions/r-and-python/" target="_blank" rel="noopener noreferrer">R and Python, a Love Story</a> shows how RStudio products helped bilingual data science teams collaborate more productively, and have a greater impact on their organization.</li>
+<li>At rstudio::conf 2020, George Kastrinakis from Financial Times <a href="https://rstudio.com/resources/rstudioconf-2020/building-a-new-data-science-pipeline-for-the-ft-with-rstudio-connect/" target="_blank" rel="noopener noreferrer">presented a case study</a> on building a new data science pipeline, using R and RStudio Connect.</li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

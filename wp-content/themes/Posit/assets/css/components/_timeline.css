@@ -1,0 +1,58 @@
+/* STACKED TIMELINE (MOBILE)*/
+.timeline-line {
+    @apply relative grid place-items-center z-[2] w-full h-full pb-[80px];
+}
+
+.timeline-line::before {
+    @apply content-[''] absolute w-[1px] h-full bg-blue4 z-[1];
+}
+
+.timeline-line .timeline-dot {
+    @apply relative z-10 mx-auto mb-[24px] w-[16px] h-[16px] rounded-full bg-blue6 border-[4px] border-blue4 box-border animate-pulse shadow-[10px_10px_1px_0px_rgba(50,118,181,0.1)];
+}
+
+/* PINNED TIMELINE (DESKTOP)*/
+
+.timeline-event-container .timeline-dot {
+    @apply absolute left-[50%] -translate-x-[50%] -translate-y-[50%] z-10 w-[16px] h-[16px] rounded-full bg-blue6 border-[4px] border-blue4 box-border animate-pulse shadow-[10px_10px_1px_0px_rgba(50,118,181,0.1)];
+}
+
+.timeline-event-container.odd .timeline-dot {
+    @apply top-0;
+}
+
+.timeline-event-container.even .timeline-dot {
+    @apply -bottom-[16px];
+}
+
+.timeline-event-container.even {
+    @apply -translate-y-[100%];
+}
+
+.timeline-event-container .timeline-progress-bar {
+    @apply h-[1px] w-full bg-blue6 absolute -left-[50%] translate-x-[8px] origin-left;
+}
+
+.timeline-event-container .timeline-progress-bar .progress {
+    @apply h-full w-full bg-blue4 absolute left-0 origin-left;
+}
+
+.timeline-event-container.odd .timeline-progress-bar {
+    @apply top-0 -translate-y-[1px];
+}
+
+.timeline-event-container.even .timeline-progress-bar {
+    @apply bottom-0;
+}
+
+.timeline-bar {
+    @apply h-[1px];
+}
+
+.timeline-bar::-webkit-progress-bar {
+    @apply bg-blue6;
+}
+
+.timeline-bar::-webkit-progress-value {
+    @apply bg-blue4;
+}

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2017-02-09">
+
+<title>RStudio Connect 1.4.2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Connect 1.4.2</h1>
+
+<p class="date">2017-02-09</p>
+</header>
+
+<p>We’re excited to announce the latest release of <a href="https://www.rstudio.com/products/connect/">RStudio Connect: version 1.4.2</a>. This release includes a number of notable features including an overhauled interface for parameterized R Markdown reports.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2017/02/screen-shot-2017-02-07-at-9-06-03-am.png" class="img-fluid"></p>
+<p></p><figcaption>Enhanced Parameterized R Markdown Reports</figcaption><p></p>
+</figure>
+</div>
+<p class="caption">
+Enhanced Parameterized R Markdown Reports
+</p>
+<p>The most notable feature in this release is the ability to publish <a href="https://rmarkdown.rstudio.com/developer_parameterized_reports.html">parameterized R Markdown</a> reports that are easier for anyone to customize. If you’re unfamiliar, parameterized R Markdown reports allow you to inject input parameters into your R Markdown document to alter what analysis the report performs. The parameters of your R Markdown report are now visible on the left-hand sidebar, allowing users to easily tweak the inputs to the document and quickly view the output in the browser.</p>
+<p>Users even have the opportunity to create private versions of the report which they can schedule to run again, email, or save and revisit in the browser. Of course, you can continue to use the wide variety of output formats (notebooks, dashboards, books, and others) while using parameterized R Markdown.</p>
+<p>In addition to the parameterized report overhaul, there are some other notable features included in this release.</p>
+<ul>
+<li><p><strong>Content private by default</strong> - Content is set to private (“Just Me”) by default. Users can still change the visibility of their content before publishing, as before.</p></li>
+<li><p><strong>Execute R as the authenticated viewer</strong> - You can now choose to have some applications execute their underlying R process as the authenticated viewer currently looking at the app. This allows applications to access any data or resource that the associated user has access to on the server. Requires PAM authentication. <a href="http://docs.rstudio.com/connect/1.4.2/admin/process-management.html#process-management-runas-current">More details here</a>.</p></li>
+</ul>
+<p>Other important features include:</p>
+<ul>
+<li><p>Show progress indicator when updating a report.</p></li>
+<li><p>Users can now filter content to include only items that they can edit or view.</p></li>
+<li><p>Users now only count against the named user license limit after they log in for the first time.</p></li>
+<li><p>Added support for global “System Messages” that can display an HTML message to your users on the landing pages. <a href="http://docs.rstudio.com/connect/1.4.2/admin/server-management.html#system-messages">Details here</a>.</p></li>
+<li><p>Updated packrat to gain more transparency on package build errors.</p></li>
+<li><p>Updated the list of SSL ciphers to correspond with modern best-practices.</p></li>
+</ul>
+<p>If you haven’t yet had a chance to download and try <a href="https://rstudio.com/products/connect">RStudio Connect</a> we encourage you to do so. RStudio Connect is the best way to share all the work that you do in R (Shiny apps, R Markdown documents, plots, dashboards, etc.) with collaborators, colleagues, or customers.</p>
+<p>You can find more details or download a 45 day evaluation of the product at <a href="https://www.rstudio.com/products/connect/" class="uri">https://www.rstudio.com/products/connect/</a>. Additional resources can be found below.</p>
+<ul>
+<li><p><a href="https://www.rstudio.com/products/connect/">RStudio Connect home page &amp; downloads</a></p></li>
+<li><p><a href="http://docs.rstudio.com/connect/admin/">RStudio Connect Admin Guide</a></p></li>
+<li><p><a href="https://www.rstudio.com/wp-content/uploads/2016/01/RSC-IT-Q-and-A.pdf">What IT needs to know about RStudio Connect</a></p></li>
+<li><p><a href="https://www.rstudio.com/pricing/#ConnectPricing">Pricing</a></p></li>
+<li><p><a href="https://beta.rstudioconnect.com/connect/">An online preview of RStudio Connect</a></p></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

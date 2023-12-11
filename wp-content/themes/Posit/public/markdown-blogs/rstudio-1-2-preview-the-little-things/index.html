@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2018-11-19">
+
+<title>RStudio 1.2 Preview: The Little Things</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio 1.2 Preview: The Little Things</h1>
+
+<p class="date">2018-11-19</p>
+</header>
+
+<p><em>Today, we’re continuing our blog series on new features in RStudio 1.2. If you’d like to try these features out for yourself, you can download a <a href="https://www.rstudio.com/products/rstudio/download/preview/">preview release of RStudio 1.2</a>.</em></p>
+<p>In this blog series thus far, we’ve focused on the biggest new features in RStudio 1.2. Today, we’ll take a look at some of the smaller ones.</p>
+<h2 id="detect-missing-r-packages" class="anchored">Detect missing R packages</h2>
+<p>Many R scripts open with calls to <code>library()</code> and <code>require()</code> to load the packages they need in order to execute. If you open an R script that references packages that you don’t have installed, RStudio will now offer to install all the needed packages in a single click. No more typing <code>install.packages()</code> repeatedly until the errors go away!</p>
+<p><img src="2018-11-19-missing-packages.png" style="width: 466px"></p>
+<p>If this isn’t helpful in your workflow, disable it in <em>Options -&gt; Code -&gt; Diagnostics -&gt; [x] Prompt to install missing R packages</em>.</p>
+<h2 id="create-powerpoint-presentations" class="anchored">Create PowerPoint presentations</h2>
+<p>R Markdown is a great tool for making presentations – in addition to being convenient (no more copying and pasting results and graphs!), your whole presentation becomes a reproducible document. Now you can <a href="https://bookdown.org/yihui/rmarkdown/powerpoint-presentation.html">author PowerPoint presentations in R Markdown</a>, thanks to the <a href="https://pandoc.org/MANUAL.html#producing-slide-shows-with-pandoc">new PowerPoint presentation support in Pandoc 2</a>.</p>
+<p>To make a new PowerPoint presentation, go to <em>File -&gt; New File -&gt; R Markdown -&gt; Presentation -&gt; PowerPoint</em>. You can also make a PowerPoint presentation out of one of your existing presentations by opening the Knit menu…</p>
+<p><img src="2018-11-19-r-markdown-powerpoint.png" style="width: 311px"></p>
+<p>… or just by including <code>output: powerpoint_presentation</code> in your presentation’s YAML header.</p>
+<p>When working with PowerPoint, using the <em>Knit</em> command will cause your slideshow to re-open in PowerPoint right where you left off, so it’s easy to iterate on changes.</p>
+<p>Se our <a href="https://support.rstudio.com/hc/en-us/articles/360004672913-Rendering-PowerPoint-Presentations-with-RStudio">guide to rendering PowerPoint presentations with RStudio</a> for more details, including how to use columns, templates, and speaker notes.</p>
+<h2 id="filter-data-with-histograms" class="anchored">Filter data with histograms</h2>
+<p>The data viewer in RStudio 1.1 lets you filter numeric columns by dragging a pair of endpoints to select the range of interest.</p>
+<p><img src="2018-11-19-filter-sliders.png" style="width: 237px"></p>
+<p>Many of you let us know that you wanted to be able to enter the exact values you wanted to filter by, or type just one value. We’ve implemented this, and we’ve also added a histogram to make it easy to see the distribution of the data in the column at a glance.</p>
+<p><img src="2018-11-19-filter-histogram.png" style="width: 269px"></p>
+<p>Just brush (drag over) the section of the histogram you’re interested in to apply a filter. You can also type your own range into the textbox, or even a single value if that’s what you’re interested in.</p>
+<h2 id="show-hidden-files" class="anchored">Show hidden files</h2>
+<p>RStudio’s <em>Files</em> pane has traditionally not shown hidden files, with the exception of a handful that it knows to be useful (for example, your <code>.Rprofile</code>). Sometimes, however, you really want to be able to see everything – and now you can. Click <em>More</em> on the Files pane, then check <em>Show Hidden Files</em>.</p>
+<p><img src="2018-11-19-show-hidden-files.png" style="width: 483px"></p>
+<h2 id="click-to-force-promises" class="anchored">Click to force promises</h2>
+<p>You might have noticed that sometimes – especially while debugging – values in the Environment pane look disabled and show an expression rather than a value. For example, try typing <code>data("AirPassengers")</code>. You’ll see this in your Environment pane:</p>
+<p><img src="2018-11-19-force-promises.png" style="width: 246px"></p>
+<p>These values are called “promises” and represent function arguments or other unevaluated expressions (read more about promises in the <a href="http://adv-r.had.co.nz/Computing-on-the-language.html">non-standard evaluation chapter of Advanced R</a>). (Why doesn’t RStudio show the value right away? The Environment pane tries hard to avoid causing side effects, so it doesn’t evaluate unevaluated expressions.)</p>
+<p>If you <em>do</em> want to see the value right away, you can now just click it in the Environment pane. RStudio will call <code>force()</code> on the promise for you, and you can see its value immediately.</p>
+<h2 id="explore-list-columns" class="anchored">Explore list columns</h2>
+<p>Sometimes the data in a data frame isn’t simple; if the data frame was derived from nested data (such as JSON) some of its values may themselves be lists (read the <a href="https://jennybc.github.io/purrr-tutorial/ls13_list-columns.html">purrr tutorial on list columns</a> for more). In RStudio 1.2, the data viewer makes these columns easy to explore by rendering the list values:</p>
+<p><img src="2018-11-19-list-columns.png" style="width: 493px"></p>
+<p>Click on any list value to open it in the Object Explorer.</p>
+<h2 id="search-in-connections" class="anchored">Search in Connections</h2>
+<p>If you connect to a database with a lot of tables, it can be tedious to scroll to the one you want. You can now type part of the table’s name in the new Search box instead:</p>
+<p><img src="2018-11-19-search-connections.png" style="width: 423px"></p>
+<p><em>Note that, for performance reasons, this search field doesn’t search all the object names in your database; it only filters the ones that are already visible.</em></p>
+<h2 id="custom-knitr-engines-in-r-notebooks" class="anchored">Custom knitr engines in R Notebooks</h2>
+<p>One of the things that makes knitr powerful is its support for custom engines. In RStudio 1.2, we’ve made R Notebooks more extensible by integrating support for these custom engines. Here’s an example of an R Markdown document with a custom engine called <code>data</code>, which evaluates a chunk’s contents as raw data (in the style of a <a href="https://www.tldp.org/LDP/abs/html/here-docs.html">bash heredoc</a> for data):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Hello Text Data</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>Register the <span class="in">`data`</span> engine.</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>knit_engines<span class="sc">$</span><span class="fu">set</span>(<span class="at">data =</span> <span class="cf">function</span>(options) {</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">assign</span>(options<span class="sc">$</span>output.var, </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>         <span class="fu">read.table</span>(<span class="at">text =</span> options<span class="sc">$</span>code), </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">envir =</span> knitr<span class="sc">::</span><span class="fu">knit_global</span>()</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="cn">NULL</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>Use the <span class="in">`data`</span> engine to evaluate this chunk, and save results to <span class="in">`x`</span>.</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="in">```{data, output.var='x'}</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="in">26 A L</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="in">30 A L</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="in">18 A M</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="in">20 B H</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>Print the resultant value.</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>x</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="in">```</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In RStudio 1.2, you can run all of this code in an R Notebook. The results appear right beneath the chnk:</p>
+<p><img src="2018-11-19-custom-knit-engine.png" style="width: 561px"></p>
+<h2 id="improved-package-and-repo-management" class="anchored">Improved package and repo management</h2>
+<p>We’ve revamped the <em>Packages</em> section of Options. Now you can manage primary <em>and</em> secondary repositories from inside RStudio.</p>
+<p><img src="2018-11-19-packages-pane.png" style="width: 595px"></p>
+<p>(Hint: this feature works great with the new <a href="https://www.rstudio.com/products/package-manager/">RStudio Package Manager</a>.)</p>
+<p>You might also have noticed that we’ve added web links to every package in the Packages pane. These will take you the package’s homepage – even if it’s on Github rather than CRAN.</p>
+<p><img src="2018-11-19-browse-package.png" style="width: 494px"></p>
+<h2 id="magic-source-comments" class="anchored">Magic !source comments</h2>
+<p>Have you ever wanted to customize the behavior of the <em>Source</em> command in RStudio? Maybe you have an R script that needs some pre- or post- actions before <code>source()</code>, or you’re working with a file for which <code>source()</code> doesn’t make sense at all – for instance, when using <a href="https://github.com/jimhester/altparsers">alternate R parsers</a>.</p>
+<p>Now you can make RStudio’s <em>Source</em> command do whatever you like, using a magic comment like the following:</p>
+<pre><code># !source altparsers::src</code></pre>
+<p>This tells RStudio to use <code>altparsers::src()</code> instead of <code>source()</code> when you invoke the <em>Source</em> command. You can customize the behavior even more by using <code>.file</code> or <code>.code</code> in the magic command to refer to the filename and its contents, respectively.</p>
+<h2 id="wrapup" class="anchored">Wrapup</h2>
+<p>We’re always looking for little ways to make RStudio a more comfortable environment for your day-to-day work with R, and we hope these small changes add up for you. We very much appreciate your feedback and ideas – many of the above were suggestions from the community. Download the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio 1.2 Preview</a> to try these features out, and visit the <a href="https://community.rstudio.com/c/rstudio-ide">community forum</a> to let us know what you think!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

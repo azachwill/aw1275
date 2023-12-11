@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2019-10-02">
+
+<title>Building Data Science Infrastructure at an Enterprise Level with RStudio and ProCogia</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Building Data Science Infrastructure at an Enterprise Level with RStudio and ProCogia</h1>
+
+<p class="date">2019-10-02</p>
+</header>
+
+<p><sup> Photo by <a href="https://unsplash.com/@phoebezzf?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Zhifei Zhou</a> on <a href="https://unsplash.com/s/photos/seattle?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></sup></p>
+<p>We’re hosting a free, half-day event with one of our <a href="https://rstudio.com/certified-partners/">Full Service Certified Partners</a>, ProCogia, in Seattle on Wednesday October 9th. This event is for data science and IT teams that want to learn more about:</p>
+<ul>
+<li>helpful new RStudio R packages like <code>pins</code></li>
+<li>what RStudio professional products can do for your data science team if you have both Jupyter and RStudio users</li>
+<li>using Kubernetes or Slurm to scale your work</li>
+</ul>
+<p><strong>If you’re interested in learning more, be sure to register on the ProCogia event page: <a href="https://www.eventbrite.com/e/rstudio-and-procogia-roadshow-tickets-72099330037">RStudio &amp; ProCogia Roadshow: R in Enterprise</a>.</strong></p>
+<p>For a taste of what to expect, here’s a discussion on using enterprise RStudio and python products to build a containerized data science development environment, written by Gagandeep Singh, data scientist and certified RStudio administrator, at ProCogia.</p>
+<p>“Modern organizations are spending a considerable amount of resources on data science research and development. Companies are recognizing that the need to have a dedicated data science department in-house has increased exponentially. Companies are looking at external partners with dedicated competence and experience in this field to assist in building a comprehensive solution. As specialty data science consultants, we have established partnerships with popular data science platform providers such as RStudio and are involved in the JupyterHub project. For example, we were brought in by a multinational leading biotechnology company to design, develop and deploy an integrated data science development platform for their team of over 100 international data scientists. The ask was to build a comprehensive solution where users can use either R and/or Python, develop models, and share results through a common platform.</p>
+<p>The biggest concern for us was to provide a solution that could handle a multitude of user sessions, but also provide high-performance computing and resources at the same time. The safe option was to build a high-availability, load-balanced environment, although it might create troubles in the future as the number of users kept increasing and resources needed to be optimized.</p>
+<p>We instead decided to take a two-pronged approach, in which a Kubernetes-backed, containerized solution would be the primary interface, and a load-balanced product would be backing up any additional load. Users launch their own containers for each processing session and Kubernetes takes care of the backend resource allocations. They can run both Jupyter notebooks and R scripts in the container, and perform multiple assignments concurrently. The publishing platform, RStudio Connect, provides a cohesive product to share results through shiny applications, HTML reports, and even Jupyter Notebooks with Python code. RStudio Server Pro 1.2 now supports running sessions and jobs on Kubernetes.</p>
+<p>Connect has both Python and R enabled. It has also been configured to schedule reports to be sent as emails. We also configured the RStudio Server Pro IDE in a load-balanced, high-availability environment. In this situation, the RStudio IDE’s internal load balancer works with AWS’s load balancer to accommodate backup and smooth operations in case any of the servers go down. The publishing platform is also configured with high availability, which means multiple servers are simultaneously serving the users’ publishing needs using a common database. We integrated a high-availability RStudio Package Manager into the mix, which enabled the administrator to establish control over both package access and downloads. Users could utilize RStudio Package Manager to access different versions of R packages. Our instance of Package Manager was also capable of serving internally developed packages by connecting to the original git source, which eliminated the need for additional administration.</p>
+<p>A customized solution that took into account security protocols, data sharing and management, and the needs of individual data scientists and administrators is what was needed. There cannot be a one-size-fits-all solution when it comes to the architecture of data science environments for organizations across various industries. The environment must be tailored to business goals, administrator concerns, and user productivity. A solution that works with regards to security protocols may not be a solution that works for users of the environment. The factors are all considered when creating a data science environment for organizations based on their specific goals at the time and in the future.”</p>
+<p>Space is limited, so reserve your seat now!</p>
+<p>Agenda:</p>
+<ul>
+<li>8:30 am Registration &amp; Breakfast</li>
+<li>9:00 am Welcome &amp; Introduction</li>
+<li>9:15 am Open Source in Enterprise: a Virtuous Cycle - Lou Bajuk (RStudio)</li>
+<li>9:45 am Automating RStudio Products in the Cloud - ProCogia</li>
+<li>10:30 am Coffee Break</li>
+<li>10:45 am The R Community in Transitioning to Pro from Open Source - Daniella Mark (ProCogia)</li>
+<li>11:00 am Looking Ahead: R in Enterprise - Kevin Bolger (ProCogia)</li>
+<li>11:30 am New Data Workflows in RStudio Connect Using the <code>pins</code> Package - Javier Luraschi (RStudio)</li>
+<li>12:00 pm Closing Remarks &amp; Lunch</li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

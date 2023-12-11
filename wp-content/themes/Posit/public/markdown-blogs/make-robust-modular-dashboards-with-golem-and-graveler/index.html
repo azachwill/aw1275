@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-04-07">
+<meta name="description" content="Alan Carlson from Snap Finance describes how his team uses a reproducible workflow to build robust, modular dashboards that streamline onboarding and minimize technical debt.">
+
+<title>Make robust, modular dashboards with golem and graveler</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Make robust, modular dashboards with golem and graveler</h1>
+
+<p class="date">2022-04-07</p>
+</header>
+
+<p><sup>Photo courtesy of <a href="https://pixabay.com/photos/job-office-team-business-internet-5382501/">Pixabay</a></sup></p>
+<div class="lt-gray-box">
+<p>This is a guest post from Alan Carlson at Snap Finance. As the Tech Lead for the Business Intelligence (BI) team, Alan’s primary focus at Snap is researching, creating, and maintaining methods that help the rest of Snap’s BI Team in their work. From dashboards to visualizations to R code in general, he has built multiple packages and bookdowns that make BI easier to train and to use within the RStudio environment.</p>
+<p>Since 2012, Snap has been on a mission to bring flexible, pay-over-time financing options to all consumers. For more information, visit <a href="https://snapfinance.com/" target="_blank">snapfinance.com</a>.</p>
+</div>
+<p>Has this ever happened to you?</p>
+<p>You are assigned to maintain a dashboard someone on your team has graciously left you, and the users of this dashboard ask you to add a new feature. Fine, you think. “The data for this dashboard doesn’t look terribly complex. I’ll just step in where so-and-so left off and add that feature easily!”</p>
+<p>Minutes quickly turn into hours as you realize that the last developer coded an entirely different way than you do. It will take days of refactoring just to understand what their code is trying to do, let alone add a new feature. Eventually, you scrap their entire dashboard and decide to rebuild it.</p>
+<p>Or perhaps you have incoming hires of fresh developers who have never worked with {shiny} before. Can you trust that the training you have (if any) is sufficient and will prepare them to build production-ready dashboards independently?</p>
+<p>This was the two-pronged challenge facing our team a few years ago. We needed to completely overhaul old dashboards while also training staff on how to build tools that help drive insights for the company. We quickly realized that we needed to decrease the time spent building dashboard frameworks for our new members and ensure that anyone taking over another dashboard could easily modify them.</p>
+<p><a target="_blank" rel="noopener noreferrer" class="btn btn-primary pl-5 pr-5 mt-4" href="https://www.addevent.com/event/xZ12108850
+">Join us live on April 12th to hear directly from the Snap Finance team about how they put robust, modular dashboards into practice and ask questions about how you can do the same! </a></p>
+<h2 id="our-journey-towards-a-reproducible-development-workflow" class="anchored">Our journey towards a reproducible development workflow</h2>
+<p>One of the major advantages of open source is the vast community that enables the widespread sharing of knowledge. Community members collaborate to develop tools that help solve problems. Sharing those tools allows others to benefit from their contributions.</p>
+<p>Our journey started with <a href="https://engineering-shiny.org/index.html" target="_blank">{golem}</a>, an open-source package built by the great team at <a href="https://thinkr.fr/" target="_blank">ThinkR</a>. At a high level, {golem} turns your Shiny dashboards into a package framework and allows you to develop and deploy them exactly as you would an R package. This allows for better documentation, testing, robustness, etc. It’s a wonderful framework for engineering dashboards. However, the concepts themselves can be complex and technical. At the time, we knew this would be hard to explain (and implement) with our new developers.</p>
+<p>Building upon the amazing {golem} package, we created a wrapper that abstracts away its technical side and sets defaults for our development workflow. We also set the defaults to include our company branding. We named this new internal package {graveler}.[^Why graveler?]</p>
+<p>[^Why graveler?]: But if {golem} is the platonic ideal of how to engineer dashboards, then what comes before it?</p>
+<pre><code>If you know your folklore, golems are animated beings made from inanimate objects. This sounds like what we do as developers: breathe life into our dashboards. However, Golem is also a creature from Nintendo’s Pokémon game franchise. If you are unfamiliar, Pokémon get stronger via evolution and, in Golem’s case, it reaches its final form once you evolve it from a Graveler.
+
+And with the name finally settled, we could now start on our journey of standardization and replication with {golem}’s devolution: {graveler}.</code></pre>
+<h2 id="using-graveler-to-set-up-a-shiny-dashboard-framework" class="anchored">Using {graveler} to set up a Shiny dashboard framework</h2>
+<p>Information on {graveler} can be found in the <a href="https://github.com/ghcarlalan/graveler" target="_blank">GitHub repository</a>. Install the package using devtools:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"ghcarlalan/graveler"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A new option appears when you open a new project. You can set your package name, username, and display title in this dialogue box.</p>
+<p>Creating this project will include all the files necessary to create your initial dashboard and theming. You will see three open files: <code>01_dev.R</code>, <code>run_dev.R</code>, and <code>02_deploy.R</code>.</p>
+<script src="https://fast.wistia.com/embed/medias/qns1frhlv2.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:62.5% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_qns1frhlv2 videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<p>The first file sets up the dependencies for deployment. These include the libraries you need to run your dashboard, a <code>golem.config</code> system file, an <code>app.R</code> file to deploy on RStudio Connect, and a manifest file to use git-backed content within RStudio Connect. You can adjust these to fit your workflow.</p>
+<p>Once those steps are taken care of, execute the <code>run_dev.R</code> file, create the <code>golem-config.yml</code> file, and you will have your very own Shiny dashboard skeleton set up with minimal effort!</p>
+<script src="https://fast.wistia.com/embed/medias/own33y25ws.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:62.5% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_own33y25ws videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<p>The third file has helper functions we use to add <a href="https://docs.rstudio.com/connect/user/content-settings/#content-vars" target="_blank">environment variables</a> programmatically to our published work.</p>
+<p>To add a new tab / module to your dashboard, you run <code>graveler::level_up(name = "foo")</code>. This creates a module for your dashboard that contains sections for your UI and server code. At the bottom of each module, you will see three lines of code that you will copy and paste in their respective system files: <code>body.R</code>, <code>app_server.R</code>, and <code>sidebar.R</code>. The <code>level_up()</code> function also creates a <code>fct</code> file per {golem}’s recommendation, which incentivizes you to build functions for your dashboard modules to streamline debugging and testing.</p>
+<p>From there, it’s just a matter of building modules and publishing with whatever workflow your team uses.</p>
+<script src="https://fast.wistia.com/embed/medias/pl819znagu.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:60.83% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_pl819znagu videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<h2 id="sharing-and-publishing-dashboards-with-rstudio-tools" class="anchored">Sharing and publishing dashboards with RStudio tools</h2>
+<p>Here at Snap, we use <a href="https://docs.rstudio.com/connect/user/git-backed/" target="_blank">RStudio’s Git-backed publishing feature</a> to seamlessly modify dashboards across our team and publish to RStudio Connect. We have two RStudio Connect servers: production and development, which allows us to test features or coding methods without messing with what our stakeholders are seeing. <a href="https://www.rstudio.com/products/package-manager/" target="_blank">RStudio Package Manager</a> helps us share internally created packages (like {graveler}) and ensure that we all use the same packages/functions for our work.</p>
+<h2 id="ultimately-were-spending-more-time-actually-developing-now" class="anchored">Ultimately, we’re spending more time <em>actually developing</em> now</h2>
+<p>With {graveler}, RStudio Package Manager, and RStudio Connect, developers are spending more time <em>actually developing</em> instead of spending time trying to spin up a Shiny framework. More importantly, they are all building dashboards <em>the same way</em>, reducing tech debt and simplifying code review. The ability to bring on new developers, integrate them into our workflow, and have them become almost instant contributors to our BI work with {golem} and {graveler} has been a great advantage to our team, our codebase, and our Sr.&nbsp;Developers’ sanities.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

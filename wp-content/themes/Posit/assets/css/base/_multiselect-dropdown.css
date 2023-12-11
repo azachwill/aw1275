@@ -1,0 +1,31 @@
+.parent-active {
+    @apply z-50 lg:z-auto;
+}
+
+.multiselect-dropdown {
+    @apply lg:ease-in-out duration-150;
+}
+
+.multiselect-dropdown.active {
+    @apply border-gray2;
+}
+
+.multiselect-dropdown.active .options {
+    @apply block opacity-100 bg-neutral-light fixed lg:relative w-full h-full top-0 left-0 lg:inset-0 max-h-screen lg:max-h-[calc(100vh-200px)];
+}
+
+.multiselect-dropdown.active .options .options-wrapper {
+    @apply opacity-100 h-full max-h-[calc(100vh-180px)] md:max-h-[calc(100vh-225px)] lg:max-h-[calc(100vh-312px)];
+}
+
+.multiselect-dropdown .select-option .dropdown-arrow > svg {
+    @apply rotate-0 ease-in-out duration-150;
+}
+
+.multiselect-dropdown.active .select-option .dropdown-arrow > svg {
+    @apply rotate-180;
+}
+
+.multiselect-dropdown.active .select-option .select-option-title {
+    @apply text-blue1;
+}

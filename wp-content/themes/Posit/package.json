@@ -1,0 +1,62 @@
+{
+    "name": "posit",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "development": "cross-env NODE_ENV=development webpack --progress --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "production": "cross-env NODE_ENV=production webpack --progress --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "dev": "npm run development",
+        "prod": "npm run production",
+        "watch": "mix watch",
+        "watch-poll": "mix watch -- --watch-options-poll=1000",
+        "hot": "mix watch --hot",
+        "prettier": "npx prettier --write assets",
+        "lint": "npx eslint assets",
+        "lint-fix": "npx eslint --fix assets",
+        "precommit": "npm run lint-fix && npm run prettier",
+        "prepush": "npm run lint",
+        "prepare": "cd ../../../ && husky install ./wp-content/themes/Posit/.husky"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@babel/eslint-parser": "^7.18.9",
+        "@babel/eslint-plugin": "^7.18.10",
+        "@tailwindcss/line-clamp": "^0.4.2",
+        "autoprefixer": "^10.4.7",
+        "eslint": "^8.21.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "eslint-plugin-vue": "^9.3.0",
+        "eslint-webpack-plugin": "^3.2.0",
+        "husky": "^8.0.0",
+        "laravel-mix": "^6.0.44",
+        "laravel-mix-eslint": "^0.2.0",
+        "lint-staged": "^13.0.3",
+        "postcss-import": "^14.1.0",
+        "postcss-nested": "^5.0.6",
+        "prettier": "2.7.1",
+        "prettier-eslint": "^15.0.1",
+        "tailwindcss": "^3.1.2"
+    },
+    "dependencies": {
+        "@glidejs/glide": "^3.5.2",
+        "@lottiefiles/lottie-player": "^1.5.7",
+        "cross-env": "^7.0.3",
+        "fullpage.js": "^4.0.9",
+        "gsap": "^3.11.4",
+        "jquery": "^3.6.0",
+        "lodash.debounce": "^4.0.8",
+        "lodash.throttle": "^4.1.1",
+        "swiper": "^8.3.2",
+        "tom-select": "^2.2.2",
+        "video.js": "^7.20.1",
+        "what-input": "^5.2.12"
+    },
+    "presets": [
+        [
+            "@babel/env"
+        ]
+    ]
+}

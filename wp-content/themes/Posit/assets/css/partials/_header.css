@@ -1,0 +1,10 @@
+.header .description p:not(:first-of-type) {
+    @apply mt-[24px];
+}
+
+@media screen and (max-width: 600px) {
+    .header-ctas {
+        display: flex;
+        flex-flow: row wrap;
+    }
+}

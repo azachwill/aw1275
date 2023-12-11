@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2018-10-09">
+
+<title>RStudio 1.2 Preview: Reticulated Python</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio 1.2 Preview: Reticulated Python</h1>
+
+<p class="date">2018-10-09</p>
+</header>
+
+<p><img id="reticulated-python" src="https://rstudio.github.io/reticulate/images/reticulated_python.png" width="200" align="right" style="margin-left: 15px;" alt="reticulated python"></p>
+<p>One of the primary focuses of <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio v1.2</a> is improved support for other languages frequently used with R. Last week on the blog we talked about new features for working with <a href="https://blog.rstudio.com/2018/10/02/rstudio-1-2-preview-sql/">SQL</a> and <a href="https://blog.rstudio.com/2018/10/05/r2d3-r-interface-to-d3-visualizations/">D3</a>. Today we’re taking a look at enhancements we’ve made around the <a href="https://rstudio.github.io/reticulate/">reticulate</a> package (an R interface to Python).</p>
+<p>The <a href="https://rstudio.github.io/reticulate/">reticulate</a> package makes it possible to embed a Python session within an R process, allowing you to import Python modules and call their functions directly from R. If you are an R developer that uses Python for some of your work or a member of data science team that uses both languages, reticulate can dramatically streamline your workflow. New features in <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio v1.2</a> related to reticulate include:</p>
+<ol type="1">
+<li><p>Support for executing reticulated Python chunks within <a href="https://rmarkdown.rstudio.com/r_notebooks.html">R Notebooks</a>.</p></li>
+<li><p>Display of <a href="https://matplotlib.org/">matplotlib</a> plots within both notebook and console execution modes.</p></li>
+<li><p>Line-by-line execution of Python code using the reticulate <code>repl_python()</code> function.</p></li>
+<li><p>Sourcing Python scripts using the reticulate <code>source_python()</code> function.</p></li>
+<li><p>Code completion and inline help for Python.</p></li>
+</ol>
+<p>Note that for data science projects that are Python-only, we still recommend IDEs optimized for that, such as <a href="https://jupyterlab.readthedocs.io/en/stable/">JupyterLab</a>, <a href="https://www.jetbrains.com/pycharm/">PyCharm</a>, <a href="https://code.visualstudio.com/docs/languages/python">Visual Studio Code</a>, <a href="https://rodeo.yhat.com/">Rodeo</a>, and <a href="https://www.spyder-ide.org/">Spyder</a>. However, if you are using reticulated Python within an R project then RStudio provides a set of tools that we think you will find very useful.</p>
+<h2 id="installation" class="anchored">Installation</h2>
+<p>You can download the RStudio v1.2 preview release here: <a href="https://www.rstudio.com/rstudio/download/preview/" class="uri">https://www.rstudio.com/rstudio/download/preview/</a>.</p>
+<p>All of the features described below require that you have previously installed the reticulate package, which you can do as follows:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"reticulate"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2 id="r-notebooks" class="anchored">R Notebooks</h2>
+<p>R Notebooks have been enhanced to support executing Python chunks using the reticulate Python engine. For example, here we use pandas to do some data manipulation then plot the results with ggplot2:</p>
+<p><img src="rmarkdown_reticulate.png" class="screenshot"></p>
+<p>Python objects all exist in a single persistent session so are usable across chunks just like R objects. R and Python objects are also shared across languages with conversions done automatically when required (e.g.&nbsp;from Pandas data frame to R data frame or NumPy 2D array to R matrix).</p>
+<p>The article on <a href="https://rstudio.github.io/reticulate/articles/calling_python.html">Calling Python from R</a> describes the various ways to access Python objects from R as well as functions available for more advanced interactions and conversion behavior.</p>
+<p>R Notebooks can also display matplotlib plots inline when they are printed from Python chunks:</p>
+<p><img src="rmarkdown_reticulate_matplotlib.png" class="screenshot"></p>
+<p>See the article on the reticulate <a href="https://rstudio.github.io/reticulate/articles/r_markdown.html">R Markdown Python Engine</a> for full details on using Python chunks within R Markdown documents, including how to call Python code from R chunks and vice-versa.</p>
+<h2 id="python-scripts" class="anchored">Python Scripts</h2>
+<p>You can execute code from Python scripts line-by-line using the <strong>Run</strong> button (or Ctrl+Enter) in the same way as you execute R code line-by-line. RStudio will automatically switch into reticulate’s <code>repl_python()</code> mode whenever you execute lines from a Python script:</p>
+<p><img src="repl_python.png" class="screenshot"></p>
+<p>Type <code>exit</code> from the Python REPL to exit back into R (RStudio will also automatically switch back to R mode whenever you execute code from an R script).</p>
+<p>Any Python objects created within the REPL are immediately available to the R session via the <code>reticulate::py</code> object (e.g.&nbsp;in the example above you could access the pandas object via <code>py$s</code>).</p>
+<p>In addition, RStudio now provides code completion and inline help for Python scripts:</p>
+<p><img src="code_completion.png" class="screenshot"></p>
+<h2 id="sourcing-scripts" class="anchored">Sourcing Scripts</h2>
+<p>Click the editor’s <strong>Source Script</strong> button (or the Ctrl+Shift+Enter shortcut) within a Python source file to execute a script using reticulate’s <code>source_python()</code> function:</p>
+<p><img src="source_python.png" class="screenshot"></p>
+<p>Objects created within the script will be made available as top-level objects in the R global environment.</p>
+<h2 id="why-reticulate" class="anchored">Why reticulate?</h2>
+<p>Since we released the package, we’re often asked what the source of the name “reticulate” is.</p>
+<p>Here’s what <a href="https://en.wikipedia.org/wiki/Reticulated_python">Wikipedia</a> says about the reticulated python:</p>
+<blockquote>
+<p>The reticulated python is a species of python found in Southeast Asia. They are the world’s longest snakes and longest reptiles…The specific name, reticulatus, is Latin meaning “net-like”, or reticulated, and is a reference to the complex colour pattern.</p>
+</blockquote>
+<p>And here’s the <a href="https://www.merriam-webster.com/dictionary/reticulate">Merriam-Webster</a> definition of reticulate:</p>
+<blockquote>
+<p>1: resembling a net or network; especially : having veins, fibers, or lines crossing a reticulate leaf. 2: being or involving evolutionary change dependent on genetic recombination involving diverse interbreeding populations.</p>
+</blockquote>
+<p>The package enables you to <em>reticulate</em> Python code into R, creating a new breed of project that weaves together the two languages.</p>
+<p>The <a href="https://www.rstudio.com/rstudio/download/preview/">RStudio v1.2 Preview Release</a> provides lots of enhancements for reticulated Python. Check it out and let us know what you think on <a href="https://community.rstudio.com/c/rstudio-ide">RStudio Community</a> and <a href="https://github.com/rstudio/rstudio/issues">GitHub</a>.</p>
+<p><strong><em>UPDATE:</em></strong> <em>Nov.&nbsp;27, 2019</em><br>
+<em>Learn more about <a href="https://rstudio.com/solutions/python-and-r/">how R and Python work together in RStudio</a>.</em></p>
+<style type="text/css">
+.screenshot, .illustration {
+  margin-bottom: 10px;
+  margin-top: 10px;
+  border: solid 1px #cccccc;
+  width: 95%;
+}
+</style>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

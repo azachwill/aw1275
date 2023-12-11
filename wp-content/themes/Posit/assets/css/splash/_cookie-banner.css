@@ -1,0 +1,96 @@
+#cookie-law-info-bar {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    @apply rounded-[16px] !p-[40px] mb-[10px] z-20;
+
+    .cli-bar-message {
+        @apply body-medium w-[100%] lg:w-[70%];
+    }
+
+    .cli-bar-btn_container {
+        .cli-plugin-button {
+            @apply py-[12px] px-[24px] ui-small uppercase rounded-[5px] w-full;
+        }
+
+        .cli-plugin-button:first-child {
+            @apply !bg-blue1 border-[2px] border-blue4 !text-neutral-light;
+        }
+    }
+}
+
+body.cli-modal-open {
+    @apply overflow-hidden;
+}
+
+.cli-modal-content.cli-bar-popup {
+    @apply bg-blue1 text-neutral-light rounded-[16px];
+
+    .cli-modal-close svg path:first-child {
+        @apply !fill-neutral-light;
+    }
+
+    .cli-modal-body {
+        .cli-privacy-overview h4 {
+            @apply !h3;
+        }
+
+        .cli-privacy-content {
+            @apply max-h-[65px];
+
+            .cli-privacy-content-text {
+                @apply text-neutral-light body-medium;
+            }
+        }
+
+        .cli-privacy-overview.cli-collapsed .cli-privacy-content {
+            @apply max-h-[unset];
+        }
+
+        .cli-row::-webkit-scrollbar {
+            @apply w-[5px];
+        }
+
+        .cli-row::-webkit-scrollbar-thumb {
+            @apply bg-neutral-light outline outline-1 outline-neutral-gray;
+        }
+    }
+
+    .cli-privacy-readmore {
+        @apply text-blue4 ui-small uppercase;
+    }
+
+    .cli-tab-section-container {
+        .cli-tab-section {
+            * {
+                @apply bg-blue1 text-neutral-light;
+            }
+
+            .cli-tab-header {
+                @apply bg-blue1  body-large w-[99%];
+
+                .cli-switch {
+                    .cli-slider::after {
+                        @apply !text-neutral-light;
+                    }
+
+                    .cli-slider {
+                        @apply !bg-neutral-gray;
+                    }
+
+                    input:checked + .cli-slider {
+                        @apply !bg-blue4;
+                    }
+                }
+            }
+
+            .cli-tab-content {
+                @apply bg-blue1;
+            }
+        }
+    }
+
+    .cli-modal-footer {
+        #wt-cli-privacy-save-btn {
+            @apply bg-blue4 py-[12px] px-[24px] ui-small uppercase rounded-[5px];
+        }
+    }
+}

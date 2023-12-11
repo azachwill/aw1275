@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-09-13">
+<meta name="description" content="With the vetiver package, data scientists have a streamlined, consistent way to maintain machine learning pipelines. We recently updated our Bike Share prediction application using vetiver and Quarto.">
+
+<title>Update Your Machine Learning Pipeline With vetiver and Quarto</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Update Your Machine Learning Pipeline With vetiver and Quarto</h1>
+
+<p class="date">2022-09-13</p>
+</header>
+
+<p>Machine learning operations (MLOps) are a set of best practices for running machine learning models successfully in production environments. Data scientists and system administrators have expanding options for setting up their pipeline. However, while many tools exist for preparing data and training models, there is a lack of streamlined tooling for tasks like putting a model in production, maintaining the model, or monitoring performance.</p>
+<p>Enter <a href="https://vetiver.rstudio.com/" target="_blank">vetiver</a>, an open-source framework for the entire model lifecycle. Vetiver provides R and Python programmers with a fluid, unified way of working with machine learning models.</p>
+<p>Our Solutions Engineering team developed a <a href="https://shiny.rstudio.com/" target="_blank">Shiny</a> app for Washington D.C.’s <a href="https://www.capitalbikeshare.com/" target="_blank">Capital Bikeshare</a> program a few years ago. This app provides real-time predictions of the number of bikes available at stations across the city. The end-to-end machine learning pipeline feeding the app uses R to import and modify data, save it in a <a href="https://pins.rstudio.com/" target="_blank">pin</a>, develop a model, then move the model to a deployable location. Alex Gold <a href="https://www.rstudio.com/resources/rstudioconf-2020/deploying-end-to-end-data-science-with-shiny-plumber-and-pins/" target="_blank">delivered a presentation</a> on this workflow in 2020.</p>
+<p>Sam Edwardes <a href="https://solutions.rstudio.com/example/bike_predict/" target="_blank">updated the project</a> to apply Quarto and the new vetiver framework. Previously, we used R Markdown and a combination of one-off functions and scripts for each MLOps task. Using the latest from RStudio:</p>
+<ul>
+<li><a href="https://quarto.org/" target="_blank">Quarto</a> provides a refreshed look and language-agnostic tool for computational documents. Like R Markdown documents, the Quarto documents are available on <a href="https://www.rstudio.com/products/connect/" target="_blank">RStudio Connect</a>.</li>
+<li>The pipeline now uses vetiver to train, pin, monitor, and deploy the model.
+<ul>
+<li>This streamlines the code and makes the MLOps pipeline easier to maintain.</li>
+<li>By using vetiver across the organization, we have a consistent way to perform MLOps tasks.</li>
+<li>Deploying the model as an API endpoint using vetiver allows us to reuse the machine learning model for other apps or use cases.</li>
+</ul></li>
+</ul>
+<p>We will walk through the updated pipeline below. To see the entire project, check out the <a href="https://solutions.rstudio.com/example/bike_predict/" target="_blank">Bike Predict page on solutions.rstudio.com</a>.</p>
+<h2 id="building-a-predictive-web-app-with-shiny" class="anchored">Building A Predictive Web App With Shiny</h2>
+<p>The Shiny app predicts the number of bikes at a station in the near future based on real-time streaming data from an API. The steps involved are:</p>
+<ul>
+<li>Write the latest station status data from the <a href="https://capitalbikeshare.com" target="_blank">Capital Bikeshare</a> API to a database</li>
+<li>Join the station status data with the station information dataset and tidy the data</li>
+<li>Train the model using this tidied dataset</li>
+<li>Save and version the model to Connect as a pin using vetiver</li>
+<li>Use the vetiver model card template to document essential facts and considerations of the deployed model</li>
+<li>Use functions provided by vetiver to document and monitor model performance</li>
+<li>Use the API endpoint to serve predictions to a Shiny app interactively</li>
+<li>Make the Shiny app available to anybody interested in the predictions</li>
+</ul>
+<p>The project shows an exciting set of capabilities, combining open source with RStudio’s professional products.</p>
+<ul>
+<li><a href="https://www.rstudio.com/products/workbench/" target="_blank">RStudio Workbench</a> is a centralized, server-based environment for working with code.</li>
+<li><a href="https://www.rstudio.com/products/connect/" target="_blank">RStudio Connect</a> publishes and schedules data science assets like pins, APIs, and Quarto reports.</li>
+<li><a href="https://www.rstudio.com/products/package-manager/" target="_blank">RStudio Package Manager</a> (RSPM) controls and distributes packages throughout an organization.</li>
+</ul>
+<h2 id="creating-an-end-to-end-machine-learning-pipeline" class="anchored">Creating An End-to-End Machine Learning Pipeline</h2>
+<p><strong>1. Create a custom package for pulling data</strong></p>
+<p><a href="https://www.google.com/search?client=firefox-b-1-d&amp;q=capital+bikshare+api" target="_blank">Capital Bikeshare has an API</a> that publishes real-time system data. We created a set of helper functions for pulling the data. To increase efficiency, we wanted to reuse and share these functions.</p>
+<p>For that, we created the <a href="https://github.com/sol-eng/bikeHelpR" target="_blank">bikehelpR</a> package to house, document, and test the functions we used. To deploy the package, we used RSPM. RSPM makes it easy to create a package and have it available via <code>install.packages()</code> for everybody on our team.</p>
+<p><strong>2. Extract, transform, load process in R</strong></p>
+<p>The first step of the pipeline pulls the latest data from the Capital Bikeshare API using the bikehelpR package. We write the raw data to the Content Database’s <em>bike_raw_data</em> and <em>bike_station_info</em> tables.</p>
+<p>The station info is also written to a pin. This pin will be accessed by the Shiny app so that it can extract the bike station info without connecting to the database. Read more about “production-izing” <a href="https://rviews.rstudio.com/2019/10/17/deploying-data-with-pins/" target="_blank">Shiny with pins</a>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/image1.png" class="img-fluid"></p>
+<p></p><figcaption>A Quarto document with the title ETL Step 1 Raw Data Refresh. The first section is the description and code for pulling raw data.</figcaption><p></p>
+</figure>
+</div>
+<p><a href="https://colorado.rstudio.com/rsc/bike-predict-r-raw-data-refresh/" target="_blank">ETL Step 1 - Raw Data Refresh Quarto Document</a></p>
+<p><strong>3. Tidy and join datasets</strong></p>
+<p>We tidy the <em>bike_raw_data</em> table using <a href="https://www.tidyverse.org/" target="_blank">tidyverse</a> packages. Then, we join it with the <em>bike_station_info</em> table and write the output into the Content Database’s <em>bike_model_data</em> table.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/image2.png" class="img-fluid"></p>
+<p></p><figcaption>A Quarto document with the title ETL Step 2 Tidy data. The contents show the description and code for getting data from a database.</figcaption><p></p>
+</figure>
+</div>
+<p><a href="https://colorado.rstudio.com/rsc/bike-predict-r-tidy-data/document.html" target="_blank">ETL Step 2 - Tidy Data Quarto Document</a></p>
+<p><strong>4. Train and deploy the model</strong></p>
+<p>We use the <em>bike_model_data</em> table to train and evaluate a random forest model. The model is saved to RStudio Connect as a pin (using vetiver) and then it is converted into an API endpoint (also using vetiver). By using vetiver to pin and deploy our model, we ensure a consistent approach across the organization for how we pin, version, and deploy machine learning models. Then, we deploy the API to RStudio Connect.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/image3.png" class="img-fluid"></p>
+<p></p><figcaption>A Quarto document with the title Model Step 1 Train and Deploy Model. The document shows the description and code for modeling.</figcaption><p></p>
+</figure>
+</div>
+<p><a href="https://colorado.rstudio.com/rsc/bike-predict-r-train-and-deploy-model/document.html" target="_blank">Model Step 1 - Train and Deploy Model</a></p>
+<p><strong>5. Create a model card</strong></p>
+<p>Next, we evaluate the training and evaluation data using various methods. Vetiver’s <a href="https://dl.acm.org/doi/10.1145/3287560.3287596" target="_blank">model card</a> template helps document essential facts and considerations of the deployed model.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/image4.png" class="img-fluid"></p>
+<p></p><figcaption>A Quarto document with the title Model Step 2 Model Card. The document describes a model card.</figcaption><p></p>
+</figure>
+</div>
+<p><a href="https://colorado.rstudio.com/rsc/bike-predict-r-model-card/document.html" target="_blank">Model Step 2 - Model Card</a></p>
+<p><strong>6. Monitor model metrics</strong></p>
+<p>We can document model performance using vetiver and write the metrics to a pin on RStudio Connect. With these functions, we can monitor for model performance degradation. Using vetiver to monitor model performance again ensures a consistent approach to model governance across teams.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/image5.png" class="img-fluid"></p>
+<p></p><figcaption>A Quarto document with the title Model Step 3 Model Metrics. The document describes the background and displays tables.</figcaption><p></p>
+</figure>
+</div>
+<p><a href="https://colorado.rstudio.com/rsc/bike-predict-r-model-metrics/document.html" target="_blank">Model Step 3 - Model Metrics</a></p>
+<p><strong>7. Deploy a Shiny app that displays real-time predictions</strong></p>
+<p>We use the API endpoint to serve predictions to a Shiny app interactively. Clicking on a station shows us a line graph of the time and predicted number of bikes.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/image6.gif" class="img-fluid"></p>
+<p></p><figcaption>A Shiny app showing a map of the Capitol Bikeshare predictions on the top and a line graph over time with the number of predicted bikes at a particular station. A cursor scrolls through the map and clicks on various stations, prompting the line graph to update.</figcaption><p></p>
+</figure>
+</div>
+<p><a href="https://colorado.rstudio.com/rsc/bike-predict-r-client-app/" target="_blank">Link to Shiny App</a></p>
+<p><strong>8. Create project dashboard</strong></p>
+<p>This project is composed of many different tasks. We wanted a single place to share the full context and content with others. We created a dashboard made with <a href="https://rstudio.github.io/connectwidgets/" target="_blank">connectwidgets</a> to link to the entire project. This makes it easy for anybody new to the Bike Share app to understand its purpose and steps involved.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/image7.png" class="img-fluid"></p>
+<p></p><figcaption>A page on RStudio Connect with the title Bike Share. The page describes the project and includes an image of the machine learning pipeline.</figcaption><p></p>
+</figure>
+</div>
+<p><a href="https://colorado.rstudio.com/rsc/bike-predict-r-dashboard/document.html" target="_blank">Link to Dashboard</a></p>
+<p>See the entire updated pipeline here:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/image8.png" class="img-fluid"></p>
+<p></p><figcaption>The pipeline for the Bike Share prediction app, where the ETL feeds into pinned datasets, pinned model, live database connection, then the API serves predictions leading to the prod and dev client apps. An internal package is listed alongside the pipeline.</figcaption><p></p>
+</figure>
+</div>
+<h2 id="learn-more" class="anchored">Learn More</h2>
+<p>We hope that you enjoyed this example of using vetiver, pins, and RStudio Connect to create an end-to-end machine learning pipeline. Folks in machine-learning-heavy contexts can use vetiver to streamline their work and easily “production-ize” content.</p>
+<ul>
+<li>Review the Bike Share pipeline code on <a href="https://github.com/sol-eng/bike_predict" target="_blank">GitHub</a>.</li>
+<li>Check out this project and other RStudio product workflows on <a href="https://solutions.rstudio.com/example/bike_predict/" target="_blank">solutions.rstudio.com</a>.</li>
+</ul>
+Join Julia Silge and Isabel Zimmerman to learn more about MLOps with vetiver in Python and R at the <a href="https://www.youtube.com/watch?v=oFQANK13-k4" target="_blank">RStudio Enterprise Meetup on September 20th</a>!
+<center>
+<a class="btn btn-primary" href="https://www.addevent.com/event/In13519032" target="_blank">Add the event to your calendar</a>
+</center>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

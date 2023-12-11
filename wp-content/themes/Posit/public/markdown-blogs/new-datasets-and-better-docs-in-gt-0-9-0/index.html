@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2023-07-27">
+<meta name="description" content="We are excited to demonstrate all the new things in gt 0.7.0. This release has so many new features and enhancements that unlock new ways for making tables.">
+
+<title>posit-blogs - New datasets and better docs in {gt} 0.9.0</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">New datasets and better docs in {gt} 0.9.0</h1>
+
+<p class="date">2023-07-27</p>
+</header>
+
+<p>This is the eighth blog post on <a href="https://gt.rstudio.com/">gt</a> <code>0.9.0</code> and, for this one, we’re going to focus on two seemingly small (but actually really important) things: included datasets and documentation.</p>
+<h2 id="new-datasets-in-0.9.0-and-beyond" class="anchored">New datasets in <code>0.9.0</code> and beyond</h2>
+<p>We really love having varied datasets in the <strong>gt</strong> package. They allow us to make interesting examples for the documentation (more on this later), and they allow you quickly try out <strong>gt</strong> features without much fuss. In version <code>0.9.0</code>, four new datasets were added: <a href="https://gt.rstudio.com/reference/towny.html"><code>towny</code></a>, <a href="https://gt.rstudio.com/reference/metro.html"><code>metro</code></a>, <a href="https://gt.rstudio.com/reference/rx_adsl.html"><code>rx_adsl</code></a>, and <a href="https://gt.rstudio.com/reference/rx_addv.html"><code>rx_addv</code></a>. The first two of these, <code>towny</code> and <code>metro</code>, are being used extensively in our examples; check out the examples for the <a href="https://gt.rstudio.com/reference/text_case_match.html"><code>text_case_match()</code></a>, <a href="https://gt.rstudio.com/reference/fmt_url.html"><code>fmt_url()</code></a>, and <a href="https://gt.rstudio.com/reference/fmt_image.html"><code>fmt_image()</code></a> functions. The <code>rx_adsl</code> and <code>rx_addv</code> datasets have been added by <strong>gt</strong> contributor Alex Lauer, along with the excellent new article <a href="https://gt.rstudio.com/articles/case-study-clinical-tables.html"><em>Case Study: Clinical Tables</em></a>.</p>
+<p>The plan going forward is to add even more datasets and work them into new examples. If you install the development version of <strong>gt</strong> via <code>devtools::install_github("rstudio/gt")</code>, you’ll have access to two datasets that will be in the next CRAN version of <strong>gt</strong>: <a href="https://gt.rstudio.com/reference/constants.html"><code>constants</code></a> and <a href="https://gt.rstudio.com/reference/illness.html"><code>illness</code></a>.</p>
+<h2 id="new-ways-weve-made-the-documentation-better" class="anchored">New ways we’ve made the documentation better</h2>
+<p>The <strong>gt</strong> package has a large set of exported functions. After all, it’s trying to help you do a lot when it comes to preparing tables. When an API gets this big, the complexity of the project tends to increase in all sorts of ways. So, it’s all the more important to make the documentation as helpful as possible. The docs should help guide the user to the right information and provide as many useful pointers wherever the user might land.</p>
+<p>To get the documentation effort off to a good start (many years ago), we decided to prioritize the following things:</p>
+<ol type="1">
+<li>Functions should be grouped into families, where functions in each family share common goals</li>
+<li>Each function should have its own help file with its own examples, lowering the potential for confusion</li>
+<li>There should be <em>many</em> useful examples, and they should all be continuously improved</li>
+</ol>
+<p>It does take time to develop useful function documentation, especially when there are over 125 exported functions. However, with <strong>gt</strong> <code>0.9.0</code>, we feel like it’s really coming together. We’ve actually done a few more things lately with the overall aim of refining the documentation experience, so let’s have a look at these new documentation features.</p>
+<h3 id="better-descriptions-of-function-arguments" class="anchored">Better descriptions of function arguments</h3>
+<p>We wanted to have some consistency when explaining the arguments for each function. To achieve this, we structured the documentation entry for each argument such that there is:</p>
+<ul>
+<li>a short title</li>
+<li>a description of the acceptable inputs</li>
+<li>an indication of whether a value is required or optional (with the default value given)</li>
+</ul>
+<p>Here is a screenshot of some of the arguments for the <code>tab_spanner()</code> function (taken from the <a href="https://gt.rstudio.com/reference/tab_spanner.html">project website page</a> for <code>tab_spanner()</code>).</p>
+<p><img src="z08-documentation-arguments.png" class="img-fluid"></p>
+<p>Having a short title for each argument is useful. The short title can more directly describe the purpose of the argument than the argument name (which is often terse) can by itself. It’s really great as a ‘subject line’ for the descriptive text that follows, and it should remove some ambiguity within the more complex functions where there is a lot of interplay across arguments.</p>
+<p>Knowing what kinds of inputs are okay for each argument is also very good upfront information! Sometimes you have to carefully parse the description for hints on this sort of thing. This small change, which occupies the next line of text, means that we can, for the most part, rely on something like <code>scalar&lt;character&gt;</code> to indicate that a single string is needed. And we can always elaborate on acceptable inputs within the argument description that follows if the situation demands it.</p>
+<p>We know from the revised function documentation for <code>tab_spanner()</code> that the <code>data</code> and <code>label</code> arguments require inputs, as the <strong>required</strong> label makes this quite clear. This at-a-glance information doesn’t require the user to have to look at the function’s signature in the <em>Usage</em> section. We hope this little change is useful for quickly attaining an understanding of the requirements for the different functions.</p>
+<h3 id="even-more-examples" class="anchored">Even more examples</h3>
+<p>We kept adding more examples in <strong>gt</strong> <code>0.9.0</code>, and we’ll keep trending toward the direction of ‘more is better’. Many functions have two (useful) examples, but we’d really like to have even more, especially for those functions that can produce many different types of outputs. The documentation for the <a href="https://gt.rstudio.com/reference/tab_spanner.html"><code>tab_spanner()</code></a> function now has six examples available (an excerpt from the project website is below), which is more in line with the standard we want to have for every function.</p>
+<p><img src="z08-documentation-examples.png" class="img-fluid"></p>
+<p>This means there will be hundreds of examples you can draw from when making your own tables. This benefits all users since many great table-making ideas can be gleaned from these mini-galleries of <strong>gt</strong> tables.</p>
+<h3 id="additional-sections-where-more-explanation-is-needed" class="anchored">Additional sections where more explanation is needed</h3>
+<p>As it sometimes happens, key pieces of information within a documentation page might be explained elsewhere (e.g., in another section or in an entirely different resource). While this is not the worst thing in the world, it would often be more convenient to just have all the necessary information on a single page. In <strong>gt</strong> <code>0.9.0</code>, effort was put into adding necessary sections to each function’s documentation page. Sometimes this work involved placing a section on referencing table columns in all the functions where that was relevant, and sometimes we created new sections to more fully explain complex concepts (like adding column spanners with the <code>tab_spanner()</code> function).</p>
+<p><img src="z08-documentation-sections.png" class="img-fluid"></p>
+<p>Not having to jump around in the documentation can only be a good thing, and it’s hoped that these focused documentation changes make learning <strong>gt</strong>’s functions a smoother experience!</p>
+<h2 id="conclusion" class="anchored">Conclusion</h2>
+<p>The <strong>gt</strong> package has been improving in a documentation-and-datasets sort of direction. We don’t want you to be confused, so good docs are a must for this package. You can always suggest improvements in these areas by <a href="https://github.com/rstudio/gt/issues">filing an issue</a> on GitHub. Take part in the <strong>gt</strong> <a href="https://github.com/rstudio/gt/discussions">Discussions page</a> if you have any suggestions or questions. The <strong>gt</strong> package has a Twitter account at <a href="https://twitter.com/gt_package"><span class="citation" data-cites="gt_package">@gt_package</span></a>, so check it out for package news and announcements. The <code>gt_package</code> <a href="https://discord.gg/Ux7nrcXHVV"><em>Discord server</em></a> is also a great place to more casually ask questions and generally talk about table things.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+
+
+
+</body></html>

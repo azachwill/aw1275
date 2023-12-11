@@ -1,0 +1,47 @@
+.sticky-subnav {
+    position: sticky;
+    top: 70px;
+    z-index: 10;
+
+    &__grid {
+        justify-items: center;
+        overflow: scroll;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    &__item {
+        flex: 1 0 auto;
+        margin-bottom: 0;
+        text-align: center;
+
+        svg {
+            display: initial;
+        }
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .sticky-subnav {
+        &__wrapper {
+            @apply flex flex-row flex-nowrap items-center;
+        }
+
+        &__arrow {
+            padding-left: 16px;
+
+            svg {
+                --tw-text-opacity: 1;
+                stroke: rgb(23 33 43 / var(--tw-text-opacity));
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .sticky-subnav {
+        top: 78px;
+    }
+}

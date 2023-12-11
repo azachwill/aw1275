@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-10-07">
+
+<title>RStudio v1.4 Preview: Python Support</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio v1.4 Preview: Python Support</h1>
+
+<p class="date">2020-10-07</p>
+</header>
+
+<p>Last week, we introduced RStudio’s new <a href="https://blog.rstudio.com/2020/09/30/rstudio-v1-4-preview-visual-markdown-editing/">visual markdown editor</a>. Today, we’re excited to introduce some of the expanded support for Python in the next release of RStudio.</p>
+<h2 id="python-support" class="anchored">Python Support</h2>
+<p>The RStudio 1.4 release introduces a number of features that will further improve the Python editing experience in RStudio:</p>
+<ul>
+<li><p>The default Python interpreter to be used by RStudio / <code>reticulate</code> can now be customized in the Global Options pane,</p></li>
+<li><p>The Environment pane now displays a summary of Python objects available in the main module when the <code>reticulate</code> REPL is active,</p></li>
+<li><p>Python objects can now be viewed and explored within the RStudio data viewer and object explorer,</p></li>
+<li><p><code>matplotlib</code> plots are now displayed within the Plots pane when <code>show()</code> is called.</p></li>
+</ul>
+<h3 id="configuring-the-default-python-interpreter" class="anchored">Configuring the Default Python Interpreter</h3>
+<p>When working with <code>reticulate</code>, one normally selects a Python interpreter using <code>reticulate</code> functions – for example, via <code>reticulate::use_python(…, required = TRUE)</code> or by setting the <code>RETICULATE_PYTHON</code> environment variable. (Or, alternatively, they trust <code>reticulate</code> to find and activate an appropriate version of Python as available on their system.)</p>
+<p>However, one might want to control the version of Python without explicitly using <code>reticulate</code> to configure the active Python session. RStudio now provides a Python options pane, available both globally (via <code>Tools -&gt; Global Options…</code>), or per-project (via <code>Tools -&gt; Project Options…</code>), which can be used to configure the default version of Python to be used in RStudio.</p>
+<p>Within the Python preferences pane, the default Python interpreter to be used by RStudio can be viewed and modified:</p>
+<p><img src="images/python-preferences-pane.png" alt="The Python preferences pane." width="700"></p>
+<p>When the <code>Select…</code> button is pressed, RStudio will find and display the available Python interpreters and environments:</p>
+<p><img src="images/python-interpreter-list.png" alt="The list of Python interpreters available on the system." width="700"></p>
+<p>RStudio will display system interpreters, Python virtual environments (created by either the Python <code>virtualenv</code> or <code>venv</code> modules), and Anaconda environments (if Anaconda is installed). Once an environment has been selected, RStudio will instruct <code>reticulate</code> to use that environment by default for future Python sessions.</p>
+<p>Note that the <code>RETICULATE_PYTHON</code> environment variable still takes precedence over the default interpreter set here. If you’d like to use RStudio to configure the default version of Python, but are setting <code>RETICULATE_PYTHON</code> within your <code>.Renviron</code> / <code>.Rprofile</code> startup files, you may need to unset it.</p>
+<h3 id="environment-pane-support" class="anchored">Environment Pane Support</h3>
+<p>The RStudio environment pane is now capable of displaying the contents of Python modules when the <code>reticulate</code> REPL is active. By default, the contents of the main module are displayed.</p>
+<p><img src="images/python-environment-pane.png" alt="The RStudio IDE surface, with the Environment pane displaying Python objects." width="700"></p>
+<p>Similar to how R environments are displayed within the Environment pane, one can also view the contents of other loaded Python modules.</p>
+<p><img src="images/python-environment-pane-numpy.png" alt="The environment pane, currently viewing the contents of the numpy module." width="700"></p>
+<p>In addition, <a href="https://pandas.pydata.org/" title="pandas - Python Data Analysis Library">pandas</a> <code>DataFrame</code> objects can be opened and viewed similarly to R <code>data.frame</code> objects, and other Python objects can be viewed in the object explorer.</p>
+<h3 id="exploring-python-objects" class="anchored">Exploring Python Objects</h3>
+<p>Python objects can be explored either by calling the <code>View()</code> function from the <code>reticulate</code> REPL, or by using the associated right-most buttons in the Environment pane.</p>
+<p><img src="images/python-object-explorer.png" alt="The object explorer, used to view a simple Python dictionary." width="700"></p>
+<h3 id="displaying-matplotlib-plots" class="anchored">Displaying <code>matplotlib</code> Plots</h3>
+<p><a href="https://matplotlib.org/"><code>matplotlib</code></a> is a popular Python module, used to create visualizations in Python. With RStudio 1.4, the IDE can now also display <code>matplotlib</code> plots within the Plots pane.</p>
+<p><img src="images/python-matplotlib-example.png" alt="A heart drawn within the Plots pane via the matplotlib package." width="700"></p>
+<p>Data scientists using Python might also be familiar with the <a href="https://seaborn.pydata.org/"><code>seaborn</code></a> module, which provides a higher-level interface on top of <code>matplotlib</code> for producing high quality data visualizations. RStudio can also render plots generated by the <code>seaborn</code> package:</p>
+<p><img src="images/python-seaborn-example.png" width="700"></p>
+<p>Currently, only static (non-interactive) plots are supported – we hope to support interactive graphics in a future release of RStudio.</p>
+<h3 id="getting-started" class="anchored">Getting Started</h3>
+<p>You can try out the new Python features by installing the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio 1.4 Preview Release</a>. If you do, please let us know how we can make it better on the <a href="https://community.rstudio.com/c/rstudio-ide">community forum</a>!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

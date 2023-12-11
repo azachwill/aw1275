@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-09-16">
+<meta name="description" content="Three key attributes define Serious Data Science; open-source software, code-first development, and a centralized data science infrastructure. This approach has been successful at driving value and impact at hundreds of organizations. In this post, we will focus on the advantages of code-first data science.">
+
+<title>The Advantages of Code-First Data Science</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">The Advantages of Code-First Data Science</h1>
+
+<p class="date">2021-09-16</p>
+</header>
+
+<p><sup> Photo by <a href="https://unsplash.com/@cgower?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank" rel="noopener noreferrer">Christopher Gower</a> on <a href="https://unsplash.com/">Unsplash</a> </sup></p>
+<p>RStudio has worked with hundreds of different data science teams, and we’ve seen three key strategies that help maximize their productivity and impact:</p>
+<ul>
+<li>Adopting open source as the core of their work</li>
+<li>Leading with a Code-First approach</li>
+<li>Implementing a centralized data science infrastructure</li>
+</ul>
+<p>Collectively, we call this approach <a href="https://www.rstudio.com/solutions/serious-data-science/" target="_blank" rel="noopener noreferrer">Serious Data Science</a>. In this post, we focus on the benefits of a Code-First approach.</p>
+<p>A no-code approach to data science has some serious drawbacks, as described in this video:</p>
+<script src="https://fast.wistia.com/embed/medias/32cf7r0kh4.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_32cf7r0kh4 videoFoam=true" style="height:100%;position:relative;width:100%">
+<div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;">
+<img src="https://fast.wistia.com/embed/medias/32cf7r0kh4/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;">
+</div>
+</div>
+</div>
+</div>
+<p>As we discussed in depth <a href="https://www.rstudio.com/resources/why-your-enterprise-needs-code-first-data-science/" target="_blank" rel="noopener noreferrer">in a recent webinar</a>, a Code-First approach is important because:</p>
+<ul>
+<li>Code provides the flexibility to build and share the most valuable insights, tailored to the analytic problems and needs of your stakeholders</li>
+<li>Code enables fast iteration and updates</li>
+<li>Code by its nature is reusable, extensible, and inspectable</li>
+</ul>
+<script src="https://fast.wistia.com/embed/medias/3mptb802yl.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_3mptb802yl videoFoam=true" style="height:100%;position:relative;width:100%">
+<div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;">
+<img src="https://fast.wistia.com/embed/medias/3mptb802yl/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;">
+</div>
+</div>
+</div>
+</div>
+<p>Code-First helps overcome the pitfalls of no-code approaches, as shown in the table below:</p>
+
+<table class="table-striped-odd-bg">
+<thead>
+<tr>
+<th class="problem">
+No-Code Problem
+</th>
+<th class="solution">
+Code-First Solution
+</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>
+<p>
+Difficulty in tracking changes and auditing work
+</p>
+</td>
+<td>
+<p>
+Code, coupled with version control systems like git, can track what changed, when, by whom, and why.
+</p>
+<p>
+Code can be logged when run for auditing and monitoring.
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>
+No single source of truth
+</p>
+</td>
+<td>
+<p>
+Centralized tools can create a single source of truth for data, dashboards, and models.
+</p>
+<p>
+Version control can track multiple versions of code separately without creating conflicts.
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>
+Difficulty in reproducing and extending work
+</p>
+</td>
+<td>
+<p>
+Code can enable reproducibility by explicitly recording every step taken.
+</p>
+<p>
+Open-source code can be deployed on many platforms and is not dependent on proprietary tools.
+</p>
+<p>
+Code can be copied, pasted, and modified to address emergent problems as circumstances change.
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>
+Limitations on analysis techniques and presentation formats
+</p>
+</td>
+<td>
+<p>
+Code can allow you to analyze and present all your data as you need to in the form of custom dashboards and reports.
+</p>
+<p>
+Code can pull in new methods and open-source work without waiting for vendors to add proprietary features.
+</p>
+</td>
+</tr>
+
+</tbody></table>
+<h2 id="to-learn-more" class="anchored">To learn more</h2>
+<p>If you’d like to learn more about a code-first approach to data science, you can <a href="https://www.rstudio.com/resources/why-your-enterprise-needs-code-first-data-science/" target="_blank" rel="noopener noreferrer">watch our recent webinar here</a> or read an overview of the webinar in <a href="https://blog.rstudio.com/2021/05/12/code-first-data-science-for-the-enterprise2/" target="_blank" rel="noopener noreferrer">this blog post</a>. For a broader view of Serious Data Science and links to more resources, <a href="https://www.rstudio.com/solutions/serious-data-science/" target="_blank" rel="noopener noreferrer">see this page</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

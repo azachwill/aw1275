@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2017-08-11">
+
+<title>RStudio v1.1 Preview: Terminal</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio v1.1 Preview: Terminal</h1>
+
+<p class="date">2017-08-11</p>
+</header>
+
+<p>Today we’re excited to announce availability of our first Preview Release for RStudio 1.1, a major new release which includes the following new features:</p>
+<ul>
+<li>A <strong>Connections</strong> tab which makes it easy to connect to, explore, and view data in a variety of databases.</li>
+<li>A <a href="https://support.rstudio.com/hc/en-us/articles/115010737148-Using-the-RStudio-Terminal">Terminal tab</a> which provides fluid shell integration with the IDE, xterm emulation, and even support for full-screen terminal applications.</li>
+<li>An <strong>Object Explorer</strong> which can navigate deeply nested R data structures and objects.</li>
+<li>A new, modern <strong>dark theme</strong> and Retina-quality icons throughout.</li>
+<li>Improvements to the <a href="https://github.com/rstudio/rstudioapi">RStudio API</a> which add power and flexibility to RStudio add-ins and packages.</li>
+<li>RStudio Server Pro support for floating licensing, notifications, self-service session management, a library of professional ODBC drivers, and more.</li>
+<li>Dozens of other small improvements and bugfixes.</li>
+</ul>
+<p>You can try out these new features in the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio Preview Release</a>.</p>
+<h2 id="terminal" class="anchored">Terminal</h2>
+<p>Over the next few weeks we’ll be blogging about each of these new features. We start today with an overview of the integrated support for full-featured system terminals via the <strong>Terminal tab</strong>.</p>
+<p>The Terminal tab provides access to the system shell within the RStudio IDE. Potential uses include advanced source-control operations, execution of long-running jobs, remote logins, and interactive full-screen terminal applications (e.g.&nbsp;text editors, terminal multiplexers).</p>
+<h3 id="opening-terminals" class="anchored">Opening Terminals</h3>
+<p>The Terminal tab is next to the Console tab. Switch to the Terminal tab to automatically create a new terminal, ready to accept commands. If the tab isn’t visible, show it via <strong>Shift+Alt+T</strong> or the <strong>Tools -&gt; Terminal -&gt; Move Focus to Terminal</strong> menu. Here’s a terminal with the output of some simple commands:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-08-07-1_1_term-simple.png" class="img-fluid"></p>
+<p></p><figcaption>Basic terminal example</figcaption><p></p>
+</figure>
+</div>
+<p>Support for xterm enables use of full-screen programs:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-08-07-1_1_term_vim.png" class="img-fluid"></p>
+<p></p><figcaption>Terminal running vim</figcaption><p></p>
+</figure>
+</div>
+<p>Additional terminal sessions can be started using the <strong>New Terminal</strong> command on the terminal drop-down menu, or via <strong>Shift+Alt+R</strong>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-08-07-1_1_term_dropdown.png" class="img-fluid"></p>
+<p></p><figcaption>Terminal dropdown menu</figcaption><p></p>
+</figure>
+</div>
+<p>Each terminal session is independent, with its own system shell and buffer. Switch between them using the arrows next to the drop-down menu or by clicking on the terminal’s name in that menu.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-08-07-1_1_term_multiple.png" class="img-fluid"></p>
+<p></p><figcaption>Multiple terminal example</figcaption><p></p>
+</figure>
+</div>
+<p>Programs running in a terminal do not block the rest of the RStudio user-interface, so you can continue working in RStudio even when the terminal is busy. On Mac, Linux, or Server, a busy terminal will have <strong>(busy)</strong> next to its name, and the close [x] changes to a <strong>stop</strong> button:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-08-07-1_1_term_busy.png" class="img-fluid"></p>
+<p></p><figcaption>Busy terminal example</figcaption><p></p>
+</figure>
+</div>
+<p>If there is a busy terminal (Mac, Linux, or Server) trying to exit RStudio (or any other operation that will stop the current R session) will give a warning. Proceeding will kill the running programs.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-08-07-1_1_term_warn.png" class="img-fluid"></p>
+<p></p><figcaption>Busy terminal example</figcaption><p></p>
+</figure>
+</div>
+<h3 id="run-in-terminal" class="anchored">Run in Terminal</h3>
+<p>When editing a shell script in RStudio, the <strong>Run Selected Line(s)</strong> command (<strong>Cmd+Enter</strong> on Mac / <strong>Ctrl+Enter on others</strong>) executes the current line, or selection, in the current terminal. This can be used to step through a shell script line-by-line and observe the results in the terminal.</p>
+<p>Here’s an example where Cmd+Enter was hit three times, with focus on the editor and the cursor starting on the first line.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-08-07-1_1_term_run.png" class="img-fluid"></p>
+<p></p><figcaption>Run a shell script line-by-line</figcaption><p></p>
+</figure>
+</div>
+<p>In other text file types, including R source files, the new <strong>Send to Terminal</strong> command (<strong>Cmd+Alt+Enter</strong> on Mac, <strong>Ctrl+Alt+Enter</strong> on others) may be invoked to send the current selection to the current terminal. This can be handy for other languages with a command-line interpreter. Below, Python was started in the current terminal, then <strong>Cmd+Alt+Enter</strong> was used to step through each line of the Python source file.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-08-07-1_1_term_python.png" class="img-fluid"></p>
+<p></p><figcaption>Python example</figcaption><p></p>
+</figure>
+</div>
+<h3 id="closing-terminals" class="anchored">Closing Terminals</h3>
+<p>To close a terminal session, use the Close Terminal command on the Terminal dropdown menu, click the [x] on the far-right of the Terminal pane toolbar, or exit from within the shell itself.</p>
+<p>If the Terminal tab is not useful to your workflows, simply click the [x] on the tab itself to close it, and it will not reappear in future RStudio sessions. To restore the tab, start a terminal via the <strong>Tools/Terminal/New Terminal</strong> menu command.</p>
+<h3 id="terminal-options" class="anchored">Terminal Options</h3>
+<p>Various aspects of the terminal can be configured with the new Terminal Options pane. Invoke with Tools/Global Options… and click on the Terminal icon.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-08-07-1_1_term_options.png" class="img-fluid"></p>
+<p></p><figcaption>Terminal Options</figcaption><p></p>
+</figure>
+</div>
+<h3 id="windows-specific-shell-options" class="anchored">Windows-Specific Shell Options</h3>
+<p>On the RStudio IDE for Microsoft Windows, you can select between Git-Bash, Command Prompt, Windows PowerShell, or the Windows Subsystem for Linux. The choices available depend on what is installed on the system.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-08-07-1_1_term_winshell.png" class="img-fluid"></p>
+<p></p><figcaption>Windows shell options</figcaption><p></p>
+</figure>
+</div>
+<p>We look forward to seeing how people use the <a href="https://support.rstudio.com/hc/en-us/articles/115010737148-Using-the-RStudio-Terminal">Terminal tab</a> in RStudio 1.1. If you want to give it a test drive, please download the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio Preview Release</a>.</p>
+<p>We hope you try out the preview and <a href="https://support.rstudio.com/">let us know</a> how we can make it better.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

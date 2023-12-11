@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-11-19">
+<meta name="description" content="RStudio analyzes how the California Department of Public Health built a COVID-19 dashboard in R and Shiny that now serves millions of California citizens.">
+
+<title>How California Uses Shiny in Production to Fight COVID-19</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">How California Uses Shiny in Production to Fight COVID-19</h1>
+
+<p class="date">2020-11-19</p>
+</header>
+
+<figure>
+<img align="center" src="hero.jpg">
+<figcaption>
+<i>Short term forecast from the <a href="https://calcat.covid19.ca.gov/cacovidmodels/" target="_blank" rel="noopener noreferrer">California COVID Assessment Tool (CalCAT)</a></i>
+</figcaption>
+</figure>
+<blockquote>
+<p>“Things move along so rapidly nowadays that people saying:”It can’t be done,” are always being interrupted by somebody doing it.” <em>– Puck magazine, 1903.</em></p>
+</blockquote>
+<p>As we at RStudio have talked about the topic of <a href="https://blog.rstudio.com/2020/05/19/driving-real-lasting-value-with-serious-data-science/" target="_blank" rel="noopener noreferrer">serious data science</a>, we often field questions about the suitability of R for use in large-scale, production environments. Those questions typically coalesce around:</p>
+<ol type="1">
+<li><strong>Speed:</strong> Is R fast enough to run production workloads?</li>
+<li><strong>Scalability:</strong> Can R be used for large scale production?</li>
+<li><strong>Infrastructure:</strong> What kind of R infrastructure do administrators need to run production applications?</li>
+</ol>
+<p>Instead of debating these question in theory in this post, we’ll instead turn to an organization that is not just talking about deploying Shiny dashboards in large-scale production, but is actually “doing it”.</p>
+<p>Many definitions exist for what constitutes an application being in large-scale production. For the purposes of this article, we’ll define large-scale production as:</p>
+<div style="padding:0px 30px 0px 30px; margin:20px 0;">
+<div class=".quote-spacing">
+<pre><code>  &lt;div class=".quote-size"&gt;
+     &lt;i&gt;Applications serving thousands of users on a daily basis.&lt;/i&gt;
+  &lt;/div&gt;</code></pre>
+</div>
+</div>
+<p>One application that fits this definition nicely is the California COVID Assessment Tool (CalCAT) which serves 32 million Californian citizens. CalCAT is a Shiny dashboard written in R by a group of data scientists within the California Department of Public Health (CDPH) and is hosted on an array of commercial <a href="https://rstudio.com/products/team/" target="_blank" rel="noopener noreferrer">RStudio Team</a> servers.</p>
+<p>RStudio recently talked with members of the team who deployed this dashboard to understand how this public, large-scale Shiny app came to be. The following sections present some of our takeaways from those discussions.</p>
+<style type="text/css"> 
+.quote-spacing    { padding:0 80px; } 
+.quote-size       { font-size: 160%; line-height: 34px; } 
+.speaker-quote    { padding-left: 50px; text-indent: -50px; }
+.no-speaker-quote { padding-left: 50px; }
+
+[@media] only screen and (max-width: 600px) {
+   .quote-spacing { padding-top:0; } 
+   .quote-size    { font-size: 120%; line-height: 28px; }
+}
+</style>
+<h2 id="cdphs-first-shiny-dashboard-tracked-opiod-use" class="anchored">CDPH’s First Shiny Dashboard Tracked Opiod Use</h2>
+<figure>
+<div style="padding: 35px 0 0 0;">
+<pre><code>&lt;a href="https://skylab.cdph.ca.gov/ODdash/" target="_blank" rel="noopener noreferrer"&gt;
+  &lt;img align="center" src="opioid-dashboard.png"&gt;
+&lt;/a&gt;</code></pre>
+</div>
+<figcaption>
+<i>CDPH’s <a href="https://skylab.cdph.ca.gov/ODdash/" target="_blank" rel="noopener noreferrer">Opioid Overdose Surveillance application</a></i>
+</figcaption>
+</figure>
+<p>The CalCAT dashboard project was born out of CDPH’s experience fielding a prior public-facing Shiny dashboard in 2016, namely the <a href="https://skylab.cdph.ca.gov/ODdash/" target="_blank" rel="noopener noreferrer">CDPH Opioid Overdose Surveillance application</a>. That application evolved largely from:</p>
+<ul>
+<li><strong>A need to get data out quickly.</strong> CDPH didn’t really have an enterprise-level dashboarding solution secured in 2016. When the opioid crisis arrived, the department realized it needed to get data out quickly and update it as needed as the epidemic gripped the state.</li>
+<li><strong>The ability to deploy a dashboard using free software and cloud resources.</strong> When looking for a dashboarding solution, one of the developers evaluated Shiny, realized it was free and open source, and that RStudio offered shinyapps.io for a very low cost way for CDPH to deploy it. Without the need for a capital investment to get started, they created some basic visualizations, shopped them to leadership including the director of the department, and got the full go-ahead to develop and deploy shortly thereafter. This allowed them to get their opioid dashboard out in 3 or 4 months, which was unheard of at the time.</li>
+<li><strong>A positive reception by users.</strong> California was one of the first states in the country that had a public opioid overdose dashboard. This positive experience with Shiny and shinyapps.io generated interest in R and encouraged the building of more internal infrastructure for hosting and deploying these apps.</li>
+</ul>
+<h2 id="covid-19s-arrival-made-sharing-data-mission-critical" class="anchored">COVID-19’s Arrival Made Sharing Data Mission Critical</h2>
+<p>When COVID-19 arrived in the United States in early 2020, many organizations, both inside and outside of the California Department of Public Health, suddenly found themselves wanting data to respond to the pandemic. That demand led to:</p>
+<ul>
+<li><strong>The formation of the CalCAT development team.</strong> CalCAT evolved out of some early work with Johns Hopkins University regarding scenario-based models. Initially, CalCAT just wanted to develop a quick lightweight app to explore the simulations that Johns Hopkins was providing and to share it using an RStudio Connect server with other CDPH staff.</li>
+<li><strong>Creation of a extranet-hosted Shiny dashboard for COVID-19.</strong> Based on their experience with the Opioid Dashboard, the team developed an internal Shiny app to provide visualizations of what was going on throughout the state. As the dashboard evolved, CDPH moved it to the state government extranet for others to access.</li>
+<li><strong>Expanding the dashboard to serve other departments with data.</strong> While the app began as an effort to share data with county health officers and local epidemiologists, people from other departments started asking, “How did you get this number? We can’t replicate it.” That led the team to expand the app to allow users to download the code and data behind the visualizations and do their own analyses.</li>
+</ul>
+<p>Once other departments gained access to the data, the app quickly became a vital source of COVID information throughout the state because it:</p>
+<ul>
+<li><strong>Allowed authenticated access to internal confidential data.</strong> Because the COVID dashboard authenticated county health officers to gain access to the Shiny app, it could include aggregated confidential data beyond what would normally be available to the general public.</li>
+<li><strong>Supported county-based dashboards.</strong> County health jurisdictions found that they could download their county’s data and republish it on their own dashboards, thereby giving their users visibility into their local situation.</li>
+<li><strong>Drove county-level pandemic actions.</strong> California established <a href="https://covid19.ca.gov/safer-economy/" target="_blank" rel="noopener noreferrer">hard metrics such as case and infection rates</a> to guide which businesses were allowed to open. The data published by this extranet dashboard ensured everyone was working from a consistent set of measurements and actions that were authorized by the state.</li>
+</ul>
+<h2 id="responding-to-the-emergency-creating-a-public-dashboard-for-california-citizens" class="anchored">Responding to the Emergency: Creating A Public Dashboard for California Citizens</h2>
+<figure>
+<div style="padding: 35px 0 0 0;">
+<pre><code>&lt;a href="https://calcat.covid19.ca.gov/cacovidmodels/" target="_blank" rel="noopener noreferrer"&gt;
+  &lt;img align="center" src="covid-dashboard.jpg"&gt;
+&lt;/a&gt;</code></pre>
+</div>
+<figcaption>
+<a href="https://calcat.covid19.ca.gov/cacovidmodels/" target="_blank" rel="noopener noreferrer"><i>The CalCAT public dashboard</i></a>
+</figcaption>
+</figure>
+<p>The extranet site helped CDPH and the county health officers understand both the depth and breadth of pandemic infections within California. However, on March 4, 2020, the following announcement spurred the department to build a public site.</p>
+<blockquote>
+<p>“As part of the state’s response to address the global COVID-19 outbreak, Governor Gavin Newsom today declared a State of Emergency to make additional resources available, formalize emergency actions already underway across multiple state agencies and departments, and help the state prepare for broader spread of COVID-19. The proclamation comes as the number of positive California cases rises and following one official COVID-19 death.” <i>– Gavin Newsom, Governor of California, March 4, 2020</i></p>
+</blockquote>
+<p>In response to the Governor’s mandate, the team:</p>
+<ul>
+<li><strong>Deployed the public COVID dashboard app you see today.</strong> Based on their work with their internal county-based dashboard and with advice from DJ Patil, the Chief Data Scientist of the United States in the Obama administration, the team modified and upgraded the internal county-based app into what you currently see today. This dashboard allows people to explore both the California models and an ensemble of estimates from other organizations to provide a single picture for the state and its counties. The team used R to do some statistical work in the background while also creating interactive visualizations to share those results.</li>
+<li><strong>Made their code open source.</strong> The CalCAT team made <a href="https://github.com/StateOfCalifornia/CalCAT" target="_blank" rel="noopener noreferrer">the source code for the site public on Github</a> so anybody in the world could access and improve on it. In addition to the website, they also created an open data portal for the state that includes additional aggregated data.</li>
+</ul>
+<h2 id="cdpds-r-infrastructure-evolved-to-support-the-pandemic-efforts" class="anchored">CDPD’s R Infrastructure Evolved to Support the Pandemic Efforts</h2>
+<p>As CalCAT gained popularity and the team gained experience, the infrastructure supporting the team evolved to meet the new demands by adding:</p>
+<ul>
+<li><strong>Multiple hosting environments.</strong> The CalCAT environment now features both a public-facing environment and an extranet environment that requires authentication with partners and staff. CDPH now also has internal testing platforms on which they run apps before they go out to the public-facing and extranet servers.</li>
+<li><strong>Professional products</strong>. While the project started off with open source Shiny Servers and shinyapps.io for the Opioid Dashboard, the team later moved to RStudio Server Pro for development and then added RStudio Connect and RStudio Package Manager for publishing. They now run multiple instances of those products to spread the workload out and accommodate the millions of users who access the public site.</li>
+<li><strong>Collaborative workflows</strong>. Once the team grew beyond just one or two developers, it created <a href="https://github.com/StateOfCalifornia/CalCAT" target="_blank" rel="noopener noreferrer">a Github repository</a> where it could collaboratively work on code, push changes, and adopt changes from others. While this workflow required scientists within the department to learn basic devops software development techniques, the team decided the benefits from collaboration were worth climbing that learning curve.</li>
+</ul>
+<h3 id="calcats-success-has-encouraged-r-use-within-cdph" class="anchored">CalCAT’s Success Has Encouraged R Use Within CDPH</h3>
+<p>The project team noted how much the Opiod dashboard changed CDPH’s thinking about how R could be used to deliver data to the public by:</p>
+<ul>
+<li><strong>Providing examples of what was possible.</strong> The Opioid dashboard expanded the scope of what could be done with CDPH data. The CalCAT dashboard proved that, with the help of their infrastructure and IT team, such applications could be scaled up to provide service to the public. Collaborating with IT also introduced the CalCAT scientists to software tools they wouldn’t have discovered themselves.</li>
+<li><strong>Rapidly deploying new apps.</strong> After the COVID dashboard was up, other groups started asking for new apps that could tackle other aspects of the crisis. One such application was a very simple program to create unique IDs for COVID tests, which was mandated and published within a week. The ability to respond quickly to department needs burnished R’s reputation within CDPH.</li>
+<li><strong>Creating an internal R community.</strong> The team is already seeing real expansion in personnel with R skills, especially in hiring. Their job descriptions now ask for R skills, and people are being recruited from other disciplines. Increasingly, the personnel within the department are coming in with R experience.</li>
+<li><strong>Embracing a code-based approach.</strong> One developer noted that writing code to do data science instead of using a point-and-click tool was analogous to a team doing rock climbing. Working code creates a path and anchors for others to use, and new developers then can use those anchors to follow in their footsteps.</li>
+</ul>
+<h2 id="takeaways" class="anchored">Takeaways</h2>
+<p>The CalCAT experience shows that, despite claims to the contrary, R can be used for large-scale production applications. When we re-examine the three categories of concern about R with which we started the piece, we discover that:</p>
+<ul>
+<li><strong>Speed of development was the key to success.</strong> This was an application that had to be deployed quickly in response to a national emergency. Using R and Shiny allowed the team to deploy an interactive app that provided access to COVID data in weeks, not months.</li>
+<li><strong>Scaling up production use was an evolutionary process.</strong> The team took advantage of its prior experience with the Opioid Dashboard to deploy both the extranet and public versions of the COVID-19 application. The team had already deployed public apps on shinyapps.io and had deployed server infrastructure in house as part of their extranet application. When the time came to go public with the public CalCAT dashboard, scaling up became mostly a matter of replicating servers they already had experience with.</li>
+<li><strong>Infrastructure to support this application was available off the shelf.</strong> Instead of having to roll their own deployment process, the group was able to use RStudio’s server product suite to do the app development as well as the large-scale deployment on an array of RStudio Connect servers.</li>
+</ul>
+<p>By using a code-based approach, the California Department of Public Health has built a repository of human and intellectual capital around building public health dashboards. This small team’s work and open source code can now be passed on to others both within and outside of California government. Their efforts will likely spawn new projects that will better inform citizens and continue to help them stay safe throughout this unprecedented pandemic.</p>
+<h2 id="to-learn-more" class="anchored">To Learn More</h2>
+You can learn about each of RStudio’s commercial products by following the links below.
+<ul>
+<li>
+<a href="https://rstudio.com/products/rstudio-server-pro/" target="_blank" rel="noopener noreferrer">RStudio Server Pro</a> delivers fully integrated development environments for R and Python accessible via a browser.
+</li>
+<li>
+<a href="https://rstudio.com/products/connect/" target="_blank" rel="noopener noreferrer">RStudio Connect</a> connects data scientists with decision makers with a one-button publishing solution from the RStudio IDE.
+</li>
+<li>
+<a href="https://rstudio.com/products/package-manager/" target="_blank" rel="noopener noreferrer">RStudio Package Manager</a> controls package distribution for reproducible data science.
+</li>
+<li>
+<a href="https://rstudio.com/products/team/" target="_blank" rel="noopener noreferrer">RStudio Team</a> bundles RStudio Server Pro, RStudio Connect, and RStudio Package Manager products to ease purchasing and administration.
+</li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

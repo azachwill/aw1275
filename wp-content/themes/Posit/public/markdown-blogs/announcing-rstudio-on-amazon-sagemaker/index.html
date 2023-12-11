@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-11-02">
+<meta name="description" content="RStudio is excited to announce the release of RStudio on Amazon SageMaker. Developed in collaboration with the Amazon SageMaker team, this release makes it easy for data scientists to use the full power of SageMaker for machine learning from their favorite data science workbench.">
+
+<title>Announcing RStudio on Amazon SageMaker</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Announcing RStudio on Amazon SageMaker</h1>
+
+<p class="date">2021-11-02</p>
+</header>
+
+<h2 id="data-science-in-the-cloud" class="anchored">Data Science in the Cloud</h2>
+<p>As more organizations migrate their data science work to the cloud, they naturally want to bring along their favorite data science tools, including RStudio, R, and Python. These organizations are embracing the cloud to achieve various goals, including to:</p>
+<ul>
+<li>Simplify and reduce startup costs.</li>
+<li>Promote collaboration between organizations or groups.</li>
+<li>Mitigate the high costs of maintaining their own computing infrastructure.</li>
+<li>Scale to meet variable demand.</li>
+<li>Minimize data movement.</li>
+</ul>
+<p>While RStudio provides <a href="https://blog.rstudio.com/2020/11/12/cloud-strategy/" target="_blank" rel="noopener noreferrer">many different ways to support an organization’s cloud strategy</a>, we’ve heard from many customers who also use Amazon SageMaker. They wanted an easier way to combine RStudio’s professional products with SageMaker’s rich machine learning and deep learning capabilities, and to incorporate RStudio into their data science infrastructure on SageMaker.</p>
+<h2 id="rstudio-on-amazon-sagemaker" class="anchored">RStudio on Amazon SageMaker</h2>
+<p>Based on this feedback, we are excited to announce RStudio on Amazon SageMaker, developed in collaboration with the SageMaker team.</p>
+<p><a href="https://aws.amazon.com/pm/sagemaker/" target="_blank" rel="noopener noreferrer">Amazon SageMaker</a> helps data scientists and developers to prepare, build, train, and deploy high-quality machine learning models quickly by bringing together a broad set of capabilities purpose-built for machine learning.</p>
+<blockquote>
+<p>RStudio is excited to collaborate with the Amazon SageMaker team on this release as they make it easier for organizations to move their open-source data science workloads to the cloud. We are committed to helping our joint customers use our commercial offerings to bring their production workloads to Amazon’s SageMaker, and to further collaborations with the Amazon SageMaker team.</p>
+<p>— Tareef Kawaf, President, RStudio PBC</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="image1.png" class="img-fluid"></p>
+<p></p><figcaption>RStudio IDE showing output using Amazon SageMaker capabilities</figcaption><p></p>
+</figure>
+</div>
+<h3 id="easy-access-to-sagemaker-for-data-scientists" class="anchored">Easy Access to SageMaker for Data Scientists</h3>
+<p>Data scientists can quickly get to work, spinning up their favorite development environment on SageMaker. They can:</p>
+<ul>
+<li><strong>Launch RStudio Workbench</strong> with a simple click.</li>
+<li><strong>Start a new session</strong> with a fully-configured environment.</li>
+<li><strong>Choose an instance type</strong> with the desired compute and memory for the job at hand, from a wide array of ML instances available.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="image2.png" class="img-fluid"></p>
+<p></p><figcaption>RStudio Workbench options to choose different instance types</figcaption><p></p>
+</figure>
+</div>
+<p>Within that environment, they can get access to their organization’s data stored on AWS. They also have access to all of SageMaker’s deep learning capabilities, accessed via Python libraries using the <a href="https://rstudio.github.io/reticulate/" target="_blank" rel="noopener noreferrer">reticulate</a> package. This preconfigured environment includes all the necessary SageMaker libraries to get started.</p>
+<p>This offering complements Amazon SageMaker Studio Notebooks, which provide access to Python coding in a Jupyter Notebook environment. This means that data scientists proficient with both R and Python can freely switch between RStudio and SageMaker Studio Notebooks. All of their work, including code, datasets, repositories, and other artifacts are synchronized between the two environments through the default Amazon Elastic File System (Amazon EFS) storage.</p>
+<p>For more information from the data scientist perspective, see <a href="https://aws.amazon.com/blogs/aws/announcing-fully-managed-rstudio-on-amazon-sagemaker-for-data-scientists/" target="_blank" rel="noopener noreferrer">Announcing Fully Managed RStudio on Amazon SageMaker for Data Scientists</a>.</p>
+<h3 id="familiar-management-tools-for-devops-teams" class="anchored">Familiar Management Tools for DevOps Teams</h3>
+<p>As a fully managed offering on Amazon SageMaker, this release makes it easy for DevOps teams and IT Admins to administer, secure and scale their organization’s centralized data science infrastructure. They can:</p>
+<ul>
+<li><strong>Quickly create a multi-user RStudio Workbench environment</strong> in AWS SageMaker for their team’s data science work, without the need to install and configure RStudio Workbench.</li>
+<li><strong>Administer this environment using familiar AWS tools and frameworks</strong>, including managing licenses, security, and domains.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="image3.png" class="img-fluid"></p>
+<p></p><figcaption>Arrow pointing to RStudio option to launch app in SageMaker Domain</figcaption><p></p>
+</figure>
+</div>
+<p>For more information from the DevOps perspective, see <a href="https://aws.amazon.com/blogs/machine-learning/get-started-with-rstudio-on-amazon-sagemaker/" target="_blank" rel="noopener noreferrer">Getting Started with RStudio on Amazon SageMaker</a>.</p>
+<h3 id="data-driven-insights-for-organizations" class="anchored">Data-Driven Insights for Organizations</h3>
+<p>For data-driven organizations already using AWS, this provides a way to migrate their self-managed RStudio environments to AWS SageMaker, using their existing RStudio Workbench licenses without an incremental cost.</p>
+<p>When RStudio for SageMaker is configured for use with RStudio Connect, data scientists using both RStudio for SageMaker and SageMaker Studio can easily share their R and Python insights with their decision-makers.</p>
+<p><a href="../../products/connect/" target="_blank">RStudio Connect</a> makes it easy to deliver key insights to decision-makers, at the right time, in the right format. Connect supports a spectrum of data products, static or dynamic, developed in R and Python: Dashboards, applications, APIs, reports, and more.</p>
+<p>For more information, see <a href="https://aws.amazon.com/blogs/machine-learning/host-rstudio-connect-and-package-manager-for-ml-development-in-rstudio-on-amazon-sagemaker/" target="_blank" rel="noopener noreferrer">Host RStudio Connect and Package Manager for ML Development in RStudio on Amazon SageMaker</a>.</p>
+<h2 id="getting-started-with-rstudio-on-amazon-sagemaker" class="anchored">Getting Started with RStudio on Amazon SageMaker</h2>
+<p>RStudio for Amazon SageMaker enables RStudio Workbench customers to bring their existing licenses to SageMaker. If you are an existing customer, or would like to learn more, please reach out to your customer success manager or <a href="https://rstudio.chilipiper.com/book/schedule-time-with-rstudio" target="_blank" rel="noopener noreferrer">schedule a time to talk with us</a>.</p>
+<center>
+<p><strong> <a href="https://www.addevent.com/event/Ch9725290" target="_blank" rel="noopener noreferrer">Join us on Dec.&nbsp;6th for an RStudio on SageMaker Meetup</a></strong></p><strong>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://www.addevent.com/event/Ch9725290"><img src="image4.png" title="RStudio on Amazon SageMaker Event on December 6th" class="img-fluid"></a></p>
+<p></p><figcaption>White tile with blue hexes saying RStudio on Amazon SageMaker December 6th at 12ET</figcaption><p></p>
+</figure>
+</div>
+</strong>
+</center>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

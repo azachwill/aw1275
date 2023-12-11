@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-03-17">
+
+<title>RStudio 1.3 Preview: The Little Things</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio 1.3 Preview: The Little Things</h1>
+
+<p class="date">2020-03-17</p>
+</header>
+
+<p><em>This blog post is part of a series on new features in RStudio 1.3, currently available as a <a href="https://www.rstudio.com/products/rstudio/download/preview/">preview release</a>.</em></p>
+<p>In every RStudio release, we introduce dozens of small quality-of-life improvements alongside bigger headline features. This blog post concludes our series on the upcoming RStudio 1.3 release with a look at some of these little conveniences.</p>
+<h3 id="global-replace" class="anchored">Global Replace</h3>
+<p>RStudio has long had a <em>Find in Files</em> feature, which makes it possible to easily locate text in your project. If you’re not familiar with this feature, try it out: press <em>Ctrl+Shift+F</em> (MacOS: <em>Cmd+Shift+F</em>), or choose <em>Find in Files…</em> from the <em>Edit</em> menu.</p>
+<p>In RStudio 1.3, it’s now possible to <strong>replace</strong> the text you found:</p>
+<p><img align="center" src="global-replace.png" alt="Screenshot of Global Replace in action"></p>
+<p>After you’ve done a search, switch to <em>Replace</em> view via the toggle, enter your new text, and click <em>Replace All</em>. It works with regular expressions, too.</p>
+<h3 id="resizable-environment-columns" class="anchored">Resizable Environment Columns</h3>
+<p>This really is a little thing, but it drove many of you nuts: the size of the columns in the Environment pane was fixed, so if your variables (or values) were long, it was awkward to try to see the whole thing. Now you can!</p>
+<p><img align="center" src="resize-cols.png" alt="Screenshot showing resizable columns in the Environment pane"></p>
+<h3 id="new-file-templates" class="anchored">New File Templates</h3>
+<p>Do you usually start new files with the same information? For example, do you usually include a header comment on your R scripts with metadata you know you’ll find useful later? You can now have RStudio inject this header for you when you create a new file.</p>
+<p><img align="center" src="script-template.png" alt="Screenshot showing an R script with content from a default template"></p>
+<p>Create a template in <code>~/.config/rstudio/templates/default.R</code> (macOS/Linux) or <code>AppData/Roaming/RStudio/templates/default.R</code> (Windows) to try it out. It works with other file types, too; for example creating a file named <code>default.cpp</code> will set the content for new C++ files.</p>
+<p>If you’re an RStudio Server administrator, you can set templates for all the users on your server, which can be helpful if your organization has standards around file headers and structure. Read more in <a href="https://docs.rstudio.com/ide/server-pro/1.3.898-1/r-sessions.html#default-document-templates">Default Document Templates</a> from the admin guide.</p>
+<h3 id="autosave" class="anchored">Autosave</h3>
+<p>RStudio automatically keeps its own backup copy of files you’re editing so that you don’t lose changes. We’ve improved this in two ways in the 1.3 release:</p>
+<p><img align="center" src="auto-save.png" alt="Section of Options dialog showing auto-save preferences"></p>
+<ol type="1">
+<li>When enabled, RStudio will automatically save open files as they are changed. This is useful if you don’t want to have to remember to manually save and just want your changes saved at all times.</li>
+<li>You can also disable the auto-backup, or change the interval at which it is performed. This is useful if you are storing your projects on a cloud-synchronized folder, which sometimes struggle to keep up with RStudio’s frequent writes to the backup copy.</li>
+</ol>
+<h3 id="terminal-ergonomics" class="anchored">Terminal Ergonomics</h3>
+<p>You can now set the initial working directory of new terminals, so it’s less likely you’ll have to begin each terminal session with the same old <code>cd</code> command.</p>
+<p><img align="center" src="terminal-options.png" alt="Section of Options dialog showing terminal starting directory"></p>
+<p>We’ve also added a bunch of commands designed to reduce the number of times you need to manually paste cumbersome file and directory paths between the IDE and the terminal.</p>
+<p><img align="center" src="terminal-commands.png" alt="Menu showing new commands for working with directories in the Terminal"></p>
+<p>Specifically, we’ve added:</p>
+<ul>
+<li>A command to open a new terminal at location of current editor file</li>
+<li>A command to insert the full path and filename of current editor file into the terminal</li>
+<li>A command in the File pane to open a new terminal at File pane’s current location</li>
+<li>A command to change the terminal to current RStudio working directory</li>
+</ul>
+<h3 id="shiny-background-jobs" class="anchored">Shiny Background Jobs</h3>
+<p>RStudio can now run Shiny applications as background jobs in the Jobs tab we added in RStudio 1.2.</p>
+<p><img align="center" src="shiny-background.png" alt="Menu showing new commands for working with directories in the Terminal"></p>
+<p>This has a couple of advantages:</p>
+<ul>
+<li>You can continue to use the R console while your Shiny application runs!</li>
+<li>Your Shiny application runs in a fresh R session. This makes it easier to keep your application’s code reproducible, since any implicit dependencies will keep the application from running successfully in the background.</li>
+</ul>
+<p>Note, however, that you can’t use RStudio’s debugging interface with a Shiny application running in the background, since it is part of a separate R session.</p>
+<h3 id="wrapup" class="anchored">Wrapup</h3>
+<p>If you’d like to try out any of these features, we welcome you to download the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio Preview</a> and give them a spin!</p>
+<p>We hope these little changes make a big difference in your day-to-day work, and we’d love to hear your feedback on the <a href="https://community.rstudio.com/c/rstudio-ide">community forum</a>.</p>
+<p>Finally, we’re grateful to you, the R community, for the overwhelming number of ideas, support, and bug reports that have helped us build this release. We couldn’t have done it without you. Watch this space for an announcement of the stable release soon!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

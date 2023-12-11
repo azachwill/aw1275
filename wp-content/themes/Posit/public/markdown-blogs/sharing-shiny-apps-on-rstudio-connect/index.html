@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-01-13">
+<meta name="description" content="RStudio Connect allows you to easily share your Shiny apps with push-button publishing, while maintaining enterprise-level security and tuning resources to meet the demands of your application.">
+
+<title>Sharing Secure and Scalable Shiny Apps on RStudio Connect</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Sharing Secure and Scalable Shiny Apps on RStudio Connect</h1>
+
+<p class="date">2022-01-13</p>
+</header>
+
+<p><a href="https://shiny.rstudio.com/" target="_blank">Shiny</a> is an R package that makes it easy for data scientists to build interactive web apps straight from R, without having to learn any new languages or frameworks. Once you’ve created a Shiny app, it’s time to share your great work!</p>
+<p>However, how can you ensure that:</p>
+<ul>
+<li>Only authorized users can view the dashboard?</li>
+<li>Your data is secure once uploaded?</li>
+<li>Users don’t experience a lag time when exploring the data?</li>
+</ul>
+<p><a href="https://www.rstudio.com/products/connect/" target="_blank">RStudio Connect</a> is an enterprise-level product from RStudio to securely host and share Shiny applications, as well as other data science products. You can publish Shiny apps with a push of a button from the RStudio IDE:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<figure>
+<img src="images/gif1.gif" title="Deploying a Shiny dashboard on RStudio Connect" class="img-fluid">
+</figure>
+<p></p><figcaption>Push-button publishing from the RStudio IDE</figcaption><p></p>
+</figure>
+</div>
+<center>
+<i>
+
+Push-button publishing from the RStudio IDE
+
+</i>
+</center>
+<p>RStudio Connect allows you to share your Shiny app knowing your viewers have the right permissions, your data is secure, and your app will display your results quickly and efficiently.</p>
+<p>Let’s explore RStudio Connect with a dashboard using the <a href="https://allisonhorst.github.io/palmerpenguins/" target="_blank">Palmer Penguins</a> data. Check out the dashboard on <a href="https://colorado.rstudio.com/rsc/palmer-penguins-shiny-example/" target="_blank">colorado.rstudio.com</a>.</p>
+<h2 id="control-viewership-with-user-authentication" class="anchored">Control Viewership With User Authentication</h2>
+<p>Once you’ve uploaded a Shiny app to Connect, you have the option to:</p>
+<ul>
+<li><strong>Allow anybody to access, no login required:</strong> Any visitor to RStudio Connect will be able to view the content. This includes anonymous users who are not authenticated with the system.</li>
+<li><strong>Allow anybody with a login to access:</strong> Those with RStudio Connect accounts are permitted to view this content.</li>
+<li><strong>Allow only select users or groups to access:</strong> Specific users (or groups of users) are allowed to view this content. Other users will not have access.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<figure>
+<img src="images/gif2.gif" title="Changing the viewership access on a Shiny app on RStudio Connect" class="img-fluid">
+</figure>
+<p></p><figcaption>Changing the sharing settings on a Shiny app on Connect from anybody to only those with an account</figcaption><p></p>
+</figure>
+</div>
+<center>
+<i>
+
+Changing sharing settings on RStudio Connect
+
+</i>
+</center>
+<p>This provides you flexibility over how uploaded content is shared. You can also assign roles to individuals or groups of team members. Viewers have read-only access while Collaborators can modify the content.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<figure>
+<img src="images/gif3.gif" title="Adding a collaborator to a Shiny app" class="img-fluid">
+</figure>
+<p></p><figcaption>Adding a collaborator to a Shiny app</figcaption><p></p>
+</figure>
+</div>
+<center>
+<i>
+
+Adding a collaborator to a Shiny app
+
+</i>
+</center>
+<p>RStudio Connect also allows you to enable Single-Sign On so that your users won’t need to remember an additional log-in. Check out how we sign into our Shiny apps at RStudio!</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<figure>
+<img src="images/gif4.gif" title="Single-sign on with RStudio Connect" class="img-fluid">
+</figure>
+<p></p><figcaption>Single-sign on from Google to access our dashboard</figcaption><p></p>
+</figure>
+</div>
+<center>
+<i>
+
+Using single-sign to access the Shiny dashboard
+
+</i>
+</center>
+<h2 id="deploy-shiny-applications-securely-on-premises-or-in-your-vpc" class="anchored">Deploy Shiny Applications Securely, on Premises or in Your VPC</h2>
+<p>While SaaS solutions also allow you to share Shiny apps, the data and application are accessible on someone else’s cloud. This is an issue if your data is private or sensitive.</p>
+<p>With RStudio Connect, the application is kept secure within your organization’s own environment. You can prevent unauthorized access and ensure that you comply with all data security and privacy guidelines.</p>
+<p>If your environment requires offline package access, we recommend you use a local repository option such as <a href="https://www.rstudio.com/products/package-manager/" target="_blank">RStudio Package Manager</a>.</p>
+<h2 id="maintain-fast-response-times-with-performance-tuning" class="anchored">Maintain Fast Response Times With Performance Tuning</h2>
+<p>RStudio Connect is built to scale content. After you publish an app, you can change RStudio Connect’s runtime settings to help tune and scale your Shiny applications. By selecting values that support your expected use, you can maximize the trade-off between app responsiveness and memory consumption/load time:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<figure>
+<img src="images/gif5.gif" title="Performance tuning on RStudio Connect" class="img-fluid">
+</figure>
+<p></p><figcaption>Increasing the max processes on the Shiny dashboard</figcaption><p></p>
+</figure>
+</div>
+<center>
+<i>
+
+Increasing the maximum processes on the Shiny dashboard
+
+</i>
+</center>
+<p>Your users can rely on your app to show data in a timely manner, and you can adjust the configurations based on use and traffic.</p>
+<h2 id="learn-more" class="anchored">Learn More</h2>
+<p>With RStudio Connect, you can share your Shiny apps in a secure and scalable way.</p>
+<ul>
+<li>Find out the options for <a href="https://shiny.rstudio.com/tutorial/written-tutorial/lesson7/" target="_blank">sharing your Shiny apps</a>.
+<ul>
+<li><a href="https://support.rstudio.com/hc/en-us/articles/217240558-What-is-the-difference-between-RStudio-Connect-and-shinyapps-io-" target="_blank">What is the difference between RStudio Connect and shinyapps.io?</a></li>
+</ul></li>
+</ul>
+<p>Want to see an example of secure, scalable Shiny apps?</p>
+<ul>
+<li>Read how the California Department of Public Health <a href="https://www.rstudio.com/blog/using-shiny-in-production-to-monitor-covid-19/" target="_blank">created a Shiny app to quickly share data with millions of Californians</a>.</li>
+<li>Explore lessons learned from the Georgia Institute of Technology on <a href="https://www.rstudio.com/blog/how-do-you-use-shiny-to-communicate-to-8-million-people/" target="_blank">building the COVID-19 Event Risk Assessment Planning Tool</a>.</li>
+<li>Join us for an <strong><a href="https://www.addevent.com/event/rV10488631" target="_blank">R in Public Sector Meetup on January 27th: Organizational &amp; Technical Aspects of Shiny in Production</a>.</strong> Speakers from the Dutch National Institute for Public Health and the Environment will discuss the development of a Shiny app that provides actionable information to 300 health professionals.</li>
+</ul>
+<p>In addition to Shiny, RStudio Connect publishes other types of applications, including Dash, Streamlit, and others. Find out more about <a href="https://www.rstudio.com/products/connect/" target="_blank">RStudio Connect</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

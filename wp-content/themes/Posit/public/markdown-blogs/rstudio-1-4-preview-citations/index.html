@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-11-09">
+
+<title>RStudio 1.4 Preview: Citations</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio 1.4 Preview: Citations</h1>
+
+<p class="date">2020-11-09</p>
+</header>
+
+<p><em>This post is part of a series on new features in RStudio 1.4, currently available as a <a href="https://www.rstudio.com/products/rstudio/download/preview/">preview release</a>.</em></p>
+<p>A few weeks ago we blogged about the new <a href="https://blog.rstudio.com/2020/09/30/rstudio-v1-4-preview-visual-markdown-editing/">visual markdown editor</a> included in RStudio v1.4. Today we’ll go into more depth on the <a href="https://rstudio.github.io/visual-markdown-editing/#/citations">citation features</a> included in visual mode, including easy insertion of citations from:</p>
+<ol type="1">
+<li>Your document bibliography.</li>
+<li><a href="#citations-from-zotero">Zotero</a> personal or group libraries.</li>
+<li><a href="#citations-from-dois">DOI</a> (Document Object Identifier) references.</li>
+<li>Searches of <a href="https://www.crossref.org/">Crossref</a>, <a href="https://datacite.org/">DataCite</a>, or <a href="https://pubmed.ncbi.nlm.nih.gov/">PubMed</a>.</li>
+</ol>
+<h2 id="inserting-citations" class="anchored">Inserting Citations</h2>
+<p>You may insert citations using the <strong>Insert -&gt; Citation</strong> command, after placing your cursor in the body of your document where you’d like to insert the citation. Alternatively, you can use markdown syntax directly (e.g.&nbsp;by typing <code>[@cite]</code> or <code>@cite</code>) .</p>
+<p>Use the <kbd><img src="images/citation_2x.png" width="15" height="14"></kbd> toolbar button or the <kbd>⇧⌘ F8</kbd> keyboard shortcut to show the <strong>Insert Citation</strong> dialog:</p>
+<p><img src="images/visual-editing-citation-search.png" class="illustration" width="918"></p>
+<p>Note that you can insert multiple citations by using the add button on the right side of the item display.</p>
+<p>If you insert citations from Zotero, DOI look-up, or a search then they are automatically added to your document bibliography.</p>
+<h3 id="markdown-syntax" class="anchored">Markdown Syntax</h3>
+<p>You can also insert citations directly using markdown syntax (e.g.&nbsp;<code>[@cite]</code>). When you do this a completion interface is provided for searching available citations:</p>
+<p><img src="images/visual-editing-citations.png" width="700"></p>
+<p>If you aren’t familiar with Pandoc’s citation syntax, here’s a quick refresher. Citations go inside square brackets and are separated by semicolons. Each citation must have a key, composed of ‘@’ + the citation identifier from the database, and may optionally have a prefix, a locator, and a suffix. Here are some examples:</p>
+<div class="illustration">
+<div>
+Blah Blah <span class="citation">[</span><span class="citation"><span class="citation" data-cites="doe99">@doe99</span></span>, pp.&nbsp;33-35, 38-39<span class="citation">]</span>.
+</div>
+<div>
+<p>Blah Blah <span class="citation">[</span><span class="citation"><span class="citation" data-cites="smith04">@smith04</span></span>; <span class="citation"><span class="citation" data-cites="doe99">@doe99</span></span><span class="citation">]</span>.</p>
+</div>
+<div>
+Smith says blah <span class="citation">[</span><span class="citation">-<span class="citation" data-cites="smith04">@smith04</span></span><span class="citation">]</span>.
+</div>
+<div>
+<pre><code>&lt;span class="citation"&gt;@smith04&lt;/span&gt; &lt;span class="citation"&gt;[&lt;/span&gt;p. 33&lt;span class="citation"&gt;]&lt;/span&gt; says blah.</code></pre>
+</div>
+</div>
+<p>See the <a href="https://pandoc.org/MANUAL.html#citation-syntax">Pandoc Citations</a> documentation for additional information on Pandoc citation syntax.</p>
+<h3 id="citation-ids" class="anchored">Citation IDs</h3>
+<p>Before inserting a citation from an external source you will may wish to customize it’s ID. Within the <strong>Insert Citation</strong> dialog, click the edit button on the right side of citations to change their ID:</p>
+<p><img src="images/visual-editing-citations-id.png" class="illustration"></p>
+<p>If you insert a new citation via code completion, you will also be provided with the opportunity to change its default citation ID.</p>
+<p>For citations inserted from Zotero, you can also use the <a href="https://retorque.re/zotero-better-bibtex/">Better BibTeX</a> plugin to generate citation IDs and handle BibTeX export (this can be enabled via <a href="https://rstudio.github.io/visual-markdown-editing/#/options?id=citation-options">Citation Options</a> if you have Better BibTeX installed).</p>
+<h3 id="citation-preview" class="anchored">Citation Preview</h3>
+<p>Once you’ve inserted a citation, place the cursor over it to see a preview of it along with a link to the source if one is available:</p>
+<p><img src="images/visual-editing-cite-popup.png" width="700"></p>
+<p>The preview (and generated bibliography) will use the currently defined <a href="https://citationstyles.org/">CSL style</a> for the document (as specified in the <code>csl</code> metadata field. A repository of CSL styles can be found at <a href="http://zotero.org/styles" class="uri">http://zotero.org/styles</a>.</p>
+<h2 id="citations-from-zotero" class="anchored">Citations from Zotero</h2>
+<p><a href="https://zotero.org">Zotero</a> is a popular free and open source reference manager. If you use Zotero, you can also insert citations directly from your Zotero libraries. If you have Zotero installed locally it’s location will be detected automatically and citations from your main library (<strong>My Library</strong>) will be available:</p>
+<p><img src="images/visual-editing-citations-zotero-browse.png" class="illustration" width="918"></p>
+<p>Not that while they aren’t enabled by default, you can also insert citations from Zotero <a href="#group-libraries">Group Libraries</a> (see the next section for details).</p>
+<p>Zotero references will also show up automatically in completions:</p>
+<p><img src="images/visual-editing-citation-completions.png" width="426"></p>
+<p>Items from Zotero will appear alongside items from your bibliography with a small “Z” logo juxtaposed over them. If you insert a citation from Zotero that isn’t already in your bibliography then it will be automatically added to the bibliography.</p>
+<p>If you are running both RStudio and Zotero on your desktop, then no additional configuration is required for connecting to your Zotero library. If however you using RStudio Server and/or want to access your Zotero library over the web, then a few more steps are required (see the <a href="https://rstudio.github.io/visual-markdown-editing/#/citations?id=zotero-web-api">Zotero Web API</a> documentation for details).</p>
+<h3 id="group-libraries" class="anchored">Group Libraries</h3>
+<p><a href="https://www.zotero.org/support/groups">Zotero Groups</a> provide a powerful way to share collections with a class or work closely with colleagues on a project. By default, Zotero Group Libraries are not included in the <strong>Insert Citation</strong> dialog or citation completions. However, there are options available to use group libraries at a global, per-project, or per-document level.</p>
+<p>For example, here we specify a project-level option to use the <em>Reproducible Research Series (Year 1)</em> group library:</p>
+<p><img src="images/visual-editing-citation-zotero-group.png" class="illustration" width="543"></p>
+<p>You can also specify one or more libraries within YAML. For example:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"Reproducible Research"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">zotero</span><span class="kw">:</span><span class="at"> </span><span class="st">"Reproducible Research Series (Year 1)"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Note that you can also turn off Zotero entirely for a document using <code>zotero: false</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"Reproducible Research"</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">zotero</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2 id="citations-from-dois" class="anchored">Citations from DOIs</h2>
+<p>Use the <strong>From DOI</strong> pane of the <strong>Insert Citation</strong> dialog to insert a citation based on a <a href="https://www.doi.org/">DOI</a> (e.g that you have retrieved from a PubMed or other search):</p>
+<p><img src="images/visual-editing-citation-insert-doi.png" width="918"></p>
+<p>If you are using markdown syntax, you can also paste a DOI after the <code>[@</code> and it will be looked up:</p>
+<p><img src="images/visual-editing-citations-doi.png" width="700"></p>
+<p>Once you’ve confirmed that it’s the correct work (and possibly modified the suggested ID), the citation will be inserted into the document and an entry for the work added to your bibliography.</p>
+<h2 id="citations-from-search" class="anchored">Citations from Search</h2>
+<p>Use the <strong>Crossref</strong>, <strong>DataCite</strong>, and <strong>PubMed</strong> panes of the <strong>Insert Citation</strong> dialog to search one of those services for a citation:</p>
+<p><img src="images/visual-editing-citations-crossref.png" class="illustration" width="918"></p>
+<p>Items inserted from a search will automatically be added to your bibliography.</p>
+<p>Note that for PubMed queries you can use the full supported query syntax. For example, this query searches on the author and title fields: <code>Peterson[Author] AND Embolism[Title]</code>. You can learn more about building PubMed queries here: <a href="https://pubmed.ncbi.nlm.nih.gov/advanced/" class="uri">https://pubmed.ncbi.nlm.nih.gov/advanced/</a>.</p>
+<h2 id="try-it-out" class="anchored">Try it out!</h2>
+<p>You can try out the new features from this blog series by installing the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio 1.4 Preview Release</a>. If you do, we very much welcome your feedback on our <a href="https://community.rstudio.com/c/rstudio-ide">community forum</a>. Complete documentation for using citations can be found at <a href="https://rstudio.github.io/visual-markdown-editing/#/citations" class="uri">https://rstudio.github.io/visual-markdown-editing/#/citations</a>.</p>
+<style type="text/css">
+kbd {
+  display: inline-block;
+  text-align: center;
+  padding: 0em 0.4em;
+  border: 1px solid hsl(113, 0%, 89%);
+  border-radius: 4px;
+  background: hsl(113, 0%, 97%);
+}
+.illustration {
+  border: 1px solid rgb(230, 230, 230);
+  padding: 6px;
+}
+.citation {
+  color: blue;
+}
+</style>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

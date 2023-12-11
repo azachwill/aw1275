@@ -1,0 +1,363 @@
+---
+title: "Using R in Production with Posit Connect: Deploying Models as APIs for Customer-Facing Applications"
+date: '2023-05-31'
+slug: using-r-in-production-with-posit-connect
+tags:
+  - connect
+authors:
+  - Isabella Velásquez
+description: Description here.
+alttext: Add alt text for header image.
+blogcategories:
+  - Industry
+events: blog
+---
+
+Businesses continually seek ways to use their data to inform decision-making and enhance customer experiences. One powerful approach is the integration of prescriptive analytics models into customer-facing applications. By equipping customers with real-time recommendations, businesses empower them to make optimal product choices, leading to increased satisfaction and loyalty.
+
+PING, a prominent sports equipment manufacturing company, delivers custom, data-driven experiences through their cutting-edge tool, [Ballnamic](https://ballfitting.com/). They use advanced technology like robot capture, human capture, and on-course data to develop models to optimize, predict, and provide insights. These models power Ballnamic's backend. Existing or prospective customers can use the tool to receive personalized product suggestions that improve their golf performance.
+
+To promote data-driven decision-making within the company, the data science team relies on the versatile capabilities of [Shiny](https://shiny.posit.co/) apps. Data scientists use Shiny apps to build interactive web apps and dashboards. Shiny also excels as a prototyping tool by enabling rapid iteration of models. Once the data scientists finish their analyses, they publish the apps on [Posit Connect](https://posit.co/products/enterprise/connect/), allowing colleagues from different departments to conveniently access and review the results. This collaborative approach enables teams outside of data science to use data to inform fitting philosophy, club design, and other critical business decisions.
+
+However, once PING decided to offer a public-facing web service, the data scientists had to consider new project requirements. Their existing process for cleaning, modeling, visualizing, and reporting data using R worked well for internal projects. But now, they needed to adjust their workflow to create models that could effectively support a revenue-generating tool on a website that didn't use R.
+
+A significant challenge arises when data scientists need to share timely and dependable model results with a web development team. Web developers may not be familiar with R. Although they can review model results in a Shiny app, they need a streamlined process for extracting those results. Furthermore, the outputs must be in a compatible format that can easily integrate with a website's user interface.
+
+A manual process, such as handing off CSVs, is painful, risky, and time-consuming. Whenever updates are needed, data scientists have to go through the repetitive cycle of downloading the CSV, sharing it, and notifying their colleagues about the new file. It's easy to make mistakes during this process, as it's challenging to keep track of the most up-to-date version. Data scientists must ensure the website is promptly updated to reflect any changes in the data or the model. To deliver models ready for "prime time", the data science team must carefully consider all these details.
+
+PING found their solution by leveraging their [Posit Connect](https://posit.co/products/enterprise/connect/) server to host Application Programming Interfaces (APIs) as well as Shiny apps. An API is a flexible and interoperable tool that is widely used to pull information into websites. Using the [plumber package](https://www.rplumber.io/), data scientists using R can create a web API by annotating their existing R source code with special comments. This approach enables them to use their preferred language to share model results in a format that works with websites.
+
+After a data scientist creates an API using the plumber package in R, Posit Connect serves as a hosting platform for the API in a production environment. Connect seamlessly integrates with the rest of the data science workflow; data scientists can publish to Connect directly in RStudio. Connect's platform also allows for authentication, granting access to specific users. Publishers have the flexibility to adjust run-time configurations based on usage and traffic, ensuring that the model remains operational and responsive. Furthermore, Connect simplifies the distribution of outputs to intended users. For PING, sharing an API between teams is as simple as sharing a URL.
+
+Thanks to plumber and Posit products, PING's data science team has the necessary tools to use R in production. They are able to deliver accurate, streamlined, and automated model results.
+
+By implementing this workflow, PING effectively closed the divide between their data science team and end-users. Customers are equipped to make informed decisions through the app, leading to improved product choices and an enhanced golfing experience. We invite you to delve deeper into PING's remarkable data transformation journey by visiting our page, ["A Game of Numbers: Democratizing golf through data insights"](https://posit.co/about/customer-stories/ping/).
+
+![](images/diagram.jpg){fig-alt="A diagram showing the PING's team data workflow from data collection to a relational database to modeling and visualizing to creating R Markdown and Shiny apps, that get sent to the PING team for decision making, and APIs that get sent to the web dev team for developing customer-facing apps."}
+
+Successfully integrating prescriptive analytics into customer-facing apps is a valuable advantage when it comes to gaining a competitive edge. Data scientists can achieve this by adopting a streamlined workflow that combines R and Posit products. These robust tools enable teams to collaborate across departments, enabling the company to provide customers with personalized experiences driven by data.
+
+In this blog post, we will provide a simplified example to guide you through the step-by-step process of creating an API in RStudio and explore the steps involved in deploying and sharing it on Posit Connect. The code for this post can be found on [GitHub](https://github.com/rstudio-marketing/using-r-in-prod).
+
+## Identify Data Sources
+
+Suitable data sources play a crucial role in determining modeling approaches. These sources can range from databases and APIs to external datasets or even manually entered data. At PING, their data scientists have access to a diverse range of valuable information, including human/robot capture and on-course data. These data sets come in different formats, such as JSON, XML, and CSVs.
+
+Relational databases are commonly used for storing frequently updated data, especially when dealing with various file types. They offer a convenient way to link important information, such as golf club types or player data, with the stored variables.
+
+Let's consider an example where we want to develop an application that assists users in selecting golf balls that maximize ball flight distance. For this walkthrough, we have dummy data stored in a PostgreSQL database on [bit.io](https://bit.io/ivelasq3/elements?view=tables#ivelasq3%2Felements/golf-dat):
+
+![](images/database.png){fig-alt="A database containing 50 rows of golf ball data, variables are iron, material, dimples, diameter, and thickness."}
+
+The database contains the following variables:
+
+| Column    | Description                                                      |
+|-----------------|-------------------------------------------------------|
+| Material  | The golf ball core material: Liquid or Tungsten |
+| Diameter  | The golf ball core diameter: 118 or 156         |
+| Dimples   | The number of dimples: 392 or 422         |
+| Thickness | The golf ball cover thickness: 0.03 or 0.06 |
+| Iron      | The golf ball flight distance for 5-iron golf club |
+
+Now that we have our data in a database, we can access it with R in RStudio.
+
+## Extract-transform-load (ETL) into RStudio on Posit Workbench
+
+RStudio provides [several options](https://solutions.posit.co/connections/db/getting-started/database-queries/) to connect to shared resources such as databases or mounted file systems. For Posit Workbench customers, we offer [Posit Professional ODBC Drivers](https://docs.posit.co/pro-drivers/install/), which provide connections to some of the most popular databases and use them in a production environment.
+
+R packages such as DBI, dbplyr, and odbc allow us to query databases with R. Let's use the DBI package to connect to our database:
+
+```{r}
+#| warning: false
+#| message: false
+# Install these packages if you have not already
+# install.packages(c('DBI', 'RPostgres', 'tidyverse', 'tidymodels', 'plumber'))
+
+library(dplyr)
+conflicted::conflict_prefer("select", "dplyr")
+
+con <- DBI::dbConnect(
+  RPostgres::Postgres(),
+  dbname = 'ivelasq3/elements',
+  host = 'db.bit.io',
+  port = 5432,
+  user = 'ivelasq3_demo_db_connection',
+  password = Sys.getenv('BITIO_KEY') # insert your password here
+)
+```
+
+Now, let's use the dbplyr package. The dbplyr package allows you to query databases with dplyr syntax, so you do not have to switch between R and SQL to explore the data. However, we'll be working solely in R for this walkthrough. We can use the `collect()` function to download our data into a tibble.
+
+```{r}
+golf_dat <-
+  tbl(con, dbplyr::ident_q('"public"."golf_dat"')) |>
+  collect()
+
+golf_dat
+```
+
+We have accessed our golf ball data directly from our database in RStudio. To ensure that this data remains up-to-date, we can [schedule an R Markdown or Quarto document in Posit Connect](https://docs.posit.co/connect/user/scheduling/). Scheduling allows the document to run regularly and consistently. As new or updated data enters the database, the document can execute the necessary code to retrieve and save the dataset. It can also rerun our model with the new data, ensuring the results are always based on the latest available data.
+
+## Tidy and visualize with the tidyverse
+
+Once we have our data in R, the next step is to clean and wrangle it. It's important to note that the variables `diameter`, `dimples`, and `thickness` are currently stored as quantitative values. However, they represent dichotomous variables with two distinct categories. To ensure accuracy during the modeling phase, we need to convert these variables into factor variables. We can achieve this with the `mutate()` function from the dplyr package, which allows us to modify these specific columns accordingly.
+
+```{r}
+golf_dat_factor <-
+  golf_dat |>
+  dplyr::mutate(across(material:thickness, ~ as.factor(.x)))
+```
+
+Next, we need to [tidy the data](https://vita.had.co.nz/papers/tidy-data.pdf), which structures it in a way that works well with ggplot2. The `pivot_longer()` function from the tidyr package can help us rearrange the data into the right format.
+
+```{r}
+golf_dat_long <-
+  golf_dat_factor |>
+  tidyr::pivot_longer(cols = material:thickness)
+```
+
+It's critical to visualize the data and review the output at the onset of a data science project. This helps us identify any patterns or trends that immediately jump out to us. We can keep our observations in mind during the modeling phase.
+
+```{r}
+#| fig-alt: "Variables on the x-axis and golf ball flight distance on the y-axis. Boxplot showing distributions for diameter, dimples, material, and thickness."
+#| fig-align: "center"
+library(ggplot2)
+
+golf_dat_long |>
+  ggplot(aes(x = iron, y = value, fill = name)) +
+  geom_boxplot(alpha = 0.2,
+               color = "#555656") +
+  theme_minimal() +
+  facet_grid(cols = vars(name),
+             scales = "free",
+             switch = "both") +
+  xlab("5-iron golf club flight distance") +
+  theme(axis.title.x = element_blank(),
+        legend.position = "none") +
+  coord_flip()
+```
+
+## Model with tidymodels
+
+Now, let's move on to modeling. We will use the tidymodels framework, a collection of packages for modeling and machine learning using tidyverse principles.
+
+```{r}
+#| message: false
+#| warning: false
+library(tidymodels)
+```
+
+### Create a train-test split
+
+Tidymodels has convenient functions for creating train-test splits.
+
+```{r}
+set.seed(1234)
+
+golf_split <- initial_split(golf_dat_factor)
+golf_train <- training(golf_split)
+golf_test <- testing(golf_split)
+```
+
+### Preprocess the data with recipies
+
+Now, we can use [the recipes package](https://recipes.tidymodels.org/) to preprocess the data so that it can be used for modeling.
+
+* The `recipe()` function defines a sequence of steps to preprocess the data. We specify the outcome variable (`iron`) and the predictor variables (`.`, which stands for all other variables).
+* The `step_dummy()` function creates dummy variables for the predictor variables. Dummy variables are binary variables that are used to represent categorical variables in a regression model.
+
+```{r}
+golf_rec <-
+  recipe(iron ~ ., data = golf_train) |>
+  step_dummy(all_factor_predictors())
+```
+
+### Specify the model
+
+Next, we specify the linear regression model we want to use for our analysis. Given that we have qualitative predictors (categorical variables) and a quantitative outcome (continuous variable), a linear regression model is appropriate.
+
+```{r}
+golf_linear <- linear_reg()
+
+golf_wflow <- 
+  workflow() |>
+  add_model(golf_linear) |>
+  add_recipe(golf_rec)
+
+golf_fit <-
+  golf_wflow |>
+  fit(data = golf_train)
+```
+
+We can use the `extract_fit_parsnip()` function to extract various information and attributes from a fitted model object. By using the `tidy()` function, we can easily see our output to assess the significance of each predictor value.
+
+```{r}
+golf_fit |>
+  extract_fit_parsnip() |>
+  tidy()
+```
+
+### Make predictions with the model
+
+Now, we can assess the performance of our model by evaluating how well it performs on the test set.
+
+```{r}
+#| fig-alt: "Scatterplot of actual and predicted golf ball distances."
+#| fig-align: "center"
+linear_predictions <- 
+  predict(golf_fit, golf_test)
+  
+golf_results <-
+  bind_cols(predict(golf_fit, golf_train)) |>
+  bind_cols(golf_train |>
+              select(iron))
+  
+ggplot(golf_results, aes(x = iron, y = .pred)) +
+  geom_point(color = "#FA8128",
+             alpha = 0.5) +
+  geom_smooth(method = "lm",
+              color = "#1B909E") +
+  labs(y = "Predicted Distance", x = "Actual") +
+  coord_obs_pred() +
+  theme_minimal()
+```
+
+We can also check the metrics, such as root mean square error (RMSE).
+
+```{r}
+rmse(golf_results, truth = iron, estimate = .pred)
+```
+
+The estimation of RMSE for this model is `r round(rmse(golf_results, truth = iron, estimate = .pred)$.estimate, 2)`. Generally, an RMSE closer to 0 indicates better model performance. However, despite the current RMSE, we will proceed with our chosen model.
+
+If we want to input our own values and observe the predictions made by our model, we can use the `predict()` function. We provide the function with a tibble containing our desired input values to obtain the corresponding results. This allows us to explore and analyze the model's performance on specific inputs of interest.
+
+```{r}
+new_dat <-
+  tibble(
+    material = "Liquid",
+    dimples = "422",
+    thickness = "0.03",
+    diameter = "156"
+  )
+
+predict(golf_fit, new_dat)$.pred
+```
+
+Suppose we want to provide a user-friendly interface for anyone to input values for material, diameter, dimples, and thickness to predict the distance of a golf ball. In this case, we need an accessible solution that goes beyond RStudio. This is where an API becomes valuable. 
+
+By creating an API, we can make our model accessible to a wider audience by integrating it with other tools. Users can input their desired variables using the API, allowing them to receive predictions tailored to their specific inputs.
+
+## Turn our model into an API with plumber
+
+We can use the plumber package to convert our model into an API that can be accessed outside of R. As mentioned earlier, the process involves adding special comments with `#*` to our R code to transform it into an API. For instance, a `plumber.R` file might have the following structure:
+
+```{r}
+#| eval: false
+library(plumber)
+library(tidyverse)
+library(tidymodels)
+
+# For brevity, I am reading a CSV here rather than pulling from the database.
+golf_dat <-
+  readr::read_csv("~/R/ping-story/data/processed/golf_dat.csv")
+
+golf_dat_factor <-
+  golf_dat |>
+  dplyr::mutate(across(material:thickness, ~ as.factor(.x)))
+
+set.seed(1234)
+
+golf_split <- initial_split(golf_dat_factor)
+golf_train <- training(golf_split)
+golf_test <- testing(golf_split)
+
+golf_rec <-
+  recipe(iron ~ ., data = golf_train) |>
+  step_dummy(all_factor_predictors()) |>
+  prep(training = golf_train)
+
+#* @apiTitle 5-iron golf club flight distance prediction
+#* Predict the distance of a ball based on its characteristics
+#* @param material material of the ball
+#* @param dimples number of dimples
+#* @param diameter diameter of the ball
+#* @param thickness thickness of the ball
+#* @get /iron
+
+function(material, dimples, diameter, thickness) {
+  new_dat <- tibble(material, dimples, diameter, thickness)
+  
+  golf_linear <- linear_reg()
+  
+  golf_wflow <-
+    workflow() |>
+    add_model(golf_linear) |>
+    add_recipe(golf_rec)
+  
+  golf_fit <-
+    golf_wflow |>
+    fit(data = golf_train)
+  
+  iron <-
+    predict(golf_fit, new_dat)$.pred
+  
+}
+```
+
+Now we can run (or "plumb") the API:
+
+```{r}
+#| eval: false
+pr("api/plumber.R") |>
+  pr_run(port = 8000)
+```
+
+When we run the API with `pr()`, it opens an interactive user interface that allows us to explore and inspect the available endpoints. The interface gives us the opportunity to input various values and observe the corresponding predicted outcomes. 
+
+By trying out different values, we can experiment with different inputs to assess the model's performance and gain insights into the predictions for different scenarios.
+
+<center>
+<script src="https://fast.wistia.com/embed/medias/eserbq0pbb.jsonp" async></script><script src="https://fast.wistia.com/assets/external/E-v1.js" async></script><div class="wistia_embed wistia_async_eserbq0pbb" style="height:387px;position:relative;width:640px"><div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;"><img src="https://fast.wistia.com/embed/medias/eserbq0pbb/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;" /></div></div>
+</center>
+
+We have successfully created our API! Now, the next question is: How can we share it with others or use it in other applications?
+
+## Host APIs on Posit Connect
+
+Posit Connect is a commercial publishing platform that enables R developers to easily publish various R content types, including Plumber APIs. Posit Connect automatically manages an API's dependent packages and files and recreates an environment closely mimicking the local development environment on the server.
+
+We can publish an API to Connect directly from RStudio:
+
+<center>
+<script src="https://fast.wistia.com/embed/medias/lzr8c0l504.jsonp" async></script><script src="https://fast.wistia.com/assets/external/E-v1.js" async></script><div class="wistia_embed wistia_async_lzr8c0l504" style="height:360px;position:relative;width:640px"><div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;"><img src="https://fast.wistia.com/embed/medias/lzr8c0l504/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;" /></div></div>
+</center>
+<br>
+Once we have created our API, we can share it with others or integrate it into other applications or websites.
+
+* We can provide the URL of our API to others, allowing them to directly access and interact with it. You can access this walkthrough's API on our demo server: [https://colorado.posit.co/rsc/golf-plumber-api/](https://colorado.posit.co/rsc/golf-plumber-api/)
+* The plumber package automatically creates comprehensive documentation that explains the available endpoints, input parameters, and expected responses. We can provide this documentation to guide others on how to use the API.
+* Our API can be integrated into other applications or systems by incorporating the API endpoints and making HTTP requests to retrieve predictions or send data.
+
+By leveraging R and Posit products in an end-to-end workflow, we have successfully transformed our model into an accessible tool that can be used outside of R. A broader audience can benefit from our model's insights and use the information to inform decision-making.
+
+One thing to note is that our model is predictive. Prescriptive models, on the other hand, go beyond predicting future outcomes.  These models consider factors like limitations, preferences, and optimization criteria to provide practical insights and offer suggestions for achieving a specific outcome.
+
+With Ballnamic, the PING team takes employ different techniques to optimize suggestions based on predefined objectives. By adding context and expertise to their models, PING enhances the decision-making process and helps users make informed choices with concrete recommendations.
+
+## Put R in production with Posit
+
+When data scientists combine R with the Posit platform, they can do amazing things. The seamless integration of R and Posit empowers data scientists to bring their models to the forefront, making them accessible and actionable for a wider audience. Data scientists can confidently deliver their R-based solutions, helping their organization make data-driven decisions and improve customer experiences.
+
+We are excited to be a part of your R in production journey. Our sales team is dedicated to providing you with the information and support you need to make the most of your data workflow. [Schedule a time to chat here](https://posit.co/schedule-a-call/?booking_calendar__c=RSC_Demo).
+
+### Enhance your R skills
+
+You can explore several workshops at [posit::conf(2023)](https://posit.co/conference/) directly related to the topics discussed in this post. These workshops provide valuable insights and hands-on experiences to help you dive deeper into the integration of R with Posit products, deploying models, and sharing results. For more details on the workshops available at posit::conf(2023), visit [this blog post](https://pos.it/conf-workshops).
+
+* [Data Science Workflows with Posit Tools — R Focus](https://www.youtube.com/watch?v=hiZQmnx8RXo)
+* [Introduction to tidymodels](https://www.youtube.com/watch?v=NTtcTF2tFEA&list=PL9HYL-VRX0oROlETlHRDAt0FzqnfkoG84&index=17)
+* [Advanced tidymodels](https://www.youtube.com/watch?v=-n9G6YTCHh4&list=PL9HYL-VRX0oROlETlHRDAt0FzqnfkoG84&index=1)
+* [Deploy and Maintain Models with Vetiver](https://www.youtube.com/watch?v=jwbmxVuo63M)
+
+Don't miss out on this opportunity to expand your knowledge and skills in leveraging R and Posit for data-driven success. [Register today!](https://reg.conf.posit.co/flow/posit/positconf23/reg/login)

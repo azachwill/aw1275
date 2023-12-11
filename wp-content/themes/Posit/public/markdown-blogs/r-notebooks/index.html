@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2016-10-05">
+
+<title>R Notebooks</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">R Notebooks</h1>
+
+<p class="date">2016-10-05</p>
+</header>
+
+<p>Today we’re excited to announce <a href="https://rmarkdown.rstudio.com/r_notebooks.html">R Notebooks</a>, which add a powerful notebook authoring engine to <a href="https://rmarkdown.rstudio.com/">R Markdown</a>. Notebook interfaces for data analysis have compelling advantages including the close association of code and output and the ability to intersperse narrative with computation. Notebooks are also an excellent tool for teaching and a convenient way to share analyses.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2016/09/screen-shot-2016-09-21-at-3-42-44-pm.png" class="img-fluid"></p>
+<p></p><figcaption>screen-shot-2016-09-21-at-3-42-44-pm</figcaption><p></p>
+</figure>
+</div>
+<p>You can try out R Notebooks today in the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio Preview Release</a>.</p>
+<h2 id="interactive-r-markdown" class="anchored">Interactive R Markdown</h2>
+<p>As an authoring format, R Markdown bears many similarities to traditional notebooks like <a href="https://jupyter.org/">Jupyter</a> and <a href="http://beakernotebook.com/">Beaker</a>. However, code in notebooks is typically executed interactively, one cell at a time, whereas code in R Markdown documents is typically executed in batch.</p>
+<p>R Notebooks bring the interactive model of execution to your R Markdown documents, giving you the capability to work quickly and iteratively in a notebook interface without leaving behind the plain-text tools and production-quality output you’ve come to rely on from R Markdown.</p>
+
+
+R Markdown Notebooks Traditional Notebooks
+<table style="color:#808080;border:1px solid #d0d0d0;padding:2px;margin-top:15px;margin-bottom:15px;">
+<tbody>
+<tr></tr>
+<tr>
+<td style="text-align:left;">
+Plain text representation
+</td>
+<td style="color:#000000;text-align:center;">
+✓
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Same editor/tools used for R scripts
+</td>
+<td style="color:#000000;text-align:center;">
+✓
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Works well with version control
+</td>
+<td style="color:#000000;text-align:center;">
+✓
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Focus on production output
+</td>
+<td style="color:#000000;text-align:center;">
+✓
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Output inline with code
+</td>
+<td style="color:#000000;text-align:center;">
+✓
+</td>
+<td style="color:#000000;text-align:center;">
+✓
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Output cached across sessions
+</td>
+<td style="color:#000000;text-align:center;">
+✓
+</td>
+<td style="color:#000000;text-align:center;">
+✓
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Share code and output in a single file
+</td>
+<td style="color:#000000;text-align:center;">
+✓
+</td>
+<td style="color:#000000;text-align:center;">
+✓
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Emphasized execution model
+</td>
+<td style="color:#000000;text-align:center;">
+Interactive &amp; Batch
+</td>
+<td style="color:#000000;text-align:center;">
+Interactive
+</td>
+</tr>
+</tbody>
+
+</table>
+<p>This video provides a bit more background and a demonstration of notebooks in action:</p>
+<p>[youtube https://www.youtube.com/watch?v=zNzZ1PfUDNk&amp;w=560&amp;h=315]</p>
+<h2 id="iterate-quickly" class="anchored">Iterate Quickly</h2>
+<p>In a typical R Markdown document, you must re-knit the document to see your changes, which can take some time if it contains non-trivial computations. R Notebooks, however, let you run code and see the results in the document immediately. They can include just about any kind of content R produces, including console output, plots, data frames, and interactive <a href="http://www.htmlwidgets.org/">HTML widgets</a>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2016/09/screen-shot-2016-09-20-at-4-16-47-pm.png" class="img-fluid"></p>
+<p></p><figcaption>screen-shot-2016-09-20-at-4-16-47-pm</figcaption><p></p>
+</figure>
+</div>
+<p>You can see the progress of the code as it runs:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2016/09/screen-shot-2016-09-21-at-10-52-02-am.png" class="img-fluid"></p>
+<p></p><figcaption>screen-shot-2016-09-21-at-10-52-02-am</figcaption><p></p>
+</figure>
+</div>
+<p>You can preview the results of individual inline expressions, too:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2016/09/notebook-inline-output.png" class="img-fluid"></p>
+<p></p><figcaption>notebook-inline-output</figcaption><p></p>
+</figure>
+</div>
+<p>Even your LaTeX equations render in real-time as you type:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2016/09/notebook-mathjax.png" class="img-fluid"></p>
+<p></p><figcaption>notebook-mathjax</figcaption><p></p>
+</figure>
+</div>
+<p>This focused mode of interaction doesn’t require you to keep the console, viewer, or output panes open. Everything you need is at your fingertips in the editor, reducing distractions and helping you concentrate on your analysis. When you’re done, you’ll have a formatted, reproducible record of what you’ve accomplished, with plenty of context, perfect for your own records or sharing with others.</p>
+<h2 id="batteries-included" class="anchored">Batteries Included</h2>
+<p>R Notebooks can run more than just R code. You can run chunks <a href="https://rmarkdown.rstudio.com/authoring_knitr_engines.html">written in other languages</a>, like Python, Bash, or C++ (Rcpp).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2016/09/screen-shot-2016-09-20-at-4-25-48-pm.png" class="img-fluid"></p>
+<p></p><figcaption>screen-shot-2016-09-20-at-4-25-48-pm</figcaption><p></p>
+</figure>
+</div>
+<p>It’s even possible to run SQL directly:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2016/09/notebook-sql.png" class="img-fluid"></p>
+<p></p><figcaption>notebook-sql</figcaption><p></p>
+</figure>
+</div>
+<p>This makes an R Notebook an excellent tool for orchestrating a reproducible, end-to-end data analysis workflow; you can easily ingest data using your tool of choice, and share data among languages by using packages like <a href="https://cran.r-project.org/web/packages/feather/index.html">feather</a>, or ordinary CSV files.</p>
+<h2 id="reproducible-notebooks" class="anchored">Reproducible Notebooks</h2>
+<p>While you can run chunks (and even individual lines of R code!) in any order you like, a fully reproducible document must be able to be re-executed start-to-finish in a clean environment. There’s a built-in command to do this, too, so it’s easy to test your notebooks for reproducibility.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2016/09/screen-shot-2016-09-21-at-3-52-34-pm.png" class="img-fluid"></p>
+<p></p><figcaption>screen-shot-2016-09-21-at-3-52-34-pm</figcaption><p></p>
+</figure>
+</div>
+<h2 id="rich-output-formats" class="anchored">Rich Output Formats</h2>
+<p>Since they’re built on R Markdown, R Notebooks work seamlessly with other R Markdown output types. You can use any existing R Markdown document as a notebook, or render (knit) a notebook to any R Markdown output type.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2016/09/notebook-yaml.png" class="img-fluid"></p>
+<p></p><figcaption>notebook-yaml</figcaption><p></p>
+</figure>
+</div>
+<p>The same document can be used as a notebook when you’re quickly iterating on ideas and later rendered to a wholly different format for publication – no duplication of code, data, or output required.</p>
+<h2 id="share-and-publish" class="anchored">Share and Publish</h2>
+<p>R Notebooks are easy to share with collaborators. Because they’re plain-text files, they work well with version control systems like Git. Your collaborators don’t even need RStudio to edit them, since notebooks can be <a href="https://rmarkdown.rstudio.com/r_notebook_format.html">rendered in the R console</a> using the open source <a href="https://cran.r-project.org/web/packages/rmarkdown/index.html">rmarkdown</a> package.</p>
+<p>Rendered notebooks can be previewed right inside RStudio:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2016/09/notebook-preview.png" class="img-fluid"></p>
+<p></p><figcaption>notebook-preview</figcaption><p></p>
+</figure>
+</div>
+<p>While the notebook preview looks similar to a rendered R Markdown document, the notebook preview does not execute any of your R code chunks; it simply shows you a rendered copy of the markdown in your document along with the most recent chunk output. Because it’s very fast to generate this preview (again, no R code is executed), it’s generated every time you save the R Markdown document.</p>
+<p>The generated HTML file has the special extension <em>.nb.html</em>. It is self-contained, free of dependencies, and can be viewed locally or published to any static web hosting service.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2016/09/screen-shot-2016-09-14-at-12-12-35-pm.png" class="img-fluid"></p>
+<p></p><figcaption>screen-shot-2016-09-14-at-12-12-35-pm</figcaption><p></p>
+</figure>
+</div>
+<p>It also includes a bundled copy of the R Markdown source file, so it can be seamlessly opened in RStudio to resume work on the notebook with all output intact.</p>
+<h2 id="try-it-out" class="anchored">Try It Out</h2>
+<p>To try out R Notebooks, you’ll need to download the latest <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio Preview Release</a>.</p>
+<p>You can find documentation on notebook features on the <a href="https://rmarkdown.rstudio.com/r_notebooks.html">R Notebooks</a> page on the R Markdown website, and we’ve also published a video tutorial in our <a href="https://www.rstudio.com/resources/webinars/introducing-notebooks-with-r-markdown/">R Notebooks Webinar</a>.</p>
+<p>We believe the R Notebook will become a powerful new addition to your toolkit. Give it a spin and let us know what you think!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

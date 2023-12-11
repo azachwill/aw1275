@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-01-18">
+<meta name="description" content="In this blog post, we highlight three speakers from the RStudio Enterprise Community Meetup who share packages and tools to supercharge your R skills.">
+
+<title>Three Videos to Supercharge Your R Skills</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Three Videos to Supercharge Your R Skills</h1>
+
+<p class="date">2022-01-18</p>
+</header>
+
+<p>Image by Rachael Dempsey</p>
+<p>We have many great videos on the RStudio YouTube channel. You can watch folks discuss <a href="https://youtu.be/E887K1au5ug" target="_blank">their data science stories and processes</a>, learn about <a href="https://youtu.be/5gqksthQ0cM" target="_blank">packages</a> and <a href="https://youtu.be/_XNKSEQTo30" target="_blank">products</a>, and hear <a href="https://youtu.be/IkqItgPSPro" target="_blank">inspiring examples from others in the community</a>.</p>
+<p>With hundreds of videos, you have hours of content to watch! To get you started, we want to highlight three videos about R tools that will take your R skills to another level, whether for work, fun, or general learning. Happy watching!</p>
+<p><strong>1. Business Reports with R Markdown by Christophe Dervieux</strong></p>
+<p>Want to learn how to style your R Markdown reports to tailor them for your organization? Christophe Dervieux shows us various options to customize our HTML output:</p>
+<ul>
+<li><strong>Using R Markdown’s built-in support for Sass:</strong> R Markdown now has built-in support for Sass through the <a href="https://rstudio.github.io/sass/" target="_blank">sass</a> R package. Sass is a CSS extension language that helps create CSS rules in more flexible ways than with plain CSS. You can directly supply .scss files to <code>css</code> arguments of your html document. It’s easier to work with CSS rules and variables to apply your style guidelines.</li>
+<li><strong>Going further with bslib:</strong> The <a href="https://rstudio.github.io/bslib/" target="_blank">bslib</a> package provides tools for customizing Bootstrap themes directly from R. R Markdown’s built-in support allows you to customize your documents without CSS or Sass. You can start with pre-packaged themes or create a custom look.</li>
+</ul>
+<p>Christophe also discusses how to develop templates for Office outputs, create PDFs from HTML using the <a href="https://github.com/rstudio/pagedown" target="_blank">pagedown</a> R package, and more. Watch Christophe’s full talk here:</p>
+<center>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/gQ9he9dyfGs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="">
+</iframe>
+</center>
+<p><strong>2. Exploratory Data Analysis by Priyanka Gagneja</strong></p>
+<p>Exploratory data analysis, or EDA, is a crucial step of every data science project. However, it can be repetitive and time-consuming.</p>
+<p>Priyanka Gagneja shares packages that have helped her automate her EDA process. She walks through:</p>
+<ul>
+<li><strong>Starting your EDA, feature engineering, and data reporting</strong> using <a href="https://cran.r-project.org/web/packages/DataExplorer/vignettes/dataexplorer-intro.html" target="_blank">DataExplorer</a>.</li>
+<li><strong>Checking data quality</strong> with <a href="https://cran.r-project.org/web/packages/dataReporter/index.html" target="_blank">DataReporter</a>.</li>
+<li><strong>Calculating summary statistics</strong> using <a href="https://cran.r-project.org/web/packages/skimr/vignettes/skimr.html" target="_blank">skimr</a>.</li>
+</ul>
+<p>Once you have completed your EDA, then it’s time to start looking at patterns and relationships. Priyanka demonstrates:</p>
+<ul>
+<li><strong>Creating pipeable pivot tables</strong> using <a href="https://rdrr.io/cran/rpivotTable/man/rpivotTable.html" target="_blank">rPivotTable</a>.</li>
+<li><strong>Visualizing your data</strong> with <a href="https://cran.r-project.org/web/packages/esquisse/vignettes/get-started.html" target="_blank">esquisse</a>.</li>
+<li><strong>Generating plots and reports</strong> with <a href="https://cran.r-project.org/web/packages/chronicle/index.html" target="_blank">chronicle</a>.</li>
+</ul>
+<p>Learn about these packages and more in her talk:</p>
+<center>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/qvFeaPRgOns" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="">
+</iframe>
+</center>
+<p><strong>3. Scaling Spreadsheets with R by Nathan Stephens</strong></p>
+<p>We use Excel spreadsheets for the same reasons we use R: to wrangle, transform, analyze, visualize, and communicate our data. However, it can be difficult to work in Excel if your data is large or your analysis is complicated. R, however, is an attractive alternative:</p>
+<ul>
+<li><strong>Increasing file size:</strong> While you start hitting the limits of Excel when you move into gigabytes of data, R can handle those files very easily.</li>
+<li><strong>Handling complexity:</strong> Things quickly become complicated in Excel with Visual Basic scripts, various pivot tables, multiple spreadsheets, and so on. These can often be replaced by a simple R script.</li>
+</ul>
+<p>When would you start to think about using R rather than Excel? Nathan Stephens shows us that boundary where you might agree that R is the right tool for the job.</p>
+<center>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/yb_mBJz3iSc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="">
+</iframe>
+</center>
+<h2 id="learn-more" class="anchored">Learn More</h2>
+<p>We hope that you can apply these skills to your future projects. There is a lot more to enjoy!</p>
+<ul>
+<li>Interested in watching these webinars live? Join the <a href="https://www.meetup.com/RStudio-Enterprise-Community-Meetup/" target="_blank">RStudio Enterprise Community Meetup</a> to learn more from industry leaders on data science best practices and the capabilities of open-source software.</li>
+<li>Want to keep watching? Check out <a href="https://www.youtube.com/channel/UC3xfbCMLCw1Hh4dWop3XtHg" target="_blank">RStudio’s YouTube page</a> for more content from RStudio staff and others in the data science community.</li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

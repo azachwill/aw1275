@@ -1,0 +1,13 @@
+@layer utilities {
+    .dropdown-input {
+        @apply px-[24px] py-[8px] md:py-[18px] text-blue1/[.62] rounded-[4px] ring-1 ring-neutral-gray bg-neutral-light text-left body-md-regular;
+    }
+
+    .dropdown-modal [data-close-modal] svg g {
+        @apply stroke-blue1;
+    }
+
+    .dropdown-modal.open {
+        @apply z-50;
+    }
+}

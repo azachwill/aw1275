@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2019-01-17">
+
+<title>RStudio Connect 1.7.0</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Connect 1.7.0</h1>
+
+<p class="date">2019-01-17</p>
+</header>
+
+<p>RStudio Connect is the publishing platform for everything you create in R. In conversations with our customers, R users were excited to have a central place to share all their data products, but were facing a tough problem. Their colleagues working in Python didn’t have the same option, leaving their work stranded on their desktops. Today, we are excited to introduce the ability for data science teams to publish Jupyter Notebooks and mixed Python and R content to RStudio Connect.</p>
+<p>Connect 1.7.0 is a major release that also includes many other significant improvements, such as programmatic deployment and historical event data. We encourage existing customers to <a href="https://rstudio.com/products/connect/download-commercial">upgrade</a>.</p>
+<p>We also welcome anyone who has not yet experienced RStudio Connect to <a href="https://rstudio.com/products/connect/evaluation">try it today</a>!</p>
+<p></p>
+<h2 id="updates" class="anchored">Updates</h2>
+<h3 id="python-r-reticulated-apps-apis-and-reports" class="anchored">Python &amp; R: Reticulated Apps, APIs, and Reports</h3>
+<p>RStudio has often provided support for other languages frequently used with R. Earlier this year, we announced the <a href="https://rstudio.github.io/reticulate/">reticulate R package</a> and <a href="https://blog.rstudio.com/2018/10/09/rstudio-1-2-preview-reticulated-python">IDE support</a> for creating projects that use R and Python. Now, these projects are fully supported in RStudio Connect, as well. Whether you’re creating a reticulated Shiny app, a Plumber API that calls Python, or an R Markdown document that mixes Python and R, RStudio Connect will automatically re-create both the R and Python environments!</p>
+<p></p>
+<p>Note: Server administrators need to add a <a href="https://docs.rstudio.com/connect/1.6.11/admin/python.html">Python configuration</a> for RStudio Connect.</p>
+<h3 id="jupyter-notebooks" class="anchored">Jupyter Notebooks</h3>
+<p>Data science teams in the enterprise can include people who use RStudio, Jupyter Notebooks, or both. Now RStudio, Jupyter, and JupyterHub users can publish and share the data products they create every day in one convenient place. Jupyter Notebooks can be published to RStudio Connect using a <a href="https://docs.rstudio.com/rsconnect-jupyter">Jupyter extension</a>. Notebooks are published as static HTML files, or the notebook source can be published. When the source is included, RStudio Connect automatically restores the Python environment and the Jupyter Notebooks can be re-executed, emailed, and scheduled.</p>
+<h3 id="programmatic-deployment" class="anchored">Programmatic Deployment</h3>
+<p>As data products become critical to organizations, RStudio Connect users have requested more flexible deployment options. Enterprise workflows sometimes require approvals to publish to production environments. For example, content stored in Git may be published to separate QA or Production environments based on IT approvals.</p>
+<p>In RStudio Connect 1.7.0, we’ve added support for <a href="https://docs.rstudio.com/connect/1.7.0/user/cookbook.html#cookbook-deploying">programmatic deployment</a> in the <a href="https://docs.rstudio.com/connect/1.7.0/api/#content">RStudio Connect Server API</a>. These new APIs let your deployment engineers craft custom deployment workflows. We have created <a href="https://github.com/rstudio/connect-api-deploy-shiny">example scripts</a> showing how to use the content APIs to deploy a Shiny application.</p>
+<p></p>
+<h3 id="historical-event-data" class="anchored">Historical Event Data</h3>
+<p>RStudio Connect now <a href="https://docs.rstudio.com/connect/1.7.0/admin/historical-information.html#historical_events">collects and surfaces data</a> you can use to answer how often your data product is being viewed, whether it needs updating, and who is using it. For reports, dashboards, plots, and notebooks, RStudio Connect records “who, what, and when” for each visit. This data is available to publishers and admins through the <a href="https://docs.rstudio.com/connect/1.7.0/api/#instrumentation">Connect Server API</a>. We’ve created a <a href="https://github.com/sol-eng/connect-usage">sample dashboard</a> you can use out of the box or as a launch pad for your own analysis!</p>
+<p></p>
+<h3 id="security-authentication-changes" class="anchored">Security &amp; Authentication Changes</h3>
+<ul>
+<li><p><strong>Bundle Uploads</strong> Better protection against malicious bundle uploads that previously may have written outside the content directory.</p></li>
+<li><p><strong>Brute-force Protection</strong> A brute force attack protection has been added for interactive authentication attempts.</p></li>
+<li><p><strong>User Profiles</strong> Admins can now prevent users from editing their profiles for all authentication providers. Additionally, Connect better handles email values supplied by authentication providers, fixing a bug that would prevent users from logging in. See the <a href="http://docs.rstudio.com/connect/news">release notes</a> for details.</p></li>
+<li><p><strong>Audit Improvements</strong> All modifications to users and groups done via the <code>usermanager</code> utility are reported in the audit logs.</p></li>
+<li><p><strong>Unique Users</strong> RStudio Connect better enforces unique users. The <code>usermanager</code> utility has multiple updates, making it easier to fix broken user accounts.</p></li>
+<li><p><strong>Proxied Auth Improvements</strong> Installations using a custom authentication provider can provide <a href="https://docs.rstudio.com/connect/1.7.0/admin/authentication.html#authentication-proxy">complete user profiles through proxy headers</a>, removing the need for users or admins to update profiles manually or via the Connect Server API.</p></li>
+<li><p><strong>Programmatic Group Management</strong> The <a href="https://docs.rstudio.com/connect/1.7.0/api/#groups">Connect Server API</a> can be used to create and manage groups for installations using Password or OAuth2 authentication methods.</p></li>
+</ul>
+<h3 id="deprecations-breaking-changes" class="anchored">Deprecations &amp; Breaking Changes</h3>
+<ul>
+<li><p><strong>Breaking</strong> The deprecated <code>OAuth2.DiscoveryEndpoint</code> configuration value has been removed.</p></li>
+<li><p><strong>Deprecation</strong> The configuration setting <code>Password.UserInfoEditableBy</code> is deprecated in favor of <code>Authorization.UserInfoEditableBy</code>. Future releases will remove the setting entirely.</p></li>
+</ul>
+<p>Please review the <a href="https://docs.rstudio.com/connect/news">full release notes</a></p>
+<blockquote>
+<h4 id="upgrade-planning" class="anchored">Upgrade Planning</h4>
+<p>Please note the breaking changes and deprecations above. If you are interested in adding Python support (for Jupyter Notebooks or Reticulated Python &amp; R content), please follow the instructions to configure <a href="https://docs.rstudio.com/connect/1.7.0/admin/python.html">Python for RStudio Connect</a>. Upgrading to 1.7.0 from 1.6.10 can take upwards of ten minutes due to a data migration. If you are upgrading from an earlier version, be sure to consult the release notes for the intermediate releases, as well.</p>
+</blockquote>
+<p>If you haven’t yet had a chance to download and try <a href="https://rstudio.com/products/connect/">RStudio Connect</a>, we encourage you to do so. RStudio Connect is the best way to share all your data science work (Shiny apps, R Markdown documents, Jupyter Notebooks, plots, dashboards, Plumber APIs, etc.) with collaborators, colleagues, or customers.</p>
+<p>You can find more details or download a 45-day evaluation of the product at <a href="https://www.rstudio.com/products/connect/">https://www.rstudio.com/products/connect/</a>. Additional resources can be found below.</p>
+<ul>
+<li><a href="https://www.rstudio.com/products/connect/">RStudio Connect home page &amp; downloads</a></li>
+<li><a href="http://docs.rstudio.com/connect/admin/">RStudio Connect Admin Guide</a></li>
+<li><a href="http://docs.rstudio.com/connect/news/">Detailed news and changes between each version</a></li>
+<li><a href="https://www.rstudio.com/pricing/#ConnectPricing">Pricing</a></li>
+<li><a href="https://beta.rstudioconnect.com/connect/">An online preview of RStudio Connect</a></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

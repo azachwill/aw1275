@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-02-11">
+
+<title>RStudio 1.3 Preview: Real Time Spellchecking</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio 1.3 Preview: Real Time Spellchecking</h1>
+
+<p class="date">2020-02-11</p>
+</header>
+
+<p>As part of the upcoming 1.3 release of the RStudio IDE we are excited to show you a preview of the real time spellchecking feature that we’ve added.</p>
+<p>Prior to RStudio 1.3, spellchecking was an active process requiring the user to step word by word in a dialog. By integrating spellchecking directly into the editor we can check words as you’re typing them and are able to give suggestions on demand.</p>
+<p>As with the prior spellcheck implementation (that is still invoked with the toolbar button) the new spellchecking is fully Hunspell compatible and any previous custom dictionaries can be used.</p>
+<h2 id="interface-and-usage" class="anchored">Interface and usage</h2>
+<p>Using the new real time spellchecking is simple with a standard and familiar interface. A short period of time after typing in a saved file of a supported format (R Script, R Markdown, C++, and more) a yellow underline will appear under words that don’t pass the spellcheck of the loaded dictionary. Right click the word for suggestions, to ignore it, or to add it to your own local dictionary to be remembered for the future. The application will only check comments in code files and raw text in markdown files.</p>
+<p><img align="center" style="padding: 35px;" src="context_menu_example.png" alt="Context menu in C++ comment"></p>
+<p>In consideration of the domain specific language of RStudio users we have collected, and are constantly adding to, a <a href="https://github.com/rstudio/rstudio/blob/master/src/gwt/src/org/rstudio/studio/client/common/spelling/domain_specific_words.csv">whitelisted set of words</a> to reduce the noise of the spellcheck on initial usage. Sadly, <em>hypergeometric</em> and <em>reprex</em> are not yet listed in universal language dictionaries.</p>
+<h2 id="customization" class="anchored">Customization</h2>
+<p>The new spellcheck feature might not be for you, and that’s ok. If you don’t want your tools constantly questioning your spelling this feature is easy to turn off. Navigate to <strong>Tools -&gt; Global Options -&gt; Spelling</strong> and disable the “Use real time spellchecking” check box.</p>
+<p>If you are typing in another language or really insist that this section should be spelled <em>customisation</em> you can switch to a different dictionary with the same dropdown interface as RStudio 1.2. Both the manual and real time spellcheck options will load the same dictionary. If none of the dictionaries shipped with RStudio fit your needs you can add any Hunspell compatible dictionary by clicking the <em>Add…</em> button next to the list of custom dictionaries.</p>
+<p><img align="center" style="padding: 35px;" src="spellcheck_options.png" alt="Spellcheck Options Menu"></p>
+<h3 id="just-the-tip-of-the-iceberg" class="anchored">Just the tip of the iceberg</h3>
+<p>This is just a small sample of what’s to come in RStudio 1.3 and we’re excited to show you more of what we’ve been working hard on since 1.2 in the coming weeks. Stay tuned for more!</p>
+<p>You can download the new RStudio 1.3 Preview release to try it out yourself:</p>
+<p><a href="https://www.rstudio.com/products/rstudio/download/preview/">Download RStudio 1.3 Preview</a></p>
+<p>Feedback is welcome on the <a href="https://community.rstudio.com/c/rstudio-ide">RStudio IDE Community Forum</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

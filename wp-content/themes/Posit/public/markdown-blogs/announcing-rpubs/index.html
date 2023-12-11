@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2012-06-04">
+
+<title>Announcing RPubs: A New Web Publishing Service for R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Announcing RPubs: A New Web Publishing Service for R</h1>
+
+<p class="date">2012-06-04</p>
+</header>
+
+<p>Today we’re very excited to announce <a href="http://www.rpubs.com/">RPubs</a>, a free service that makes it easy to publish documents to the web from R. RPubs is a quick and easy way to disseminate data analysis and R code and do ad-hoc collaboration with peers.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="http://rpubs.com/jjallaire/friday-demo"><img src="https://rstudioblog.files.wordpress.com/2012/06/rpubs_document.png" class="img-fluid"></a></p>
+</figure>
+</div>
+<p>RPubs documents are based on <a href="http://rstudio.org/docs/authoring/using_markdown">R Markdown</a>, a new feature of knitr 0.5 and RStudio 0.96. To publish to RPubs within RStudio, you simply create an R Markdown document then click the <strong>Publish</strong> button within the HTML Preview window:</p>
+<p><img src="https://rstudioblog.files.wordpress.com/2012/06/publish_to_rpubs.png" class="img-fluid"></p>
+<p>RPubs documents include a moderated comment stream for feedback and dialog with readers, and can be updated with changes by publishing again from within RStudio.</p>
+<p>Note that you’ll only see the Publish button if you update to the latest version of RStudio (v0.96.230, <a href="http://www.rstudio.org/download">available for download</a> today).</p>
+<h2 id="the-markdown-package" class="anchored">The markdown package</h2>
+<p>RStudio has integrated support for working with R Markdown and publishing to RPubs, but we also want to make sure that no matter what tools you use it’s still possible to get the same results. To that end we’ve also been working on a new version of the <a href="http://cran.r-project.org/web/packages/markdown/index.html">markdown</a> package (v0.5, available now on CRAN).</p>
+<p>The markdown package provides a standalone implementation of R Markdown rendering that can be integrated with other editors and IDEs. The package includes a function to upload to RPubs, but is also flexible enough to support lots of other web publishing scenarios. We’ve been working with Jeff Horner on this and he has a more detailed write-up on the <a href="http://jeffreyhorner.tumblr.com/post/24404112057/announcing-the-r-markdown-package">capabilities of the markdown package</a> on his blog.</p>
+<h2 id="gallery-of-examples" class="anchored">Gallery of examples</h2>
+<p>We’ve also published a <a href="http://www.rpubs.com/gallery">gallery of example documents</a> on RPubs—the gallery illustrates some of the most useful techniques for getting the most out of R Markdown, and includes the following articles:</p>
+<ul>
+<li><p><a href="http://rpubs.com/gallery/equations">MathJax and Writing Equations</a></p></li>
+<li><p><a href="http://rpubs.com/gallery/googleVis">Dynamic Graphics with the googleVis Package</a></p></li>
+<li><p><a href="http://rpubs.com/gallery/options">Customizing Chunk Options</a></p></li>
+<li><p><a href="http://rpubs.com/gallery/cache">Caching Code Chunks</a></p></li>
+</ul>
+<p>Let us know what additional examples you’d like to see—we’ll be adding more in the weeks ahead.</p>
+<h2 id="section" class="anchored"></h2>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

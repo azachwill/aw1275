@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2015-05-26">
+
+<title>New Version of RStudio (v0.99) Available Now</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">New Version of RStudio (v0.99) Available Now</h1>
+
+<p class="date">2015-05-26</p>
+</header>
+
+<p>We’re pleased to announce that the final version of RStudio v0.99 is <a href="https://www.rstudio.com/ide/download">available for download</a> now. Highlights of the release include:</p>
+<ul>
+<li><p>A new <a href="https://support.rstudio.com/hc/en-us/articles/205175388-Using-the-Data-Viewer">data viewer</a> with support for large datasets, filtering, searching, and sorting.</p></li>
+<li><p>Complete overhaul of R <a href="https://support.rstudio.com/hc/en-us/articles/205273297-Code-Completion">code completion</a> with many new features and capabilities.</p></li>
+<li><p>The source editor now provides <a href="https://support.rstudio.com/hc/en-us/articles/205753617-Code-Diagnostics">code diagnostics</a> (errors, warnings, etc.) as you work.</p></li>
+<li><p>User customizable <a href="https://support.rstudio.com/hc/en-us/articles/204463668-Code-Snippets">code snippets</a> for automating common editing tasks.</p></li>
+<li><p><a href="https://blog.rstudio.com/2015/04/14/rstudio-v0-99-preview-tools-for-rcpp/">Tools for Rcpp</a>: completion, diagnostics, code navigation, find usages, and automatic indentation.</p></li>
+<li><p>Many additional <a href="https://blog.rstudio.com/2015/05/06/rstudio-v0-99-preview-more-editor-enhancements/">source editor improvements</a> including multiple cursors, tab re-ordering, and several new themes.</p></li>
+<li><p>An <a href="https://blog.rstudio.com/2015/02/23/rstudio-0-99-preview-vim-mode-improvements/">enhanced Vim mode</a> with visual block selection, macros, marks, and subset of : commands.</p></li>
+</ul>
+<p>There are also lots of smaller improvements and bug fixes across the product. Check out the <a href="https://www.rstudio.com/products/rstudio/release-notes/">v0.99 release notes</a> for details on all of the changes.</p>
+<h3 id="data-viewer" class="anchored">Data Viewer</h3>
+<p>We’ve completely overhauled the data viewer with many new capabilities including live update, sorting and filtering, full text searching, and no row limit on viewed datasets.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/05/screen-shot-2015-05-06-at-12-01-14-pm.png" class="img-fluid"></p>
+<p></p><figcaption>data-viewer</figcaption><p></p>
+</figure>
+</div>
+<p>See the <a href="https://support.rstudio.com/hc/en-us/articles/205175388-Using-the-Data-Viewer">data viewer documentation</a> for more details.</p>
+<h3 id="code-completion" class="anchored">Code Completion</h3>
+<p>Previously RStudio only completed variables that already existed in the global environment. Now completion is done based on source code analysis so is provided even for objects that haven’t been fully evaluated:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/05/screen-shot-2015-05-06-at-11-50-41-am.png" class="img-fluid"></p>
+<p></p><figcaption>completion-scopes</figcaption><p></p>
+</figure>
+</div>
+<p>Completions are also provided for a wide variety of specialized contexts including dimension names in [ and [[:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/05/screen-shot-2015-05-06-at-11-54-22-am.png" class="img-fluid"></p>
+<p></p><figcaption>completion-bracket</figcaption><p></p>
+</figure>
+</div>
+<h3 id="code-diagnostics" class="anchored">Code Diagnostics</h3>
+<p>We’ve added a new inline code diagnostics feature that highlights various issues in your R code as you edit.</p>
+<p>For example, here we’re getting a diagnostic that notes that there is an extra parentheses:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/04/screen-shot-2015-04-08-at-12-04-14-pm.png" class="img-fluid"></p>
+<p></p><figcaption>Screen Shot 2015-04-08 at 12.04.14 PM</figcaption><p></p>
+</figure>
+</div>
+<p>Here the diagnostic indicates that we’ve forgotten a comma within a shiny UI definition:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/04/screen-shot-2015-04-28-at-11-29-46-am.png" class="img-fluid"></p>
+<p></p><figcaption>diagnostics-comma</figcaption><p></p>
+</figure>
+</div>
+<p>A wide variety of diagnostics are supported, including optional diagnostics for code style issues (e.g.&nbsp;the inclusion of unnecessary whitespace). Diagnostics are also available for several other languages including C/C++, JavaScript, HTML, and CSS. See the <a href="https://support.rstudio.com/hc/en-us/articles/205753617-Code-Diagnostics">code diagnostics documentation</a> for additional details.</p>
+<h3 id="code-snippets" class="anchored">Code Snippets</h3>
+<p>Code snippets are text macros that are used for quickly inserting common snippets of code. For example, the <code>fun</code> snippet inserts an R function definition:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/04/screen-shot-2015-04-07-at-10-39-50-am.png" class="img-fluid"></p>
+<p></p><figcaption>Insert Snippet</figcaption><p></p>
+</figure>
+</div>
+<p>If you select the snippet from the completion list it will be inserted along with several text placeholders which you can fill in by typing and then pressing <strong>Tab</strong> to advance to the next placeholder:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/04/screen-shot-2015-04-07-at-10-44-39-am.png" class="img-fluid"></p>
+<p></p><figcaption>Screen Shot 2015-04-07 at 10.44.39 AM</figcaption><p></p>
+</figure>
+</div>
+<p>Other useful snippets include:</p>
+<ul>
+<li><p><code>lib</code>, <code>req</code>, and <code>source</code> for the library, require, and source functions</p></li>
+<li><p><code>df</code> and <code>mat</code> for defining data frames and matrices</p></li>
+<li><p><code>if</code>, <code>el</code>, and <code>ei</code> for conditional expressions</p></li>
+<li><p><code>apply</code>, <code>lapply</code>, <code>sapply</code>, etc. for the apply family of functions</p></li>
+<li><p><code>sc</code>, <code>sm</code>, and <code>sg</code> for defining S4 classes/methods.</p></li>
+</ul>
+<p>See the <a href="https://support.rstudio.com/hc/en-us/articles/204463668-Code-Snippets">code snippets documentation</a> for additional details.</p>
+<h3 id="try-it-out" class="anchored">Try it Out</h3>
+<p>RStudio v0.99 is <a href="https://www.rstudio.com/products/rstudio/download/">available for download</a> now. We hope you enjoy the new release and as always please <a href="https://support.rstudio.com">let us know</a> how it’s working and what else we can do to make the product better.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

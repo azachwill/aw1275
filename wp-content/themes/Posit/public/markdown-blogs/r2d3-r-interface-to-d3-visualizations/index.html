@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2018-10-05">
+
+<title>posit-blogs - r2d3 - R Interface to D3 Visualizations</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">r2d3 - R Interface to D3 Visualizations</h1>
+
+<p class="date">2018-10-05</p>
+</header>
+
+<blockquote>
+<p class="body-md-regular body-sm-regular">
+Please note that the information presented in this post reflects the package as it stood when initially released, and may now be outdated. For the most up-to-date information, kindly refer to <a href="https://rstudio.github.io/r2d3/" class="uri">https://rstudio.github.io/r2d3/</a>.
+</p>
+</blockquote>
+<p><img src="r2d3-hex.png" width="180" align="right" style="border: none; margin-left: 10px;"></p>
+<p>As part our series on new features in the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio v1.2 Preview Release</a>, we’re pleased to announce the <a href="https://rstudio.github.io/r2d3/">r2d3 package</a>, a suite of tools for using custom <a href="https://d3js.org/">D3 visualizations</a> with R.</p>
+<p>RStudio v1.2 includes several features to help optimize your development experience with <strong>r2d3</strong>. We’ll describe these features below, but first a bit more about the package. Features of <strong>r2d3</strong> include:</p>
+<ul>
+<li><p>Translating R objects into D3 friendly data structures</p></li>
+<li><p>Publishing D3 visualizations to the web</p></li>
+<li><p>Incorporating D3 scripts into <a href="https://rmarkdown.rstudio.com/">R Markdown</a> reports, presentations, and dashboards</p></li>
+<li><p>Creating interacive D3 applications with <a href="https://shiny.rstudio.com/">Shiny</a></p></li>
+<li><p>Distributing D3 based <a href="http://www.htmlwidgets.org">htmlwidgets</a> in R packages</p></li>
+</ul>
+<div style="clear: both">
+
+</div>
+<p><br></p>
+<p>With <strong>r2d3</strong>, you can bind data from R to D3 visualizations like the ones found on <a href="https://github.com/d3/d3/wiki/Gallery" class="uri">https://github.com/d3/d3/wiki/Gallery</a>, <a href="https://bl.ocks.org/" class="uri">https://bl.ocks.org/</a>, and <a href="https://vida.io/explore" class="uri">https://vida.io/explore</a>:</p>
+<div style="margin-top: 20px; margin-bottom: 10px;">
+<p><a href="https://rstudio.github.io/r2d3/articles/gallery/chord/"><img src="chord_thumbnail.png" width="28%" class="illustration gallery-thumbnail"></a>&nbsp;&nbsp;<a href="https://rstudio.github.io/r2d3/articles/gallery/bubbles/"><img src="bubbles_thumbnail.png" width="28%" class="illustration gallery-thumbnail"></a>&nbsp;&nbsp;<a href="https://rstudio.github.io/r2d3/articles/gallery/cartogram/"><img src="cartogram_thumbnail.png" width="28%" class="illustration gallery-thumbnail"></a></p>
+</div>
+<p>D3 visualizations created with <strong>r2d3</strong> work just like R plots within RStudio, R Markdown documents, and Shiny applications.</p>
+<p>You can install the <strong>r2d3</strong> package from CRAN as follows:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"r2d3"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2 id="d3-scripts" class="anchored">D3 Scripts</h2>
+<p>To use <strong>r2d3</strong>, write a D3 script and then pass R data to it using the <code>r2d3()</code> function. For example, here’s a simple D3 script that draws a bar chart (“barchart.js”):</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// !preview r2d3 data=c(0.3, 0.6, 0.8, 0.95, 0.40, 0.20)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> barHeight <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">floor</span>(height <span class="op">/</span> data<span class="op">.</span><span class="at">length</span>)<span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>svg<span class="op">.</span><span class="fu">selectAll</span>(<span class="st">'rect'</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">data</span>(data)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">enter</span>()<span class="op">.</span><span class="fu">append</span>(<span class="st">'rect'</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">'width'</span><span class="op">,</span> <span class="kw">function</span>(d) { <span class="cf">return</span> d <span class="op">*</span> width<span class="op">;</span> })</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">'height'</span><span class="op">,</span> barHeight)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">'y'</span><span class="op">,</span> <span class="kw">function</span>(d<span class="op">,</span> i) { <span class="cf">return</span> i <span class="op">*</span> barHeight<span class="op">;</span> })</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">'fill'</span><span class="op">,</span> <span class="st">'steelblue'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To render the script within R you call the <code>r2d3()</code> function:</p>
+<pre><code>library(r2d3)
+r2d3(data=c(0.3, 0.6, 0.8, 0.95, 0.40, 0.20), script = "barchart.js")</code></pre>
+<p>Which results in the following visualization:</p>
+<p><img src="bar_chart.png" class="illustration" width="600/"></p>
+<h3 id="d3-variables" class="anchored">D3 Variables</h3>
+<p>Note that data is provided to the script using the <code>data</code> argument to the <code>r2d3()</code> function. This data is then automatically made available to the D3 script. There are a number of other special variables available within D3 scripts, including:</p>
+<ul>
+<li><code>data</code> — The R data converted to JavaScript.</li>
+<li><code>svg</code> — The svg container for the visualization</li>
+<li><code>width</code> — The current width of the container</li>
+<li><code>height</code> — The current height of the container</li>
+<li><code>options</code> — Additional options provided by the user</li>
+<li><code>theme</code> — Colors for the current theme</li>
+</ul>
+<p>When you are learning D3 or translating D3 examples for use with R it’s important to keep in mind that D3 examples will generally include code to load data, create an SVG or other root element, and establish a width and height for the visualization.</p>
+<p>On the other hand with <strong>r2d3</strong>, these variables are <em>provided automatically</em> so do not need to be created. The reasons these variables are provided automatically are:</p>
+<ol type="1">
+<li><p>So that you can dynamically bind data from R to visualizations; and</p></li>
+<li><p>So that <strong>r2d3</strong> can automatically handle dynamic resizing for your visualization. Most D3 examples have a static size. This is fine for an example but not very robust for including the visualization within a report, dashboard, or application.</p></li>
+</ol>
+<h2 id="rstudio-v1.2-and-r2d3" class="anchored">RStudio v1.2 and r2d3</h2>
+<p>The <a href="https://www.rstudio.com/rstudio/download/preview/">RStudio v1.2 preview release</a> includes support for previewing D3 scripts as you write them. To try this out, install the preview release then create a D3 script using the new file menu:</p>
+<p><img src="new_script.png" class="screenshot" width="600/"></p>
+<p>A simple template for a D3 script (the barchart.js example shown above) is provided by default. You can use the <strong>Preview</strong> command (Ctrl+Shift+Center) to render the visualization:</p>
+<p><img src="rstudio_preview.png" class="screenshot" width="600/"></p>
+<p>You might wonder where the data comes from for the preview. Note that there is a special comment at the top of the D3 script:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// !preview r2d3 data=c(0.3, 0.6, 0.8, 0.95, 0.40, 0.20)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This comment enables you to specify the data (along with any other arguments to the <code>r2d3()</code> function) to use for the preview.</p>
+<h2 id="r-markdown" class="anchored">R Markdown</h2>
+<p>RStudio v1.2 also includes support for rendering <strong>r2d3</strong> visualizations within R Markdown documents and R Notebooks. There is a new <code>d3</code> R Markdown engine which works like this:</p>
+<pre><code>```{r setup}
+library(r2d3)
+bars &lt;- c(10, 20, 30)
+```
+
+```{d3 data=bars, options=list(color = 'orange')}
+svg.selectAll('rect')
+  .data(data)
+  .enter()
+    .append('rect')
+      .attr('width', function(d) { return d * 10; })
+      .attr('height', '20px')
+      .attr('y', function(d, i) { return i * 22; })
+      .attr('fill', options.color);
+```</code></pre>
+<p><img src="rmarkdown-1.png" class="illustration" width="600/"></p>
+<p>Note that in order to use the <code>d3</code> engine you need to add <code>library(r2d3)</code> to the setup chunk (as illustrated above).</p>
+<p>You can also of course call the <code>r2d3()</code> function from within an R code chunk:</p>
+<pre><code>---
+output: html_document
+
+---
+
+```{r}
+library(r2d3)
+r2d3(data=c(0.3, 0.6, 0.8, 0.95, 0.40, 0.20), script = "barchart.js")
+```</code></pre>
+<p><img src="bar_chart.png" class="illustration" width="600/"></p>
+<h2 id="shiny" class="anchored">Shiny</h2>
+<p>The <code>renderD3()</code> and <code>d3Output()</code> functions enable you to include D3 visualizations within Shiny applications:</p>
+<pre><code>library(shiny)
+library(r2d3)
+
+ui &lt;- fluidPage(
+  inputPanel(
+    sliderInput("bar_max", label = "Max:",
+                min = 0.1, max = 1.0, value = 0.2, step = 0.1)
+  ),
+  d3Output("d3")
+)
+
+server &lt;- function(input, output) {
+  output$d3 &lt;- renderD3({
+    r2d3(
+      runif(5, 0, input$bar_max),
+      script = system.file("examples/baranims.js", package = "r2d3")
+    )
+  })
+}
+
+shinyApp(ui = ui, server = server)</code></pre>
+<p><img src="baranim-1.gif" class="illustration" width="600/"></p>
+<p>See the article on <a href="https://rstudio.github.io/r2d3/articles/shiny.html">Using r2d3 with Shiny</a> to learn more (including how to create custom Shiny inputs that respond to user interaction with D3 visualizations).</p>
+<h2 id="try-it-out" class="anchored">Try It Out</h2>
+<p>To try out <strong>r2d3</strong>, start by installing the package from CRAN:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"r2d3"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then, download the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio v1.2 Preview Release</a> and head over to https://rstudio.github.io/r2d3/ for complete documentation on using the package.</p>
+<p>If you aren’t familliar with D3, check out these links to learn the basics and see some examples that might inspire your own work:</p>
+<ul>
+<li><p><a href="https://rstudio.github.io/r2d3/articles/learning_d3.html">Learning D3</a> — Suggested resources for learning how to create D3 visualizations.</p></li>
+<li><p><a href="https://rstudio.github.io/r2d3/articles/gallery.html">Gallery of Examples</a> — Learn from a wide variety of example D3 visualizations.</p></li>
+</ul>
+<p>We hope that the <strong>r2d3</strong> package opens up many new horizons for creating custom interactive visualizations with R!</p>
+<style type="text/css">
+.screenshot, .illustration {
+  margin-bottom: 10px;
+  margin-top: 10px;
+  border: solid 1px #cccccc;
+}
+</style>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2019-03-08">
+
+<title>Building tidy tools workshop</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Building tidy tools workshop</h1>
+
+<p class="date">2019-03-08</p>
+</header>
+
+<p>Join RStudio Chief Data Scientist Hadley Wickham for his popular “Building tidy tools” workshop in Sydney, Australia! If you’d missed the sold out course at rstudio::conf 2019 now is your chance.</p>
+<p>Register here: <a href="https://www.rstudio.com/workshops/building-tidy-tools/" class="uri">https://www.rstudio.com/workshops/building-tidy-tools/</a></p>
+<p>You should take this class if you have some experience programming in R and you want to learn how to tackle larger-scale problems. You’ll get the most if you’re already familiar with the basics of functions (i.e., you’ve written a few) and are comfortable with R’s basic data structures (vectors, matrices, arrays, lists, and data frames). There is approximately a 30% overlap in the material with Hadley’s previous “R Masterclass”. However, the material has been substantially reorganised, so if you’ve taken the R Masterclass in the past, you’ll still learn a lot in this class.</p>
+<h3 id="what-will-i-learn" class="anchored">What will I learn?</h3>
+<p>This course has three primary goals. You will:</p>
+<ul>
+<li>Learn efficient workflows for developing high-quality R functions, using the set of codified conventions of good package design. You’ll also learn workflows for unit testing, which helps ensure that your functions do exactly what you think they do.</li>
+<li>Master the art of writing functions that do one thing well and can be fluently combined together to solve more complex problems. We’ll cover common function-writing pitfalls and how to avoid them.</li>
+<li>Learn best practices for API design, programming tools, object design in S3, and the tidy eval system for NSE.</li>
+</ul>
+<p><strong>When</strong> - WEDNESDAY, MAY 1, 2019, 8:00AM - THURSDAY, MAY 2, 2019, 5:00PM</p>
+<p><strong>Where</strong> - The Westin Sydney, 1 Martin Pl, Sydney NSW 2000, Australia</p>
+<p><strong>Who</strong> - Hadley Wickham, Chief Scientist at RStudio</p>
+<p>Build your skills and learn from the best at this rare in-person workshop - the only Australia workshop from Hadley in 2019.</p>
+<p>Register here: https://www.rstudio.com/workshops/building-tidy-tools/</p>
+<p>Discounts are available for 5 or more attendees from any organization, and for students.</p>
+<p>Please email training@rstudio.com if you have any questions about the workshop that aren’t answered on the registration page.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

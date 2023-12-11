@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2013-11-15">
+
+<title>Shiny 0.8.0 released; Yihui Xie joins RStudio</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Shiny 0.8.0 released; Yihui Xie joins RStudio</h1>
+
+<p class="date">2013-11-15</p>
+</header>
+
+<p>We’re very pleased to announce <a href="http://rstudio.com/shiny/">Shiny 0.8.0</a> (which actually went up on CRAN about two weeks ago). This release features a vastly better way to display tabular data, and new debugging tools that make it much easier to fix errors in your app.</p>
+<h2 id="datatables-support" class="anchored">DataTables support</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2013/11/datatables1.png" class="img-fluid"></p>
+<p></p><figcaption>datatables</figcaption><p></p>
+</figure>
+</div>
+<p>We now support much more attractive and powerful displays of tabular data using the popular <a href="http://datatables.net/">DataTables</a> library. Our DataTables integration features pagination, searching/filtering, sorting, and more. Check out <a href="http://glimmer.rstudio.com/yihui/12_datatables/">this demo</a> to see it in action, and learn more about how to use it in your own apps by visiting the tutorial’s <a href="http://rstudio.github.io/shiny/tutorial/#datatables">chapter on DataTables</a>.</p>
+<h2 id="debugging-tools" class="anchored">Debugging tools</h2>
+<p>In <a href="http://cran.rstudio.com/web/packages/shiny/">version 0.8.0</a> of the <a href="http://rstudio.com/shiny/">Shiny</a> package, we’ve greatly improved the set of debugging tools you can use with your Shiny apps. It’s now much easier to figure out what’s happening when things go wrong, thanks to two new features:</p>
+<ul>
+<li><p>Integration with the new visual debugger that’s available with <a href="https://www.rstudio.com/ide/download/preview">RStudio v0.98</a>. You can set breakpoints and step through your code much more easily than before.</p></li>
+<li><p>A new option ‘shiny.error’ which can take a function as an error handler. It is called when an error occurs in a reactive observer (e.g.&nbsp;when running an output rendering function). You can use options(shiny.error=traceback) to simply print a traceback, options(shiny.error=recover) for debugging from a regular R console, or options(shiny.error=browser) to jump into the RStudio visual debugger.</p></li>
+</ul>
+<p>There have also been a few smaller tweaks and bug fixes. For the full list, you can take a look at our <a href="http://cran.rstudio.com/web/packages/shiny/NEWS">NEWS file</a>.</p>
+<h2 id="welcome-yihui-xie" class="anchored">Welcome, Yihui Xie!</h2>
+<p>If you’re reading this, there’s a good chance you have heard of <a href="http://yihui.name">Yihui Xie</a> or have used his software; during his time as a PhD student at Iowa State University, he created the <a href="http://yihui.name/knitr/">knitr</a>, <a href="http://cranvas.org/">cranvas</a>, and <a href="http://cran.r-project.org/web/packages/animation/index.html">animation</a> packages, among others.</p>
+<p>We’re thrilled to announce that Yihui has joined the RStudio team! He will be one of the primary maintainers of the Shiny package and has already contributed some great improvements in the short time he has been with us.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

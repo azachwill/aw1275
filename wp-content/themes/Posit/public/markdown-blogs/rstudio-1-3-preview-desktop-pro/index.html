@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-03-10">
+
+<title>RStudio 1.3 Preview: Remote Sessions in RStudio Desktop Pro</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio 1.3 Preview: Remote Sessions in RStudio Desktop Pro</h1>
+
+<p class="date">2020-03-10</p>
+</header>
+
+<p><em>This blog post is part of a series on new features in RStudio 1.3, currently available as a <a href="https://www.rstudio.com/products/rstudio/download/preview/">preview release</a>.</em></p>
+<p>Today, we’re going to talk about an exciting new feature of RStudio Desktop Pro - the ability to connect to remote sessions running on an existing RStudio Server Pro instance. This new Desktop Pro feature allows you to launch sessions remotely from your desktop to do your work on a more powerful computing system than your local machine, while providing the enhanced look-and-feel of the desktop application. Alternatively, you can continue to run your desktop sessions on your local machine and run resource intensive background jobs on a remote server, allowing your local resources to be used for more focused tasks.</p>
+<p>When connected to a remote server, the IDE looks almost exactly the same as it normally does, but it will indicate which server you are connected to, as well as provide a means for managing sessions on that server.</p>
+<p><img align="center" src="remote-session-ide.png" alt="Desktop Pro Remote Session"></p>
+<h2 id="prerequisites" class="anchored">Prerequisites</h2>
+<p>In order to use RStudio Desktop Pro to launch remote sessions, you will first need to ensure you have an existing installation of RStudio Server Pro. You will also want to ensure that the version number of RStudio Server Pro matches that of the RStudio Desktop Pro version in use.</p>
+<h2 id="adding-remote-session-servers" class="anchored">Adding Remote Session Servers</h2>
+<p>Once RStudio Server Pro is running, you can add it Desktop Pro as a new <em>Session Server</em> by clicking on the <em>Session Server Settings Dialog</em> from within Desktop Pro, which you can find underneath the connection status dropdown in the upper right corner of the IDE.</p>
+<p><img align="center" src="connection-status-dropdown.png" alt="The Connection Status Dropdown"></p>
+<p>Clicking on <em>Session Server Settings</em> will present you with a dialog where you can add and remove session servers, each one indicating a remote RStudio Server Pro instance that you can connect to.</p>
+<p><img align="center" src="session-server-settings.png" alt="The Session Server Settings Dialog"></p>
+<p>Upon clicking on the <code>Add</code> button, you will be shown the following dialog to add a session server. Simply give the server the desired name and add the base URL of your RStudio Server Pro instance.</p>
+<p><img align="center" src="add-session-server.png" alt="The Add Session Server Dialog"></p>
+<p>For most installations, these settings are sufficient. However, some installations may want to add path mappings.</p>
+<h3 id="path-mappings" class="anchored">Path Mappings</h3>
+<p>Path mappings allow you to map local system paths to remote server paths that will automatically be replaced when running Launcher Jobs on that particular session server. For example, if you map a shared drive on your local Windows machine at <code>H:</code> and this maps to <code>/shared/code</code> on your remote session server, you can add a path mapping from <code>H:-&gt;/shared/code</code> to ensure Launcher job paths including local paths are properly rewritten to remote paths.</p>
+<h2 id="switching-between-servers" class="anchored">Switching Between Servers</h2>
+<p>You can switch between remote session servers via the aforementioned <em>Connection Status Dropdown</em> - simply select which server to connect to, and the desktop will reload, connected to the selected server.</p>
+<p>By default, once you have session servers defined, you will be prompted to select where to start your session every time you start Desktop Pro - locally, or on one of the specified servers. You can change this behavior by changing the <code>Start new sessions</code> setting on the <em>Session Server Settings</em> dialog.</p>
+<p>Additionally, if you hold down the <em>Alt</em> key while launching Desktop Pro, you will be prompted to select where to start your session, regardless of any other settings.</p>
+<h2 id="try-it-out" class="anchored">Try it Out!</h2>
+<p>If you’d like to try out the new Desktop Pro, you can download the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio 1.3 Preview</a>. For more detailed documentation on RStudio Pro features, see the <a href="http://docs.rstudio.com/ide/desktop-pro/1.3.881-1">admin guide</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

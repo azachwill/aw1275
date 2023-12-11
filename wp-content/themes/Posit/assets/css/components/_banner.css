@@ -1,0 +1,38 @@
+/* Contact Banner */
+
+.contact-banner {
+    .description a {
+        text-decoration: underline;
+    }
+
+    &.top-rounded {
+        .contact-banner-wrapper {
+            border-radius: 8px 8px 0 0 !important;
+        }
+    }
+
+    &.bottom-rounded {
+        .contact-banner-wrapper {
+            border-radius: 0 0 8px 8px !important;
+        }
+    }
+}
+
+/* Alert Banner */
+
+body.has-banner {
+    @apply mt-[196px] lg:mt-[78px];
+
+    .header-nav {
+        @apply top-[196px] lg:top-[78px];
+    }
+
+    .nav-modal {
+        top: 156px !important;
+    }
+
+    .mobile-nav,
+    .mobile-nav .mobile-nav-wrapper {
+        top: 196px;
+    }
+}

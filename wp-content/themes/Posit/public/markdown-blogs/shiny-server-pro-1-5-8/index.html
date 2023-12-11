@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2018-09-04">
+
+<title>Shiny Server (Pro) 1.5.8</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Shiny Server (Pro) 1.5.8</h1>
+
+<p class="date">2018-09-04</p>
+</header>
+
+<p><a href="https://www.rstudio.com/products/shiny/shiny-server/">Shiny Server 1.5.8.921 and Shiny Server Pro 1.5.8.985 are now available.</a></p>
+<p>This release includes support for listening on IPv6 addresses. It also fixes issues with servers that have home directories mounted over NFS with <code>root_squash</code>, and with networks that use double-bind LDAP with restrictive permissions on user accounts.</p>
+<p>Finally, this release changes the default SSL/TLS configuration in Shiny Server Pro to remove support for the obsolete and insecure TLSv1 protocol.</p>
+<h3 id="shiny-server-1.5.8.921" class="anchored">Shiny Server 1.5.8.921</h3>
+<ul>
+<li><p>Upgrade to Node v8.11.3.</p></li>
+<li><p>Added support for listening on IPv6 addresses.</p></li>
+<li><p>X-Powered-By response header now reports “Shiny Server” instead of “Express”.</p></li>
+<li><p>Resolve permissions issues when log directory is on an NFS mount with root squash. The <code>log_as_user</code> directive was intended to work for these situations, but would fail in common configurations. It should now work.</p></li>
+<li><p><code>log_file_mode</code> no longer respects the process umask, and the default has been changed from <code>0660</code> to <code>0640</code>.</p></li>
+<li><p>Exit code of shiny-server process was always 0, regardless of the reason the process exited. Now a non-zero exit code is used if the process was terminated by a signal, or an unhandled error crashed the process, or loading of the shiny-server.conf config file failed during startup.</p></li>
+</ul>
+<h3 id="shiny-server-pro-1.5.8.985" class="anchored">Shiny Server Pro 1.5.8.985</h3>
+<p>The above changes, plus:</p>
+<ul>
+<li><p>For LDAP double-bind authentication, use the base_bind account to iterate the user’s groups (rather than the user’s own LDAP account, which sometimes does not have permissions to see its own groups).</p></li>
+<li><p>Added <code>auth_ignore_case</code> directive, which can be used to treat <code>required_user</code> and <code>required_group</code> directives as case-insensitive. Disabled by default, as it’s only safe to use on systems that prevent the creation of users/groups whose names vary from existing users/groups only by case.</p></li>
+<li><p>For SSL/TLS configurations, remove support for TLSv1 by default (SSLv2 and v3 were already not supported). If a stricter or looser policy is desired, this can be achieved by adding <code>ssl_min_version</code> as a child directive of <code>ssl</code>; valid values for <code>ssl_min_version</code> are <code>tlsv1</code>, <code>tlsv11</code>, and <code>tlsv12</code>.</p></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2018-11-05">
+
+<title>RStudio 1.2 Preview - New Features in RStudio Pro</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio 1.2 Preview - New Features in RStudio Pro</h1>
+
+<p class="date">2018-11-05</p>
+</header>
+
+<p><em>Today, we’re continuing our blog series on new features in RStudio 1.2. If you’d like to try these features out for yourself, you can download a <a href="https://www.rstudio.com/products/rstudio/download/preview/">preview release of RStudio Pro 1.2</a>.</em></p>
+<p>We’ve added some great new features to RStudio Pro for v1.2, which includes not only Server Pro, but also the new and improved Pro Desktop. Let’s get started!</p>
+<h2 id="rstudio-server-pro" class="anchored">RStudio Server Pro</h2>
+<h3 id="the-job-launcher" class="anchored">The Job Launcher</h3>
+<p>Perhaps the biggest new change in v1.2 is the Job Launcher. This allows you to run RStudio sessions and ad-hoc R scripts within your already existing cluster workload managers, such as Kubernetes, allowing you to leverage your existing infrastructure instead of provisioning load balancer nodes manually. At release, we will support the following clusters:</p>
+<ul>
+<li><a href="https://kubernetes.io">Kubernetes</a></li>
+<li><a href="https://slurm.schedmd.com">Slurm</a></li>
+</ul>
+<p>The following diagram shows an example of how you can use the Job Launcher with Kubernetes to painlessly scale RStudio Server Pro across potentially hundreds of nodes.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2018-11-05-launcher-sessions.png" class="img-fluid"></p>
+<p></p><figcaption>Launcher Sessions</figcaption><p></p>
+</figure>
+</div>
+<p>When starting RSP sessions via the Launcher, users will still use the same home page that they are familiar with, but will have additional options for controlling the creation of their sessions within your distributed environment of choice.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2018-11-05-launcher-home-page.png" class="img-fluid"></p>
+<p></p><figcaption>Launcher Homepage</figcaption><p></p>
+</figure>
+</div>
+<p>We determined that most RSP users were already using Slurm and Kubernetes, so integration with them was added first. However, the Job Launcher is an extensible system that makes it fairly simple to develop plugins to target different cluster types. We plan to develop more plugins in the future, and would love to hear from you about what we should tackle next! At present, we plan to add support for <a href="https://www.ibm.com/us-en/marketplace/hpc-workload-management">LSF</a>.</p>
+<p>For more information on launching ad-hoc jobs, see our upcoming blog post on background jobs. For more information on using the Job Launcher with RStudio Server Pro, see the <a href="http://docs.rstudio.com/ide/server-pro/1.2.1086-1/job-launcher.html">documentation</a>.</p>
+<h3 id="improved-r-version-management" class="anchored">Improved R Version Management</h3>
+<p>We’ve improved management of various versions of R within your environments, allowing you to:</p>
+<ul>
+<li>Label each version so users can have a friendly name associated with each version. This makes it easy to differentiate between similar versions for different environments, such as when running parallel versions of Microsoft R and Vanilla R.</li>
+<li>Execute an arbitrary script when the version is loaded, perhaps to dynamically alter any important environment variables (such as LD_LIBRARY_PATH)</li>
+<li>Load an arbitrary environment module, if using Environment Modules (see <a href="https://en.wikipedia.org/wiki/Environment_Modules_(software)">environment modules</a>)</li>
+</ul>
+<p>When specifying a label, users will see the label on the home page, as well as within the session itself when accessing the version switch menu. The following screenshots show an example where the R version 3.1.3 was given the label <code>My Special R Version</code>.</p>
+<p><img src="2018-11-05-home-page-label.png" class="img-fluid" alt="Home Page Label"> <img src="2018-11-05-session-version-select-label.png" class="img-fluid" alt="Session Version Select Label"></p>
+<p>For a more detailed guide on configuring R Versions, see the <a href="http://docs.rstudio.com/ide/server-pro/1.2.1086-1/r-versions.html#extended-r-version-definitions">documentation</a>.</p>
+<h3 id="configuration-reload" class="anchored">Configuration Reload</h3>
+<p>We’ve added the ability to reload some of Server Pro’s configuration at run-time, without having to stop the server and interrupt users’ sessions. Currently, the following is supported:</p>
+<ul>
+<li>Reloading <code>/etc/rstudio/load-balancer</code> to add new nodes or remove existing nodes. Note that when removing nodes, removed nodes need to have their RStudio processes stopped by running <code>sudo rstudio-server stop</code> on that node before invoking the configuration reload.</li>
+<li>Reloading the list of server R versions specified in <code>/etc/rstudio/r-versions</code>.</li>
+</ul>
+<p>In order to perform the configuration reload, simply edit the above files as desired and then send the <code>SIGHUP</code> signal to the <code>rserver</code> executable, like so:</p>
+<pre><code>pidof rserver | sudo xargs kill -s SIGHUP</code></pre>
+<h2 id="rstudio-pro-desktop" class="anchored">RStudio Pro Desktop</h2>
+<p>With the release of RStudio v1.2 we are excited to announce the RStudio Pro Desktop, a fully licensed platform that provides enterprise users with an enhanced version of RStudio Desktop that comes with professional priority support. The Pro Desktop will be built on over time to include new capabilities and integrations with other RStudio professional products.</p>
+<h3 id="bundled-odbc-drivers" class="anchored">Bundled ODBC Drivers</h3>
+<p>Pro Desktop now adds support for installing the <a href="https://www.rstudio.com/products/drivers">RStudio Pro Drivers</a> for connecting to various ODBC data sources, such as MongoDB, Oracle, and PostgreSQL (just to name a few!).</p>
+<p>Connecting to a database is simple - just click on the New Connection button under the Connections pane, and you’ll be greeted with a dialog from which to select your database type.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2018-11-05-odbc-connections.png" class="img-fluid"></p>
+<p></p><figcaption>Database Connections</figcaption><p></p>
+</figure>
+</div>
+<p>When connecting to a data source for the first time, you will be prompted to install the ODBC package. Simply click yes, and then you will be able to connect to many of the most popular databases available today!</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2018-11-05-odbc-install.png" class="img-fluid"></p>
+<p></p><figcaption>ODBC install</figcaption><p></p>
+</figure>
+</div>
+<p>For more information on database connectivity within RStudio Pro, see the <a href="http://db.rstudio.com">documentation</a>.</p>
+<hr>
+<p>If you’re interested in giving the new RStudio Pro features a try, please <a href="https://www.rstudio.com/products/rstudio/download/preview">download the RStudio 1.2 preview</a>. For more detailed documentation on RStudio Pro features, see the <a href="http://docs.rstudio.com/ide/server-pro/1.2.1086-1">admin guide</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

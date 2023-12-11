@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2017-09-07">
+
+<title>RStudio 1.1 Preview - New Features in RStudio Server Pro</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio 1.1 Preview - New Features in RStudio Server Pro</h1>
+
+<p class="date">2017-09-07</p>
+</header>
+
+<p><em>Today, we’re continuing our blog series on new features in RStudio 1.1. If you’d like to try these features out for yourself, you can download a <a href="https://www.rstudio.com/products/rstudio/download/preview/">preview release of RStudio Server Pro 1.1</a>.</em></p>
+<h1 id="rstudio-server-pro">RStudio Server Pro</h1>
+<p>Today we are going to be talking about some of the great new features we have added to RStudio Server Pro v1.1, which make users’ and administrators’ workflows more efficient. Let’s begin!</p>
+<h2 id="features-for-users" class="anchored">Features for Users</h2>
+<h3 id="homepage-improvements" class="anchored">Homepage Improvements</h3>
+<p>One of the key features of RStudio Server Pro is the ability for users to run multiple concurrent R sessions. In order to help you keep track of your active sessions, RStudio Server Pro comes with a <strong>home page</strong> that allows you&nbsp;to see the status of your sessions, such as if they are idle, executing&nbsp;or suspended. In RStudio Server Pro v1.1, we’ve made a few improvements that will help you manage your sessions.</p>
+<h4 id="managing-multiple-sessions" class="anchored">Managing Multiple Sessions</h4>
+<p>The homepage now allows you to select multiple active sessions and kill them, allowing you to cleanup many sessions with one single action. Simply select the desired sessions by clicking their checkboxes, and click on either the Quit or Force Quit buttons. The Quit button will attempt to gracefully kill your sessions by giving them the opportunity to properly shut down. The Force Quit button immediately kills your sessions by sending them SIGKILL and cleans up all child processes as well. Note that in both cases, any unsaved data may be lost.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-09-13-home-page-select.png" class="img-fluid"></p>
+<p></p><figcaption>Selecting Sessions</figcaption><p></p>
+</figure>
+</div>
+<h4 id="accessing-the-home-page" class="anchored">Accessing the Home Page</h4>
+<p>We’ve made accessing the home page easier, allowing you to get there without having to first get into a running session. To do so, simply type in the address of your company’s RStudio in your browser, and add /home, like so:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-09-13-home-page-url.png" class="img-fluid"></p>
+<p></p><figcaption>Home Page URL</figcaption><p></p>
+</figure>
+</div>
+<h4 id="session-labels" class="anchored">Session Labels</h4>
+<p>In the past, it could be difficult to keep track of your sessions and know which was which when looking at them on the home page. Now you can label your sessions so that they show up clearly on the home page. To do that, simply click the <strong>Label Current Session</strong> button from the Sessions dropdown in the top right corner from within an active session and give the session a name.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-09-13-label-current-session.png" class="img-fluid"></p>
+<p></p><figcaption>Labeling the Current Session</figcaption><p></p>
+</figure>
+</div>
+<p>The label will be displayed on the home page making it easy for you to properly drop back in to the correct session.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-09-13-home-page-labels.png" class="img-fluid"></p>
+<p></p><figcaption>Sessions on Home Page with Labels</figcaption><p></p>
+</figure>
+</div>
+<h2 id="features-for-admins" class="anchored">Features for Admins</h2>
+<h3 id="floating-licensing" class="anchored">Floating Licensing</h3>
+<p>Floating licensing allows you to run fully licensed copies of RStudio Server Pro easily in ephemeral instances, such as Docker containers, virtual machines, and EC2 instances. Instances don’t have to be individually licensed, and you don’t have to manually activate and deactivate a license in each instance. Instead, a lightweight license server distributes temporary licenses (“leases”) to each instance, and the instance uses the license only while it’s running.</p>
+<p>This model is perfect for environments in which RStudio Server Pro instances are frequently created and destroyed on demand, and only requires that you purchase a license for the maximum number of concurrent instances you want to run.</p>
+<p>Technical details on the floating licensing system are available in the <a href="http://docs.rstudio.com/ide/server-pro/1.1.345/license-management.html#floating-licensing">RStudio Server Pro Administration Guide</a>.</p>
+<h3 id="session-notifications" class="anchored">Session Notifications</h3>
+<p>Administrators can now broadcast notifications to users in real-time with our new notification system. The system is very flexible, so we will just cover the basics here. For more in-depth information, see the <a href="http://docs.rstudio.com/ide/server-pro/1.1.345/r-sessions.html#notifications">RStudio Server Pro Administration Guide</a>, or take a look at the documentation in the <strong>/etc/rstudio/notifications.conf</strong> file.</p>
+<p>To broadcast a notification to all of your users, add lines like the following to your <strong>/etc/rstudio/notifications.conf</strong> file:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{ini}</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="in">StartTime: 2017-11-06</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="in">EndTime: 2017–11-11</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="in">Message: Remember that on November 10th after business hours we will be performing a database migration. Please make sure all of your work is saved before going home.</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will create a notification that starts broadcasting to your users on the 6th of November, and stops on midnight of the 11th. Each user will only see the message until they have acknowledged it, usually once in the first session they create during the notification window, or to any sessions that are currently active. The notification will look something like:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-09-13-admin-notification.png" class="img-fluid"></p>
+<p></p><figcaption>Session Notification</figcaption><p></p>
+</figure>
+</div>
+<h3 id="automatically-deleting-unused-sessions" class="anchored">Automatically Deleting Unused Sessions</h3>
+<p>As an administrator, you have the ability to automatically suspend sessions to disk after a certain period of inactivity by specifying the <strong>session-timeout-minutes</strong> option in <strong>/etc/rstudio/rsession.conf</strong>. RStudio Server Pro v1.1 adds the ability to also kill and delete these sessions entirely after a certain amount of hours, freeing up valuable system resources. Simply add the following line to <strong>/etc/rstudio/rsession.conf</strong>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{ini}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="in">session-timeout-kill-hours=96</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This setting will kill and delete any inactive sessions that have not been used for the specified hours. You should set a long timeout period to ensure that only sessions users have forgotten about or no longer need are deleted, as the session’s data is lost forever. Again, for more information, see the RStudio Server Pro Administration Guide.</p>
+<p>Thank you for using RStudio Server Pro. We hope these new features improve both user and administrator workflows!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

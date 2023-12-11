@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2015-12-21">
+
+<title>posit-blogs - ggplot 2.0.0</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">ggplot 2.0.0</h1>
+
+<p class="date">2015-12-21</p>
+</header>
+
+<blockquote>
+<p class="body-md-regular body-sm-regular">
+Please note that the information presented in this post reflects the package as it stood when initially released, and may now be outdated. For the most up-to-date information, kindly refer to <a href="https://ggplot2.tidyverse.org/" class="uri">https://ggplot2.tidyverse.org/</a>.
+</p>
+</blockquote>
+<p>I’m very pleased to announce the release of ggplot2 2.0.0. I know I promised <a href="https://blog.rstudio.com/2015/01/09/ggplot2-updates/">that there wouldn’t be any more updates</a>, but while working on the 2nd edition of the ggplot2 book, I just couldn’t stop myself from fixing some long standing problems.</p>
+<p>On the scale of ggplot2 releases, this one is huge with over one hundred fixes and improvements. This might break some of your existing code (although I’ve tried to minimise breakage as much as possible), but I hope the new features make up for any short term hassle. This blog post documents the most important changes:</p>
+<ul>
+<li><p>ggplot2 now has an official extension mechanism.</p></li>
+<li><p>There are a handful of new geoms, and updates to existing geoms.</p></li>
+<li><p>The default appearance has been thoroughly tweaked so most plots should look better.</p></li>
+<li><p>Facets have a much richer set of labelling options.</p></li>
+<li><p>The documentation has been overhauled to be more helpful, and require less integration across multiple pages.</p></li>
+<li><p>A number of older and less used features have been deprecated.</p></li>
+</ul>
+<p>These are described in more detail below. See the <a href="https://github.com/hadley/ggplot2/releases/tag/v2.0.0">release notes</a> for a complete list of all changes.</p>
+<h2 id="extensibility" class="anchored">Extensibility</h2>
+<p>Perhaps the bigggest news in this release is that ggplot2 now has an official extension mechanism. This means that others can now easily create their on stats, geoms and positions, and provide them in other packages. This should allow the ggplot2 community to flourish, even as less development work happens in ggplot2 itself. See <a href="https://cran.r-project.org/web/packages/ggplot2/vignettes/extending-ggplot2.html"><code>vignette("extending-ggplot2")</code></a> for details.</p>
+<p>Coupled with this change, ggplot2 no longer uses proto or reference classes. Instead, we now use ggproto, a new OO system designed specifically for ggplot2. Unlike proto and RC, ggproto supports clean cross-package inheritance, which is necessary for extensibility. Creating a new OO system isn’t usually the right solution, but I’m pretty sure it was necessary here. Read more about it in the vignette.</p>
+<h2 id="new-and-updated-geoms" class="anchored">New and updated geoms</h2>
+<ul>
+<li>ggplot no longer throws an error if you your plot has no layers. Instead it automatically adds <code>geom_blank()</code>:</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(cyl, hwy))</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/12/unnamed-chunk-2-1.png" class="img-fluid"></p>
+<ul>
+<li><code>geom_count()</code> (a new alias for the old <code>stat_sum()</code>) counts the number of points at unique locations on a scatterplot, and maps the size of the point to the count:</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(cty, hwy)) <span class="sc">+</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(cty, hwy)) <span class="sc">+</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_count</span>()</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/12/unnamed-chunk-3-1.png" class="img-fluid"><img src="https://rstudioblog.files.wordpress.com/2015/12/unnamed-chunk-3-2.png" class="img-fluid"></p>
+<ul>
+<li><code>geom_curve()</code> draws curved lines in the same way that <code>geom_segment()</code> draws straight lines:</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y, <span class="at">xend =</span> x <span class="sc">+</span> <span class="fl">0.5</span>, <span class="at">yend =</span> y <span class="sc">+</span> <span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_curve</span>(<span class="fu">aes</span>(<span class="at">colour =</span> <span class="st">"curve"</span>)) <span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">colour =</span> <span class="st">"segment"</span>))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/12/unnamed-chunk-4-1.png" class="img-fluid"></p>
+<ul>
+<li><code>geom_bar()</code> now behaves differently from <code>geom_histogram()</code>. Instead of binning the data, it counts the number of unique observations at each location:</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(cyl)) <span class="sc">+</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(cyl)) <span class="sc">+</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/12/unnamed-chunk-5-1.png" class="img-fluid"><img src="https://rstudioblog.files.wordpress.com/2015/12/unnamed-chunk-5-2.png" class="img-fluid"></p>
+<p>If you got into the (bad) habit of using <code>geom_histogram()</code> to create bar charts, or <code>geom_bar()</code> to create histograms, you’ll need to switch.</p>
+<ul>
+<li><p>Layers are now much stricter about their arguments - you will get an error if you’ve supplied an argument that isn’t an aesthetic or a parameter. This breaks the handful of geoms/stats that used <code>...</code> to pass additional arguments on to the underlying computation. Now <code>geom_smooth()</code>/<code>stat_smooth()</code> and <code>geom_quantile()</code>/<code>stat_quantile()</code> use <code>method.args</code> instead; and <code>stat_summary()</code>, <code>stat_summary_hex()</code>, and <code>stat_summary2d()</code> use <code>fun.args</code>. This is likely to cause some short-term pain but in the long-term it will make it much easier to spot spelling mistakes and other errors.</p></li>
+<li><p><code>geom_text()</code> has been overhauled to make labelling your data a little easier. You can use <code>nudge_x</code> and <code>nudge_y</code> arguments to offset labels from their corresponding points. <code>check_overlap = TRUE</code> provides a simple way to avoid overplotting of labels: labels that would otherwise overlap are omitted.</p></li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(wt, mpg, <span class="at">label =</span> <span class="fu">rownames</span>(mtcars))) <span class="sc">+</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">nudge_y =</span> <span class="fl">0.5</span>, <span class="at">check_overlap =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/12/unnamed-chunk-6-1.png" class="img-fluid"></p>
+<p>(Labelling points well is still a huge pain, but at least these new features make life a lit better.)</p>
+<ul>
+<li><code>geom_label()</code> works like <code>geom_text()</code> but draws a rounded rectangle underneath each label:</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">seq</span>(<span class="sc">-</span>pi, pi, <span class="at">length =</span> <span class="dv">50</span>),</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">seq</span>(<span class="sc">-</span>pi, pi, <span class="at">length =</span> <span class="dv">50</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">r =</span> x <span class="sc">^</span> <span class="dv">2</span> <span class="sc">+</span> y <span class="sc">^</span> <span class="dv">2</span>, <span class="at">z =</span> <span class="fu">cos</span>(r <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>r <span class="sc">/</span> <span class="dv">6</span>))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(grid, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_raster</span>(<span class="fu">aes</span>(<span class="at">fill =</span> z)) <span class="sc">+</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">0</span>), <span class="at">label =</span> <span class="st">"Center"</span>) <span class="sc">+</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>()</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/12/unnamed-chunk-7-1.png" class="img-fluid"></p>
+<ul>
+<li><code>aes_()</code> replaces <code>aes_q()</code>, and works like the SE functions in dplyr and my other recent packages. It supports formulas, so the most concise SE version of <code>aes(carat, price)</code> is now <code>aes_(~carat, ~price)</code>. You may want to use this form in packages, as it will avoid spurious <code>R CMD check</code> warnings about undefined global variables.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mpg, <span class="fu">aes_</span>(<span class="sc">~</span>displ, <span class="sc">~</span>cty)) <span class="sc">+</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Same as</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(displ, cty)) <span class="sc">+</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2 id="appearance" class="anchored">Appearance</h2>
+<p>I’ve made a number of small tweaks to the default appearance:</p>
+<ul>
+<li><p>The default <code>theme_grey()</code> background colour has been changed from “grey90” to “grey92”: this makes the background a little less visually prominent.</p></li>
+<li><p>Labels and titles have been tweaked for readability. Axis labels are darker, and legend titles get the same visual treatment as axis labels.</p></li>
+<li><p>The default font size dropped from 12 to 11. You might be surprised that I’ve made the default text size smaller as it was already hard for many people to read. It turns out there was a bug in RStudio (<a href="https://www.rstudio.com/products/rstudio/download/preview/">fixed in 0.99.724</a>), that shrunk the text of all grid based graphics. Once that was resolved the defaults seemed too big to my eyes.</p></li>
+<li><p><code>scale_size()</code> now maps values to <em>area</em>, not radius. Use <code>scale_radius()</code> if you want the old behaviour (not recommended, except perhaps for lines). Continue to use <code>scale_size_area()</code> if you want 0 values to have 0 area.</p></li>
+<li><p>Bar and rectangle legends no longer get a diagonal line. Instead, the border has been tweaked to make it visible, and more closely match the size of line drawn on the plot.</p></li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(<span class="fu">factor</span>(cyl), <span class="at">fill =</span> drv)) <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">colour =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/12/unnamed-chunk-9-1.png" class="img-fluid"></p>
+<ul>
+<li><p><code>geom_point()</code> now uses shape 19 instead of 16. This looks much better on the default Linux graphics device. (It’s very slightly smaller than the old point, but it shouldn’t affect any graphics significantly). You can now control the width of the outline on shapes 21-25 with the <code>stroke</code> parameter.</p></li>
+<li><p>The default legend will now allocate multiple rows (if vertical) or columns (if horizontal) in order to make a legend that is more likely to fit on the screen. You can override with the <code>nrow</code>/<code>ncol</code> arguments to <code>guide_legend()</code></p></li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(displ,hwy, <span class="at">colour =</span> manufacturer)) <span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>p</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Revert back to previous behaviour</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">guides</span>(<span class="at">colour =</span> <span class="fu">guide_legend</span>(<span class="at">nrow =</span> <span class="dv">1</span>))</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/12/unnamed-chunk-10-1.png" class="img-fluid"><img src="https://rstudioblog.files.wordpress.com/2015/12/unnamed-chunk-10-2.png" class="img-fluid"></p>
+<ul>
+<li>Two new themes were contributed by <a href="http://github.com/jiho">Jean-Olivier Irisson</a>: <code>theme_void()</code> is completely empty and <code>theme_dark()</code> has a dark background designed to make colours pop out.</li>
+</ul>
+<h2 id="facet-labels" class="anchored">Facet labels</h2>
+<p>Thanks to the work of <a href="https://github.com/lionel-">Lionel Henry</a>, facet labels have received three major improvements:</p>
+<ol type="1">
+<li><p>You can switch the position of facet labels so they’re next to the axes.</p></li>
+<li><p><code>facet_wrap()</code> now supports custom labellers.</p></li>
+<li><p>You can create combined labels when facetting by multiple variables.</p></li>
+</ol>
+<h3 id="switching-the-labels" class="anchored">Switching the labels</h3>
+<p>The new <code>switch</code> argument allows you to switch the labels to display near the axes:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">transform</span>(mtcars,</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">am =</span> <span class="fu">factor</span>(am, <span class="at">levels =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>, <span class="fu">c</span>(<span class="st">"Automatic"</span>, <span class="st">"Manual"</span>)),</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">gear =</span> <span class="fu">factor</span>(gear, <span class="at">levels =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Three"</span>, <span class="st">"Four"</span>, <span class="st">"Five"</span>))</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(mpg, disp)) <span class="sc">+</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(am <span class="sc">~</span> gear, <span class="at">switch =</span> <span class="st">"both"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/12/unnamed-chunk-11-1.png" class="img-fluid"></p>
+<p>This is especially useful when the labels directly characterise the axes. In that situation, switching the labels can make the plot clearer and more readable. You may also want to use a neutral label background by setting <code>strip.background</code> to <code>element_blank()</code>:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> mtcars <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">Logarithmic =</span> <span class="fu">log</span>(mpg),</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Inverse =</span> <span class="dv">1</span> <span class="sc">/</span> mpg,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Cubic =</span> mpg <span class="sc">^</span> <span class="dv">3</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Original =</span> mpg</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> tidyr<span class="sc">::</span><span class="fu">gather</span>(transformation, mpg2, Logarithmic<span class="sc">:</span>Original)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(mpg2, disp)) <span class="sc">+</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>transformation, <span class="at">scales =</span> <span class="st">"free"</span>, <span class="at">switch =</span> <span class="st">"x"</span>) <span class="sc">+</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.background =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/12/unnamed-chunk-12-1.png" class="img-fluid"></p>
+<h3 id="wrap-labeller" class="anchored">Wrap labeller</h3>
+<p>A longstanding issue in ggplot was that <code>facet_wrap()</code> did not support custom labellers. Labellers are small functions that make it easy to customise the labels. You can now supply labellers to both wrap and grid facets:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(mpg2, disp)) <span class="sc">+</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>transformation, <span class="at">scales =</span> <span class="st">"free"</span>, <span class="at">labeller =</span> <span class="st">"label_both"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/12/unnamed-chunk-13-1.png" class="img-fluid"></p>
+<h3 id="composite-margins" class="anchored">Composite margins</h3>
+<p>Labellers have now better support for composite margins when you facet over multiple variable with <code>+</code>. All labellers gain a <code>multi_line</code> argument to control whether labels should be displayed as a single line or over multiple lines, one for each factor.</p>
+<p>The labellers still work the same way except for <code>label_bquote()</code>. That labeller makes it easy to write mathematical expression involving the values of facetted factors. Historically, <code>label_bquote()</code> could only specify a single expression for all margins and factor. The factor value was referred to via the backquoted placeholder <code>.(x)</code>. Now that it supports expressions combining multiple factors, you must backquote the variable names themselves. In addition, you can provide different expressions for each margin:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>my_labeller <span class="ot">&lt;-</span> <span class="fu">label_bquote</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">rows =</span> .(am) <span class="sc">/</span> alpha,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cols =</span> .(vs) <span class="sc">^</span> .(cyl)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(wt, mpg)) <span class="sc">+</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(am <span class="sc">~</span> vs <span class="sc">+</span> cyl, <span class="at">labeller =</span> my_labeller)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/12/unnamed-chunk-14-1.png" class="img-fluid"></p>
+<h2 id="documentation" class="anchored">Documentation</h2>
+<p>I’ve given the documentation a thorough overhaul:</p>
+<ul>
+<li><p>Tighly linked geoms and stats (e.g.&nbsp;<code>geom_boxplot()</code> and <code>stat_boxplot()</code>) are now documented in the same file so you can see all the arguments in one place. Similarly, variations on a theme (like <code>geom_path()</code>, <code>geom_line()</code>, and <code>geom_step()</code>) are documented together.</p></li>
+<li><p>I’ve tried to reduce the use of <code>...</code> so that you can see all the documentation in one place rather than having to follow links around. In some cases this has involved adding additional arguments to geoms to make it more clear what you can do.</p></li>
+<li><p>Thanks to <a href="https://github.com/hrbrmstr">Bob Rudis</a>, the use of <code>qplot()</code> in examples has been grealy reduced. This is inline with the 2nd edition of the ggplot2 book, which eliminates <code>qplot()</code> in favour of <code>ggplot()</code>.</p></li>
+</ul>
+<h2 id="deprecated-features" class="anchored">Deprecated features</h2>
+<ul>
+<li><p>The <code>order</code> aesthetic is officially deprecated. It never really worked, and was poorly documented.</p></li>
+<li><p>The <code>stat</code> and <code>position</code> arguments to <code>qplot()</code> have been deprecated. <code>qplot()</code> is designed for quick plots - if you need to specify position or stat, use <code>ggplot()</code> instead.</p></li>
+<li><p>The theme setting <code>axis.ticks.margin</code> has been deprecated: now use the margin property of <code>axis.ticks</code>.</p></li>
+<li><p><code>stat_abline()</code>, <code>stat_hline()</code> and <code>stat_vline()</code> have been removed: these were never suitable for use other than with their corresponding geoms and were not documented.</p></li>
+<li><p><code>show_guide</code> has been renamed to <code>show.legend</code>: this more accurately reflects what it does (controls appearance of layer in legend), and uses the same convention as other ggplot2 arguments (i.e.&nbsp;a <code>.</code> between names). (Yes, I know that’s inconsistent with function names (which use <code>_</code>) but it’s too late to change now.)</p></li>
+</ul>
+<p>A number of geoms have been renamed to be more consistent. The previous names will continue to work for the forseeable future, but you should switch to the new names for new work.</p>
+<ul>
+<li><p><code>stat_binhex()</code> and <code>stat_bin2d()</code> have been renamed to <code>stat_bin_hex()</code> and <code>stat_bin_2d()</code>. <code>stat_summary2d()</code> has been renamed to <code>stat_summary_2d()</code>, <code>geom_density2d()</code>/<code>stat_density2d()</code> has been renamed to <code>geom_density_2d()</code>/<code>stat_density_2d()</code>.</p></li>
+<li><p><code>stat_spoke()</code> is now <code>geom_spoke()</code> since I realised it’s a reparameterisation of <code>geom_segment()</code>.</p></li>
+<li><p><code>stat_bindot()</code> has been removed because it’s so tightly coupled to <code>geom_dotplot()</code>. If you happened to use <code>stat_bindot()</code>, just change to <code>geom_dotplot()</code>.</p></li>
+</ul>
+<p>All defunct functions have been removed.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-04-14">
+<meta name="description" content="In March of 2021, Epi-Interactive hosted one of the first in-person R events in Wellington, New Zealand. Here are some takeaways from their experience.">
+
+<title>Impressions from New Zealand’s R Exchange</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Impressions from New Zealand’s R Exchange</h1>
+
+<p class="date">2021-04-14</p>
+</header>
+
+<p><i>This is a guest post from Uli Muellner, Director of IT &amp; Learning, at <a href="https://www.epi-interactive.com/" target="_blank" rel="noopener noreferrer">Epi-Interactive</a>, a Full Service RStudio Partner.</i></p>
+<p><img src="header.png" alt="The New Zealand R-Exchange" class="center"></p>
+<p><b>Kia ora koutou</b>,</p>
+<p>In March we were fortunate to run a face-to-face event in Wellington, New Zealand, bringing people together to discuss how they use R in their organisation to analyse and share data. It felt special to be able to do that, hence we wanted to share some of the highlights with you all. Thanks to our presenters from Statistics NZ, the New Zealand Ministry of Health, the Cancer Control Agency, and RStudio for supporting this event. See the full agenda <a href="https://www.epi-interactive.com/events/r-exchange/" target="_blank" rel="noopener noreferrer">here</a>.</p>
+<p>Here is what we learned:</p>
+<h2 class="anchored">
+<ol type="1">
+<li>We are all in the same boat
+</li></ol></h2>
+
+<p>While the stories we heard from different organisations highlighted the diversity of how R is being used, there seem to be common challenges that reach across the board. Often organisations start their R journey with employees innovating in their respective field or there are obvious pain-points to tackle, like tedious manual reporting or the limitations of proprietary tools like Excel. However, once R grows within organisations, isolated solutions often hit a wall when IT gets involved and a more structured approach is required to address systemic issues such as data security.</p>
+<p>One strategy to overcome those obstacles successfully is to get the IT department on board early and build up an infrastructure where code development and publishing can be centralised and better controlled. As Josiah Parry from RStudio mentioned in his talk, the start-up mantra “fail fast, fail early, fail often” doesn’t always apply, for example, to government agencies who can’t fail on issues such as data security and privacy standards. This is where RStudio professional products can help as they facilitate the establishment of R in a controlled environment, for example by</p>
+<ul>
+<li>
+Managing a curated set of R packages with version control (<i><a href="https://www.rstudio.com/products/package-manager/" target="_blank" rel="noopener noreferrer">RStudio Package Manager</a></i>)
+</li>
+<li>
+Providing a dedicated server-based development environment for analysts and data scientists (<i><a href="https://www.rstudio.com/products/rstudio-server-pro/" target="_blank" rel="noopener noreferrer">RStudio Server Pro</a></i>) or
+</li>
+<li>
+Offering a publishing platform that provides access to outputs for a wider internal and external audience, e.g.&nbsp;via R Shiny dashboards, Markdown documents, scheduled reports or APIs (<i><a href="https://www.rstudio.com/products/connect/" target="_blank" rel="noopener noreferrer">RStudio Connect</a></i>).
+</li>
+</ul>
+<p><img src="diagram.png" alt="The RStudio professional product ecosystem" class="center"></p>
+<p style="text-align: right">
+<small><i>Diagram courtesy of RStudio</i></small>
+</p>
+<p>While a centralised controlled environment is considered a key success factor, users were keen to be able to continue to try out novel approaches, e.g.&nbsp;by using a sandbox or experimental environment. This would allow for a proof-of-concept or prototyping, where some of the approaches may or may not be transitioned into production.</p>
+<h2 class="anchored">
+<ol start="2" type="1">
+<li>Change comes from within
+</li></ol></h2>
+
+<p>Innovation was there in the room with us. Hearing battle stories from our colleagues really showcased the impact people can have by customising R to their specific needs. For example, while it is ideal to maintain a consistent appearance and behaviour across several different Shiny apps within an organisation, this is not always easy to achieve as different people might be involved in app development and code is commonly duplicated or difficult to maintain and update. We heard from one of our speakers how creating an R package containing styles, reference data, and documentation can serve as a single point of reference for any number of R Shiny apps and allows a team to easily update and maintain key facets of style and function. From a user point of view a consistent look and feel can establish trust and make dashboards easier to understand and navigate. Think about the “Don’t make me think” principle established by Steve Krug about web usability, where people should be able to accomplish tasks as easily and directly as possible. A consistent interface across all apps within an organisation can greatly contribute to this goal.</p>
+<p><br> <br></p>
+<p><img src="health.png" alt="Screenshot from New Zealand Ministry of Health survey results as a Shiny app" class="center"></p>
+<p style="text-align: right">
+<small><i>Screenshot: Ministry of Health. 2020. Annual Data Explorer 2019/20: New Zealand Health Survey [Data File]. URL: https://minhealthnz.shinyapps.io/nz-health-survey-2019-20-annual-data-explorer/ (Accessed 07/04/2021)</i></small>
+</p>
+<h2 class="anchored">
+<ol start="3" type="1">
+<li>The opportunities are huge
+</li></ol></h2>
+
+<p>While saying this to the audience of this blog feels like preaching to the choir this event showcased yet again how analysis, data science, and interactive dashboards that are code-based can be used to inform and engage stakeholders and connect data with real-world decision making. It was inspiring to see this in action during the talk on reporting of performance indicators to improve health service delivery and how R-driven reporting can make a difference in getting the message out there. It was easy to observe that R supports transparency and reproducibility, as it is open source, and features such as package creation and literate programming are readily available. These characteristics are becoming increasingly important for organisations that rely on the trust of their stakeholders, that might be both producers and consumers of the data. It was truly exciting to hear our speakers and participants’ vision on what the future here holds.</p>
+<p><img src="screenshot2.png" alt="Screenshot of University of Minnesota's AIS Explorer, 2021" class="center"></p>
+<p style="text-align: right">
+<small><i>Screenshot: University of Minnesota. 2021. AIS Explorer 2021 [Data File]. URL: https://www.aisexplorer.umn.edu/ (Accessed 08/04/2021)</i></small>
+</p>
+<hr>
+<h3 class="anchored">
+About Epi-interactive
+</h3>
+<p>While we are based at the bottom of the world in New Zealand’s windswept and creative capital (Lord of the Rings anyone?) we work across the globe. Here is how you can connect.</p>
+<h4 class="anchored">
+Learn from our Shiny Ninjas
+</h4>
+<p>Keen to build and extend your R Shiny skills in a fun and interactive online environment? Then the 2021 Edition of our R Shiny Masterclass Series might be for you. Delivered online in May and June 2021 we offer an Introduction and Advanced Class (8 sessions each).</p>
+<p><a href="https://www.epi-interactive.com/events/r-shiny-masterclass-series/" target="_blank" rel="noopener noreferrer">Find out more and register on our website</a></p>
+<p><img src="social2.jpg" alt="Learn from Shiny experts" class="center"></p>
+<h4 class="anchored">
+Stay in touch
+</h4>
+<ul>
+<li>
+Contact us on <a href="mailto:info@epi-interactive.com" target="_blank" rel="noopener noreferrer">info@epi-interactive.com</a> if you would like to discuss your project idea with us.
+</li>
+<li>
+Follow us on <a href="https://epi-interactive.us9.list-manage.com/track/click?u=36f9ab1413fd9ff644e6cffc7&amp;id=cfbe387558&amp;e=8357c5dc58" target="_blank" rel="noopener noreferrer">LinkedIn</a> for news and updates.
+</li>
+<li>
+Learn more about <a href="https://www.epi-interactive.com/work/" target="_blank" rel="noopener noreferrer">our work </a>.
+</li>
+<li>
+Subscribe to our <a href="http://eepurl.com/hvjVpb" target="_blank" rel="noopener noreferrer">mail list</a>.
+</li>
+</ul>
+<p><img src="footer.jpg" alt="Epi-Interactive" class="center"></p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

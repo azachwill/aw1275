@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2017-08-16">
+
+<title>RStudio 1.1 Preview - Data Connections</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio 1.1 Preview - Data Connections</h1>
+
+<p class="date">2017-08-16</p>
+</header>
+
+<p><em>Today, we’re continuing our blog series on new features in RStudio 1.1. If you’d like to try these features out for yourself, you can <a href="https://www.rstudio.com/products/rstudio/download/preview/">download a preview release of RStudio 1.1</a>.</em></p>
+<h2 id="data-connections" class="anchored">Data Connections</h2>
+<p>Connecting to data sources in R isn’t always straightforward; even when you’re able to establish a connection, navigating within it and understanding the shape of the data inside can be difficult. We built the Connections tab to make it easy to establish connections to data sources and access the data they contain.</p>
+<h3 id="connecting-to-data" class="anchored">Connecting to Data</h3>
+<h4 id="new-connection-wizard" class="anchored">New Connection Wizard</h4>
+<p>RStudio 1.1 includes a new Connection wizard which makes it easy to connect to any data source on your system.</p>
+<p><img src="2017-08-16-connection_create.png" alt="RStudio Connection wizard" style="width: 70%"></p>
+<p>Clicking on a connection type shows a form which you can fill to create the appropriate R code for creating a new connection. It’s now just as easy to connect to a data source as it is to import a CSV file.</p>
+<p><img src="2017-08-16-connection_dialog.png" alt="RStudio Connection wizard" style="width: 70%"></p>
+<p>RStudio can show you data sources from a variety of places, including:</p>
+<ul>
+<li>ODBC drivers installed on your machine, using the <a href="https://github.com/rstats-db/odbc/">odbc</a> package</li>
+<li>Spark connections, using the <a href="https://spark.rstudio.com/">sparklyr</a> package</li>
+<li>Connections supplied by an administrator, on RStudio Server</li>
+<li>Data sources defined by any installed R packages; see <a href="https://rstudio.github.io/rstudio-extensions/rstudio-connections.html">RStudio Connections</a> for more</li>
+</ul>
+<h4 id="saved-connections" class="anchored">Saved Connections</h4>
+<p>Once you have established a connection, RStudio saves it for future reference (even if you didn’t create it using the wizard!). This makes it easy to connect to the same data again later, without having to find the connection command in your R console history or dig up the R script you used to establish the connection.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-08-16-connection_list.png" class="img-fluid"></p>
+<p></p><figcaption>Connection List</figcaption><p></p>
+</figure>
+</div>
+<p>Your connection history is available in all your projects. Never look up a server name again!</p>
+<h2 id="exploring-connections" class="anchored">Exploring Connections</h2>
+<p>When you’re connected to a data source, RStudio will show you all of the objects available. You can explore this list, and preview the data, using the tools in the Connections pane.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-08-16-connection_explorer.png" class="img-fluid"></p>
+<p></p><figcaption>Connection Explorer</figcaption><p></p>
+</figure>
+</div>
+<h2 id="professional-odbc-drivers" class="anchored">Professional ODBC Drivers</h2>
+<p>Finally, RStudio will be providing professional ODBC drivers for the most important enterprise databases to our Pro customers. We developed the Connections tab to work seamlessly with these drivers; they will give your users easy, consistent access to the data in your company’s systems. More news about these ODBC drivers is coming soon!</p>
+<h2 id="further-reading" class="anchored">Further Reading</h2>
+<p>The Connections tab is just one part of a larger effort at RStudio to advance the state of the art in data connectivity with R. Here’s some more reading on both the big picture and the technical details:</p>
+<ul>
+<li><a href="http://db.rstudio.com/">Using Databases with R</a> describes best practices for working with data from databases using R and RStudio.</li>
+<li><a href="https://support.rstudio.com/hc/en-us/articles/115010915687-Using-RStudio-Connections">Using RStudio Connections</a> contains more detailed information on the Connections tab.</li>
+<li><a href="https://rstudio.github.io/rstudio-extensions/rstudio-connections.html">Extending RStudio Connections</a> describes how to add new connection types to RStudio and make it possible to browse your connection’s data in the pane.</li>
+</ul>
+<p>We hope you <a href="https://www.rstudio.com/products/rstudio/download/preview/">download the RStudio 1.1 preview</a> and <a href="http://support.rstudio.com/hc/en-us">let us know what you think</a>!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

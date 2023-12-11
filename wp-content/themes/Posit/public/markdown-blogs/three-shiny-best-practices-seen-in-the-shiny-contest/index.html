@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-07-22">
+
+<title>Top 3 Coding Best Practices from the Shiny Contest</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Top 3 Coding Best Practices from the Shiny Contest</h1>
+
+<p class="date">2021-07-22</p>
+</header>
+
+<p>Recently we <a href="https://www.rstudio.com/blog/winners-of-the-3rd-annual-shiny-contest/">wrapped up another round of the Shiny Contest</a>, and, as always, the entries were terrific. A previous post announced and discussed the winners, but we wanted to take a moment to highlight some of the examples of fantastic code we saw in the entries. In this post, we have selected three apps that demonstrate Shiny best practices. The apps are <a href="https://community.rstudio.com/t/restor-shiny-contest-submission/104903">RestoR</a> by Luka Negoita and Anna Calle, the <a href="https://community.rstudio.com/t/commute-explorer-shiny-contest-submission/104651">Commute Explorer</a> by Stefan Schliebs, and <a href="https://community.rstudio.com/t/wedding-a-shiny-app-to-help-future-grooms-shiny-contest-submission/104657">{wedding}: a Shiny app to help future grooms</a> by Margot Brard.</p>
+<p>While many of the apps submitted implement every one of the best practices we touch on (along with many other best practices), the three we’re highlighting illustrate their respective best practices excellently.</p>
+<p>The three points we will discuss are</p>
+<ul>
+<li><a href="#modules">Modules</a></li>
+<li><a href="#custom-styles">Using custom styles</a></li>
+<li><a href="#reactive-variables">Smart organization of reactive variables</a></li>
+</ul>
+<h2 id="modules" class="anchored">Best practice #1: Modules</h2>
+<h3 id="commute-explorer" class="anchored">Commute Explorer</h3>
+<p><img src="https://community.rstudio.com/uploads/default/original/3X/6/c/6c271876439a87ec22caa52774262ade91dec369.jpeg" class="img-fluid" alt="Screenshot of Commute Explorer app"> <em>Links:</em> <a href="https://nz-stefan.shinyapps.io/commute-explorer-2/">App</a> - <a href="https://github.com/nz-stefan/commute-explorer-2/">Code</a> - <a href="https://community.rstudio.com/t/commute-explorer-shiny-contest-submission/104651">Community Post</a></p>
+<p><a href="https://shiny.rstudio.com/articles/modules.html">Modules</a> are used to abstract complicated sections of an app into self-contained and reusable UI and server functions. As your app grows larger and and more complicated, well utilized modules result in cleaner code that is easier to read and understand, both for the original author and any collaborators interacting with your code.</p>
+<p>Commute Explorer does a great job not only of using modules but of simplifying the interfaces to those modules by passing reactive variables into the module’s server function. A common mistake in using modules is to call them inside of some other reactive statement like <code>observe()</code>…</p>
+<pre><code># Bad module calling example
+observe({
+  # Process data before sending it into the module
+  if (input$filterTo != "special") {
+    myModuleServer(
+      data %&gt;% 
+        filter(val == input$filterTo)
+    )
+  } else {
+    # Handle special case 
+    myModuleServer(
+      data %&gt;% 
+        ...
+    )
+  }
+})</code></pre>
+<p>Compare this to the (edited-for-brevity) <a href="https://github.com/nz-stefan/commute-explorer-2/blob/master/app/server.R">server function from the Commute Explorer app</a>. (The modules used are prefixed with <code>mod_</code> .)</p>
+<pre><code># Server function from Commute Explorer app 
+server &lt;- function(input, output, session) {
+  
+  # initialise the app state...
+  app_state &lt;- reactiveValues(...)
+  
+  ... 
+  
+  # add server logic for the commute explorer
+  mod_commute_mode("mode", app_state)
+  mod_commute_map("map", app_state)
+  mod_commute_table("table", app_state)
+  mod_commute_filter("filter", app_state)
+}</code></pre>
+<p>By using reactives as inputs to its modules, the app’s code makes it clear what the module depends on, leaving the logic for how it depends on that thing abstracted away from your main app script. See the <a href="https://shiny.rstudio.com/articles/communicate-bet-modules.html">article on communication between modules</a> for a more in-depth exploration into this concept.</p>
+<h2 id="custom-styles" class="anchored">Best practice #2: Using custom styles</h2>
+<h3 id="wedding-a-shiny-app-to-help-future-grooms" class="anchored">{wedding}: a Shiny app to help future grooms</h3>
+<p><em>Links:</em> <a href="https://connect.thinkr.fr/wedding/">App</a> - <a href="https://github.com/ThinkR-open/wedding">Code</a> - <a href="https://community.rstudio.com/t/wedding-a-shiny-app-to-help-future-grooms-shiny-contest-submission/104657">Community Post</a></p>
+<p><img src="thumbnail.jpeg" class="img-fluid" alt="Screenshot of the landing page for the {wedding} app. Custom fonts and a background image make for a striking first impression."> <em>Screenshot of the landing page for the {wedding} app. Custom fonts and a background image make for a striking first impression.</em></p>
+<p>The {wedding} app is a fantastic example of an app that you would never know was written primarily in a statistical programming language. The app has an entirely bespoke look thanks to the use of custom style sheets.</p>
+<p>A great way of getting the use of Shiny accepted, either at your company (or by your spouse), is to keep it “on brand.” The {wedding} app does this by leveraging custom CSS to beautifully match the style of a wedding invitation, creating a seamless experience for the guests/users.</p>
+<p>The app uses the Shiny framework <a href="https://thinkr-open.github.io/golem/">Golem</a>’s helpers to add the CSS to the page, but there are plenty of other ways to do it. To learn more about customizing the look and feel of your Shiny apps, see the <a href="https://rstudio.github.io/bslib/">bslib package</a> and the article <a href="https://shiny.rstudio.com/articles/css.html">Using custom CSS in your app</a>.</p>
+<h2 id="reactive-variables" class="anchored">Best practice #3: Smart organization of reactive variables</h2>
+<h3 id="restor" class="anchored">RestoR</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://community.rstudio.com/uploads/default/original/3X/e/d/ed7e4ca1d7d37a641c775bedc3ffe89b5a7ca53d.jpeg" class="img-fluid"></p>
+<p></p><figcaption>Screenshot of RestorR app</figcaption><p></p>
+</figure>
+</div>
+<p><em>Links:</em> <a href="https://gv2050.shinyapps.io/gv2050-platform-submission/">App</a> - <a href="https://github.com/LukaNeg/gv2050-platform-submission">Code</a> - <a href="https://community.rstudio.com/t/restor-shiny-contest-submission/104903">Community Post</a></p>
+<p>As R is a scripting language, one of the most challenging parts about learning Shiny is that the code doesn’t just run down the script but as a series of “reactive” calls of code chunks that listen to each other. A common source of poor Shiny performance and maintainability is placing a large amount of logic within a single reactive statement such as an <code>observe()</code>. Burdening your observe statements with lots of <code>renderPlot()</code> calls is tempting because it is how an R programmer’s script-oriented mindset works. However, once you learn to trust Shiny’s reactive system and liberally use reactive variables, your code becomes much cleaner, faster, and more maintainable.</p>
+<p>The RestorR app does a great job at this. One way to tell is that you see very few nested brackets when looking through the <code>server.r</code> file. Instead, you see nice compact reactive variables like…</p>
+<pre><code>datasheet_df &lt;- reactive({
+  sample_data %&gt;%
+  filter(site %in% input$selectSiteDatasheets) %&gt;% 
+  ...
+})
+
+## Download button
+output$download_datasheet &lt;- downloadHandler(
+  filename = function() {
+    paste("spreadsheet_", input$selectSiteDatasheets, ".csv", sep = "")
+  },
+  content = function(file) {
+    write.csv(datasheet_df(), file, row.names = FALSE)
+  }
+)</code></pre>
+<p>Here <code>datasheet_df</code> is a reactive variable that Shiny will always keep up to date. Therefore the download button only needs to describe that it uses whatever the current value of that reactive is. This separation keeps the code easy to reason about and allows easy use of <code>datasheet_df</code> in other contexts than just the download button.</p>
+<p>Contrast this with a naive implementation such as:</p>
+<pre><code>observe({
+  # Build datasheet_df based on current selectSiteDatasheets input
+  datasheet_df &lt;- sample_data %&gt;%
+    filter(site %in% input$selectSiteDatasheets) %&gt;%
+    ....
+    
+  # Setup download button so it downloads filtered data
+  output$download_datasheet &lt;- downloadHandler(
+    filename = function() {
+      paste("spreadsheet_", input$selectSiteDatasheets, ".csv", sep = "")
+    },
+    content = function(file) {
+      write.csv(datasheet_df, file, row.names = FALSE)
+    }
+  )
+})</code></pre>
+<p>Here changes in <code>input$selectedSiteDatasheets</code> trigger an <code>observe()</code> statement that filters some data and then sets up a download button. This code is not ideal because it re-initializes the download button every time the input changes. In addition, this style makes it much harder to reuse the filtered <code>datasheet_df</code> anywhere else in your app, hindering future enhancements like showing <code>datasheet_df</code> in a table.</p>
+<p>The compact and simple reactives result in a clean and easy-to-understand reactive dependency graph. Neat dependency graphs make your app’s logic easier to parse both for humans reading the code and Shiny when executing that code. Want to see what the dependency graph looks like for your app? Try out the <a href="https://rstudio.github.io/reactlog/">React Log</a>.</p>
+<h2 id="learning-more" class="anchored">Learning more</h2>
+<p>The Shiny contest, both this year and in the past, was an awe-inspiring demonstration of Shiny excellence from all participants with something to learn from every app submitted. If you’re eager to learn more about writing great Shiny apps by looking at outstanding examples, check out the winners from the <a href="https://www.rstudio.com/blog/winners-of-the-3rd-annual-shiny-contest/">announcement post</a>. Another resource for learning more is the <a href="https://shiny.rstudio.com/">Shiny website</a>, where you can look at <a href="https://shiny.rstudio.com/articles/">articles</a> covering topics from <a href="https://shiny.rstudio.com/articles/basics.html">beginner</a> to <a href="https://shiny.rstudio.com/articles/building-inputs.html">advanced</a>, an <a href="https://shiny.rstudio.com/gallery/">app gallery</a> for more inspiration, and <a href="https://shiny.rstudio.com/app-stories/">“app stories”</a> that look at the decision processes behind building apps.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

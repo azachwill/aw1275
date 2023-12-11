@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2017-09-05">
+
+<title>posit-blogs - Keras for R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Keras for R</h1>
+
+<p class="date">2017-09-05</p>
+</header>
+
+<blockquote>
+<p class="body-md-regular body-sm-regular">
+Please note that the information presented in this post reflects the package as it stood when initially released, and may now be outdated. For the most up-to-date information, kindly refer to <a href="https://tensorflow.rstudio.com/" class="uri">https://tensorflow.rstudio.com/</a>.
+</p>
+</blockquote>
+<p>We are excited to announce that the <a href="https://keras.rstudio.com">keras package</a> is now available on CRAN. The package provides an R interface to <a href="https://keras.io">Keras</a>, a high-level neural networks API developed with a focus on enabling fast experimentation. Keras has the following key features:</p>
+<ul>
+<li><p>Allows the same code to run on CPU or on GPU, seamlessly.</p></li>
+<li><p>User-friendly API which makes it easy to quickly prototype deep learning models.</p></li>
+<li><p>Built-in support for convolutional networks (for computer vision), recurrent networks (for sequence processing), and any combination of both.</p></li>
+<li><p>Supports arbitrary network architectures: multi-input or multi-output models, layer sharing, model sharing, etc. This means that Keras is appropriate for building essentially any deep learning model, from a memory network to a neural Turing machine.</p></li>
+<li><p>Is capable of running on top of multiple back-ends including <a href="https://github.com/tensorflow/tensorflow">TensorFlow</a>, <a href="https://github.com/Microsoft/cntk">CNTK</a>, or <a href="https://github.com/Theano/Theano">Theano</a>.</p></li>
+</ul>
+<p>If you are already familiar with Keras and want to jump right in, check out <a href="https://keras.rstudio.com" class="uri">https://keras.rstudio.com</a> which has everything you need to get started including over 20 complete examples to learn from.</p>
+<p>To learn a bit more about Keras and why we’re so excited to announce the Keras interface for R, read on!</p>
+<h2 id="keras-and-deep-learning" class="anchored">Keras and Deep Learning</h2>
+<p>Interest in deep learning has been accelerating rapidly over the past few years, and several deep learning frameworks have emerged over the same time frame. Of all the available frameworks, Keras has stood out for its productivity, flexibility and user-friendly API. At the same time, TensorFlow has emerged as a next-generation machine learning platform that is both extremely flexible and well-suited to production deployment.</p>
+<p>Not surprisingly, Keras and TensorFlow have of late been pulling away from other deep learning frameworks:</p>
+<blockquote class="twitter-tweet" data-lang="en">
+<p lang="en" dir="ltr">
+Google web search interest around deep learning frameworks over time. If you remember Q4 2015 and Q1-2 2016 as confusing, you weren't alone. <a href="https://t.co/1f1VQVGr8n">pic.twitter.com/1f1VQVGr8n</a>
+</p>
+— François Chollet (<span class="citation" data-cites="fchollet">@fchollet</span>) <a href="https://twitter.com/fchollet/status/871089784898310144">June 3, 2017</a>
+</blockquote>
+<script async="" src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>The good news about Keras and TensorFlow is that you don’t need to choose between them! The default backend for Keras is TensorFlow and Keras can be <a href="https://blog.keras.io/keras-as-a-simplified-interface-to-tensorflow-tutorial.html">integrated seamlessly</a> with TensorFlow workflows. There is also a pure-TensorFlow implementation of Keras with <a href="https://www.youtube.com/watch?v=UeheTiBJ0Io&amp;t=7s&amp;index=8&amp;list=PLOU2XLYxmsIKGc_NBoIhTn2Qhraji53cv">deeper integration</a> on the roadmap for later this year.</p>
+<p>Keras and TensorFlow are the state of the art in deep learning tools and with the keras package you can now access both with a fluent R interface.</p>
+<h2 id="getting-started" class="anchored">Getting Started</h2>
+<h3 id="installation" class="anchored">Installation</h3>
+<p>To begin, install the keras R package from CRAN as follows:</p>
+<p><code>{{r, eval=FALSE}} install.packages("keras")</code></p>
+<p>The Keras R interface uses the <a href="https://www.tensorflow.org/">TensorFlow</a> backend engine by default. To install both the core Keras library as well as the TensorFlow backend use the <code>install_keras()</code> function:</p>
+<p><code>{{r, eval=FALSE}} library(keras) install_keras()</code></p>
+<p>This will provide you with default CPU-based installations of Keras and TensorFlow. If you want a more customized installation, e.g.&nbsp;if you want to take advantage of NVIDIA GPUs, see the documentation for <a href="https://keras.rstudio.com/reference/install_keras.html"><code>install_keras()</code></a>.</p>
+<h3 id="mnist-example" class="anchored">MNIST Example</h3>
+<p>We can learn the basics of Keras by walking through a simple example: recognizing handwritten digits from the <a href="https://en.wikipedia.org/wiki/MNIST_database">MNIST</a> dataset. MNIST consists of 28 x 28 grayscale images of handwritten digits like these:</p>
+<p><img style="width: 50%;" src="https://www.tensorflow.org/images/MNIST.png"></p>
+<p>The dataset also includes labels for each image, telling us which digit it is. For example, the labels for the above images are 5, 0, 4, and 1.</p>
+<h4 id="preparing-the-data" class="anchored">Preparing the Data</h4>
+<p>The MNIST dataset is included with Keras and can be accessed using the <code>dataset_mnist()</code> function. Here we load the dataset then create variables for our test and training data:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(keras)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>mnist <span class="ot">&lt;-</span> <span class="fu">dataset_mnist</span>()</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>x_train <span class="ot">&lt;-</span> mnist<span class="sc">$</span>train<span class="sc">$</span>x</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>y_train <span class="ot">&lt;-</span> mnist<span class="sc">$</span>train<span class="sc">$</span>y</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>x_test <span class="ot">&lt;-</span> mnist<span class="sc">$</span>test<span class="sc">$</span>x</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>y_test <span class="ot">&lt;-</span> mnist<span class="sc">$</span>test<span class="sc">$</span>y</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>x</code> data is a 3-d array <code>(images,width,height)</code> of grayscale values. To prepare the data for training we convert the 3-d arrays into matrices by reshaping width and height into a single dimension (28x28 images are flattened into length 784 vectors). Then, we convert the grayscale values from integers ranging between 0 to 255 into floating point values ranging between 0 and 1:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># reshape</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(x_train) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">nrow</span>(x_train), <span class="dv">784</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(x_test) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">nrow</span>(x_test), <span class="dv">784</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># rescale</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>x_train <span class="ot">&lt;-</span> x_train <span class="sc">/</span> <span class="dv">255</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>x_test <span class="ot">&lt;-</span> x_test <span class="sc">/</span> <span class="dv">255</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>y</code> data is an integer vector with values ranging from 0 to 9. To prepare this data for training we <a href="https://www.quora.com/What-is-one-hot-encoding-and-when-is-it-used-in-data-science">one-hot encode</a> the vectors into binary class matrices using the Keras <code>to_categorical()</code> function:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>y_train <span class="ot">&lt;-</span> <span class="fu">to_categorical</span>(y_train, <span class="dv">10</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>y_test <span class="ot">&lt;-</span> <span class="fu">to_categorical</span>(y_test, <span class="dv">10</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h4 id="defining-the-model" class="anchored">Defining the Model</h4>
+<p>The core data structure of Keras is a model, a way to organize layers. The simplest type of model is the <a href="https://keras.rstudio.com/articles/sequential_model.html">sequential model</a>, a linear stack of layers.</p>
+<p>We begin by creating a sequential model and then adding layers using the pipe (<code>%&gt;%</code>) operator:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>() </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">256</span>, <span class="at">activation =</span> <span class="st">"relu"</span>, <span class="at">input_shape =</span> <span class="fu">c</span>(<span class="dv">784</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.4</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">128</span>, <span class="at">activation =</span> <span class="st">"relu"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">10</span>, <span class="at">activation =</span> <span class="st">"softmax"</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>input_shape</code> argument to the first layer specifies the shape of the input data (a length 784 numeric vector representing a grayscale image). The final layer outputs a length 10 numeric vector (probabilities for each digit) using a <a href="https://en.wikipedia.org/wiki/Softmax_function">softmax activation function</a>.</p>
+<p>Use the <code>summary()</code> function to print the details of the model:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre style="box-shadow: none;"><code>Model
+________________________________________________________________________________
+Layer (type)                        Output Shape                    Param #     
+================================================================================
+dense_1 (Dense)                     (None, 256)                     200960      
+________________________________________________________________________________
+dropout_1 (Dropout)                 (None, 256)                     0           
+________________________________________________________________________________
+dense_2 (Dense)                     (None, 128)                     32896       
+________________________________________________________________________________
+dropout_2 (Dropout)                 (None, 128)                     0           
+________________________________________________________________________________
+dense_3 (Dense)                     (None, 10)                      1290        
+================================================================================
+Total params: 235,146
+Trainable params: 235,146
+Non-trainable params: 0
+________________________________________________________________________________</code></pre>
+<p>Next, compile the model with appropriate loss function, optimizer, and metrics:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">compile</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">loss =</span> <span class="st">"categorical_crossentropy"</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">optimizer =</span> <span class="fu">optimizer_rmsprop</span>(),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">metrics =</span> <span class="fu">c</span>(<span class="st">"accuracy"</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h4 id="training-and-evaluation" class="anchored">Training and Evaluation</h4>
+<p>Use the <code>fit()</code> function to train the model for 30 epochs using batches of 128 images:</p>
+<p><code>{{r, results="hide"}} history &lt;- model %&gt;% fit(   x_train, y_train,    epochs = 30, batch_size = 128,    validation_split = 0.2 )</code></p>
+<p>The <code>history</code> object returned by <code>fit()</code> includes loss and accuracy metrics which we can plot:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(history)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="https://keras.rstudio.com/images/training_history_ggplot2.png" class="img-fluid"></p>
+<p>Evaluate the model’s performance on the test data:</p>
+<p><code>{{r, results = "hide"}} model %&gt;% evaluate(x_test, y_test,verbose = 0)</code></p>
+<pre><code>$loss
+[1] 0.1149
+
+$acc
+[1] 0.9807</code></pre>
+<p>Generate predictions on new data:</p>
+<p><code>{{r, results = "hide"}} model %&gt;% predict_classes(x_test)</code></p>
+<pre><code>  [1] 7 2 1 0 4 1 4 9 5 9 0 6 9 0 1 5 9 7 3 4 9 6 6 5 4 0 7 4 0 1 3 1 3 4 7 2 7 1 2
+ [40] 1 1 7 4 2 3 5 1 2 4 4 6 3 5 5 6 0 4 1 9 5 7 8 9 3 7 4 6 4 3 0 7 0 2 9 1 7 3 2
+ [79] 9 7 7 6 2 7 8 4 7 3 6 1 3 6 9 3 1 4 1 7 6 9
+ [ reached getOption("max.print") -- omitted 9900 entries ]</code></pre>
+<p>Keras provides a vocabulary for building deep learning models that is simple, elegant, and intuitive. Building a question answering system, an image classification model, a neural Turing machine, or any other model is just as straightforward.</p>
+<p>The <a href="https://keras.rstudio.com/articles/sequential_model.html">Guide to the Sequential Model</a> article describes the basics of Keras sequential models in more depth.</p>
+<h2 id="examples" class="anchored">Examples</h2>
+<p>Over 20 complete examples are available (special thanks to <a href="https://github.com/dfalbel"><span class="citation" data-cites="dfalbel">@dfalbel</span></a> for his work on these!). The examples cover image classification, text generation with stacked LSTMs, question-answering with memory networks, transfer learning, variational encoding, and more.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Example</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://keras.rstudio.com/articles/examples/addition_rnn.html">addition_rnn</a></td>
+<td>Implementation of sequence to sequence learning for performing addition of two numbers (as strings).</td>
+</tr>
+<tr class="even">
+<td><a href="https://keras.rstudio.com/articles/examples/babi_memnn.html">babi_memnn</a></td>
+<td>Trains a memory network on the bAbI dataset for reading comprehension.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://keras.rstudio.com/articles/examples/babi_rnn.html">babi_rnn</a></td>
+<td>Trains a two-branch recurrent network on the bAbI dataset for reading comprehension.</td>
+</tr>
+<tr class="even">
+<td><a href="https://keras.rstudio.com/articles/examples/cifar10_cnn.html">cifar10_cnn</a></td>
+<td>Trains a simple deep CNN on the CIFAR10 small images dataset.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://keras.rstudio.com/articles/examples/conv_lstm.html">conv_lstm</a></td>
+<td>Demonstrates the use of a convolutional LSTM network.</td>
+</tr>
+<tr class="even">
+<td><a href="https://keras.rstudio.com/articles/examples/deep_dream.html">deep_dream</a></td>
+<td>Deep Dreams in Keras.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://keras.rstudio.com/articles/examples/imdb_bidirectional_lstm.html">imdb_bidirectional_lstm</a></td>
+<td>Trains a Bidirectional LSTM on the IMDB sentiment classification task.</td>
+</tr>
+<tr class="even">
+<td><a href="https://keras.rstudio.com/articles/examples/imdb_cnn.html">imdb_cnn</a></td>
+<td>Demonstrates the use of Convolution1D for text classification.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://keras.rstudio.com/articles/examples/imdb_cnn_lstm.html">imdb_cnn_lstm</a></td>
+<td>Trains a convolutional stack followed by a recurrent stack network on the IMDB sentiment classification task.</td>
+</tr>
+<tr class="even">
+<td><a href="https://keras.rstudio.com/articles/examples/imdb_fasttext.html">imdb_fasttext</a></td>
+<td>Trains a FastText model on the IMDB sentiment classification task.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://keras.rstudio.com/articles/examples/imdb_lstm.html">imdb_lstm</a></td>
+<td>Trains a LSTM on the IMDB sentiment classification task.</td>
+</tr>
+<tr class="even">
+<td><a href="https://keras.rstudio.com/articles/examples/lstm_text_generation.html">lstm_text_generation</a></td>
+<td>Generates text from Nietzsche’s writings.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://keras.rstudio.com/articles/examples/mnist_acgan.html">mnist_acgan</a></td>
+<td>Implementation of AC-GAN (Auxiliary Classifier GAN ) on the MNIST dataset</td>
+</tr>
+<tr class="even">
+<td><a href="https://keras.rstudio.com/articles/examples/mnist_antirectifier.html">mnist_antirectifier</a></td>
+<td>Demonstrates how to write custom layers for Keras</td>
+</tr>
+<tr class="odd">
+<td><a href="https://keras.rstudio.com/articles/examples/mnist_cnn.html">mnist_cnn</a></td>
+<td>Trains a simple convnet on the MNIST dataset.</td>
+</tr>
+<tr class="even">
+<td><a href="https://keras.rstudio.com/articles/examples/mnist_irnn.html">mnist_irnn</a></td>
+<td>Reproduction of the IRNN experiment with pixel-by-pixel sequential MNIST in “A Simple Way to Initialize Recurrent Networks of Rectified Linear Units” by Le et al.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://keras.rstudio.com/articles/examples/mnist_mlp.html">mnist_mlp</a></td>
+<td>Trains a simple deep multi-layer perceptron on the MNIST dataset.</td>
+</tr>
+<tr class="even">
+<td><a href="https://keras.rstudio.com/articles/examples/mnist_hierarchical_rnn.html">mnist_hierarchical_rnn</a></td>
+<td>Trains a Hierarchical RNN (HRNN) to classify MNIST digits.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://keras.rstudio.com/articles/examples/mnist_transfer_cnn.html">mnist_transfer_cnn</a></td>
+<td>Transfer learning toy example.</td>
+</tr>
+<tr class="even">
+<td><a href="https://keras.rstudio.com/articles/examples/neural_style_transfer.html">neural_style_transfer</a></td>
+<td>Neural style transfer (generating an image with the same “content” as a base image, but with the “style” of a different picture).</td>
+</tr>
+<tr class="odd">
+<td><a href="https://keras.rstudio.com/articles/examples/reuters_mlp.html">reuters_mlp</a></td>
+<td>Trains and evaluates a simple MLP on the Reuters newswire topic classification task.</td>
+</tr>
+<tr class="even">
+<td><a href="https://keras.rstudio.com/articles/examples/stateful_lstm.html">stateful_lstm</a></td>
+<td>Demonstrates how to use stateful RNNs to model long sequences efficiently.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://keras.rstudio.com/articles/examples/variational_autoencoder.html">variational_autoencoder</a></td>
+<td>Demonstrates how to build a variational autoencoder.</td>
+</tr>
+<tr class="even">
+<td><a href="https://keras.rstudio.com/articles/examples/variational_autoencoder_deconv.html">variational_autoencoder_deconv</a></td>
+<td>Demonstrates how to build a variational autoencoder with Keras using deconvolution layers.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="learning-more" class="anchored">Learning More</h2>
+<p>After you’ve become familiar with the basics, these articles are a good next step:</p>
+<ul>
+<li><p><a href="https://keras.rstudio.com/articles/sequential_model.html">Guide to the Sequential Model</a>. The sequential model is a linear stack of layers and is the API most users should start with.</p></li>
+<li><p><a href="https://keras.rstudio.com/articles/functional_api.html">Guide to the Functional API</a>. The Keras functional API is the way to go for defining complex models, such as multi-output models, directed acyclic graphs, or models with shared layers.</p></li>
+<li><p><a href="https://keras.rstudio.com/articles/training_visualization.html">Training Visualization</a>. There are a wide variety of tools available for visualizing training. These include plotting of training metrics, real time display of metrics within the RStudio IDE, and integration with the TensorBoard visualization tool included with TensorFlow.</p></li>
+<li><p><a href="https://keras.rstudio.com/articles/applications.html">Using Pre-Trained Models</a>. Keras includes a number of deep learning models (Xception, VGG16, VGG19, ResNet50, InceptionVV3, and MobileNet) that are made available alongside pre-trained weights. These models can be used for prediction, feature extraction, and fine-tuning.</p></li>
+<li><p><a href="https://keras.rstudio.com/articles/faq.html">Frequently Asked Questions</a>. Covers many additional topics including streaming training data, saving models, training on GPUs, and more.</p></li>
+</ul>
+<p>Keras provides a productive, highly flexible framework for developing deep learning models. We can’t wait to see what the R community will do with these tools!</p>
+<style type="text/css">
+main {
+  hyphens: inherit;
+}
+</style>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+
+
+
+</body></html>

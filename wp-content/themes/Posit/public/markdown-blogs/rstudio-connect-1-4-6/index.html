@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2017-04-11">
+
+<title>RStudio Connect 1.4.6</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Connect 1.4.6</h1>
+
+<p class="date">2017-04-11</p>
+</header>
+
+<p>We’re excited to announce the release of <a href="https://www.rstudio.com/products/connect/">RStudio Connect: version 1.4.6</a>. This is an incremental release which features significantly improved startup time and support for server-side Shiny bookmarks.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2017/04/media-20170407.png" class="img-fluid"></p>
+<p></p><figcaption>Creating a server-side Shiny bookmark in RStudio Connect</figcaption><p></p>
+</figure>
+</div>
+<p><strong>Improved Startup &amp; Job Listing Time</strong></p>
+<p>We now track R process jobs in the database which allows us to list and query jobs much more quickly. This decreases the startup time of the RStudio Connect service – allowing even the busiest of servers to spin up in a matter of seconds. Additionally, operations that involve listing jobs such as viewing process logs for a particular application should be noticeably faster.</p>
+<p><strong>Server-Side Shiny Bookmarks</strong></p>
+<p>Shiny v0.14 introduced a feature by which users could <a href="https://shiny.rstudio.com/articles/bookmarking-state.html">bookmark the current state of the application</a> by either encoding the state in the URL or saving the state to the server. As of this release, RStudio Connect now supports server-side bookmarking of Shiny applications.</p>
+<p>Other notable changes this release:</p>
+<ul>
+<li><p>BREAKING: Changed the default for <code>Authorization.DefaultUserRole</code> from <code>publisher</code> to <code>viewer</code>. New users will now be created with a <code>viewer</code> account until promoted. The <a href="http://docs.rstudio.com/connect/1.4.5/admin/user-management.html#user-roles">user roles</a> documentation explains the differences. To restore the previous behavior, set <code>DefaultUserRole = publisher</code>. Because viewer users cannot be added as collaborators on content, this means that in order to add a remote user as a collaborator on content you must first create their account, then promote them to a publisher account.</p></li>
+<li><p>Fixed a bug in the previous release that had broken <code>Applications.ViewerOnDemandReports</code> and <code>Applications.ViewerCustomizedReports</code>. These settings are again functional and allow you to manage the capabilities of a viewer of a parameterized report on the server.</p></li>
+<li><p>Tune the number of concurrent processes to use when building R packages. This is controlled with the <code>Server.CompilationConcurrency</code> setting and passed as the value to the make flag <code>-jNUM</code>. The default is to permit four concurrent processes. Decrease this setting in low memory environments.</p></li>
+<li><p>The <code>/etc/rstudio-connect/rstudio-connect.gcfg</code> file is installed with more restrictive permissions.</p></li>
+<li><p>Log file downloads include a more descriptive file name by default. Previously, we used the naming convention <code>&lt;jobId&gt;.log</code>, which resulted in file names like <code>GBFCaiPE6tegbrEM.log</code>. Now, we use the naming convention <code>rstudio-connect.&lt;appId&gt;.&lt;reportId&gt;.&lt;bundleId&gt;.&lt;jobType&gt;.&lt;jobId&gt;.log</code>, which results in file names like <code>rstudio-connect.34.259.15.packrat_restore.GBFCaiPE6tegbrEM.log</code>.</p></li>
+<li><p>Bundle the admin guide and user guide in the product. You can access both from the Documentation tab.</p></li>
+<li><p>Implemented improved, pop-out filtering panel when filtering content, which offers a better experience on small/mobile screens.</p></li>
+<li><p>Improvements to the parameterized report pane when the viewer does not have the authority to render custom versions of the document.</p></li>
+<li><p>Database performance improvements which should improve performance in high-traffic environments.</p></li>
+</ul>
+<blockquote>
+<h4 id="upgrade-planning" class="anchored">Upgrade Planning</h4>
+<p>The migration of jobs from disk to the database may take a few minutes. The server will be unavailable during this migration which will be performed the first time RStudio Connect v1.4.6 starts. Even on the busiest of servers we would expect this migration to complete in under 5 minutes.</p>
+</blockquote>
+<p>If you haven’t yet had a chance to download and try <a href="https://rstudio.com/products/connect">RStudio Connect</a> we encourage you to do so. RStudio Connect is the best way to share all the work that you do in R (Shiny apps, R Markdown documents, plots, dashboards, etc.) with collaborators, colleagues, or customers.</p>
+<p>You can find more details or download a 45 day evaluation of the product at <a href="https://www.rstudio.com/products/connect/" class="uri">https://www.rstudio.com/products/connect/</a>. Additional resources can be found below.</p>
+<ul>
+<li><p><a href="https://www.rstudio.com/products/connect/">RStudio Connect home page &amp; downloads</a></p></li>
+<li><p><a href="http://docs.rstudio.com/connect/admin/">RStudio Connect Admin Guide</a></p></li>
+<li><p><a href="https://www.rstudio.com/wp-content/uploads/2016/01/RSC-IT-Q-and-A.pdf">What IT needs to know about RStudio Connect</a></p></li>
+<li><p><a href="http://docs.rstudio.com/connect/news/">Detailed news and changes between each version</a></p></li>
+<li><p><a href="https://www.rstudio.com/pricing/#ConnectPricing">Pricing</a></p></li>
+<li><p><a href="https://beta.rstudioconnect.com/connect/">An online preview of RStudio Connect</a></p></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

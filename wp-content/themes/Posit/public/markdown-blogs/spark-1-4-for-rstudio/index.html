@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2015-07-14">
+
+<title>Spark 1.4 for RStudio</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Spark 1.4 for RStudio</h1>
+
+<p class="date">2015-07-14</p>
+</header>
+
+<p><em>Today’s guest post is written by Vincent Warmerdam of <a href="http://www.godatadriven.com/">GoDataDriven</a> and is reposted with Vincent’s permission from <a href="http://blog.godatadriven.com/spark-rstudio.html">blog.godatadriven.com</a>. You can learn more about how to use SparkR with RStudio at the <a href="http://www.earl-conference.com/">2015 EARL Conference</a> in Boston November 2-4, where Vincent will be speaking live.</em></p>
+<p>This document contains a tutorial on how to provision a spark cluster with RStudio. You will need a machine that can run bash scripts and a functioning account on AWS. Note that this tutorial is meant for Spark 1.4.0. Future versions will most likely be provisioned in another way but this should be good enough to help you get started. At the end of this tutorial you will have a fully provisioned spark cluster that allows you to handle simple dataframe operations on gigabytes of data within RStudio.</p>
+<h3 id="aws-prep" class="anchored">AWS prep</h3>
+<p>Make sure you have an AWS account with billing. Next make sure that you have downloaded your <code>.pem</code> files and that you have your keys ready.</p>
+<h3 id="spark-startup" class="anchored">Spark Startup</h3>
+<p>Next go and get spark locally on your machine from <a href="https://spark.apache.org/downloads.html">the spark homepage</a>. It’s a pretty big blob. Unzip it once it is downloaded go to the <code>ec2</code> folder in the spark folder. Run the following command from the command line.</p>
+<pre><code>./spark-ec2 \
+--key-pair=spark-df \
+--identity-file=/Users/code/Downloads/spark-df.pem \
+--region=eu-west-1 \
+-s 1 \
+--instance-type c3.2xlarge \
+launch mysparkr</code></pre>
+<p>This script will use your keys to connect to amazon and setup a spark standalone cluster for you. You can specify what type of machines you want to use as well as how many and where on amazon. You will only need to wait until everything is installed, which can take up to 10 minutes. More info can be found <a href="https://spark.apache.org/docs/latest/ec2-scripts.html">here</a>. When the command signals that it is done, you can ssh into your machine via the command line. <code>./spark-ec2 -k spark-df -i /Users/code/Downloads/spark-df.pem --region=eu-west-1 login mysparkr</code> Once you are in your amazon machine you can immediately run SparkR from the terminal.</p>
+<pre><code>chmod u+w /root/spark/
+./spark/bin/sparkR</code></pre>
+<p>As just a toy example, you should be able to confirm that the following code already works.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ddf <span class="ot">&lt;-</span> <span class="fu">createDataFrame</span>(sqlContext, faithful)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ddf)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">printSchema</span>(ddf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This <code>ddf</code> dataframe is no ordinary dataframe object. It is a distributed dataframe, one that can be distributed across a network of workers such that we could query it for parallelized commands through spark.</p>
+<h3 id="spark-ui" class="anchored">Spark UI</h3>
+<p>This R command you have just run launches a spark job. Spark has a webui so you can keep track of the cluster. To visit the web-ui, first confirm on what IP-address the master node is via this command:</p>
+<pre><code>curl icanhazip.com</code></pre>
+<p>You can now visit the webui via your browser.</p>
+<pre><code>&lt;master-node-ip&gt;:4040</code></pre>
+<p>From here you can view anything you may want to know about your spark clusters (like executor status, job process and even a DAG visualisation). <img src="https://i.imgur.com/CsNys83.png" class="img-fluid"> This is a good moment to stand still and realize that this on it’s own right is already very cool. We can start up a spark cluster in 15 minutes and use R to control it. We can specify how many servers we need by only changing a number on the command line and without any real developer effort we gain access to all this parallelizing power. Still, working from a terminal might not be too productive. We’d prefer to work with a GUI and we would like some basic plotting functionality when working with data. So let’s install RStudio and get some tools connected.</p>
+<h3 id="rstudio-setup" class="anchored">RStudio setup</h3>
+<p>Get out of the <code>SparkR</code> shell by entering <code>q()</code>. Next, download and install Rstudio. <code>wget http://download2.rstudio.org/rstudio-server-rhel-0.99.446-x86_64.rpm</code> <code>sudo yum install --nogpgcheck -y rstudio-server-rhel-0.99.446-x86_64.rpm</code> <code>rstudio-server restart</code> While this is installing. Make sure the TCP connection on the 8787 port is open in the AWS security group setting for the master node. A recommended setting is to only allow access from your ip. <img src="https://i.imgur.com/cBfbL9v.png" class="img-fluid"> Then, add a user that can access RStudio. We make sure that this user can also access all the RStudio files.</p>
+<pre><code>adduser analyst
+passwd analyst</code></pre>
+<p>You also need to do this (the details of why are a bit involved). These edits need to be made because the analyst user doesn’t have root permissions. <code>chmod a+w /mnt/spark</code> <code>chmod a+w /mnt2/spark</code> <code>sed -e 's/^ulimit/#ulimit/g' /root/spark/conf/spark-env.sh &gt; /root/spark/conf/spark-env2.sh</code> <code>mv /root/spark/conf/spark-env2.sh /root/spark/conf/spark-env.sh</code> <code>ulimit -n 1000000</code> When this is known, point the browser to <code>&lt;master-ip-adr&gt;:8787</code>. Then login in as analyst.</p>
+<h3 id="rstudio---spark-link" class="anchored">RStudio - Spark link</h3>
+<p>Awesome. RStudio is set up. First start up the master submit.</p>
+<pre><code>/root/spark/sbin/stop-all.sh
+/root/spark/sbin/start-all.sh</code></pre>
+<p>This will reboot Spark (both the master and slave nodes). You can confirm that spark works after this command by pointing the browser to <code>&lt;ip-adr&gt;:8080</code>. Next, let’s go and start Spark from RStudio. Start a new R script, and run the following code: <code>print('Now connecting to Spark for you.')</code></p>
+<p><code>spark_link &lt;- system('cat /root/spark-ec2/cluster-url', intern=TRUE)</code></p>
+<p><code>.libPaths(c(.libPaths(), '/root/spark/R/lib'))</code> <code>Sys.setenv(SPARK_HOME = '/root/spark')</code> <code>Sys.setenv(PATH = paste(Sys.getenv(c('PATH')), '/root/spark/bin', sep=':'))</code> <code>library(SparkR)</code></p>
+<p><code>sc &lt;- sparkR.init(spark_link)</code> <code>sqlContext &lt;- sparkRSQL.init(sc)</code></p>
+<p><code>print('Spark Context available as \"sc\". \\n')</code> <code>print('Spark SQL Context available as \"sqlContext\". \\n')</code></p>
+<h3 id="loading-data-from-s3" class="anchored">Loading data from S3</h3>
+<p>Let’s confirm that we can now play with the RStudio stack by downloading some libraries and having it run against a data that lives on S3. <code>small_file = "s3n://&lt;AWS-ID&gt;:&lt;AWS-SECRET-KEY&gt;@&lt;bucket_name&gt;/data.json"</code> <code>dist_df &lt;- read.df(sqlContext, small_file, "json") %&gt;% cache</code> This <code>dist_df</code> is now a distributed dataframe, which has a different api than the normal R dataframe but is similar to <code>dplyr</code>. <code>head(summarize(groupBy(dist_df, df$type), count = n(df$auc)))</code> Also, we can install <code>magrittr</code> to make our code look a lot nicer.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>local_df <span class="ot">&lt;-</span> dist_df <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">groupBy</span>(df<span class="sc">$</span>type) <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">count =</span> <span class="fu">n</span>(df<span class="sc">$</span>id)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  collect</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>collect</code> method pulls the distributed dataframe back into a normal dataframe on a single machine so you can use plotting methods on it again and use R as you would normally. A common use case would be to use spark to sample or aggregate a large dataset which can then be further explored in R. Again, if you want to view the spark ui for these jobs you can just go to:</p>
+<pre><code>&lt;master-node-ip&gt;:4040</code></pre>
+<h3 id="a-more-complete-stack" class="anchored">A more complete stack</h3>
+<p>Unfortunately this stack has an old version of R (we need version 3.2 to get the newest version of ggplot2/dplyr). Also, as of right now there isn’t support for the machine learning libraries yet. These are known issues at the moment and version 1.5 should show some fixes. Version 1.5 will also feature RStudio installation as part of the ec2 stack. Another issue is that the namespace of <code>dplyr</code> currently conflicts with <code>sparkr</code>, time will tell how this gets resolved. Same would go for other data features like windowing function and more elaborate data types.</p>
+<h3 id="killing-the-cluster" class="anchored">Killing the cluster</h3>
+<p>When you are done with the cluster, you only need to exit the ssh connection and run the following command: <code>./spark-ec2 -k spark-df -i /Users/code/Downloads/spark-df.pem --region=eu-west-1 destroy mysparkr</code></p>
+<h3 id="conclusion" class="anchored">Conclusion</h3>
+<p>The economics of spark are very interesting. We only pay amazon for the time that we are using Spark as a compute engine. All other times we’d only pay for S3. This means that if we analyse for 8 hours, we’d only pay for 8 hours. Spark is also very flexible in that it allows us to continue coding in R (or python or scala) without having to learn multiple domain specific languages or frameworks like in hadoop. Spark makes big data really simple again. This document is meant to help you get started with Spark and RStudio but in a production environment there are a few things you still need to account for:</p>
+<ul>
+<li><p><strong>security</strong>, our web connection is not done through https, even though we are telling amazon to only use our ip, we may be at security risk if there is a man in the middle listening .</p></li>
+<li><p><strong>multiple users</strong>, this setup will work fine for a single user but if multiple users are working on such a cluster you may need to rethink some steps with regards to user groups, file access and resource management.</p></li>
+<li><p><strong>privacy</strong>, this setup works well for ec2 but if you have sensitive, private user data then you may need to do this on premise because the data cannot leave your own datacenter. Most install steps would be the same but the initial installation of Spark would require the most work. See the <a href="https://spark.apache.org/docs/latest/spark-standalone.html">docs</a> for more information.</p></li>
+</ul>
+<p>Spark is an amazing tool, expect more features in the future.</p>
+<h4 id="possible-gotya" class="anchored">Possible Gotya</h4>
+<h5 id="hanging" class="anchored">Hanging</h5>
+<p>It can happen that the <code>ec2</code> script hangs in the <code>Waiting for cluster to enter 'ssh-ready' state</code> part. This can happen if you use amazon a lot. To prevent this you may want to remove some lines in <code>~/.ssh/known_hosts</code>. More info <a href="http://stackoverflow.com/questions/28002443/cluster-hangs-in-ssh-ready-state-using-spark-1-2-ec2-launch-script">here</a>. Another option is to add the following lines to your <code>~/.ssh/config</code> file.</p>
+<pre><code># AWS EC2 public hostnames (changing IPs)
+Host *.compute.amazonaws.com
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null</code></pre>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

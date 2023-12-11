@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2018-10-29">
+
+<title>RStudio IDE Custom Theme Support</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio IDE Custom Theme Support</h1>
+
+<p class="date">2018-10-29</p>
+</header>
+
+<p>We’re excited to announce that RStudio v1.2 has added support for custom editor themes. Custom editor themes will allow you to adjust the background color of the editor and syntax highlighting of code in RStudio to better suit your own personal style.</p>
+<p>New editor themes can be added to RStudio by importing a tmTheme or sharing an existing rstheme file. The tmTheme file format was first introduced for the TextMate editor, and has since become a standard theme format. The rstheme format is specific to RStudio.</p>
+<h2 id="importing-a-custom-theme" class="anchored">Importing a Custom Theme</h2>
+<p>Before you can add a theme to RStudio, you’ll have to find a theme in the right format. This <a href="https://tmtheme-editor.herokuapp.com">online tmTheme editor</a> will allow you to create your own tmThemes or download an existing theme from a large collection of themes. If you are interested in writing your own theme be sure to read this <a href="https://rstudio.github.io/rstudio-extensions/rstudio-theme-creation.html">RStudio Extensions article about writing themes</a>.</p>
+<p>Once you have a tmTheme or rstheme file for your favorite theme or themes, you can import it to RStudio. Follow the instructions below to import a theme.</p>
+<ol type="1">
+<li><p>In the menu bar, open the “Tools” menu.</p></li>
+<li><p>From the drop down menu, choose “Global Options”. <img src="2018-10-29-import-theme-steps-1-and-2.png" align="center"></p></li>
+<li><p>In the pane on the left hand side of the options window, click “Appearance”.</p></li>
+<li><p>To import a theme, click on the “Add…” button. <img src="2018-10-29-import-theme-steps-3-and-4.png" align="center"></p></li>
+<li><p>In the file browser, navigate to the location where you’ve saved your theme file. <img src="2018-10-29-import-theme-step-5.png" align="center"></p></li>
+<li><p>If prompted to install R packages, select “Yes”. <img src="2018-10-29-import-theme-step-6.png" align="center"></p></li>
+<li><p>You should now see your newly added theme in the list of editor themes. Simply click the “Apply” button to apply your theme to RStudio. <img src="2018-10-29-import-theme-step-7.png" align="center"></p></li>
+</ol>
+<p><img src="2018-10-29-night-owl.png" align="center"></p>
+<p>The theme pictured in these examples is called Night Owlish, and was adapted from the Night Owl theme by RStudio’s own Mara Averick. It can be found on <a href="https://github.com/batpigandme/night-owlish">her github page</a>.</p>
+<h2 id="removing-a-custom-theme" class="anchored">Removing a Custom Theme</h2>
+<p>If you accidentally added a theme, or you want to add an updated version, you can remove the theme from RStudio. To do so, follow the instructions below.</p>
+<ol type="1">
+<li><p>As above, navigate to the Appearance Preferences Pane in the Global Options.</p></li>
+<li><p>If the theme you wish to remove is the active theme, be sure to switch to a different theme first.</p></li>
+<li><p>Select the theme you wish to remove from the list of themes and click the “Remove” button. <img src="2018-10-29-remove-theme-step-1.png" align="center"></p></li>
+<li><p>Select “Yes” when prompted for confirmation. <img src="2018-10-29-remove-theme-step-2.png" align="center"></p></li>
+</ol>
+<h2 id="sharing-themes" class="anchored">Sharing Themes</h2>
+<p>If you’ve found (or made) a really cool theme that you want to share, you can do so just by sharing the tmTheme or rstheme file. Then the recipient can import it as per the instructions in the <a href="#importing-a-custom-theme">Importing a Custom Theme section</a>. There is no difference between sharing the tmTheme file, or the rstheme file that is generated after the theme gets imported to RStudio, unless you or someone else has made changes to the rstheme file itself.</p>
+<p>rstheme files can be found in the <code>.R</code> directory under your home directory. On Windows, the path is <code>C:\Users\&lt;your user account&gt;\Documents\.R\rstudio\themes</code>. On all other operating systems, the path is <code>~/.R/rstudio/themes</code>.</p>
+<h2 id="some-of-our-favorite-themes" class="anchored">Some of Our Favorite Themes</h2>
+<p>To find out more about themes in RStudio, check out this <a href="https://support.rstudio.com/hc/en-us/articles/115011846747-Using-RStudio-Themes">support article about themes</a>. In the meantime, here is RStudio styled using some of our favorite themes:</p>
+<p><a href="https://github.com/dempfi/ayu">Ayu Dark, Light, and Mirage by dempfi</a>: <img src="2018-10-29-ayu-dark.png" align="center"> Ayu Dark</p>
+<p><img src="2018-10-29-ayu-mirage.png" align="center"> Ayu Mirage</p>
+<p><img src="2018-10-29-ayu-light.png" align="center"> Ayu Light</p>
+<p><a href="https://tmtheme-editor.herokuapp.com/#!/editor/theme/Candy%20Brights">Candy Brights</a>: <img src="2018-10-29-candy-brights.png" align="center"></p>
+<p><a href="https://github.com/randy3k/dotfiles/blob/master/.R/rstudio/themes/Wombat.rstheme">Wombat, by randy3k</a>: <img src="2018-10-29-wombat.png" align="center"></p>
+<p>This theme is an example of a theme where the rstheme file was modified directly. Without editing the rstheme file, it wouldn’t have been possible to change the style of non-editor elements of RStudio, like the tabs above the different panes. To learn more about creating new custom themes for RStudio, take a look at this <a href="https://rstudio.github.io/rstudio-extensions/rstudio-theme-creation.html">RStudio Extensions article about writing themes</a>.</p>
+<p>We look forward to seeing what great new themes the RStudio community comes up with!</p>
+<p>You can download the RStudio 1.2 Preview Release at <a href="https://www.rstudio.com/products/rstudio/download/preview/" class="uri">https://www.rstudio.com/products/rstudio/download/preview/</a>. If you have any questions or comments, please get in touch with us on the <a href="https://community.rstudio.com/c/rstudio-ide">community forums</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

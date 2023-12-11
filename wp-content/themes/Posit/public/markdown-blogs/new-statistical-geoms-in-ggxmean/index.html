@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-08-12">
+<meta name="description" content="Gina Reynolds, Morgan Brown, and Madison McGovern unveil ggxmean, a package that helps users add statistical concepts to plots made with ggplot2.">
+
+<title>New statistical geoms in {ggxmean}</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">New statistical geoms in {ggxmean}</h1>
+
+<p class="date">2022-08-12</p>
+</header>
+
+<div class="lt-gray-box">
+<p>This is a guest post from <a href="https://twitter.com/EvaMaeRey" target="_blank">Gina Reynolds</a> with contributions from 3rd- and 4th-year West Point Math majors Morgan Brown and Madison McGovern. Gina works in data analytics and teaches statistics and probability at West Point. Her work focuses on tools for proximate comparison and translation in data analysis and visualization.</p>
+</div>
+<h2 class="anchored">
+TL;DR
+</h2>
+<p>The ggxmean package introduces new <code>geom_*s</code> for fluid visual description of some basic statistical concepts. The ‘titular character’, <code>geom_x_mean</code>, draws a vertical line at the mean of x.</p>
+<h2 class="anchored">
+On the Path to ggxmean
+</h2>
+<p>A few years ago, I was sitting on the floor of a packed-out ballroom watching Thomas Lin Pederson’s talk, <a href="https://www.youtube.com/watch?v=uj7A3i2fi54" target="_blank">‘Extend your Ability to Extend ggplot2’</a>.</p>
+<p>‘I want to do that,’ I thought.</p>
+<p>And I had a use case in mind: statistical summaries, especially those used to explain fundamental statistical concepts like covariance, standard deviation, and correlation.</p>
+<!-- https://evamaerey.github.io/statistics/covariance_correlation.html -->
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+You can visually walk through these concepts, dissecting the equations for their computation at a chalkboard. With ggplot2, you can, of course, get this done as well. I put together that walkthrough here: <br> <br>
+<center>
+<blockquote class="twitter-tweet">
+<p lang="en" dir="ltr">
+</p><p>So, math notation and visual representation builds of basic statistics! They co-evolve speaking to different learning styles. Plus DRY principles for coders and a walkthrough of calc w num vals, for numerophiles! <a href="https://twitter.com/hashtag/ggplot2?src=hash&amp;ref_src=twsrc%5Etfw">#ggplot2</a> <a href="https://twitter.com/hashtag/xaringan?src=hash&amp;ref_src=twsrc%5Etfw">#xaringan</a> <a href="https://twitter.com/hashtag/flipbookr?src=hash&amp;ref_src=twsrc%5Etfw">#flipbookr</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://t.co/JgWLxo94Ms">https://t.co/JgWLxo94Ms</a> <a href="https://t.co/ol08lMGdtD">pic.twitter.com/ol08lMGdtD</a></p>
+<p></p>
+<p>— Gina Reynolds (<span class="citation" data-cites="EvaMaeRey">@EvaMaeRey</span>) <a href="https://twitter.com/EvaMaeRey/status/1276260233577238528?ref_src=twsrc%5Etfw">June 25, 2020</a></p>
+</blockquote>
+</center>
+<p>But to choreograph this, there was a lot of prep that I needed to do before starting to visualize. I had to calculate the means, standard deviations, etc., all before beginning to plot, and then feed those calculations into existing <code>geom_*</code> functions like <code>geom_vline</code> and <code>geom_segment</code>.</p>
+<p>This didn’t feel like the powerful declarative experience that you have a lot of the time using ggplot2. Compare that to the experience that you get with the boxplot. That goes something like this:</p>
+<ul>
+<li>I want to know about the pattern in this dataset; okay, so <code>ggplot(data = my_data)</code></li>
+<li>I’m picturing my different categories on the x-axis; alright, <code>mapping = aes(x = my_category)</code></li>
+<li>And I’d like y to represent my continuous variable; great, then <code>mapping = aes(y = my_continuous_outcome)</code></li>
+<li>And I’ll use boxplots to summarize these groupwise distributions; so it’s <code>+ geom_boxplot()</code>.</li>
+<li>Bam! I’ve built my plot and I can see group differences!</li>
+</ul>
+<p>In this boxplot example, lots of computation happens in the background for us: min, max, 25%, 75%, median. And that is great. I understand the boxplot well; I don’t need to do those computations myself. I’m happy for ggplot2 to do that for me.</p>
+<p>For the covariance/variance/correlation stats walkthroughs, I wanted to have the same declarative experience. I understand the mean well, and one standard deviation away from the mean, etc. I should be able to ask ggplot2 to do that computation for me: to compute the global mean (or a group-wise mean if I’m in the mood for that) and put a vertical line there.</p>
+<p>My solution to choreographing the stats visualizations with ‘base ggplot2’ (without using the extension mechanisms) felt inelegant and fragile. It wasn’t very portable (not easy to move to other data – maybe data that my students or I might be more passionate about) or dynamic (I couldn’t easily do group-wise work instead of acting globally). It wasn’t much fun.</p>
+<p>Thomas’ talk and the extension system seemed like the answer to bringing ggplot2’s fluid feel to these particular statistical stories.</p>
+<p>Fast forward a few years. I consulted great materials on extending ggplot2 like the <a href="https://cran.r-project.org/web/packages/ggplot2/vignettes/extending-ggplot2.html" target="_blank">‘Extending ggplot2’ vignette</a>, the <a href="https://ggplot2-book.org/extensions.html" target="_blank">‘Extension’</a> chapter in the newest edition of the ggplot2 book; again Thomas Lin Pederson’s talk, <a href="https://github.com/tidyverse/ggplot2/blob/main/R/geom-vline.r" target="_blank">ggplot2 code on GitHub</a>, and code from other extension packages in the <a href="https://exts.ggplot2.tidyverse.org/gallery/" target="_blank">ggplot2 extension gallery</a>.</p>
+<p>Using those resources, I managed to write the <code>geom_x_mean()</code> function and friends. And now I’m happy to introduce the <a href="https://github.com/EvaMaeRey/ggxmean" target="_blank">ggxmean</a> package!</p>
+<p>I’m excited about these functions because I think the syntax mirrors the chalkboard experience: naming concepts one at a time and easily depicting them.</p>
+<p>Moreover, ggxmean allows you to do this visual storytelling beyond what you might do on a chalkboard: port the work routine to other datasets that your <em>students</em> find gripping, work with larger data sets (chalkboard work tends to be super small worked examples), and do <em>group-wise</em> computations!</p>
+<p>Regarding this last point, in the plot that follows on the <a href="https://allisonhorst.github.io/palmerpenguins/" target="_blank">palmerpenguins</a> data, ggplot instantly recomputes everything for us <em>by species</em> when we add the faceting declaration! ggplot2 is hard at work in the background, being its awesome self.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggxmean)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>palmerpenguins<span class="sc">::</span>penguins <span class="sc">%&gt;%</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm) <span class="sc">+</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">y =</span> flipper_length_mm) <span class="sc">+</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">::</span><span class="fu">geom_x_mean</span>() <span class="sc">+</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">::</span><span class="fu">geom_y_mean</span>() <span class="sc">+</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">:::</span><span class="fu">geom_xdiff</span>() <span class="sc">+</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">:::</span><span class="fu">geom_ydiff</span>() <span class="sc">+</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">:::</span><span class="fu">geom_x1sd</span>(<span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">:::</span><span class="fu">geom_y1sd</span>(<span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">:::</span><span class="fu">geom_diffsmultiplied</span>() <span class="sc">+</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">:::</span><span class="fu">geom_xydiffsmean</span>(<span class="at">alpha =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">:::</span><span class="fu">geom_rsq1</span>() <span class="sc">+</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">:::</span><span class="fu">geom_corrlabel</span>() <span class="sc">+</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="at">facets =</span> <span class="fu">vars</span>(species))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="imagesunnamed-chunk-1-1.png" class="img-fluid" width="2100"></p>
+</div>
+</div>
+<!-- <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Excited to be working on a ggplot2 extension package!!! 😮🥳🤯 <a href="https://twitter.com/hashtag/ggplot2?src=hash&amp;ref_src=twsrc%5Etfw">#ggplot2</a><br><br>{ggxmean} lets you put a vertical line at the mean of x w/ geom_xmean() and do other stuff! <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a><br><br>In action: <a href="https://t.co/oxzudwlNXn">https://t.co/oxzudwlNXn</a> <br><br>Repo: <a href="https://t.co/7DTxa7n4ye">https://t.co/7DTxa7n4ye</a><br><br>Some thoughts in 🧵 <a href="https://t.co/vRjXFdmAaQ">pic.twitter.com/vRjXFdmAaQ</a></p>&mdash; Gina Reynolds (@EvaMaeRey) <a href="https://twitter.com/EvaMaeRey/status/1353484900385628166?ref_src=twsrc%5Etfw">January 24, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> -->
+<h2 class="anchored">
+Way Leads Onto Way…
+</h2>
+<p>Another set of geoms that ggxmean offers is targeted at another stats intro topic: visualizing discussion of ordinary least squares (OLS) regression. In stats classes across the world, teachers name various statistical concepts as they teach OLS. Again, instructors tend to visualize these with toy datasets on the classroom chalkboard; this is great! ggxmean attempts to isolate some of those concepts and package them into <code>geom_*</code> functions to mirror that chalkboard experience:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggxmean)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#library(transformr) #might help w/ animate</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="do">## basic example code</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>cars <span class="sc">%&gt;%</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> speed,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> dist) <span class="sc">+</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">::</span><span class="fu">geom_lm</span>() <span class="sc">+</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">::</span><span class="fu">geom_lm_residuals</span>(<span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">::</span><span class="fu">geom_lm_fitted</span>(<span class="at">color =</span> <span class="st">"goldenrod3"</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">::</span><span class="fu">geom_lm_conf_int</span>() <span class="sc">+</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">::</span><span class="fu">geom_lm_pred_int</span>() <span class="sc">+</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">::</span><span class="fu">geom_lm_formula</span>() <span class="sc">+</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">::</span><span class="fu">geom_lm_intercept</span>(<span class="at">color =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">::</span><span class="fu">geom_lm_intercept_label</span>(<span class="at">size =</span> <span class="dv">4</span>, <span class="at">hjust =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="imagesols-1.png" class="img-fluid" width="2100"></p>
+</div>
+</div>
+<h2 class="anchored">
+Extending the Scope of ggxmean: Student Contributions
+</h2>
+<p>The work on OLS was a jumping-off point for the most recent functions to the ggxmean package. Morgan Brown and Madison McGovern, students at West Point, contributed to the package for independent studies in the fall AY2022 term. I’m incredibly excited to show you their work.</p>
+<p>Morgan and Madison took up the question of data outliers. Here, we apply their work to famous toy datasets: Anscombe’s quartet and the datasauRus Dozen. With the functions I’d worked on, we can <em>visualize</em> the summary statistics (mean, sds, correlation) that are typically the subject of discussions of Anscombe’s quartet and the datasauRus Dozen. This is shown here:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># first some data munging</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>datasets<span class="sc">::</span>anscombe <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">group =</span> <span class="fu">paste</span>(<span class="st">"Anscombe"</span>, </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">str_extract</span>(name, <span class="st">"</span><span class="sc">\\</span><span class="st">d"</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">var =</span> <span class="fu">str_extract</span>(name, <span class="st">"</span><span class="sc">\\</span><span class="st">w"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>name) <span class="sc">%&gt;%</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> var,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> value) <span class="sc">%&gt;%</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>() <span class="ot">-&gt;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>tidy_anscombe</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>tidy_anscombe <span class="sc">%&gt;%</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y) <span class="sc">+</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">color =</span> group) <span class="sc">+</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="at">facets =</span> <span class="fu">vars</span>(group)) <span class="sc">+</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">::</span><span class="fu">geom_x_mean</span>() <span class="sc">+</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">::</span><span class="fu">geom_y_mean</span>() <span class="sc">+</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">:::</span><span class="fu">geom_x1sd</span>(<span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">:::</span><span class="fu">geom_y1sd</span>(<span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">::</span><span class="fu">geom_lm</span>() <span class="sc">+</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">::</span><span class="fu">geom_lm_formula</span>() <span class="sc">+</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">:::</span><span class="fu">geom_corrlabel</span>() <span class="sc">+</span> </span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="imagesanscomb1-1.png" class="img-fluid" width="2100"></p>
+</div>
+</div>
+
+<!-- This is cool. Usually we are told "and these four datasets all have the same mean, sds, correlation", with the numeric values possibly provided in a nearby table. And now we get to *see* the values right in our plot!  -->
+<p>But Anscombe and datasauRus constellations are pretty special. And looking at statistics describing outlyingness also makes sense. Using Morgan and Madison’s functions on leverage and influence, we can easily highlight outlying observations!</p>
+<p>In the following plot, Morgan’s function <code>geom_text_leverage()</code> calculates leverage for each observation:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>tidy_anscombe <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y) <span class="sc">+</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">color =</span> group) <span class="sc">+</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="at">facets =</span> <span class="fu">vars</span>(group)) <span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">::</span><span class="fu">geom_text_leverage</span>(<span class="at">vjust =</span> <span class="dv">1</span>,   <span class="do">## A function Morgan wrote for ggxmean!</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                              <span class="at">check_overlap =</span> T) <span class="sc">+</span> </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="imagesanscomb-1.png" class="img-fluid" width="2100"></p>
+</div>
+</div>
+<p>And in the <code>datasauRus::datasaurus_dozen</code>, Madison’s <code>geom_point_high_cooks()</code> highlights the 10% most influential observations:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>datasauRus<span class="sc">::</span>datasaurus_dozen <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y) <span class="sc">+</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  ggxmean<span class="sc">::</span><span class="fu">geom_point_high_cooks</span>( <span class="do">## A function Madison wrote for ggxmean!</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"goldenrod"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> .<span class="dv">5</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span> </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="at">facets =</span> <span class="st">"dataset"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="imagesdino-1.png" class="img-fluid" width="2100"></p>
+</div>
+</div>
+<h2 class="anchored">
+Using ggxmean
+</h2>
+<p>In my day-to-day analytic work, I’m glad to have the ggxmean functions ready to go. The function I use most is, not surprisingly, <code>geom_x_mean()</code> for marking the global and group-wise means! In the classroom, of course, the ggxmean functions are fun to apply to a variety of datasets used in class after a good, old-fashioned chalkboard walkthrough.</p>
+<p>The package is not yet on CRAN, so to give it a spin yourself, use:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"EvaMaeRey/ggxmean"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We’re open to your feedback and contributions on code, computation, and conventions (function names, arguments, etc.)!</p>
+
+<section class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1" role="doc-endnote"><p>Some of these functions aren’t exported because I’m not confident of the names and some other considerations. Consider weighing in on the issues at <a href="https://github.com/EvaMaeRey/ggxmean/" target="_blank">https://github.com/EvaMaeRey/ggxmean</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

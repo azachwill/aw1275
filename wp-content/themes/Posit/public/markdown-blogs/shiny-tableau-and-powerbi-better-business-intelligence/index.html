@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-07-12">
+<meta name="description" content="We compared the features and capabilities of Shiny, Tableau, and PowerBI for delivering insights in enterprise organizations. This is our opinion on how they stack up.">
+
+<title>Shiny, Tableau, and PowerBI: Better Business Intelligence</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Shiny, Tableau, and PowerBI: Better Business Intelligence</h1>
+
+<p class="date">2021-07-12</p>
+</header>
+
+<p><i>This is a guest post from Marcin Dubel, a 2021 Shiny Contest Grand Prize winner and Software Engineer at <a href="https://appsilon.com/" target="_blank" rel="noopener noreferrer">Appsilon</a>, a Full Service RStudio Partner.</i></p>
+<h2 id="finding-the-right-tool-for-the-job" class="anchored">Finding The Right Tool For The Job</h2>
+<p>With strong competition in the Business Intelligence market, choosing the best option for your project can be challenging. There are numerous options, and even though some tools outperform in key areas, there is no clear winner-take-all. To find the best fit, you must clarify your needs and identify project objectives. Some questions you might ask yourself:</p>
+<ul>
+<li>Will you integrate within other web applications?</li>
+<li>What are your connectivity needs?</li>
+<li>What’s the level of user input?</li>
+<li>What level of data science or machine learning might be useful?</li>
+</ul>
+<p>We compared the features and capabilities of Shiny, Tableau, and PowerBI for delivering insights in enterprise organizations. This is our opinion on how they stack up.</p>
+<blockquote>
+<p>For in-depth 1 vs 1 analyses see <a href="https://appsilon.com/tableau-vs-r-shiny/" target="_blank" rel="noopener noreferrer">Tableau vs R Shiny</a> or <a href="https://appsilon.com/powerbi-vs-r-shiny/" target="_blank" rel="noopener noreferrer">PowerBI vs R Shiny</a>.</p>
+</blockquote>
+<p>We encourage you to read through Lou Bajuk’s series on <a href="https://blog.rstudio.com/tags/bi-tools/" target="_blank" rel="noopener noreferrer">Data Science and Business Intelligence</a>. <a href="https://blog.rstudio.com/2021/03/04/bi-and-ds-part1/" target="_blank" rel="noopener noreferrer">Part 1</a> provides valuable insights into the <i>why</i> and <i>how</i> BI and Data Science tools can augment each other. Other posts in the series discuss important topics and <a href="https://blog.rstudio.com/2021/03/11/bi-and-ds2-strengths-challenges/" target="_blank" rel="noopener noreferrer">different approaches to BI tools</a>.</p>
+<h2 id="quick-overview" class="anchored">Quick Overview</h2>
+<h3 id="tableau" class="anchored">Tableau</h3>
+<p>Since its inception in 2003, Tableau has amassed a large community of users and can provide end-to-end services from data prep to deployment. With Tableau you can connect to almost any data source and handle massive datasets - Tableau has no row limits and is designed to scale. Its point-and-click functionality makes use a breeze, however it also means there is no source code to really dig into and replicate results.</p>
+<h3 id="powerbi" class="anchored">PowerBI</h3>
+<p>PowerBI is a collection of cloud-based apps and software services, rather than a single app or software package. As a Microsoft product, Power BI excels with ease-of-use for beginners/non-technical users and has full integration with the Microsoft ecosystem. However, mastery of PowerBI means learning the entire suite of Microsoft tools, and just as with Tableau, it is read-only, so there is no access to source code, and good luck trying to maintain proper version control.</p>
+<p><img src="paul-quote.png" alt="Paul Ditterline discusses how RStudio helped Brown-Forman achieve their BI goals" class="center"></p>
+<p>Learn more about Paul’s experience in the <a href="https://www.rstudio.com/about/customer-stories/brown-forman/" target="_blank" rel="noopener noreferrer">Brown-Forman customer story</a>.</p>
+<h3 id="shiny" class="anchored">Shiny</h3>
+<p>Shiny is a full web framework that allows R users to create interactive web applications from their preferred language. Shiny is the obvious choice for those looking for complete control over UI/UX and a single integrated web solution. For wider and faster adoption of an app, user experience (UX) is vital, and for a better experience, you need better-performing tools and complete control over customization. This is where Shiny shines. The drawback here is that a code-based solution like Shiny can be more challenging to create. But fear not - the RStudio <a href="https://shiny.rstudio.com/" target="_blank" rel="noopener noreferrer">Shiny developer center</a> and <a href="https://community.rstudio.com/c/shiny/8" target="_blank" rel="noopener noreferrer">Community</a> have plenty of free learning tools and resources. <a href="https://www.rstudio.com/products/connect/" target="_blank" rel="noopener noreferrer">RStudio Connect</a> provides a secure, scalable way to deploy Shiny applications in your organization and is our preferred delivery tool. If time is of the essence, consider reaching out to Appsilon. Our engineers are leading experts in Shiny and can help you quickly implement a Proof-of-Concept application.</p>
+<blockquote>
+<p>To see why Shiny is the preferred option for enterprise applications: <a href="https://appsilon.com/why-you-should-use-r-shiny-for-enterprise-application-development/" target="_blank" rel="noopener noreferrer">Why You Should Use Shiny for Enterprise Application Development</a></p>
+</blockquote>
+<h2 id="categories-and-scoring" class="anchored">Categories and Scoring</h2>
+<p><img src="bi_chart.png" alt="Scoring criteria and where each tool ranks" class="center"></p>
+<h2 id="making-the-right-choice---defining-your-needs" class="anchored">Making the Right Choice - Defining Your Needs</h2>
+<h3 id="shiny-1" class="anchored">Shiny</h3>
+<p>At Appsilon we prefer total control over UI customization and R’s data handling capabilities, and our engineers have the skillset to handle the complexities of a code-friendly approach. We have developed some of the most advanced R Shiny dashboards and produced several open-source packages to help users create their apps. So to say we are biased towards R Shiny is fair. But the reason why we do what we do is that at the enterprise level, self-service options simply don’t match the level of creative freedom afforded by open-source data science tools.</p>
+<h3 id="powerbi-1" class="anchored">PowerBI</h3>
+<p>Not everyone requires a higher level of customization and control. For those in need of a quick start, PowerBI is an excellent choice. With the best connectivity options available, great looks right out of the box, and full integration with the Microsoft ecosystem, PowerBI is your best budget-friendly option.</p>
+<h3 id="tableau-1" class="anchored">Tableau</h3>
+<p>If you can foot the bill, Tableau is a great option for those looking to combine big data (similar to the power of Shiny) and PowerBI’s ready, drag-and-drop designs for the inexperienced user. Tableau beats out PowerBI for ease of use, but you’ll have to decide if the benefits justify the cost.</p>
+<h2 id="conclusion" class="anchored">Conclusion</h2>
+<p>The clear winner here is you. With so many options, it’s a buyer’s market. Be wary of the one-stop-shop sellers because even the industry leaders don’t cover all the bases. Take the time to understand your goals and project requirements. There are plenty of strong, easy-to-use self-service options for producing simple dashboards and simple charts. But as project complexity increases, there is no substitute for code-friendly enterprise options like Shiny.</p>
+<h2 id="shiny-from-concept-to-production-an-rstudio-community-x-session" class="anchored">Shiny from Concept to Production: An RStudio Community X-Session</h2>
+<p>Level up your Shiny developer skills on August 10th with the leading Shiny experts at Appsilon. Discover how you can improve your Shiny app’s performance, scale for widespread adoption, and deployment through RStudio Connect. This collaborative webinar by RStudio and Appsilon was designed for all levels of Shiny developers - whether a beginner moving beyond simple dashboards or a senior developer needing to improve infrastructure. Register <a href="https://www.rstudio.com/registration/shiny-from-concept-to-production/" target="_blank" rel="noopener noreferrer">here</a> and be sure to check out presentations by two RStudio Shiny Contest Grand Prize winners.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

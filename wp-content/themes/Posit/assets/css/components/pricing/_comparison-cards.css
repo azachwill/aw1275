@@ -1,0 +1,21 @@
+.tabs-group {
+    .tab-link {
+        @apply text-blue3 ui-small-semibold rounded uppercase py-1.5 px-6;
+    }
+
+    .tab-link.active,
+    .tab-link.active-tab {
+        @apply bg-blue4 text-neutral-light border border-solid border-blue3/[.2];
+    }
+}
+
+.tabs-content-container {
+    .tab-content {
+        @apply hidden;
+    }
+
+    .tab-content.active,
+    .tab-content.active-tab {
+        @apply block;
+    }
+}

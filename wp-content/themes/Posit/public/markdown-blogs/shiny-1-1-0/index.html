@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2018-06-26">
+
+<title>Shiny 1.1.0: Scaling Shiny with async</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Shiny 1.1.0: Scaling Shiny with async</h1>
+
+<p class="date">2018-06-26</p>
+</header>
+
+<p>This is a significant release for <strong><a href="https://shiny.rstudio.com">Shiny</a></strong>, with a major new feature that was nearly a year in the making: support for asynchronous operations!</p>
+<p>Without this capability, when Shiny performs long-running calculations or tasks on behalf of one user, it stalls progress for all other Shiny users that are connected to the same process. Therefore, Shiny apps that feature long-running calculations or tasks have generally been deployed using many R processes, each serving a small number of users; this works, but is not the most efficient approach. Such applications now have an important new tool in the toolbox to improve performance under load.</p>
+<p>Shiny async is implemented via integration with the <strong><a href="https://github.com/HenrikBengtsson/future">future</a></strong> and <strong><a href="https://rstudio.github.io/promises/">promises</a></strong> packages. These two packages are used together:</p>
+<ol type="1">
+<li><strong>Use <code>future</code> to perform long-running operations in a worker process that runs in the background</strong>, leaving Shiny processes free to serve other users in the meantime. This yields much better responsiveness under load, and much more predictable latency.</li>
+<li><strong>Use <code>promises</code> to handle the result of each long-running background operation back in the Shiny process</strong>, where additional processing can occur, such as further data manipulation, or displaying to the user via a reactive output.</li>
+</ol>
+<p>If your app has a small number of severe performance bottlenecks, you can use this technique to get massively better responsiveness under load. For example, if the <code>httr::GET</code> call in this server function takes 30 seconds to complete:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output, session) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  r <span class="ot">&lt;-</span> <span class="fu">reactive</span>({</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    httr<span class="sc">::</span><span class="fu">GET</span>(url) <span class="sc">%&gt;%</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>      httr<span class="sc">::</span><span class="fu">content</span>(<span class="st">"parsed"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  output<span class="sc">$</span>plot <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">r</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ggplot</span>(<span class="fu">aes</span>(speed, dist)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>then the entire R process is stalled for those 30 seconds.</p>
+<p>We can rewrite it asynchronously like this:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(promises)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output, session) {</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  r <span class="ot">&lt;-</span> <span class="fu">reactive</span>({</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">future</span>(httr<span class="sc">::</span><span class="fu">GET</span>(url)) <span class="sc">%...&gt;%</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>      httr<span class="sc">::</span><span class="fu">content</span>(<span class="st">"parsed"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  output<span class="sc">$</span>plot <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">r</span>() <span class="sc">%...&gt;%</span> {</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ggplot</span>(., <span class="fu">aes</span>(speed, dist)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Even if the <code>httr::GET(url)</code> takes 30 seconds, the <code>r</code> reactive executes almost instantly, and returns control to the caller. The code inside <code>future(...)</code> is executed in a different R process that runs in the background, and whenever its result becomes available (i.e.&nbsp;in 30 seconds), the right-hand side of <code>%...&gt;%</code> will be executed with that result. (<code>%...&gt;%</code> is called a “promise pipe”; it works similarly to a magrittr pipe that knows how to wait for and “unwrap” promises.)</p>
+<p>If the original (synchronous) code appeared in a Shiny app, then during that 30 seconds, the R process is stuck dealing with the download and can’t respond to any requests being made by other users. But with the async version, the R process only needs to kick off the operation, and then is free to service other requests. This means other users will only have to wait milliseconds, not minutes, for the app to respond.</p>
+<h3 id="case-study" class="anchored">Case study</h3>
+<p>We’ve created a <a href="https://rstudio.github.io/promises/articles/casestudy.html">detailed case study</a> that walks through the async conversion of a realistic example app. This app processes low-level logging data from RStudio’s CRAN mirrors, to let us explore the heaviest downloaders for each day.</p>
+<p><img src="https://rstudio.github.io/promises/articles/case-study-tab3.png" class="img-fluid"></p>
+<p>To load test this example app, we launched 50 sessions of simulated load, with a 5 second delay between each launch, and directed this traffic to a single R process. We then rewrote the app to use futures and promises, and reran the load test with this async version. (The tools we used to perform the load testing are not yet publicly available, but you can refer to <a href="https://www.rstudio.com/resources/rstudioconf-2018/scaling-shiny/">Sean Lopp’s talk at rstudio::conf 2018</a> for a preview.)</p>
+<p>Under these conditions, the finished async version displays significantly lower (mean) response times than the original. In the table below, “HTTP traffic” refers to requests that are made during page load time, and “reactive processing” refers to the time between the browser sending a reactive input value and the server returning updated reactive outputs.</p>
+
+<style>
+table td:first-child, table th:first-child {text-align:left !important;}
+table td, table th {text-align:right !important;}
+</style>
+<table>
+<thead>
+<tr class="header">
+<th>Response type</th>
+<th>Original</th>
+<th>Async</th>
+<th>Delta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>HTTP traffic</td>
+<td>605 ms</td>
+<td>139 ms</td>
+<td>-77%</td>
+</tr>
+<tr class="even">
+<td>Reactive processing</td>
+<td>10.7 sec</td>
+<td>3.48 sec</td>
+<td>-67%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="learn-more" class="anchored">Learn more</h3>
+<p>Visit the <a href="https://rstudio.github.io/promises/">promises</a> website to learn more, or watch my <a href="https://www.rstudio.com/resources/videos/scaling-shiny-apps-with-async-programming-june-2018/">recent webinar</a> on Shiny async.</p>
+<p>See the <a href="https://shiny.rstudio.com/reference/shiny/1.1.0/upgrade.html">full changelog</a> for Shiny v1.1.0.</p>
+<h2 id="related-packages" class="anchored">Related packages</h2>
+<p>Over the last year, we created or enhanced several other packages to support async Shiny:</p>
+<ul>
+<li>The <strong><a href="https://rstudio.github.io/promises/">promises</a></strong> package (released 2018-04-13) mentioned above provides the actual API you’ll use to do async programming in R. We implemented this as a separate package so that other parts of the R community, not just Shiny users, can take advantage of these techniques. The promises package was inspired by the basic ideas of <a href="https://developers.google.com/web/fundamentals/primers/promises">JavaScript promises</a>, but also have significantly improved syntax and extensibility to make them work well with R and Shiny. Currently, promises is most useful when used with the <a href="https://cran.r-project.org/package=future">future</a> package by <a href="https://github.com/HenrikBengtsson">Henrik Bengtsson</a>.</li>
+<li><strong><a href="https://cran.r-project.org/package=later">later</a></strong> (released 2017-06-25) adds a low-level feature to R that is critical to async programming: the ability to schedule R code to be executed in the future, within the same R process. You can do all sorts of cool stuff on top of this, as some people are <a href="https://yihui.name/en/2017/10/later-recursion/">discovering</a>.</li>
+<li><strong><a href="https://cran.r-project.org/package=httpuv">httpuv</a></strong> (1.4.0 released 2018-04-19) has long been the HTTP web server that Shiny, and most other web frameworks for R, sit on top of. Version 1.4.0 adds support for asynchronous handling of HTTP requests, and also adds a dedicated I/O-handling thread for greatly improved performance under load.</li>
+</ul>
+<p>In the coming weeks, you can also expect updates for async compatibility to <strong><a href="https://www.htmlwidgets.org">htmlwidgets</a></strong>, <strong><a href="https://plot.ly/r/">plotly</a></strong>, and <strong><a href="https://rstudio.github.io/DT/">DT</a></strong>. Most other HTML widgets will automatically become async compatible once htmlwidgets is updated.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

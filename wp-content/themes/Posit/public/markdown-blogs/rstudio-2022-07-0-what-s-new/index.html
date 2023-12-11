@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-07-20">
+<meta name="description" content="What’s new and improved in the latest RStudio IDE release 2022.07.0, code-named Spotted Wakerobin.">
+
+<title>RStudio 2022.07.0: What’s New</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio 2022.07.0: What’s New</h1>
+
+<p class="date">2022-07-20</p>
+</header>
+
+<p>This post highlights some of the improvements in the latest RStudio IDE release 2022.07.0, code-named “Spotted Wakerobin”. To read about all of the new features and updates available in this release, check out the latest <a href="https://www.rstudio.com/products/rstudio/release-notes/" target="_blank">Release Notes</a>.</p>
+<ul>
+<li><a href="#find-in-files-improvements">Find in Files improvements</a></li>
+<li><a href="#hyperlinks">Hyperlinks</a></li>
+<li><a href="#support-for-r-4-2-0">Support for R (&gt;= 4.2.0)</a></li>
+<li><a href="#more-info">More info</a></li>
+</ul>
+<h2 id="find-in-files-improvements" class="anchored">Find in Files improvements</h2>
+<p>We’ve made some significant improvements to the Find in Files pane, across all platforms but with particularly significant improvements in Windows.</p>
+<ul>
+<li><p>The Find in Files pane has gained a Refresh button, so that users can manually refresh possible matches/replacements to capture any changes to the files since the search was last run. <img src="images/screenshot_refresh_button.jpg" class="img-fluid" alt="Refresh Find in Files"></p></li>
+<li><p>We’ve upgraded the version of <code>grep</code> we use with RStudio on Windows. This more modern version of <code>grep</code> enables improved searching through directories and subdirectories with non-ASCII characters in the path name, such as <code>C:\Users\me\Éñçĥìłăḏà</code> or <code>C:\你好\你好</code>.</p></li>
+<li><p>We’ve also changed the flavor of regular expressions supported by the Find in Files search. Previously, Find in Files supported only POSIX Basic Regular Expressions. As of this release, Find in Files is now powered by <a href="https://en.wikibooks.org/wiki/Regular_Expressions/POSIX_Basic_Regular_Expressions" target="_blank">Extended Regular Expressions</a>, when the <code>Regular expression</code> checkbox is checked. What does this mean for your searches? Previously, if you used the special characters <code>?</code>, <code>+</code>, <code>|</code>, <code>{}</code>, or <code>()</code>, they were treated as character literals; now they will be interpreted according to their special regex meaning when unescaped, and as character literals only when escaped with a single backslash. This change also adds additional support for Find and Replace using regular expressions with <code>\b</code>, <code>\w</code>, <code>\d</code>, <code>\B</code>, <code>\W</code>, and <code>\D</code>, which now return the expected results in both Find and Replace mode. These changes bring Find in Files search more closely in line with the flavor of regular expressions supported by R’s base <code>grep</code> function (using <code>PERL=FALSE</code>), but note that where the <code>grep</code> function within R requires double backslashes, Find in Files requires only a single backslash as the escape character.</p></li>
+</ul>
+<p><img src="images/screenshot_regex_find.jpg" class="img-fluid" alt="Find in Files Regular expression Find"> <img src="images/screenshot_regex_replace.jpg" class="img-fluid" alt="Find in Files Regular expression Replace"></p>
+<ul>
+<li>When using Find in Files with the search directory set to a Git repository, users will by default have the option to ignore searching through any files or subdirectories listed within the <code>.gitignore</code> for that repo. Users can uncheck this option if they wish to include these files in their search.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/screenshot_git_grep.jpg" class="img-fluid"></p>
+<p></p><figcaption>Find in Files Exclude .gitignore</figcaption><p></p>
+</figure>
+</div>
+<p>A number of other small bug fixes have been included in this release to improve the reliability and usability of Find in Files search. We hope this makes the feature more powerful and straightforward for users.</p>
+<h2 id="hyperlinks" class="anchored">Hyperlinks</h2>
+<p>Support for hyperlinks, as generated by <a href="https://cli.r-lib.org/reference/style_hyperlink.html" target="_blank">cli::style_hyperlink()</a>, has been added to the console output, build pane and various other places. Depending on their url, clicking a hyperlink will:</p>
+<ul>
+<li><p>go to a website <code>cli::style_hyperlink("tidyverse", "https://www.tidyverse.org")</code>, a local file <code>cli::style_hyperlink("file", "file:///path/to/file")</code>, or a specific line/column of a file <code>cli::style_hyperlink("file", "file:///path/to/file", params = c(line = 10, col = 4))</code></p></li>
+<li><p>open a help page <code>cli::style_hyperlink("summarise()", "ide:help:dplyr::summarise")</code> or a vignette <code>cli::style_hyperlink("intro to dplyr", "ide:vignette:dplyr::dplyr")</code>, with some preview information in the popup when the link is hovered over. <img src="images/screenshot_hyperlink_ide_help.jpg" class="img-fluid" alt="Help Page Hyperlink popup"></p></li>
+<li><p>run code in the console <code>cli::style_hyperlink("Show last error", "ide:run::rlang::last_error()")</code>. This also shows information about the function that will run when the link is clicked. <img src="images/screenshot_hyperlink_ide_run.jpg" class="img-fluid" alt="Run Hyperlink popup"></p></li>
+</ul>
+<p>Some packages (e.g.&nbsp;<code>testthat</code> and <code>roxygen2</code>) have started to take advantage of this feature to improve their user experience, and we hope this will inspire other packages. <img src="images/screenshot_hyperlink_testthat.jpg" class="img-fluid" alt="testthat failure link"></p>
+<h2 id="support-for-r-4-2-0" class="anchored">Support for R (&gt;= 4.2.0)</h2>
+<p>R 4.2+, officially released in April 2022, received extensive IDE support in the previous release of the RStudio IDE. In this release, we add support for some additional features as well as some critical bug fixes.</p>
+<ul>
+<li>We resolved an issue where files would appear to be blank when opened in projects not using UTF-8 encoding on Windows with R 4.2.0, which could result in users inadvertently overwriting their files with an empty file.</li>
+<li>We added further support for the R native pipe, first introduced in R 4.1. Code diagnostics now recognize and support the use of unnamed arguments in conjunction with the native pipe (e.g.&nbsp;<code>LETTERS |&gt; length()</code>) as well as the use of the new placeholder character (e.g.&nbsp;<code>mtcars |&gt; lm(mpg ~ cyl, data = _)</code>) added in R 4.2.0.</li>
+<li>We’ve also made it easier for users to configure whether they want to use the native R pipe <code>|&gt;</code> or the <code>magrittr</code> pipe <code>%&gt;%</code> when using the <em>Insert pipe</em> command (Cmd/Ctrl + Shift + M). Previously, this was only configurable at the global level, from the Global Options pane. As of this release, you can now inherit or override the global option in Project Options as well, to help maintain code style consistency within a RStudio project. <img src="images/screenshot_pipe_project_option.jpg" class="img-fluid" alt="Setting pipe operator in Project Options"></li>
+<li>R 4.2 also introduced extensive changes to the Help system; we’ve updated support for this new enhanced Help system to ensure it displays crisply and legibly in the IDE especially when using a dark theme. <img src="images/screenshot_enhanced_help_pane.jpg" class="img-fluid" alt="Enhanced Help in R 4.2"></li>
+</ul>
+<h2 id="more-info" class="anchored">More info</h2>
+<p>There’s lots more in this release, and it’s <a href="https://www.rstudio.com/products/rstudio/download/" target="_blank">available for download today</a>. You can read about all the features and bugfixes in the RStudio 2022.07.0 “Spotted Wakerobin” release in the <a href="https://www.rstudio.com/products/rstudio/release-notes/" target="_blank">RStudio Release Notes</a>. We’d love to hear your feedback about the new release on our <a href="https://community.rstudio.com/c/rstudio-ide/9" target="_blank">community forum</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

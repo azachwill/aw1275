@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-04-08">
+<meta name="description" content="Model monitoring is a key component of ModelOps, and the R ecosystem offers flexible, code-first solutions that meet the model monitoring needs of data science practitioners.">
+
+<title>Model Monitoring with R Markdown, pins, and RStudio Connect</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Model Monitoring with R Markdown, pins, and RStudio Connect</h1>
+
+<p class="date">2021-04-08</p>
+</header>
+
+<p>ModelOps or MLOps (for “model/machine learning operations”) focuses on the real-world processes involved in building, deploying, and maintaining a model within an organization’s data infrastructure. Developing a model that meets your organizations needs and goals is a big accomplishment, but whether that model’s purpose is <a href="https://www.tmwr.org/software-modeling.html#types-of-models" target="_blank" rel="noopener noreferrer">largely predictive, inferential, or descriptive</a>, the “care and feeding” of your model often doesn’t end when you are done developing it. How is the model going to be deployed? Should you retrain the model on a schedule? Based on changes in model performance? When should you kick off retraining the same kind of model with fresh data versus go back to the drawing board for a full round of model development again? These are the kinds of questions that ModelOps deals with.</p>
+<p><strong>Model monitoring</strong> is a key component of ModelOps, and is typically used to answer questions about how a model is performing over time, when to retrain a model, or what kinds of observations are not being predicted well. There are a lot of solutions out there to address the need for model monitoring, but the R ecosystem offers options that are <strong>code-first, flexible, and already in wide use</strong>. When we use this approach to model monitoring, we gain all the benefits of handling our data science logic via reusable, extensible code (as opposed to clicks), as well as the enormous open source community surrounding R Markdown and related tools.</p>
+<p>In this post, I’ll walk through one option for this approach.</p>
+<ul>
+<li>Deploy a model as a RESTful API using Plumber</li>
+<li>Create an R Markdown document to regularly assess model performance by:
+<ul>
+<li>Sending the deployed model new observations via httr</li>
+<li>Evaluating how the model performed with these new predictions using model metrics from yardstick</li>
+<li>Versioning the model metrics using the pins package</li>
+<li>Summarize and visualize the results using flexdashboard</li>
+</ul></li>
+<li>Schedule the R Markdown dashboard to regularly evaluate the model and notify us of the results</li>
+</ul>
+<h2 id="predicting-injuries-from-traffic-data" class="anchored">Predicting injuries from traffic data</h2>
+<p>I recently developed a model to <a href="https://juliasilge.com/blog/chicago-traffic-model/" target="_blank" rel="noopener noreferrer">predict injuries for traffic crashes in Chicago</a>. <a href="https://data.cityofchicago.org/Transportation/Traffic-Crashes-Crashes/85ca-t3if" target="_blank" rel="noopener noreferrer">The data set covers traffic crashes</a> on city streets within Chicago city limits under the jurisdiction of the Chicago Police Department, and the model predicts the probability of a crash involving an injury.</p>
+<p>{{% youtube “J5gTzoRU9tc” %}}</p>
+<p>I work on the <a href="https://www.tidymodels.org/" target="_blank" rel="noopener noreferrer">tidymodels</a> team developing open source tools for modeling and machine learning, but you can use the R ecosystem for monitoring any kind of model, even one trained in Python. I used <a href="https://www.rplumber.io/" target="_blank" rel="noopener noreferrer">Plumber</a> to <a href="https://colorado.rstudio.com/rsc/traffic-crashes/" target="_blank" rel="noopener noreferrer">deploy my model on RStudio Connect</a>, but depending on your own organization’s infrastructure, you might consider <a href="https://docs.rstudio.com/connect/user/flask/" target="_blank" rel="noopener noreferrer">deploying a Flask API</a> or another appropriate format.</p>
+<h2 id="monitor-model-performance" class="anchored">Monitor model performance</h2>
+<p>There are new crashes everyday, so I would like to measure how my model performs over time. I built a <a href="https://rmarkdown.rstudio.com/flexdashboard/" target="_blank" rel="noopener noreferrer">flexdashboard</a> for model monitoring; this dashboard does <em>not</em> use Shiny but it’s published on <a href="https://www.rstudio.com/products/connect/" target="_blank" rel="noopener noreferrer">RStudio Connect</a> as a <a href="https://docs.rstudio.com/connect/user/scheduling/" target="_blank" rel="noopener noreferrer">scheduled report</a> that re-executes automatically once a week. I get an email in my inbox with the new results every time!</p>
+<p><a href="https://colorado.rstudio.com/rsc/traffic-crash-monitor/monitor.html" target="_blank" rel="noopener noreferrer"><img src="traffic_flexdashboard.png" width="100%" alt="Model monitoring flexdashboard"></a></p>
+<p>The <a href="https://colorado.rstudio.com/rsc/traffic-crash-monitor/monitor.html" target="_blank" rel="noopener noreferrer">monitoring dashboard</a> uses <a href="https://httr.r-lib.org/" target="_blank" rel="noopener noreferrer">httr</a> to call two APIs:</p>
+<ul>
+<li>the city of Chicago’s API for the traffic data to get the latest crashes</li>
+<li>the model API to make predictions on those new crashes</li>
+</ul>
+<p>The dashboard also makes use of <a href="https://pins.rstudio.com/" target="_blank" rel="noopener noreferrer">pins</a> to <strong>publish</strong> and <strong>version</strong> model metrics each time the dashboard updates. I am a huge fan of the pins package in the context of ModelOps; you can even use it to publish and version models themselves!</p>
+<p><a href="https://colorado.rstudio.com/rsc/traffic-crash-monitor/monitor.html" target="_blank" rel="noopener noreferrer"><img src="traffic_monitor.gif" width="100%" alt="Model monitoring flexdashboard"></a></p>
+<p>Basic model monitoring should cover at least the model metrics of interest, but in the real world, most data practitioners need to track something specific to their domain or use case. This is why inflexible ModelOps tooling is often frustrating to work with. Using flexible tools like R Markdown, on the other hand, let me build a model monitoring dashboard with a table of crashes that were misclassified (so I can explore them) and an interactive map of where they are around the city of Chicago.</p>
+<h2 id="to-learn-more" class="anchored">To learn more</h2>
+<p>All the code for this demo <a href="https://github.com/juliasilge/modelops-playground" target="_blank" rel="noopener noreferrer">is available on GitHub</a>, and future posts will address how to use R for other ModelOps endeavors. If you’d like to learn more about how RStudio products like Connect can be used for tasks from serving model APIs to model monitoring and more, <a href="https://rstudio.chilipiper.com/book/schedule-time-with-rstudio" target="_blank" rel="noopener noreferrer">set up a meeting with our Customer Success team</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

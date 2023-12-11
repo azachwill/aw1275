@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-02-05">
+<meta name="description" content="Data Scientists and the IT Admins or DevOps engineers who support these platforms often face “package management” problems. Understanding and following the package management prime directive can drastically ease your organization’s headaches.">
+
+<title>The Package Management Prime Directive</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">The Package Management Prime Directive</h1>
+
+<p class="date">2021-02-05</p>
+</header>
+
+<p><sup>Photo by <a href="https://unsplash.com/@nate_dumlao?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Nathan Dumlao</a> on <a href="https://unsplash.com/?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></sup></p>
+<blockquote>
+<p><em>This is the first in a short series of blogs on package management.</em></p>
+<p><em>Registration for our webinar on <a href="https://rstudio.com/registration/managing-packages-for-open-source-data-science/">Managing Packages for Open-Source Data Science</a> on February 17 is now open.</em></p>
+</blockquote>
+<p>Absolutely essential, easy to forget if they’re there when you need them, and utterly debilitating when they’re not there, open source packages in R and Python are the pantry items in the metaphorical kitchen turning out <a href="https://blog.rstudio.com/2020/05/19/driving-real-lasting-value-with-serious-data-science/">serious data science</a>. These bundles of code and instructions, hosted in public repositories like CRAN and PyPI, are key ingredients in data science work.</p>
+<p>Just as in cooking, serious data science depends on having suitable ingredients available where and when you need them. Not having the right packages available for your analysis is a common cause of frustration and time lost for data scientists and engineers.</p>
+<p>You can make package management a solved problem for your organization, but it takes a little planning. Following the Package Management Prime Directive, which I’ll share below, can help you avoid problems before they start. But before that, you’ll need a little background.</p>
+<h2 id="grocery-store-and-the-pantry" class="anchored">Grocery Store and the Pantry</h2>
+<p>Packages live in one of two places: <strong>repositories</strong> and <strong>libraries</strong>. Understanding each of these environments, especially their differences, is the first step to avoiding package management headaches.</p>
+<blockquote>
+<p>Think of your data science workbench as a kitchen:</p>
+<ul>
+<li>The <strong>repository</strong> is the grocery store, a central place where everyone gets their packages.</li>
+<li>The <strong>library</strong> is the pantry, where you keep your own private set of packages.</li>
+<li><strong>Installation</strong> is the shopping trip to stock your library with packages from the repository.</li>
+</ul>
+</blockquote>
+<p><img src="zz_pkg-envs.png" alt="Illustration of package repository and library." width="350"></p>
+<p><sup>Photos by <a href="https://unsplash.com/@neonbrand?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">NeONBRAND</a> and <a href="https://unsplash.com/@luisabrimble?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Luisa Brimble</a> on <a href="https://unsplash.com/?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a>.</sup></p>
+<p>Like the grocery store, the package repository includes more packages – inert and boxed up – than any one person needs. Common repositories include CRAN, BioConductor, PyPI, <a href="https://rstudio.com/products/package-manager/">private RStudio Package Manager</a>, and <a href="https://packagemanager.rstudio.com/client/#/">public RStudio Package Manager</a>.</p>
+<p>And like the pantry in your home, which holds shelf-stable ingredients until they’re needed in the kitchen, the library holds packages specific to your work, ready for you to combine with other raw ingredients for your analysis.</p>
+<p>Libraries are needed wherever there’s a running R or Python process, like within the <a href="https://rstudio.com/products/rstudio/">RStudio IDE</a> and Jupyter Notebooks, or alongside apps and reports running on platforms like <a href="https://rstudio.com/products/connect/">RStudio Connect</a>.</p>
+<p>Unlike your ability to choose among various colors or flavors of the same item in your pantry, R and Python find packages in the library by name alone, so the library that corresponds to your code must include:</p>
+<ul>
+<li>exactly one version of each package needed and</li>
+<li>only package versions that are consistent, so package interdependencies work.</li>
+</ul>
+<p>Now that you have a general idea of what repositories and libraries are, it’s time for a general rule for how to think about managing packages.</p>
+<h2 id="the-package-management-prime-directive" class="anchored">The Package Management Prime Directive</h2>
+<p>A grocery store or repository aims to meet the needs of as many people as possible.</p>
+<p>Your pantry or library, on the other hand, requires all the ingredients for your creations, but no more. These constraints lead directly to the Package Management Prime Directive:</p>
+<blockquote>
+<p>Repositories should be as broad possible.</p>
+<p>Libraries should be as specific as possible.</p>
+</blockquote>
+<p>Most organizations administer only one or a few central repositories to keep management simple. Many organizations decide to just use a public repository and skip repository management altogether.</p>
+<p>In contrast, most organizations empower data scientists and engineers to manage their own libraries. Increasingly, many are using libraries that correspond to individual projects to make them even more specific. Luckily, this is easier than it sounds, as there’s <a href="https://environments.rstudio.com">great tooling for library management</a> in both R and Python, which we’ll explore in future posts in this series.</p>
+<p>Now, armed with the Package Management Prime Directive and an understanding of why it’s important, you’ve got all the conceptual understanding to solve most package management issues.</p>
+<p>In future posts, we’ll cover frequent sources of package management pain for both data scientists and platform administrators, and how they can work together to create a Package Management Plan to prevent even the most pernicious of package problems.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

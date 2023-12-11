@@ -1,0 +1,63 @@
+.ts-wrapper {
+    @apply h-full;
+
+    &.multi.has-items .ts-control {
+        @apply pl-[24px] !pr-[24px] py-[18px];
+
+        > input {
+            @apply !mx-0;
+        }
+    }
+
+    .ts-control {
+        @apply h-full body-md-regular pl-[24px] !pr-[24px] py-[18px];
+
+        > input {
+            @apply body-md-regular min-w-0 w-1/2 flex-auto;
+        }
+
+        .item {
+            @apply hidden;
+        }
+
+        .checkbox-count {
+            @apply px-[9px] m-0 border border-blue3/10 rounded-sm bg-blue3/20 body-md-regular;
+        }
+    }
+
+    .ts-dropdown {
+        @apply mt-[-1px] shadow-none;
+
+        .optgroup {
+            @apply px-[24px] mt-[16px];
+
+            .optgroup-header {
+                @apply body-md-semibold body-md-semibold text-blue3 capitalize border-b border-blue3/[.6] mb-[25px];
+            }
+
+            .option {
+                @apply flex items-center py-[10px] px-[8px] body-sm-regular text-blue1/[.62] border-b-[0.5px] lg:last-of-type:border-b-0 border-gray4;
+
+                > input {
+                    @apply inline-block content-[''] h-[20px] w-[20px] min-w-[20px] mr-[10px] rounded-sm box-border border border-gray3 relative;
+
+                    &:hover {
+                        @apply border border-gray2;
+                    }
+
+                    &:checked {
+                        @apply border border-blue3/10 accent-blue3/40 ring-[6px] ring-blue4/20;
+                    }
+                }
+            }
+        }
+
+        .no-results {
+            @apply body-md-regular px-[24px] py-[18px];
+        }
+    }
+}
+
+.dropdownButtonsContainer {
+    @apply grid grid-cols-12 gap-x-[8px] px-[20px] md:px-[60px] lg:px-[20px] py-[16px] md:py-[32px] lg:py-[16px] bg-neutral-light border-t-[0.5px] border-gray4;
+}

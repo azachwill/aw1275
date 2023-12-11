@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-11-02">
+<meta name="description" content="In this post, we explore the creation and evolution of the Clusterbuster, a Shiny app developed by the Dutch National Institute for Public Health and the Environment. Hundreds of doctors and epidemiologists use the Clusterbuster to gain insight into COVID-19 clusters in the Netherlands.">
+
+<title>How the “Clusterbuster” Shiny App Helps Hundreds of Doctors and Epidemiologists Battle COVID-19 in the Netherlands</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">How the “Clusterbuster” Shiny App Helps Hundreds of Doctors and Epidemiologists Battle COVID-19 in the Netherlands</h1>
+
+<p class="date">2021-11-02</p>
+</header>
+
+<p>As 2020 closed, Eveline Geubbels, former COVID-19 Surveillance Coordinator at the Dutch National Institute for Public Health and the Environment (RIVM), faced an important question: How can we help the public health doctors and epidemiologists that work within the 25 Dutch regional health services gain insight into clusters of COVID-19 cases?</p>
+<p>Now ten months into 2021, RIVM has an answer. For the past seven months, a Shiny web application called the Clusterbuster has been providing valuable information to hundreds of doctors and epidemiologists on the facts and figures surrounding COVID-19 on a daily basis.</p>
+<h2 id="first-steps-in-creating-a-valuable-and-safe-application-fast" class="anchored">First Steps in Creating a Valuable (and Safe) Application Fast</h2>
+<p>Eveline tasked Sjoerd Wierenga, a recently hired data scientist, to help RIVM answer this question. Sjoerd learned that the organization had experience with R and Shiny and was working on providing secure access to their applications. His advice was to move forward with creating a COVID-19 web app with these tools. Together with his colleague Jossy van den Boogaard, a medical epidemiologist, they quickly set up an advisory board made up of doctors and epidemiologists to outline further development.</p>
+<blockquote>
+<p>“At that time, the COVID control teams at the MHSs [Municipal Health Services] were struggling with keeping an eye on newly developing clusters in the midst of the ever-increasing COVID-19 caseload. The members of the advisory board were therefore keen to create a tool that could help them with tracking (and tackling) clusters.”</p>
+</blockquote>
+<blockquote>
+<p>—Jossy van den Boogaard</p>
+</blockquote>
+<p>Team Clusterbuster recruited more data scientists within a few weeks. Senior Data Scientist Job Spijker tackled one of the major prerequisites in getting an application into production safely and efficiently: creating a deployment stack for the application and the data.</p>
+<blockquote>
+<p>“Because we were working with sensitive data, we preferred to use on-premise solutions. Thanks to the open-source nature of many RStudio products, it was a breeze to implement our own stack on the institute’s infrastructure.”</p>
+</blockquote>
+<blockquote>
+<p>—Job Spijker</p>
+</blockquote>
+<p>At the same time, many others were working behind the scenes doing risk analysis, privacy assessments, infrastructure buildouts, and much more. After a couple of months, everything seemed to fall into place. Thanks to the advisory board, the team was confident that they were sharing valuable insights. With the help of supporting staff from legal, IT, and others, they could proceed knowing that they could share the insights in a safe and responsible way.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<figure>
+<img src="image1.png" title="COVID-19 Shiny App" class="img-fluid">
+</figure>
+<p></p><figcaption>COVID-19 dashboard with a map showing hotspots on the left and progress of notifications on the right</figcaption><p></p>
+</figure>
+</div>
+
+<em>The first prototype for a COVID-19 Shiny application by Sjoerd Wierenga, which was hosted on shinyapps.io. This screen shot shows synthetic data. The text in the image was translated from the original Dutch using Google Translate.</em>
+
+<p>With the major prerequisites met and the outcomes of weekly advisory board meetings to guide them, the team created a Shiny web application that quickly generated valuable insights.</p>
+<h2 id="scaling-up-impact" class="anchored">Scaling Up Impact</h2>
+<blockquote>
+<p>“We operate with the philosophy that the impact we generate is a function of both quality and volume. So: numbers matter!”</p>
+</blockquote>
+<blockquote>
+<p>— Sjoerd Wierenga</p>
+</blockquote>
+<p>The application was developed for (and partly by) professionals with a background in infectious disease control. In March, the first group of around 30 professionals received access to the application. The group grew to 200 over the following months. At the time of writing, Team Clusterbuster provides access to close to 400 doctors, epidemiologists, and other front-line professionals, and they add new users almost every day.</p>
+<p>Because the team operates with the philosophy that the impact they generate is a function of both quality and volume, these numbers matter! More users continue to request access to the application to:</p>
+<ol type="1">
+<li>Draw insights from new data</li>
+<li>Create custom visualizations</li>
+<li>Incorporate user feedback</li>
+</ol>
+<p>Let’s look at how the team achieved each of these goals.</p>
+<p><strong>1. Draw insights from new data</strong></p>
+<p>The Clusterbuster app has evolved with the pandemic. The team started off visualizing only reported cases, but as the pandemic spread, they added new data such as the geographical distribution of clusters. In the last couple of months, the team has also incorporated data from the Dutch National COVID-19 Immunization Program.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<figure>
+<img src="image2.png" title="COVID-19 Shiny App" class="img-fluid">
+</figure>
+<p></p><figcaption>Explorer showing two maps with different types of COVID-19 situations, such as linked cases</figcaption><p></p>
+</figure>
+</div>
+
+<em>A dashboard page displaying the geographical distribution of linked cases for a given situation. This screen shot shows synthetic data. The text in the image was translated from the original Dutch using Google Translate.</em>
+
+<p><strong>2. Create custom visualizations</strong></p>
+<p>The Clusterbuster combines reliable data sources and visualizes them in new ways. One visualization combined the vaccination rate and the number of reported infections with an interactive bivariate geographical representation. This visualization allowed epidemiologists to gain insight into which neighborhoods lagged behind in vaccinations while potentially being at risk because of an increase in reported cases.</p>
+<blockquote>
+<p>“By using R Shiny, we had a lot of flexibility in creating insights. We weren’t limited to off-the-shelf functionality — we could be as creative as our coding skills allowed! Linking visualizations and allowing for a lot of interactivity really helped with making the advisory board’s ideas come to life.”</p>
+</blockquote>
+<blockquote>
+<p>— Jolien ten Velden</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<figure>
+<img src="image3.png" title="COVID-19 Shiny App" class="img-fluid">
+</figure>
+<p></p><figcaption>Bivariate map showing both vaccine coverage and incidence</figcaption><p></p>
+</figure>
+</div>
+
+<em>Showing a combination of the vaccination rate and reported cases with a bivariate choropleth map. This screen shot shows synthetic data. The text in the image was translated from the original Dutch using Google Translate.</em>
+
+<p><strong>3. Incorporate user feedback</strong></p>
+<p>Team Clusterbuster put a lot of thought into realizing an application that users actually want to use. In addition, they often received feedback on user friendliness and overall look of the app. This resulted in word of mouth being the biggest driver of more professionals seeking authorization.</p>
+<p>Thanks to the work of Marjanne Plasmans, who created a separate Shiny application to track the usage of the Clusterbuster, the team knows that the application is being accessed hundreds of times each week. One of the users, a Public Health Doctor for the MHS VGGM, describes how the application helps them in monitoring COVID-19:</p>
+<blockquote>
+<p>“The Clusterbuster is very useful in maintaining an overview of clusters and outbreaks. We use certain visualizations to track where cases are on the rise, and how this relates to specific concerns. For example: for our daily reports we use the Clusterbuster’s insights to monitor outbreaks in areas with a relatively low vaccination coverage, or clusters in nursing homes that require our attention.”</p>
+</blockquote>
+<blockquote>
+<p>—Patrick van Schelven</p>
+</blockquote>
+<h2 id="future-developments" class="anchored">Future Developments</h2>
+<p>Job Spijker takes pride in what he and his colleagues achieved during the COVID-19 crisis: implementing the technology to make Shiny applications available for professionals while complying with strict privacy regulations. Using this experience, Job, Sjoerd, and their colleague William Schuch are actively creating templates and procedures to facilitate efficient creation of future applications.</p>
+<p>The development team plans to update Clusterbuster to adapt to the evolution of the pandemic. More options will be added in the upcoming months to help with the (hopefully) final push in the battle against COVID-19. While the team keeps on improving the application and providing access to more authorized users, they also philosophize about the post COVID-19 potential.</p>
+<blockquote>
+<p>“By using open source software and a code first approach we can drastically reduce the ‘production costs’ of valuable insights. This is, in my view, one of the key aspects in achieving more data driven public policy making.”</p>
+</blockquote>
+<blockquote>
+<p>—Sjoerd Wierenga</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<figure>
+<img src="image4.png" title="COVID-19 Shiny App" class="img-fluid">
+</figure>
+<p></p><figcaption>Template of COVID-19 Clusterbuster dashboard with a map on the left and text on the right</figcaption><p></p>
+</figure>
+</div>
+
+<em>The template is based on the Clusterbuster, making it possible to create new ‘Clusterbusters’ quickly and easily.</em>
+
+<p>Finally, the team is actively having conversations about making the code open source. This could facilitate co-creation of future applications, something the RIVM has <a href="https://www.werkenvoornederland.nl/organisaties/ministerie-van-volksgezondheid-welzijn-en-sport/via-open-source-keken-slimste-developers-mee-bij-het-maken-van-corona-app" target="_blank" rel="noopener noreferrer">recently experienced </a>. The team considers it a way of giving back to the open source community, without which the Clusterbuster would not have existed in the first place.</p>
+<p>We at RStudio would like to thank the following professionals for their time in developing this post:</p>
+<ul>
+<li>Sjoerd Wierenga, Data Scientist and Team Lead, Centre for Infectious Disease Control, RIVM</li>
+<li>Jossy van den Boogaard, Medical Epidemiologist, Centre for Infectious Disease Control, RIVM</li>
+<li>Job Spijker, Senior Data Scientist, Environment and Safety, RIVM</li>
+<li>Jolien ten Velden, Data Scientist and Researcher, GGD Hart voor Brabant</li>
+<li>William Schuch, Geo Information Specialist, Mathematics, Data and GIS, RIVM</li>
+<li>Marjanne Plasmans, Researcher, Public Health and Health Services, RIVM</li>
+<li>Patrick van Schelven, Public Health Doctor, VGGM</li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

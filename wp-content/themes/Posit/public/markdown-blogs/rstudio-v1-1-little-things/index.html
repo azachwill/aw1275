@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2017-09-13">
+
+<title>RStudio v1.1 - The Little Things</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio v1.1 - The Little Things</h1>
+
+<p class="date">2017-09-13</p>
+</header>
+
+<p><em>Today, we’re concluding our blog series on new features in RStudio 1.1. If you’d like to try these features out for yourself, you can download a <a href="https://www.rstudio.com/products/rstudio/download/preview/">preview release of RStudio 1.1</a>.</em></p>
+<h2 id="details-matter" class="anchored">Details matter</h2>
+<p>Throughout this blog series, we’ve focused on some of the big features we added in RStudio 1.1. It’s not just the big things that matter, though; it’s sometimes the little ones that make the most difference in your day-to-day work. Towards that end, we spent a chunk of time during RStudio 1.1’s development implementing small but significant improvements to the core IDE features you use every day. Many of these were based on requests and ideas from the R community – we’re very thankful for everyone’s input and perspective!</p>
+<h3 id="create-git-branches" class="anchored">Create Git branches</h3>
+<p>We’ve significantly improved Git branch management. Now you can add a new branch right from the IDE, and set it up to track a remote branch at the same time.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-09-13-new-branch.png" class="img-fluid"></p>
+<p></p><figcaption>New branch</figcaption><p></p>
+</figure>
+</div>
+<p>You can even type to search your branch names, which is helpful if you have a lot of them!</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-09-13-search-branches.png" class="img-fluid"></p>
+<p></p><figcaption>Search branches</figcaption><p></p>
+</figure>
+</div>
+<h3 id="ctrlr-command-search" class="anchored">Ctrl+R command search</h3>
+<p>Regular RStudio users will know that <em>Ctrl+Up</em> (or <em>Cmd+Up</em> on MacOS) lets you recall a previous R command by typing only a few letters from the beginning of the command. In RStudio 1.1, we’ve added <em>Ctrl+R</em>, which–just like in your favorite shell–performs an incremental history search. Now you can recall a previous R command based on text anywhere in the command, not just at the beginning.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-09-13-ctrl-r.png" class="img-fluid"></p>
+<p></p><figcaption>Reverse history search</figcaption><p></p>
+</figure>
+</div>
+<h3 id="change-knit-directory" class="anchored">Change knit directory</h3>
+<p>In RStudio 1.0, knitting R Markdown documents (and executing notebook chunks) was always done in the context of the document’s directory. This has some advantages, but many people prefer to use more contextual paths. In RStudio 1.1, you can now choose to evaluate chunks in the current working directory, or in the directory of the document’s project.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-09-13-knit-directory.png" class="img-fluid"></p>
+<p></p><figcaption>Choose knit directory</figcaption><p></p>
+</figure>
+</div>
+<p>This setting can be different for each R Markdown document, and it affects both the execution of notebook chunks and the behavior of the Knit button, so you’ll get consistent results no matter how your R chunks are evaluated.</p>
+<h3 id="run-r-code-between-blank-lines" class="anchored">Run R code between blank lines</h3>
+<p>In older versions of RStudio, <em>Ctrl+Enter</em> sent a single line of R code to the console. In 1.0, we added the ability to automatically send an entire R statement to the console, even if it was spread over multiple lines. And in 1.1, we’ve made it possible to execute consecutive R lines, delimited by blank lines (like “paragraphs” in <a href="https://ess.r-project.org/">ESS</a>). You can opt into this behavior in Options -&gt; Code -&gt; Editing -&gt; Execution:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-09-13-consecutive-lines.png" class="img-fluid"></p>
+<p></p><figcaption>Multiple consecutive R lines</figcaption><p></p>
+</figure>
+</div>
+<p>This behavior is helpful if you use blank lines to delimit sections of your R script, and usually want to execute each section as a unit. For instance, in the example below you would press Ctrl+Enter once to execute the first section, and again to execute the second.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's run these two commands to build some data.</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>categories <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"first"</span>, <span class="st">"second"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">group   =</span> <span class="fu">factor</span>(categories),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">measure =</span> <span class="fu">c</span>(<span class="dv">40</span>, <span class="dv">60</span>))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Then, this last one to view it.</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> data, <span class="fu">aes</span>(group, measure), <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>))</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>It’s also possible to mix and match execution styles, as we’ve added new commands that specifically use each style (regardless of the default behavior of Ctrl+Enter). Set Ctrl+Enter to your most-used style and bind keyboard shortcuts to the others you use; you’ll rarely find yourself reaching for the mouse to execute R code!</p>
+<h3 id="data-viewer-improvements" class="anchored">Data viewer improvements</h3>
+<p>We have removed the 100-column limit in the data viewer. We’ve also made it possible to resize the columns, so you can see more of your data when it contains long text.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-09-13-resize-columns.png" class="img-fluid"></p>
+<p></p><figcaption>Data viewer columns</figcaption><p></p>
+</figure>
+</div>
+<h3 id="execute-code-from-help" class="anchored">Execute code from Help</h3>
+<p>Ever wanted to execute the example code from a function’s Help? Now you can just highlight it right in the Help pane and press Ctrl+Enter (Cmd+Enter on macOS) to send it to the console.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-09-13-execute-help.png" class="img-fluid"></p>
+<p></p><figcaption>Help code execution</figcaption><p></p>
+</figure>
+</div>
+<h3 id="project-templates" class="anchored">Project templates</h3>
+<p>Any R package can now supply RStudio with a template for new projects based on the package. For instance, when you install the <a href="https://bookdown.org/yihui/bookdown/">bookdown</a> package, you’ll start seeing an option for new <strong>bookdown</strong> projects in RStudio, which will get you started with the skeleton of a book right away.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-09-13-project-templates.png" class="img-fluid"></p>
+<p></p><figcaption>R project templates</figcaption><p></p>
+</figure>
+</div>
+<p>This project template isn’t hard-coded into RStudio – it’s provided by the R package, so any package can provide a project template. If you’re a package author, see our <a href="https://rstudio.github.io/rstudio-extensions/rstudio_project_templates.html">RStudio Project Templates</a> documentation for information on how to add a project template to your package.</p>
+<h3 id="ligature-support" class="anchored">Ligature support</h3>
+<p>In the last few years we’ve seen an uptick in fonts designed specifically for code. <a href="https://www.hanselman.com/blog/MonospacedProgrammingFontsWithLigatures.aspx">Many of these use “ligatures”</a>, which combine two or more individual characters into a single typographical glyph (see <a href="https://github.com/tonsky/FiraCode">Fira Code</a> for examples). RStudio Server and RStudio on MacOS have always supported these natively; in RStudio 1.1 we added support for them on Windows and Linux, too.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-09-13-ligatures.png" class="img-fluid"></p>
+<p></p><figcaption>Ligatures in Fira Code on Windows</figcaption><p></p>
+</figure>
+</div>
+<h3 id="files-pane-ergonomics" class="anchored">Files pane ergonomics</h3>
+<p>The <em>Copy</em> command in the Files pane makes it easy to copy a file from one place to another, but sometimes you want the file to have a different name in the new location. We’ve added a new command called <em>Copy To…</em> which does this: just like <code>cp</code>, you can now specify a destination filename.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-09-13-files-pane.png" class="img-fluid"></p>
+<p></p><figcaption>Copy To</figcaption><p></p>
+</figure>
+</div>
+<p>We’ve also significantly improved <em>Rename</em>: when you use the Files pane to rename a file that you have open, it’s no longer necessary to close and re-open the file; the editor buffer adapts immediately to the new name.</p>
+<h3 id="ansi-colors-in-the-r-console" class="anchored">ANSI colors in the R console</h3>
+<p>R packages like <a href="https://cran.r-project.org/web/packages/crayon/index.html">crayon</a> make it possible for R’s output to include colors and highlighting, using standard ANSI escape sequences. We’ve added support for these to RStudio’s R console; packages that use <em>crayon</em>, like <a href="https://cran.r-project.org/web/packages/diffobj/index.html">diffobj</a>, can now emit colored, styled text right inside the R console.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-09-13-crayon.png" class="img-fluid"></p>
+<p></p><figcaption>ANSI colors in R</figcaption><p></p>
+</figure>
+</div>
+<h2 id="conclusion" class="anchored">Conclusion</h2>
+<p>This wraps up our blog series on the RStudio 1.1 preview. If you just can’t get enough, there’s lots more: see the <a href="https://www.rstudio.com/products/rstudio/download/preview-release-notes/">RStudio 1.1 Preview Release Notes</a> for a full list of the changes in RStudio 1.1.</p>
+<p>If you’d like to learn more, we have two upcoming webinars in which we’ll be taking a deeper dive:</p>
+<ul>
+<li><strong>New Features of the IDE</strong> on December 6th, 2017: we’ll show you what’s new in RStudio 1.1 and walk you through how to apply the new features to your workflow.</li>
+<li><strong>Terminal Updates</strong> on December 20th, 2017: we’ll get into the details of the new RStudio 1.1 Terminal.</li>
+</ul>
+<p>We hope you’ve enjoyed learning about the new features and capabilities ahead of the official release of RStudio 1.1, and we look forward to putting an official release in your hands in the coming months.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

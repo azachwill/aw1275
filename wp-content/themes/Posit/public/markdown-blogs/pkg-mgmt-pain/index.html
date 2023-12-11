@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-02-11">
+<meta name="description" content="Data science teams are often frustrated by poorly-designed or nonexistent approaches to R and Python package management. In this post, you’ll learn specifically how that pain shows up for data scientists and how to identify your organization’s requirements for a better package management plan.">
+
+<title>Painful Package Management</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Painful Package Management</h1>
+
+<p class="date">2021-02-11</p>
+</header>
+
+<p><sup>Photo by <a href="https://unsplash.com/@brandablebox?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Brandable Box</a> on <a href="https://unsplash.com/?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></sup></p>
+<blockquote>
+<p><em>This is the second of three blogs on package management.</em></p>
+<p><em>Registration for our webinar on <a href="https://rstudio.com/registration/managing-packages-for-open-source-data-science/">Managing Packages for Open-Source Data Science</a> on February 17 is now open.</em></p>
+</blockquote>
+<p>If you’re a data scientist, you’ve been hired to generate insights and create assets – not manage R and Python package environments. But “I spend my day managing packages,” or even worse, “I spend my day fighting IT for the packages I need,” is an all-too-common refrain.</p>
+<p>It doesn’t have to be this way. With a little forethought and planning, your organization can adopt a <a href="https://environments.rstudio.com/reproduce.html">package management strategy</a> that will drastically reduce the amount of hassle data scientists have to endure managing packages.</p>
+<p>In this blog post, we’ll explore the frustration your data scientists probably feel if your package management plan doesn’t provide both flexibility to get work done and structure to ensure reproducibility. Then we’ll dig into the first step to make it better: determining your organization’s package management requirements.</p>
+<h2 id="when-package-management-is-pain" class="anchored">When Package Management is Pain</h2>
+<p>When package management isn’t going well, data scientists or engineers are usually the first ones to feel the sting. Here are some of the ways data scientists experience bad package management plans:</p>
+<ul>
+<li><p><strong>It’s hard or slow to install packages.</strong> Data scientists often can’t find the packages they need from public repositories or aren’t empowered to share private packages. Even when it’s easy to find packages, they may be slow to install or require system libraries that don’t exist.</p></li>
+<li><p><strong>Data science and IT/Ops feel at odds.</strong> If you’re a data scientist, you probably want every package you need <strong>now</strong> without waiting for someone to approve installation. This can put you on a collision course with IT Admins who are concerned about platform security and stability.</p></li>
+<li><p><strong>Sharing projects and deploying to production are ordeals.</strong> When you share or deploy, you may face a maze of package dependencies and conflicts where reaching success feels more like a roll of the dice than a smooth process.</p></li>
+<li><p><strong>Reproducing your results is fragile or elusive.</strong> R and Python packages get constant updates, and unless you’ve planned ahead, new package versions can break old code and create unexpected pitfalls when adding new capabilities.</p></li>
+</ul>
+<p>As we discussed in the <a href="https://blog.rstudio.com/2021/02/05/pkg-mgmt-prime-directive/">first blog in this series</a>, successful package management requires attention from both IT/Admins and data scientists as the process spans both the shared repository and the private library.</p>
+<p>That means that <strong>there’s no single solution to package management</strong>.</p>
+<p>But, these issues <strong>are</strong> solvable by developing a package management plan for your organization. The first step is to clearly identify how packages are managed in your environment and who’s responsible.</p>
+<h2 id="discovering-package-management-requirements" class="anchored">Discovering Package Management Requirements</h2>
+<p>Your organization’s package management requirements depend on your organization’s size and complexity. In some organizations, package management involves stakeholders from the data science, IT/Ops, security, and other teams.</p>
+<p>Virtually all environments share a few requirements. To successfully manage open source packages for data science, <strong>your organization needs</strong>:</p>
+<ul>
+<li><p><strong>A simple way to create and save package sets.</strong> Organizations need a standard way to ensure that data scientists can capture the dependencies for their particular code and save them for later.</p></li>
+<li><p><strong>The ability to quickly and easily add packages to libraries.</strong> Package management is much smoother when data scientists are confident they can quickly restore a previous working environment when and where they need to.</p></li>
+</ul>
+<p>And depending on your organization, <strong>you might need</strong> the ability to:</p>
+<ul>
+<li><p><strong>Share private (internally-developed) packages.</strong> If your organization is developing and using internal packages, you’ll need a way to access and share them in addition to approved packages from public repositories.</p></li>
+<li><p><strong>Limit the set of packages available in the environment.</strong> Organizations that allow open access to packages from public repositories face very different requirements than those that only allow validated packages.</p></li>
+<li><p><strong>Do all of the above in an offline or air-gapped context.</strong> If your organization’s security policy requires limited or no internet, you’ll need to pay special attention to getting data scientists the packages they need.</p></li>
+</ul>
+<p>It’s worth taking a minute to think about how your organization currently manages packages and whether you have a way to meet the requirements you face in your organization.</p>
+<p>In the (forthcoming) final blog in this series, we’ll dive into how to take the requirements you’ve identified and create your organization’s package management plan, including divvying up responsibility for package management between IT Admins and data scientists, and how to use tools like <a href="https://rstudio.github.io/renv/index.html">renv</a>, python virtual environments, and <a href="https://packagemanager.rstudio.com">public</a> and <a href="https://rstudio.com/products/package-manager/">private RStudio Package Manager</a> to execute your plan.</p>
+<blockquote>
+<p><em>Please sign up for our <a href="https://rstudio.com/registration/managing-packages-for-open-source-data-science/">free webinar</a> on February 17 to learn more about managing open source packages for R and Python.</em></p>
+</blockquote>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

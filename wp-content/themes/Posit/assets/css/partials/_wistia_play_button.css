@@ -1,0 +1,16 @@
+.wistia_embed.wistia_embed_initialized {
+    @apply rounded-[8px] overflow-hidden;
+}
+
+/*
+By default, wistia adds a mix-blend-mode: color to the play button
+and that's causing the blur on nav-bar to behave odd.
+
+Since we don't have full control on wistia styles, the fix (for now) is to
+override the mix-blend-mode and add an opacity to the button background so it
+stills shows part of the video-thumbnail through opacity.
+*/
+
+.wistia_embed.wistia_embed_initialized .w-big-play-button.w-css-reset-button-important.w-vulcan-v2-button > div {
+    @apply !mix-blend-normal !opacity-[0.5];
+}

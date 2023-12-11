@@ -1,0 +1,86 @@
+.wysiwyg-content ul li,
+.wysiwyg-content ol li {
+    @apply mx-[14px] my-[24px] list-inside;
+}
+.wysiwyg-content ul li::marker {
+    @apply mx-[8px];
+    color: #3276b5;
+}
+
+.wysiwyg-content ul {
+    list-style: disc;
+    @apply my-[16px];
+}
+
+.wysiwyg-content ol {
+    list-style: decimal;
+    @apply my-[16px];
+}
+
+.wysiwyg-content p {
+    @apply py-[8px];
+}
+
+.wysiwyg-content a {
+    @apply link-light !normal-case !z-[8] focus-link focus-visible:rounded-[4px] focus:rounded-[4px];
+}
+
+.wysiwyg-content table {
+    @apply my-[40px];
+}
+
+.wysiwyg-content table thead th {
+    @apply text-blue1;
+}
+
+.wysiwyg-content table tbody td,
+.wysiwyg-content table thead th {
+    @apply p-[16px];
+}
+
+.wysiwyg-content table tbody tr {
+    @apply text-blue1;
+}
+
+.wysiwyg-content table tbody tr:nth-child(odd) {
+    @apply bg-gray6;
+}
+
+.glide.glide--carousel .glide__bullet.glide__bullet--active {
+    @apply bg-blue1 border-blue1;
+}
+
+.slider-card p {
+    @apply !z-[8] line-clamp-3;
+    padding-bottom: 0 !important;
+}
+
+.wysiwyg-content code {
+    @apply bg-gray4/[.2] py-[5px] px-[10px] whitespace-pre-line;
+}
+
+.wysiwyg-content .panel-tabset {
+    .nav.nav-tabs {
+        @apply flex overflow-x-auto list-none m-0 border-b border-gray4;
+
+        .nav-item {
+            @apply m-0 cursor-pointer pb-[10px];
+
+            &.active {
+                @apply border-b-2 border-blue4;
+            }
+
+            .nav-link {
+                @apply body-md-semibold text-blue1/[.62] px-[18px] border-b-0 hover:bg-[length:0%] active:bg-[length:0%];
+
+                &.active {
+                    @apply text-blue4;
+                }
+            }
+        }
+    }
+
+    .tab-content {
+        @apply mt-[18px];
+    }
+}

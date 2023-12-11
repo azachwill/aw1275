@@ -1,0 +1,283 @@
+{
+    "key": "group_63235732cfae1",
+    "title": "Download Steps",
+    "fields": [
+        {
+            "key": "field_6328de99b4116",
+            "label": "Step",
+            "name": "step",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "100",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_6328ea585aa7f",
+                    "label": "Header",
+                    "name": "header",
+                    "type": "clone",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "clone": [
+                        "group_62f69ccc93534"
+                    ],
+                    "display": "group",
+                    "layout": "block",
+                    "prefix_label": 0,
+                    "prefix_name": 0
+                },
+                {
+                    "key": "field_6328dee7b4121",
+                    "label": "Add Code Snippets",
+                    "name": "add_code_snippets",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 1,
+                    "ui_on_text": "",
+                    "ui_off_text": ""
+                },
+                {
+                    "key": "field_6328ee7778788",
+                    "label": "Code Snippets",
+                    "name": "code_snippets",
+                    "type": "repeater",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_6328dee7b4121",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "collapsed": "",
+                    "min": 0,
+                    "max": 0,
+                    "layout": "block",
+                    "button_label": "Add Code Snippet",
+                    "sub_fields": [
+                        {
+                            "key": "field_6328ee7778789",
+                            "label": "Title",
+                            "name": "title",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": ""
+                        },
+                        {
+                            "key": "field_6328ee777878a",
+                            "label": "Code Snippet",
+                            "name": "code_snippet",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "maxlength": "",
+                            "rows": "",
+                            "new_lines": "br"
+                        },
+                        {
+                            "key": "field_632e3271ced6b",
+                            "label": "Add Build Revision",
+                            "name": "add_build_revision",
+                            "type": "true_false",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "message": "",
+                            "default_value": 0,
+                            "ui": 1,
+                            "ui_on_text": "",
+                            "ui_off_text": ""
+                        },
+                        {
+                            "key": "field_632e3295ced6c",
+                            "label": "Revision Select",
+                            "name": "revision_select",
+                            "type": "clone",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_632e3271ced6b",
+                                        "operator": "==",
+                                        "value": "1"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "100",
+                                "class": "",
+                                "id": ""
+                            },
+                            "clone": [
+                                "group_632e317e52b3a"
+                            ],
+                            "display": "seamless",
+                            "layout": "block",
+                            "prefix_label": 0,
+                            "prefix_name": 0,
+                            "choices": {
+                                "rstudio\/open_source\/stable\/desktop\/installer\/windows": "RStudio for Windows 10\/11",
+                                "rstudio\/open_source\/stable\/desktop\/installer\/mac": "RStudio for macOS 10.15+",
+                                "rstudio\/open_source\/stable\/desktop\/installer\/bionic": "RStudio for Ubuntu 18+\/Debian 10+",
+                                "rstudio\/open_source\/stable\/desktop\/installer\/jammy": "RStudio for Ubuntu 22",
+                                "rstudio\/open_source\/stable\/desktop\/installer\/redhat64": "RStudio for Fedora 19\/Red Hat 7",
+                                "rstudio\/open_source\/stable\/desktop\/installer\/opensuse15": "RStudio for OpenSUSE 15",
+                                "rstudio\/open_source\/stable\/desktop\/installer\/rhel8": "RStudio for Fedora 34\/Red Hat 8",
+                                "rstudio\/open_source\/stable\/server\/installer\/bionic": "RStudio Server for Ubuntu 18+\/Debian 10+",
+                                "rstudio\/open_source\/stable\/server\/installer\/jammy": "RStudio Server for Ubuntu 22",
+                                "rstudio\/open_source\/stable\/server\/installer\/redhat7_64": "RStudio Server for Red Hat\/CentOS 7",
+                                "rstudio\/open_source\/stable\/server\/installer\/opensuse15": "RStudio Server for OpenSUSE 15",
+                                "rstudio\/open_source\/stable\/server\/installer\/rhel8": "RStudio Server for Fedora 34\/Red Hat 8",
+                                "rstudio\/pro\/stable\/server\/installer\/bionic": "RStudio Server Pro for Ubuntu 18+\/Debian 10+",
+                                "rstudio\/pro\/stable\/server\/installer\/jammy": "RStudio Server Pro for Ubuntu 22",
+                                "rstudio\/pro\/stable\/server\/installer\/redhat7_64": "RStudio Server Pro for Red Hat\/CentOS 7",
+                                "rstudio\/pro\/stable\/server\/installer\/opensuse15": "RStudio Server Pro for OpenSUSE 15",
+                                "rstudio\/pro\/stable\/server\/installer\/rhel8": "RStudio Server Pro for Fedora 34\/Red Hat 8",
+                                "rstudio\/pro\/stable\/desktop\/installer\/windows": "RStudio Server Pro for Windows 10\/11",
+                                "rstudio\/pro\/stable\/desktop\/installer\/mac": "RStudio Server Pro for macOS 10.15+",
+                                "rstudio\/pro\/stable\/desktop\/installer\/bionic": "RStudio Server Pro for Ubuntu 18+\/Debian 10+",
+                                "rstudio\/pro\/stable\/desktop\/installer\/jammy": "RStudio Server Pro for Ubuntu 22",
+                                "rstudio\/pro\/stable\/desktop\/installer\/redhat64": "RStudio Server Pro for Fedora 19\/Red Hat 7",
+                                "rstudio\/pro\/stable\/desktop\/installer\/opensuse15": "RStudio Server Pro for OpenSUSE 15",
+                                "rstudio\/pro\/stable\/desktop\/installer\/rhel8": "RStudio Server Pro for Fedora 34\/Red Hat 8",
+                                "rstudio\/pro\/stable\/session\/installer\/bionic": "RStudio Session Pro for Ubuntu 18+\/Debian 10+",
+                                "rstudio\/pro\/stable\/session\/installer\/jammy": "RStudio Session Pro for Ubuntu 22",
+                                "rstudio\/pro\/stable\/session\/installer\/redhat7_64": "RStudio Session Pro for Red Hat\/CentOS 7",
+                                "rstudio\/pro\/stable\/session\/installer\/rhel8": "RStudio Session Pro for Fedora 34\/Red Hat 8",
+                                "rstudio\/pro\/stable\/session\/installer\/opensuse15": "RStudio Session Pro for OpenSUSE 15",
+                                "shiny_server\/open_source\/installer\/ubuntu64": "RStudio Shiny Server for Ubuntu 14\/Debian 8",
+                                "shiny_server\/open_source\/installer\/redhat64": "RStudio Shiny Server for Fedora 19\/Red Hat 7",
+                                "shiny_server\/pro\/installer\/bionic": "RStudio Shiny Server for Ubuntu 18+\/Debian 10+",
+                                "shiny_server\/pro\/installer\/redhat7_64": "RStudio Shiny Server for Red Hat\/CentOS 7",
+                                "shiny_server\/pro\/installer\/suse12_64": "RStudio Shiny Server for SLES\/openSUSE 12",
+                                "shiny_server\/pro\/installer\/opensuse15": "RStudio Shiny Server for OpenSUSE 15",
+                                "shiny_server\/pro\/installer\/centos8": "RStudio Shiny Server for Red Hat\/CentOS 8",
+                                "install_script\/connect\/script": "RStudio Connect Installer Bash Script",
+                                "connect\/installer\/bionic": "RStudio Connect for Ubuntu 18+\/Debian 10+",
+                                "connect\/installer\/focal": "RStudio Connect for Ubuntu 20+\/Debian 11+",
+                                "connect\/installer\/jammy": "RStudio Connect for Ubuntu 22",
+                                "connect\/installer\/redhat7_64": "RStudio Connect for Red Hat\/CentOS 7",
+                                "connect\/installer\/centos8": "RStudio Connect for Red Hat\/CentOS 8",
+                                "connect\/installer\/redhat8": "RStudio Connect for Red Hat 8",
+                                "connect\/installer\/amazonlinux2": "RStudio Connect for Amazon Linux",
+                                "connect\/installer\/opensuse15": "RStudio Connect for OpenSUSE 15",
+                                "rspm\/installer\/ubuntu64": "RStudio Package Manager for Ubuntu 14\/Debian 8",
+                                "rspm\/installer\/focal": "RStudio Package Manager for Ubuntu 20+\/Debian 11+",
+                                "rspm\/installer\/jammy": "RStudio Package Manager for Ubuntu 22",
+                                "rspm\/installer\/redhat7_64": "RStudio Package Manager for Red Hat\/CentOS 7",
+                                "rspm\/installer\/fedora28": "RStudio Package Manager for Fedora 34\/Red Hat 8",
+                                "rspm\/installer\/rhel9": "RStudio Package Manager for Red Hat 9",
+                                "rspm\/installer\/opensuse15": "RStudio Package Manager for OpenSUSE 15",
+                                "rlps\/archive\/linux": "RStudio Launcher Plugin SDK for Linux",
+                                "license_server\/rstudio\/installer\/ubuntu32": "RStudio License Server for Ubuntu 14\/Debian 8 (32-bit)",
+                                "license_server\/rstudio\/installer\/ubuntu64": "RStudio License Server for Ubuntu 14\/Debian 8 (64-bit)",
+                                "license_server\/rstudio\/installer\/redhat32": "RStudio License Server for Fedora 19\/Red Hat 7 (32-bit)",
+                                "license_server\/rstudio\/installer\/redhat64": "RStudio License Server for Fedora 19\/Red Hat 7 (64-bit)",
+                                "license_server\/rstudio_server\/installer\/ubuntu32": "RStudio Server License Server for Ubuntu 14\/Debian 8 (32-bit)",
+                                "license_server\/rstudio_server\/installer\/ubuntu64": "RStudio Server License Server for Ubuntu 14\/Debian 8 (64-bit)",
+                                "license_server\/rstudio_server\/installer\/redhat32": "RStudio Server License Server for Fedora 19\/Red Hat 7 (32-bit)",
+                                "license_server\/rstudio_server\/installer\/redhat64": "RStudio Server License Server for Fedora 19\/Red Hat 7 (64-bit)",
+                                "license_server\/shiny_server\/installer\/ubuntu32": "RStudio Shiny Server License Server for Ubuntu 14\/Debian 8 (32-bit)",
+                                "license_server\/shiny_server\/installer\/ubuntu64": "RStudio Shiny Server License Server for Ubuntu 14\/Debian 8 (64-bit)",
+                                "license_server\/shiny_server\/installer\/redhat32": "RStudio Shiny Server License Server for Fedora 19\/Red Hat 7 (32-bit)",
+                                "license_server\/shiny_server\/installer\/redhat64": "RStudio Shiny Server License Server for Fedora 19\/Red Hat 7 (64-bit)",
+                                "license_server\/connect\/installer\/ubuntu64": "RStudio Connect License Server for Ubuntu 14\/Debian 8 (64-bit)",
+                                "license_server\/connect\/installer\/redhat64": "RStudio Connect License Server for Fedora 19\/Red Hat 7 (64-bit)",
+                                "license_server\/rspm\/installer\/ubuntu32": "RStudio Package Manager License Server for Ubuntu 14\/Debian 8 (32-bit)",
+                                "license_server\/rspm\/installer\/ubuntu64": "RStudio Package Manager License Server for Ubuntu 14\/Debian 8 (64-bit)",
+                                "license_server\/rspm\/installer\/redhat32": "RStudio Package Manager License Server for Fedora 19\/Red Hat 7 (32-bit)",
+                                "license_server\/rspm\/installer\/redhat64": "RStudio Package Manager License Server for Fedora 19\/Red Hat 7 (64-bit)",
+                                "standalone\/archive\/windows": "Standalone Windows License Server",
+                                "standalone\/archive\/mac": "Standalone MacOS License Server",
+                                "standalone\/archive\/linux": "Standalone Linux License Server",
+                                "pro_drivers\/installer\/bionic": "RStudio Pro Drivers for Ubuntu 18+\/Debian 10+",
+                                "pro_drivers\/installer\/focal": "RStudio Pro Drivers for Ubuntu 20+\/Debian 11+",
+                                "pro_drivers\/installer\/redhat7_64": "RStudio Pro Drivers for Red Hat\/CentOS 7",
+                                "pro_drivers\/installer\/centos8": "RStudio Pro Drivers for Red Hat\/CentOS 8",
+                                "pro_drivers\/installer\/opensuse15": "RStudio Pro Drivers for OpenSUSE 15"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "post"
+            },
+            {
+                "param": "post_type",
+                "operator": "!=",
+                "value": "post"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1668624742
+}

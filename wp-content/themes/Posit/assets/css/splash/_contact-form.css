@@ -1,0 +1,130 @@
+.mktoFieldWrap.mktoRequiredField > .mktoField.mktoEmailField {
+    @apply h-full w-full rounded-[10px] pl-[32px] py-[18px]
+    bg-neutral-light text-16 text-neutral-dark body-medium border border-gray3 ui-small
+    placeholder-gray2 placeholder:focus:text-gray1 placeholder:ui-small
+    focus:border-gray1 focus:text-gray1
+    disabled:text-gray1 disabled:placeholder-gray1 disabled:border-gray3 disabled:bg-gray3 !important;
+}
+
+.mktoFieldWrap.mktoRequiredField > .mktoField.mktoEmailField:focus {
+    @apply outline outline-1 outline-offset-[-1px] outline-blue4 ring ring-inset ring-blue4/40;
+}
+
+.mktoFieldWrap.mktoRequiredField > .mktoRequired.mktoInvalid.typed {
+    @apply text-neutral-dark border-neutral-dark !important;
+}
+
+.mktoFieldWrap.mktoRequiredField > .mktoField.mktoEmailField.invalid {
+    @apply bg-error focus:border-error border-error text-neutral-dark focus:text-neutral-dark !important;
+}
+
+#lblPrivacyPolicyLink > div > span {
+    @apply font-open-sans font-normal text-14 leading-[140%] tracking-wide text-neutral-light !important;
+}
+
+#lblPrivacyPolicyLink > div > span > a {
+    @apply cursor-pointer text-blue5 ui-small p-0 border-b border-blue5
+    hover:text-blue1 hover:bg-turquoise-light hover:border-turquoise-light
+    focus:text-blue1 focus:bg-turquoise-light focus:border-turquoise-light focus:p-[4px]
+    active:text-neutral-light active:bg-transparent active:border-neutral-light !important;
+}
+
+#lblPrivacyPolicyLink > div > span > a:focus {
+    @apply outline outline-2 outline-offset-[-1px] outline-blue4;
+}
+
+.mktoButtonRow > .mktoButtonWrap.mktoRound > .mktoButton {
+    @apply flex justify-center w-fit px-6 py-[12px]
+    bg-none bg-blue4 border-2 border-blue4 rounded-[5px]
+    text-14 font-source-pro uppercase text-neutral-light cursor-pointer
+    hover:bg-blue3 hover:text-blue6 hover:border-blue3
+    focus:bg-blue3 focus:text-blue6 focus:border-blue3 focus:outline focus:outline-2 focus:outline-neutral-light/20
+    disabled:text-gray1 disabled:bg-gray3 disabled:border-gray3 disabled:cursor-not-allowed !important;
+}
+
+#LblEmail,
+.mktoAsterix,
+.mktoOffset,
+.mktoGutter,
+.mktoErrorDetail,
+.mktoError {
+    @apply hidden !important;
+}
+
+.mktoCheckboxList > input {
+    @apply w-0 h-0 opacity-0 !important;
+}
+
+.mktoForm {
+    @apply w-full max-w-[520px] p-0 !important;
+}
+
+.mktoFieldDescriptor {
+    @apply w-full mb-0 !important;
+}
+
+.mktoLabel {
+    @apply w-[85%] md:w-[90%] p-0 m-0 !important;
+}
+
+.mktoCheckboxList {
+    @apply p-0 w-[15%] md:w-[10%] !important;
+}
+
+.mktoFieldWrap {
+    @apply flex w-full justify-between !important;
+}
+
+.mktoButtonRow {
+    @apply mt-[24px] md:mt-[16px] !important;
+}
+
+#lblPrivacyPolicyLink,
+#LblprivacyPolicyRead,
+#privacyPolicyRead {
+    @apply mt-[16px] !important;
+}
+
+.mktoCheckboxList > #LblprivacyPolicyRead {
+    @apply relative w-[20px] h-[20px] float-right bg-neutral-light rounded mb-0 !important;
+}
+
+.mktoCheckboxList:focus-within input + label {
+    @apply border border-blue4 ring-2 ring-inset ring-blue4/40 outline outline-1 outline-offset-[-1px] outline-blue4;
+}
+
+.mktoCheckboxList:focus-within input + label:before {
+    @apply top-[2.5px] left-[6px] !important;
+}
+
+.mktoCheckboxList input + label:before {
+    @apply absolute content-[''] inline-block w-[6px] h-[11px] top-[3.5px] left-[7px] rotate-45 bg-neutral-light cursor-pointer !important;
+}
+
+.mktoCheckboxList input:checked + label:before {
+    @apply border-t-0 border-l-0 border-b-[3px] border-r-[3px] border-blue4 ring-0 !important;
+}
+
+.input-error-form {
+    @apply float-left items-center hidden mt-[10px] bottom-[-30px] text-neutral-light font-open-sans font-normal text-14 leading-[140%] tracking-wide !important;
+}
+
+.checkbox-error {
+    @apply mt-[8px] text-gray3 !important;
+}
+
+.input-error-form.invalid {
+    @apply flex visible !important;
+}
+
+.icon-error {
+    @apply inline-block mr-[9px] p-0 !important;
+}
+
+#signup-form.focus {
+    @apply bottom-0 !important;
+}
+
+#fullpage.focus {
+    @apply top-0 !important;
+}

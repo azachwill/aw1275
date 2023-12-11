@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-10-18">
+<meta name="description" content="We’d like to highlight and answer some of the great audience questions asked during the “MLOps with vetiver in Python and R” webinar.">
+
+<title>MLOps with vetiver in Python and R: Answering your questions</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">MLOps with vetiver in Python and R: Answering your questions</h1>
+
+<p class="date">2022-10-18</p>
+</header>
+
+<p>As a follow-up to last month’s <a href="https://www.youtube.com/watch?v=oFQANK13-k4">MLOps with vetiver in Python and R webinar</a>, we’d like to highlight and answer some of the great audience questions asked during the session. You can also check out the <a href="https://juliasilge.github.io/mlops-rstudio-meetup/">demo and slides on the webinar’s website</a>.</p>
+<p>Questions from attendees fell into four main categories:</p>
+<ul>
+<li><a href="#trying-out-vetiver">Trying out vetiver</a></li>
+<li><a href="#how-to-use-apis-for-machine-learning">How to use APIs for machine learning</a></li>
+<li><a href="#integrations">Integrations</a></li>
+<li><a href="#vetiver-and-rstudio-connect">Vetiver and RStudio Connect</a></li>
+</ul>
+<h2 id="trying-out-vetiver" class="anchored">Trying out vetiver</h2>
+<p><strong>Are the performance metrics customizable?</strong> Performance metrics are customizable. <a href="https://juliasilge.com/blog/nyc-airbnb/">Customizing metrics in R</a> requires you to make a custom <a href="https://yardstick.tidymodels.org/index.html">yardstick</a> metric. Customizing metrics in Python requires you to make a function with a <code>y_pred</code> and <code>y_true</code> argument for the values predicted by the model and true values, respectively.</p>
+<p><strong>Are all models supported by vetiver?</strong> R supports <a href="https://www.tidymodels.org/">tidymodels</a> workflows (including <a href="https://stacks.tidymodels.org/">stacks</a>), <a href="https://topepo.github.io/caret/">caret</a>, <a href="https://mlr3.mlr-org.com/">mlr3</a>, <a href="https://xgboost.readthedocs.io/en/latest/R-package/">XGBoost</a>, <a href="https://cran.r-project.org/package=ranger">ranger</a>, GAMS fit with <a href="https://cran.r-project.org/package=mgcv">mgcv</a>, <a href="https://stat.ethz.ch/R-manual/R-patched/library/stats/html/lm.html"><code>lm()</code></a>, and <a href="https://stat.ethz.ch/R-manual/R-patched/library/stats/html/glm.html"><code>glm()</code></a>. Python supports <a href="https://scikit-learn.org/">scikit-learn</a>, <a href="https://pytorch.org/">PyTorch</a>, <a href="https://xgboost.readthedocs.io/en/stable/python/index.html">xgboost</a>, and <a href="https://www.statsmodels.org/stable/index.html">statsmodels</a>, but also has the option to deploy any model with user-defined <a href="https://rstudio.github.io/vetiver-python/stable/advancedusage/custom_handler.html">custom handlers</a>.</p>
+<p><strong>Is vetiver for Python as complete as R?</strong> We have put together a list of <a href="https://vetiver.rstudio.com/learn-more/parity-checklist.html">function parity for R and Python</a> as a comprehensive overview of the operational parity between R and Python. In general, these two packages have nearly identical implementations. However, we prioritize that the libraries feel idiomatic for the language and serve their community as needed.</p>
+<h2 id="how-to-use-apis-for-machine-learning" class="anchored">How to use APIs for machine learning</h2>
+<p><strong>JSON and APIs can be foreign to those new to model deployment or those with no web development experience. Do you have any advice or resources to share?</strong> It can be daunting to enter the world of APIs. Luckily, there are great resources to help you get started! Twitter accounts like <a href="https://twitter.com/Rapid_API"><span class="citation" data-cites="RapidAPI">@RapidAPI</span></a> offer cartoons and bite-sized explanations of how APIs work. Appsilon also has a great article, <a href="https://appsilon.com/r-rest-api/">“How to Make REST APIs with R: A Beginners Guide to Plumber.”</a></p>
+<p><strong>What is an API? Is there an RStudio product that includes APIs?</strong> An API, or Application Programming Interface, is a standardized way for machines to communicate with each other. <a href="https://www.rstudio.com/products/connect/">RStudio Connect</a> is able to host APIs.</p>
+<h2 id="integrations" class="anchored">Integrations</h2>
+<p><strong>Any way to deploy without RSConnect?</strong> You can use Docker as a portable way to transport vetiver to a public or private cloud. Vetiver will write basic Dockerfiles for you using <a href="https://rstudio.github.io/vetiver-r/reference/vetiver_write_docker.html"><code>vetiver_write_docker()</code> in R</a> or <a href="https://rstudio.github.io/vetiver-python/stable/reference/vetiver.write_docker.html"><code>vetiver.write_docker()</code> in Python</a>.</p>
+<p><strong>Can you pass custom docker images that fit your organization’s security, architecture, etc.?</strong> The Dockerfiles generated by vetiver are well suited to basic deployments, but you are able to edit them to fit your organization’s needs.</p>
+<p><strong>Will this work within a GitHub Action workflow?</strong> Yes, you can schedule tasks through GitHub Actions with vetiver! You can use vetiver Dockerfiles, <code>plumber.R</code> files, or <code>app.py</code> files just as you would normally in GitHub Actions.</p>
+<p><strong>Does vetiver integrate with mlflow?</strong> While there are no explicit integrations, these tools are especially made to be flexible and composable, so you can certainly use vetiver alongside mlflow. One way to use these tools together would be to use mlflow for experiment tracking, then put your finalized model into a vetiver API for deployment.</p>
+<h2 id="vetiver-and-rstudio-connect" class="anchored">Vetiver and RStudio Connect</h2>
+<p><strong>Do you need to make a Dockerfile if you’re deploying to RSConnect?</strong> Using <a href="https://rstudio.github.io/vetiver-r/reference/vetiver_deploy_rsconnect.html"><code>vetiver_deploy_rsconnect()</code> in R</a> or <a href="https://rstudio.github.io/vetiver-python/stable/reference/vetiver.deploy_rsconnect.html"><code>vetiver.deploy_rsconnect()</code> in Python</a> will allow you to deploy your model directly to Connect, no Dockerfile needed!</p>
+<p><strong>Is there a RSConnect demo where I can see vetiver?</strong> For folks interested in seeing what data artifacts look like on Connect, check out these links: - <a href="https://colorado.rstudio.com/rsc/seattle-housing-pin/">versioned model object</a> - <a href="https://colorado.rstudio.com/rsc/seattle-housing/">deployed API</a> - <a href="https://colorado.rstudio.com/rsc/seattle-housing-dashboard/">monitoring dashboard</a></p>
+<p>You can also see <a href="https://colorado.rstudio.com/rsc/scooby">the Python endpoint used in the demo</a>.</p>
+<p>There were so many great questions on API usage, connecting vetiver with other applications, and extending deployment workflows. Thank you for listening to the webinar and reading through this Q&amp;A; you can use the RStudio Community link if you have other questions about vetiver.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

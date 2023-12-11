@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2017-09-06">
+
+<title>RStudio Connect v1.5.6 - Now Supporting Kerberos!</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Connect v1.5.6 - Now Supporting Kerberos!</h1>
+
+<p class="date">2017-09-06</p>
+</header>
+
+<p>We’re pleased to announce support for Kerberos in <a href="https://www.rstudio.com/products/connect/">RStudio Connect: version 1.5.6</a>. Organizations that use Kerberos can now run Shiny applications and Shiny R Markdown documents in tailored processes that have access only to the appropriate resources inside the organization.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="2017-09-06-rsc-admin-list.png" class="img-fluid"></p>
+<p></p><figcaption>RStudio Connect administrator globally listing all content on the server</figcaption><p></p>
+</figure>
+</div>
+<p>The notable changes this release include:</p>
+<ul>
+<li><strong>Full support for Kerberos</strong> across Shiny applications and Shiny R Markdown documents by running R in an authenticated PAM session that uses the cached credentials of the current user. See <a href="http://docs.rstudio.com/connect/1.5.6/admin/process-management.html#pam-credential-caching-kerberos">the documentation</a> for more details.</li>
+<li>Content <strong>deployment no longer requires explicit publishing</strong>. New content is available immediately after it is deployed and visible only to the owner. Enable the <code>[Applications].ExplicitPublishing</code> setting to revert this behavior.</li>
+<li>Heterogeneous <strong>server migrations</strong> are now supported, allowing administrators to upgrade their distribution or change to a different (supported) Linux distribution. See <a href="http://docs.rstudio.com/connect/1.5.6/admin/files-directories.html#server-migrations">the migration documentation</a> for more details.</li>
+<li>Admins are now able to toggle the content filtering settings to <strong>enumerate all content on the server</strong> so that they can manage settings, regardless of whether or not they have visibility into that content. The permissions here are unchanged; the admin will only be able to view the settings for the content, not the content itself. To view the content, the admin would need to add themselves as a viewer or collaborator of the content, which is an audited action.</li>
+<li><strong>Shiny error sanitization</strong> is enabled by default. Disable the <code>[Applications].ShinyErrorSanitization</code> setting to revert this behavior. See <a href="https://shiny.rstudio.com/articles/sanitize-errors.html">the Shiny documentation</a> for more information about Shiny error sanitization.</li>
+<li>Improved <strong>LDAP group lookup performance</strong> on large LDAP servers that don’t support <code>memberof</code>. Additionally, improved LDAP logging and error handling.</li>
+<li><strong>Security enhancements</strong> around proxy authentication, redirects, and brute-force password attacks. This release adds support for a challenge-response (<strong>CAPTCHA</strong>) to help mitigate brute-force attacks on users’ passwords. Set <code>[Authentication].ChallengeResponseEnabled</code> to true to enable this feature.</li>
+<li><strong>Customize the subject prefix</strong> for all outgoing emails using the <code>[Server].EmailSubjectPrefix</code> setting. The default is still <code>[RStudio Connect]</code>.</li>
+<li>BREAKING: Running content as the current user is now disabled for content other than Shiny Applications or Shiny R Markdown Documents. Reports will execute as the application <code>RunAs</code>, falling back to the system <code>Applications.RunAs</code> if none is specified.</li>
+</ul>
+<p>You can see the full release notes for RStudio Connect 1.5.6 <a href="http://docs.rstudio.com/connect/1.5.6/news/">here</a>.</p>
+<blockquote>
+<h4 id="upgrade-planning" class="anchored">Upgrade Planning</h4>
+<p>There are no special precautions to be aware of when upgrading from v1.5.4. You can expect the installation and startup of v1.5.6 to be complete in under a minute.</p>
+<p>If you’re upgrading from a release older than v1.5.4, be sure to consider the “Upgrade Planning” notes from those other releases, as well.</p>
+</blockquote>
+<p>If you haven’t yet had a chance to download and try <a href="https://www.rstudio.com/products/connect/">RStudio Connect</a> we encourage you to do so. RStudio Connect is the best way to share all the work that you do in R (Shiny apps, R Markdown documents, plots, dashboards, Plumber APIs, etc.) with collaborators, colleagues, or customers.</p>
+<p>You can find more details or download a 45 day evaluation of the product at <a href="https://www.rstudio.com/products/connect/">https://www.rstudio.com/products/connect/</a>. Additional resources can be found below.</p>
+<ul>
+<li><a href="https://www.rstudio.com/products/connect/">RStudio Connect home page &amp; downloads</a></li>
+<li><a href="http://docs.rstudio.com/connect/admin/">RStudio Connect Admin Guide</a></li>
+<li><a href="https://www.rstudio.com/wp-content/uploads/2016/01/RSC-IT-Q-and-A.pdf">What IT needs to know about RStudio Connect</a></li>
+<li><a href="http://docs.rstudio.com/connect/news/">Detailed news and changes between each version</a></li>
+<li><a href="https://www.rstudio.com/pricing/#ConnectPricing">Pricing</a></li>
+<li><a href="https://beta.rstudioconnect.com/connect/">An online preview of RStudio Connect</a></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

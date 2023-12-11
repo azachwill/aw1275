@@ -1,0 +1,30 @@
+.post-slider-card img {
+    @apply scale-100 transition ease-in-out duration-300;
+}
+
+.post-slider-card:hover > div > div > img {
+    @apply scale-100;
+}
+
+.post-slider-card:hover,
+.post-slider-card:focus-visible {
+    .link {
+        @apply text-blue1;
+
+        & svg {
+            @apply ease-in-out duration-[150ms] translate-x-[2px];
+        }
+
+        &::after {
+            @apply scale-x-100;
+        }
+
+        &::before {
+            @apply bg-blue1;
+        }
+
+        path {
+            @apply stroke-blue1;
+        }
+    }
+}

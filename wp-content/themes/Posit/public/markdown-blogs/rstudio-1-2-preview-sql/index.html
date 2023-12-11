@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2018-10-02">
+
+<title>RStudio 1.2 Preview: SQL Integration</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio 1.2 Preview: SQL Integration</h1>
+
+<p class="date">2018-10-02</p>
+</header>
+
+<p>The <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio 1.2 Preview Release</a>, available today, dramatically improves support and interoperability with many new programming languages and platforms, including SQL, D3, Python, Stan, and C++. Over the next few weeks on the blog, we’re going to be taking a look at improvements for each of these in turn.</p>
+<p>Today, we’re looking at SQL, and as a motivating example, we’re going to connect to a sample <em>Chinook</em> database to get a list of album titles.</p>
+<h2 id="keyring-integration" class="anchored">Keyring Integration</h2>
+<p>We’ll start by connecting to the database. When connecting to databases that use usernames and passwords, it’s not uncommon to see passwords stored in plain text in the connection string. It’s not good practice, but it’s understandable; it can be a big hassle to store and retrieve the password securely.</p>
+<p>In RStudio 1.2, we’ve made it much easier to secure your credentials. RStudio now integrates with the <a href="https://github.com/r-lib/keyring">keyring</a> package. Your password is stored, secure and encrypted, on your system’s credential store (such as the MacOS Keychain or Windows Credential Store), so you can share your R code without leaking your password.</p>
+<p>Instead of being prompted to make the password part of the connection string, you’ll get a prompt to save it to your keyring.</p>
+<p><img src="2018-10-02-rstudio-preview-sql-keyring.png" style="width: 631px"></p>
+<p>You can also take advantage of RStudio’s API to prompt for secrets in your own packages. See <a href="https://support.rstudio.com/hc/en-us/articles/360000969634-Using-Keyring">Using Keyring</a> for more information.</p>
+<h2 id="instant-query" class="anchored">Instant Query</h2>
+<p>Great, we’re connected; it’s time to make a query! It’s now a lot easier to build and execute SQL queries in RStudio. First, use the SQL button to generate a new SQL file with the open connection:</p>
+<p><img src="2018-10-02-rstudio-preview-sql-template.png" style="width: 906px"></p>
+<h2 id="autocompletion" class="anchored">Autocompletion</h2>
+<p>Now we need to refine our query with the fields we’re interested in. RStudio can now autocomplete table names and field names associated with a connection. This works in <code>.sql</code> files, R Markdown documents, and R Notebooks. We’ll use this to pick up the name of the <code>Title</code> field without extra typing or guessing.</p>
+<p><img src="2018-10-02-rstudio-preview-sql-autocomplete.png" style="width: 492px"></p>
+<h2 id="instant-preview" class="anchored">Instant Preview</h2>
+<p>You’ll notice that there’s a magic comment RStudio added to the top of the file:</p>
+<pre><code>-- !preview conn=con</code></pre>
+<p>This comment tells RStudio to execute the query against the open connection named <code>con</code>. We can now click <em>Preview</em> or press <em>Ctrl + Shift + Enter</em> to run the query. Results appear in a new tab:</p>
+<p><img src="2018-10-02-rstudio-preview-sql-preview.png" style="width: 490px"></p>
+<p>You can also preview every time you save, if you’re iterating quickly on your query and want to watch the results take shape as you go.</p>
+<h2 id="filter" class="anchored">Filter</h2>
+<p>Finally, you can now filter the list of displayed tables in the Connections pane by name. This is very useful when your database has a lot of tables!</p>
+<p><img src="2018-10-02-rstudio-preview-sql-filter.png" style="width: 463px"></p>
+<h2 id="try-it-out" class="anchored">Try it out!</h2>
+<p>If you’d like to try these new features out now, you can download the latest preview release of RStudio from https://www.rstudio.com/products/rstudio/download/preview/. If you do, we’d very much appreciate your feedback on the <a href="https://community.rstudio.com/c/rstudio-ide">RStudio Community Forum</a>!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

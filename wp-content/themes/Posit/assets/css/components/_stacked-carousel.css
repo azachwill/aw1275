@@ -1,0 +1,33 @@
+@import 'swiper/swiper-bundle.css';
+
+.swiper.stacked-carousel.swiper-initialized {
+    @apply overflow-visible;
+}
+
+.swiper.stacked-carousel.swiper-initialized[data-type='blurred']:after {
+    content: '';
+    @apply backdrop-blur absolute w-full h-full top-0 left-[100%] z-10;
+}
+
+.swiper-btn-prev:disabled,
+.swiper-btn-next:disabled {
+    @apply bg-gray4 hover:!bg-gray4 shadow-none border-neutral-light/40 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.4)];
+}
+
+.swiper-btn-prev:disabled rect,
+.swiper-btn-next:disabled rect {
+    @apply fill-neutral-dark;
+}
+
+.swiper-btn-prev rect,
+.swiper-btn-next rect {
+    @apply fill-blue3;
+}
+
+.swiper-pagination-dot {
+    @apply ring-1 w-[8px] h-[8px] mx-[8px] ring-blue1/[0.4] bg-neutral-light rounded-full;
+}
+
+.swiper-pagination-bullet-active {
+    @apply bg-blue1 ring-blue1;
+}

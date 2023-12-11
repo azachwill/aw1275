@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2019-09-19">
+
+<title>RStudio Server Pro 1.2 Update</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Server Pro 1.2 Update</h1>
+
+<p class="date">2019-09-19</p>
+</header>
+
+<p>Today, we’re announcing an important update to RStudio Server Pro 1.2 that introduces two new capabilities.</p>
+<h2 id="slurm-jobs" class="anchored">Slurm Jobs</h2>
+<p><img align="right" width="100" height="100" src="slurm_logo.png" alt="Slurm Workload Manager"></p>
+<p><a href="https://slurm.schedmd.com/">Slurm</a> is a open-source workload management system, capable of running distributed jobs across a cluster. It’s a popular tool for data science teams to run big, resource-intensive jobs on dedicated hardware. In this update, we’re introducing a new Slurm back end for RStudio Server Pro’s new Job Launcher (itself introduced in the initial release of RStudio Server Pro 1.2).</p>
+<p>This means that it’s possible to write R code in RStudio and submit it to a Slurm cluster for execution, using RStudio Server’s new Jobs feature. Once started, Slurm jobs exist independently from R sessions and can be monitored from any R session, or from the improved user dashboard. Admins can configure many aspects of the experience, including setting different resource limits (e.g.&nbsp;memory and CPU) for different groups of Slurm users.</p>
+<p>Finally, Slurm can optionally be used to run interactive R sessions as well if your R environment exists solely on your Slurm cluster.</p>
+<h2 id="jupyter-sessions" class="anchored">Jupyter Sessions</h2>
+<p><img align="right" width="100" height="100" src="jupyter_logo.png" alt="Project Jupyter"></p>
+<p>Many data science teams use <a href="https://jupyter.org/">Jupyter</a> side by side with RStudio as a tool for reproducible research, and earlier this year we announced <a href="../../2019/01/17/announcing-rstudio-connect-1-7-0/">Jupyter support for RStudio Connect</a>. In this RStudio Server Pro update, we’re making it easier to use these tools together; you can now run Jupyter sessions in addition to RStudio sessions inside RStudio Server Pro, making it possible to both author and publish Jupyter notebooks inside <a href="https://www.rstudio.com/products/team/">RStudio Team</a>.</p>
+<p>Just like RStudio sessions, RStudio Server Pro manages all of the authentication, supervision, and lifetime of Jupyter sessions, and gives you a convenient dashboard of running sessions. Starting a new Jupyter session is as easy as choosing Jupyter when you start a new session.</p>
+<p><img src="jupyter-session.png" title="Start a new JupyterLab or Jupyter Notebook session" class="img-fluid"></p>
+<p>Both Jupyter Notebook and JupyterLab are supported. Note that RStudio does not bundle Jupyter (it must be installed separately) and that Jupyter is only available when RStudio Server Pro is configured with the Job Launcher.</p>
+<h2 id="pro-user-dashboard" class="anchored">Pro User Dashboard</h2>
+<p>In addition to adding these two new capabilities, we’ve revamped the RStudio Server Pro user dashboard (homepage), with cleaner visuals and a clearer layout. You’ll see a summary of all your active sessions and jobs, quick links to your active projects, and tools for managing ongoing work.</p>
+<p><img src="dashboard.png" title="RStudio User Dashboard" class="img-fluid"></p>
+<h2 id="open-source-and-desktop" class="anchored">Open Source and Desktop</h2>
+<p>Alongside this interim release of RStudio Server Pro 1.2, we’re releasing an update to the 1.2 desktop and open source server. While this update primarily focuses on bugfixes and stability improvements, it also introduces a number of small features:</p>
+<ul>
+<li>We have restored compatibility with 32 bit R on Windows, which was temporarily dropped in the initial release of RStudio 1.2. Note that a 64 bit operating system is still required to run RStudio itself.</li>
+<li>We’ve improved compatibility with the upcoming MacOS Catalina, and added support for RedHat Enterprise Linux 8 as well as Fedora 28.</li>
+<li>A new embedded Pandoc version improves performance and stability for R Notebooks and R Markdown on Windows.</li>
+</ul>
+<p>You can download the new RStudio 1.2 update (1.2.5001-3) here:</p>
+<p><a href="https://www.rstudio.com/products/rstudio/download/">Download RStudio</a></p>
+<p>The <a href="https://www.rstudio.com/products/rstudio/release-notes/">release notes</a> contain a full list of all of the bugfixes and features in this release, and of course feedback is welcome on the <a href="https://community.rstudio.com/c/rstudio-ide">RStudio IDE Community Forum</a>.</p>
+<p><strong><em>UPDATE:</em></strong> <em>Nov.&nbsp;27, 2019</em><br>
+<em>Learn more about <a href="https://rstudio.com/solutions/python-and-r/">how R and Python work together in RStudio</a>.</em></p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-06-01">
+<meta name="description" content="We are excited to announce our partnership with Microsoft Azure ML. You can use RStudio Workbench in conjunction with Azure to build machine learning models at scale.">
+
+<title>Announcing RStudio for Microsoft Azure ML</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Announcing RStudio for Microsoft Azure ML</h1>
+
+<p class="date">2022-06-01</p>
+</header>
+
+<h2 id="machine-learning-development-in-the-cloud" class="anchored">Machine Learning Development in the Cloud</h2>
+<p>Cloud platforms enable the machine learning lifecycle with variable scaling, lower start-up costs, and centralized data lakes. Data scientists who use these resources in conjunction with their favorite tools can more efficiently build high-quality models at scale.</p>
+<p>RStudio supports cloud strategies in <a href="https://www.rstudio.com/solutions/rstudio-in-the-cloud/" target="_blank">various ways</a>. Our partnerships allow data scientists to operationalize machine learning on their preferred cloud platform using our professional products, built to be the best tools for open source data science.</p>
+<h2 id="announcing-rstudio-for-azure-ml" class="anchored">Announcing RStudio for Azure ML</h2>
+<p>We’re excited to announce a new partnership with <a href="https://azure.microsoft.com/en-us/services/machine-learning/#product-overview" target="_blank">Azure ML</a> to deliver <a href="https://www.rstudio.com/products/workbench/" target="_blank">RStudio Workbench</a> on the Azure platform. Data scientists can use the RStudio Workbench they know and love in conjunction with their Azure data sources and other Azure ML capabilities.</p>
+<blockquote>
+<p>RStudio is very pleased to work with the Azure Machine Learning team on this release, as we collaborate to make it easier for organizations to move their open-source data science workloads to the cloud. We are committed to helping our joint customers use our commercial offerings to bring their production workloads to their preferred cloud platforms.</p>
+<p>— Tareef Kawaf, President, RStudio PBC</p>
+</blockquote>
+<h2 id="access-rstudio-workbench-within-your-azure-ml-cloud-environment" class="anchored">Access RStudio Workbench Within Your Azure ML Cloud Environment</h2>
+<p>RStudio Workbench is the ideal platform for code-first data science development. With this offering, data scientists can start a single-user instance of RStudio Workbench from within their Azure ML environment as part of the machine learning lifecycle.</p>
+<p>With RStudio Workbench, data scientists can:</p>
+<ul>
+<li>Program in R or Python in your preferred IDE (RStudio, VSCode, JupyterLab, Jupyter Notebook)</li>
+<li>Build models with your favorite open-source tools such as the tidyverse and Shiny</li>
+<li>Access pre-installed packages to support your data science work</li>
+<li>Improve data connectivity via the RStudio Pro Drivers</li>
+<li>Run scripts in the background as local launcher jobs</li>
+<li>Select multiple versions of R and Python</li>
+<li>Open multiple R and Python sessions</li>
+<li>Receive end-user support</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="azure-image.png" class="img-fluid"></p>
+<p></p><figcaption>Laptop with a Workbench IDE open in Azure</figcaption><p></p>
+</figure>
+</div>
+<h2 id="get-started-with-rstudio-for-azure-ml" class="anchored">Get Started With RStudio for Azure ML</h2>
+<p>We look forward to further supporting open-source data science in the cloud. Check out the <a href="https://www.rstudio.com/azure-ml" target="_blank">RStudio for Azure ML product page</a> for more information and to purchase a license.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

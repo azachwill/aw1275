@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-02-23">
+<meta name="description" content="Learn about the new RStudio Launcher Plugin SDK, which helps developers integrate their preferred Job Management System with RStudio Team products.">
+
+<title>Introducing the RStudio Launcher Plugin SDK</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Introducing the RStudio Launcher Plugin SDK</h1>
+
+<p class="date">2021-02-23</p>
+</header>
+
+<h2 id="improving-interoperability-through-the-rstudio-job-launcher" class="anchored">Improving Interoperability through the RStudio Job Launcher</h2>
+<p>In a <a href="https://blog.rstudio.com/2020/07/15/interoperability-maximize-analytic-investments/" target="_blank" rel="noopener noreferrer">previous blog post</a> we discussed how improving interoperability between the multiple environments required by data scientists can improve productivity and ROI on IT investments. With the help of the <a href="https://rstudio.com/resources/rstudioconf-2019/rstudio-job-launcher-changing-where-we-run-r-stuff/" target="_blank" rel="noopener noreferrer">RStudio Job Launcher</a>, <a href="https://rstudio.com/products/team/" target="_blank" rel="noopener noreferrer">RStudio Team</a> products can make use of IT-managed computing resources in Kuberenetes or Slurm clusters. Data scientists can launch their RStudio, Jupyter, or VS Code sessions directly through RStudio Server Pro. They can also launch remote background jobs to leverage the hardware that is available in their organization’s computing cluster.</p>
+<p>However, there are many more job management systems available besides Kubernetes and Slurm. Data scientists may want or need access to the resources available in their organization’s preferred system to run complex analyses. Data science leaders may want to increase productivity in their teams by making use of powerful pre-existing systems. IT departments may want to increase the utilization of job management systems which are expensive to configure and maintain.</p>
+<h2 id="the-rstudio-job-launcher-plugin-system" class="anchored">The RStudio Job Launcher Plugin System</h2>
+<p>The <a href="https://rstudio.com/resources/rstudioconf-2019/rstudio-job-launcher-changing-where-we-run-r-stuff/" target="_blank" rel="noopener noreferrer">RStudio Job Launcher</a> allows RStudio Team products to integrate with multiple types of job management systems through a Plugin-based system. Each Plugin should allow the Job Launcher to communicate with one type of job management system. The Job Launcher currently has Plugins for integrating with Kubernetes and Slurm, as well as a Plugin which allows jobs to be launched directly on the Job Launcher host.</p>
+<p>To support additional job management systems, a new Plugin needs to be developed for each job management system. The <a href="https://rstudio.com/products/launcher-plugin-sdk/" target="_blank" rel="noopener noreferrer">RStudio Launcher Plugin SDK</a> (Software Development Kit) facilitates rapid development of these Plugins in C/C++.</p>
+<h3 id="the-quickstart-plugin-guide" class="anchored">The QuickStart Plugin &amp; Guide</h3>
+<p>A developer can follow along with the <a href="https://docs.rstudio.com/rlps/quickstart/" target="_blank" rel="noopener noreferrer">QuickStart Guide</a> to transform the RStudio QuickStart Plugin into a functioning Plugin. The <a href="https://docs.rstudio.com/rlps/quickstart/" target="_blank" rel="noopener noreferrer">QuickStart Guide</a> includes 16 steps, or ‘<code>TODO</code> items’, that correspond to different features that need to be implemented in the QuickStart Plugin.</p>
+<ul>
+<li><code>TODO</code>s #1 - #4 help the developer get the Plugin renamed and rebranded as desired.</li>
+<li><code>TODO</code> #5 shows how configuration options can be added to the Plugin, although it may become more obvious what options will be needed as development continues.</li>
+<li><code>TODO</code>’s #6 - #16 take the developer through the bulk of the work to create a functioning RStudio Job Launcher Plugin.</li>
+</ul>
+<p>Provided with the SDK is a utility called “Smoke Test”. The Smoke Test tool can be used during development to trigger many of the major code paths in a Plugin. Debugging a Plugin that is in use by an RStudio Team product can be difficult because the developer is not in control of which API calls are made and when. The Smoke Test makes debugging a Plugin much easier by giving the developer that control.</p>
+<p>While following the RStudio Launcher Plugin SDK QuickStart Guide, most <code>TODO</code>s will follow a similar development process. For example, the development process for <code>TODO</code> #7 might look like this:</p>
+<ol type="1">
+<li>Implement <a href="https://docs.rstudio.com/rlps/quickstart/todos.html#todo-7" target="_blank" rel="noopener noreferrer"><code>TODO</code> #7: Define cluster configuration</a></li>
+<li>Compile the plugin and the smoke-test tool</li>
+<li><a href="https://docs.rstudio.com/rlps/devguide/smoke-test.html#smoke-test-start" target="_blank" rel="noopener noreferrer">Launch the plugin through the smoke-test tool</a></li>
+<li>Trigger the Cluster Info API call using the <a href="https://docs.rstudio.com/rlps/devguide/smoke-test.html#st-menu-1" target="_blank" rel="noopener noreferrer">first option in the smoke test tool</a></li>
+<li>Validate that all of the desired configuration information is returned</li>
+<li>Repeat the previous steps until satisfied, attaching a debugger to the plugin if necessary</li>
+</ol>
+<figure>
+<img src="code-example.png" alt="A comparison of the same method in the QuickStart and Local Plugins">
+
+Figure 1: A side-by-side comparison of the QuickStart template method for <code>TODO</code> #7 and the sample Local plugin implementation of <code>TODO</code> #7.
+
+</figure>
+<p>After the developer is getting the desired results from the Smoke Test tool, they may wish to test their Plugin against an RStudio Team product. The Smoke Test tool will only cover the basic pathways of the Plugin.</p>
+<h3 id="the-developers-guide" class="anchored">The Developer’s Guide</h3>
+<p>Some Plugin developers may find it necessary to do something more complex than what is presented in the <a href="https://docs.rstudio.com/rlps/quickstart/" target="_blank" rel="noopener noreferrer">QuickStart Guide</a>. For example, they may wish to allow administrators to set resource limits on a per-user or per-group basis. In that case, the Plugin developer can turn to the <a href="https://docs.rstudio.com/rlps/devguide" target="_blank" rel="noopener noreferrer">Developer’s Guide</a>. The <a href="https://docs.rstudio.com/rlps/devguide/advanced-features.html" target="_blank" rel="noopener noreferrer">Advanced Features section of the Developer’s Guide</a> covers optional advanced features that may be added to a Plugin as needed.</p>
+<p>The <a href="https://docs.rstudio.com/rlps/devguide" target="_blank" rel="noopener noreferrer">Developer’s Guide</a> also covers the high level architecture of the SDK, how some RStudio Team products integrate with the RStudio Job Launcher, and a detailed description of all the Smoke Test Utility options. Additionally, the API between the RStudio Job Launcher and a Plugin is described in full. If developers prefer to work in a language other than C or C++, a Plugin developer can use the <a href="https://docs.rstudio.com/rlps/devguide/pluginapi.html" target="_blank" rel="noopener noreferrer">Launcher Plugin API</a> section to develop a Plugin from scratch in any other language. The <a href="https://docs.rstudio.com/rlps/devguide/pluginapi.html" target="_blank" rel="noopener noreferrer">Launcher Plugin API</a> describes the communication mechanism between the RStudio Job Launcher and a Plugin.</p>
+<h3 id="the-api-reference" class="anchored">The API Reference</h3>
+<p>The RStudio Launcher Plugin SDK also includes a complete <a href="https://docs.rstudio.com/rlps/apiref/annotated.html" target="_blank" rel="noopener noreferrer">API Reference</a> for all of its C/C++ code. The <a href="https://docs.rstudio.com/rlps/apiref/annotated.html" target="_blank" rel="noopener noreferrer">API Reference</a> may be useful if the developer wishes to see detailed class hierarchy information or reference doxygen comments outside of the codebase.</p>
+<h3 id="our-github" class="anchored">Our GitHub</h3>
+<p>The RStudio Launcher Plugin SDK is open source. If you find any bugs or wish to request enhancements, please file an issue on the <a href="https://github.com/rstudio/rstudio-launcher-plugin-sdk" target="_blank" rel="noopener noreferrer">RStudio Launcher Plugin SDK GitHub Repository</a>. Pull requests for improvements or bug fixes are also welcome!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

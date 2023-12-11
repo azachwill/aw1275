@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2019-08-05">
+
+<title>The Shiny Developer Series</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">The Shiny Developer Series</h1>
+
+<p class="date">2019-08-05</p>
+</header>
+
+<p>Shiny is one of the best ways to build interactive documents, dashboards, and data science applications. But advancing your skills with Shiny does not come without challenges.</p>
+<p>Shiny developers often have a stronger background in applied statistics than in areas useful for optimizing an application, like programming, web development, and user-interface design. Though there are many packages and tools that make developing advanced Shiny apps easier, new developers may not know these tools exist or how to find them. And Shiny developers are also often siloed. Though the Shiny developer community is huge, there is rarely someone sitting next to you to sound out ideas about your app.</p>
+<p>With these challenges in mind, the RStudio Community has partnered with Eric Nantz of the R-Podcast to create the Shiny Developer Series. # What is the Shiny Developer Series? Our goal is to:</p>
+<ul>
+<li>Review great tools that serve Shiny developers</li>
+<li>Meet the people behind these tools and learn from their experiences</li>
+<li>Foster the Shiny community.</li>
+</ul>
+<p>Each episode of the series includes:</p>
+<ul>
+<li>A webinar, where Eric hosts a live interview with the author of a tool or package that helps make Shiny developers’ lives a bit easier.</li>
+<li>An open Q&amp;A and follow-up discussion on <a href="https://community.rstudio.com/c/shiny">community.rstudio.com/c/shiny</a></li>
+<li>Recorded Live Demos - when it makes sense, Eric and/or his guest will record a demo of the tools they talked about.</li>
+</ul>
+<p><a href="https://pages.rstudio.net/shiny_dev_series.html"><strong>Register now for Shiny Developer Series updates and scheduling reminders</strong></a></p>
+<h1 id="past-episodes">Past episodes</h1>
+<p>We have already had three great episodes!</p>
+<h3 id="winston-chang-on-shinys-development-history-and-future" class="anchored">Winston Chang on Shiny’s Development History and Future</h3>
+<p>In Episode 1, Winston Chang talked about the key events that triggered RStudio’s efforts to make Shiny a production-ready framework, how principles of software design are invaluable for creating complex applications, and exciting plans for revamping the user interface and new integrations. <a href="https://shinydevseries.com/post/episode-1-shiny-development-past-and-future/">Watch the episode</a> - <a href="https://shinydevseries.com/post/episode-1-shiny-development-past-and-future/">Show notes</a> - <a href="https://community.rstudio.com/t/shiny-developer-series-episode-1-follow-up-thread/29491/">Follow-up community discussion</a></p>
+<h3 id="colin-fay-on-golem-and-effective-shiny-development-methods." class="anchored">Colin Fay on <code>golem</code> and Effective Shiny Development Methods.</h3>
+<p>In Episode 2, Colin Fay from ThinkR shared insights and practical advice for building production grade Shiny applications. He talked about the new <code>golem</code> package as the <code>usethis</code> for Shiny app development, why keeping the perspective of your app customers can keep you on the right development path, and much more. <a href="https://shinydevseries.com/post/episode-2-golem/">Watch the episode</a> - <a href="https://shinydevseries.com/post/episode-2-golem/">Show notes</a> - <a href="https://community.rstudio.com/t/shiny-developer-series-episode-2-follow-up-thread-colin-fay-on-golem-and-effective-shiny-development-methods/32618">Follow-up community discussion</a></p>
+<p><a href="https://shinydevseries.com/post/golem-demo/"><strong>Video demo of the <code>golem</code> shiny app development workflow</strong></a></p>
+<h3 id="mark-edmondson-on-googleanalyticsr-and-building-an-r-package-optimized-for-shiny" class="anchored">Mark Edmondson on <code>googleAnalyticsR</code> and building an R-Package Optimized for Shiny</h3>
+<p>In Episode 3 - Mark Edmondson from IIH Nordic talked about how he incorporates Shiny components such as modules with <code>googleAnalyticsR</code> and his other excellent packages. He dived into some of the technical challenges he had to overcome to provide a clean interface to many Google APIs, the value of open-source contributions to both his work and personal projects, and much more. <a href="https://shinydevseries.com/post/episode-3-googleanalyticsr/">Watch the episode</a> - <a href="https://shinydevseries.com/post/episode-3-googleanalyticsr/">Show notes</a> - <a href="https://community.rstudio.com/t/shiny-developer-series-webinar-discussion-episode-3-mark-edmondson-on-googleanalyticsr-and-linking-shiny-to-complex-apis/33669">Follow-up community discussion</a></p>
+<h1 id="upcoming-episodes">Upcoming Episodes</h1>
+<p>We have episodes scheduled for the rest of the year.</p>
+<h3 id="david-granjon-on-the-rinterface-collection-of-production-ready-shiny-ui-packages" class="anchored">David Granjon on the RinteRface Collection of Production-Ready Shiny UI Packages</h3>
+<p>Episode 4 - Friday, August 9, Noon-1PM Eastern</p>
+<p>If you’ve ever wanted to build an elegant and powerful Shiny UI that takes advantage of modern web frameworks, this episode is for you! David Granjon of the <code>RinteRface</code> project joins us to highlight the ways you can quickly create eye-catching dashboards, mobile-friendly views, and much more with the <code>RinteRface</code> suite of Shiny packages.</p>
+<h3 id="nick-strayer-on-novel-uses-of-javascript-in-shiny-applications" class="anchored">Nick Strayer on Novel Uses of JavaScript in Shiny Applications</h3>
+<p>Episode 5 - Friday, September 13, 11am-Noon Eastern</p>
+<p>Shiny has paved the way for R users to build interactive applications based in javascript, all through R code. But the world of javascript can bring new possibilities for visualizations and interactivity. Nick Strayer joins us in episode 5 of the Shiny Developer Series to discuss the ways he’s been able to harness the power of javascript in his projects, such as his <code>shinysense</code> package.</p>
+<h3 id="yang-tang-on-advanced-ui-the-motivation-and-use-cases-of-shinyjqui" class="anchored">Yang Tang on Advanced UI, the Motivation and Use Cases of <code>shinyjqui</code></h3>
+<p>Episode 6 - Friday, October 25, 11am-Noon Eastern</p>
+<p>Sometimes your Shiny app’s UI needs a little extra interactivity to give users more flexibility and highlight key interactions. For example, one user might not like the initial placement of a plot or data table and would like to move it around themselves. In episode 6 of the Shiny Developer Series, we will be joined by Yang Tang to discuss the development and capabilities of the powerful <code>shinyjqui</code> package that provides Shiny developers clean and intuitive wrappers to the immensely popular JQuery javascript library.</p>
+<h3 id="victor-perrier-fanny-meyer-on-dreamrs-and-tools-to-customize-the-look-feel-of-your-app" class="anchored">Victor Perrier &amp; Fanny Meyer on dreamRs, and Tools to Customize the Look &amp; Feel of Your App</h3>
+<p>Episode 7 - Friday November 8, 11-Noon Eastern time.</p>
+<p>Have you ever wanted to ease the effort in customizing the look and feel of your Shiny app? Victor and Fanny are behind dreamRs, a large collection of R packages dedicated to Shiny developers, many of which are designed to help you make your Shiny app as professional looking as possible. They will talk about how moving beyond Shiny’s default options can improve your users’ experience.</p>
+<h3 id="nathan-teetor-on-the-approach-and-philosophy-of-yonder" class="anchored">Nathan Teetor on the approach and philosophy of <code>yonder</code></h3>
+<p>Episode 8 - Friday December 6, 1-2pm Eastern</p>
+<p>We have seen the Shiny community grow immensely with excellent packages built to extend the existing functionality provided by Shiny itself. But what would a re-imagination of Shiny’s user interface and server-side components entail? Nathan’s <code>yonder</code> package is built on Shiny, but gives developers an alternative framework for building applications with R. Eric will talk with Nathan about what shiny developers can learn from this approach and how he’s approached such an ambitious undertaking!</p>
+<hr>
+<p>If you would benefit by being kept up to date about this material and developments in the community, please <a href="https://pages.rstudio.net/shiny_dev_series.html"><strong>register now for Shiny Developer Series. You will receive updates and scheduling reminders</strong></a>, and check out the <a href="https://shinydevseries.com/">Shiny Developer Series website</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

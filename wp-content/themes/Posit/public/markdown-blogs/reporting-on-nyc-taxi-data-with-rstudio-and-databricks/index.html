@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2023-09-13">
+<meta name="description" content="Description here.">
+
+<title>posit-blogs - Crossing Bridges: Reporting on NYC taxi data with RStudio and Databricks</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Crossing Bridges: Reporting on NYC taxi data with RStudio and Databricks</h1>
+
+<p class="date">2023-09-13</p>
+</header>
+
+<p>As data enthusiasts, we love uncovering stories in datasets. With Posit’s <a href="https://posit.co/download/rstudio-desktop/">RStudio Desktop</a> and Databricks Lakehouse, you can analyze data with dplyr, create impressive graphs with ggplot2, and weave data narratives with <a href="https://quarto.org/">Quarto</a>, all using data stored in Databricks.</p>
+<p><a href="https://posit.co/blog/databricks-and-posit-announce-new-integrations/">Posit and Databricks recently announced a strategic partnership</a> to provide a simplified experience for Posit and Databricks users. By combining Posit’s RStudio with Databricks, you can dive into any data stored on the Databricks Lakehouse Platform, from small data sets to large streaming data. Posit provides data scientists with user-friendly and code-first environments and tools for working with data and writing code. Databricks provides a scaleable end-to-end architecture for data storage, compute, AI, and governance.</p>
+<p>One objective for the partnership is to improve support for <a href="https://spark.apache.org/docs/latest/spark-connect-overview.html">Spark Connect</a> in R through <a href="https://spark.rstudio.com/">sparklyr</a>, simplifying the process of connecting to Databricks clusters via <a href="https://docs.databricks.com/dev-tools/databricks-connect.html">Databricks Connect</a>. In the future, Posit and Databricks will offer streamlined integration to automate many of these steps.</p>
+<p>We’ll take a tour of the enhanced sparklyr experience with a subset of the <a href="https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page">New York City taxi trip record data</a> with over 10,000,000 rows and a total file size of 37 gigabytes.</p>
+<h2 id="set-up-your-environment" class="anchored">Set up your environment</h2>
+<p>To begin, you need to set up the connection between RStudio and Databricks.</p>
+<h3 id="save-your-environment-variables" class="anchored">Save your environment variables</h3>
+<p>To use Databricks Connect, you need three configuration items. Log in to a Databricks account to obtain:</p>
+<ul>
+<li>The <a href="https://docs.databricks.com/workspace/workspace-details.html#workspace-url">Workspace Instance URL</a>, which looks like <code>https://databricks-instance.cloud.databricks.com/?o=12345678910111213</code></li>
+<li>An access token to authenticate the account. Click the user name on the top-right corner, select “User Settings”, then “Developer”. Click “Manage” next to “Access Tokens” and then “Generate new token”. Copy the token, as it won’t be shown again.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img2.png" class="img-fluid"></p>
+</figure>
+</div>
+<ul>
+<li>The Cluster ID of a currently running cluster within the workspace. Set one up by navigating to <code>https://&lt;databricks-instance&gt;/#/setting/clusters/</code>. More information can be found in the <a href="https://docs.databricks.com/en/workspace/workspace-details.html">Databricks docs</a>. Alternatively, go to “Compute” in the sidebar and add a cluster.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img1.png" class="img-fluid"></p>
+</figure>
+</div>
+<p>Now, head to RStudio.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img8.png" class="img-fluid"></p>
+</figure>
+</div>
+<p>To safely connect your Databricks and RStudio accounts, set the Databricks Workspace, access token, and cluster ID as environment variables. Environment variables keep sensitive information separate from your code, reducing the risk of exposing confidential data in your scripts.</p>
+<p>The <a href="https://usethis.r-lib.org/">usethis package</a> has a handy function for opening the R environment. Run the code below in your console to access the <code>.Renviron</code> file:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">edit_r_environ</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This function automatically opens the <code>.Renviron</code> file for editing. Set up the Databricks Workspace URL, access token, and cluster ID in the <code>.Renviron</code> file with the following names: <code>DATABRICKS_HOST</code> for the URL, <code>DATABRICKS_TOKEN</code> for the access token, and <code>DATABRICKS_CLUSTER_ID</code> for the cluster ID. For example:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">DATABRICKS_HOST</span><span class="op">=</span>https://databricks-instance.cloud.databricks.com/<span class="pp">?</span>o=12345678910111213</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="va">DATABRICKS_TOKEN</span><span class="op">=</span>1ab2cd3ef45ghijklmn6o78qrstuvwxyz</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="va">DATABRICKS_CLUSTER_ID</span><span class="op">=</span>1234-567891-1a23bcde</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Your RStudio may look like this:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img6.png" class="img-fluid"></p>
+</figure>
+</div>
+<p>Save the <code>.Renviron</code> file and restart the R session. Now, your environment is set up to connect to Databricks!</p>
+<h3 id="install-required-packages" class="anchored">Install required packages</h3>
+<p>The sparklyr package is a powerful R package that allows you to work with Apache Spark, a suite of data processing, SQL, and advanced analytics APIs. With sparklyr, you can leverage the capabilities of Spark directly from within the R environment. Connections made with sparklyr will also leverage the Connections Pane, a user-friendly way to navigate and view your data.</p>
+<p>At Posit, we have been working to update and improve the sparklyr package. Spark Connect requires a tool called gRPC to work. The Spark team offers two ways to use it: one with Scala and the other with Python. In the development version of sparklyr, we use <a href="https://rstudio.github.io/reticulate/">reticulate</a> to add features like dplyr, DBI support, and integration with RStudio’s Connection pane to the Python API. To make improvements and fixes faster, we’ve separated the Python part into its own package, pysparklyr.</p>
+<p>Access the new capabilities of sparklyr by installing the development versions of sparklyr and pysparklyr in RStudio:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(remotes)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install_github</span>(<span class="st">"sparklyr/sparklyr"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install_github</span>(<span class="st">"mlverse/pysparklyr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The sparklyr package requires specific Python components to communicate with Databricks Connect. To set up these components, run the following helper function:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_pyspark</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now, you can load the sparklyr package. Sparklyr will pick up on the preset environment variables that you configured above.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, use <code>spark_connect()</code> to open the connection to Databricks. You can tell sparklyr that you are connecting to a Spark cluster by setting <code>method = "databricks_connect"</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">method =</span> <span class="st">"databricks_connect"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If the following error pops up:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Error in `import_check()`:</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ! Python library 'databricks.connect' is not available in the</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   'r-sparklyr' virtual environment. Install all of the needed python libraries</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   using: pysparklyr::install_pyspark(virtualenv_name = "r-sparklyr")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Run the provided script to install the required Python packages:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_pyspark</span>(<span class="at">virtualenv_name =</span> <span class="st">"r-sparklyr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>With that, you should see the data in the Connections pane in the upper right-hand of RStudio.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img7.png" class="img-fluid"></p>
+</figure>
+</div>
+<p>Congratulations, you’ve connected your session with Databricks!</p>
+<h2 id="retrieve-and-analyze-your-data" class="anchored">Retrieve and analyze your data</h2>
+<p>RStudio can connect to many databases at once. Using the RStudio Connections Pane, you can check which databases you’re connected to and which ones are currently in use.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img3.png" class="img-fluid"></p>
+</figure>
+</div>
+<p>The new integration with Spark allows you to browse data managed in Unity Catalog, populating the Connections Pane with the same structure found in the Databricks Data Explorer.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img4.png" class="img-fluid"></p>
+</figure>
+</div>
+<p>In RStudio, you can navigate the data by expanding from the top level all the way down to the table you wish to explore. When you expand the table, you can see its columns and data types. You can also click on the table icon on the right side of the table name to see the first 1,000 rows of the data:</p>
+<p><img src="images/img5.png" class="img-fluid"></p>
+<h3 id="access-data-using-the-databricks-connection" class="anchored">Access data using the Databricks connection</h3>
+<p>The <a href="https://dbplyr.tidyverse.org/">dbplyr package</a> bridges R and databases by allowing you to access remote database tables as if they were in-memory data frames. In addition, it translates dplyr verbs into SQL queries, making it easy to work with the database data using familiar R syntax.</p>
+<p>Once your connection to Databricks has been set up, you can use dbplyr’s <code>tbl()</code> and <code>in_catalog()</code> functions to access any table following the order of levels in the catalog: <em>Catalog</em>, <em>Database</em>, and <em>Table</em>.</p>
+<p>In the example below, <code>"samples"</code> is the <em>Catalog</em>, <code>"nytaxi"</code> is the <em>Database</em>, and <code>"trips"</code> is the <em>Table</em>. Save the table reference in the object <code>trips</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dbplyr)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>trips <span class="ot">&lt;-</span> <span class="fu">tbl</span>(sc, <span class="fu">in_catalog</span>(<span class="st">"samples"</span>, <span class="st">"nyctaxi"</span>, <span class="st">"trips"</span>))</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>trips</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Source: spark&lt;samples.nyctaxi.trips&gt; [?? x 6]
+   tpep_pickup_datetime tpep_dropoff_datetime trip_distance fare_amount
+   &lt;dttm&gt;               &lt;dttm&gt;                        &lt;dbl&gt;       &lt;dbl&gt;
+ 1 2016-02-14 08:52:13  2016-02-14 09:16:04            4.94        19  
+ 2 2016-02-04 10:44:19  2016-02-04 10:46:00            0.28         3.5
+ 3 2016-02-17 09:13:57  2016-02-17 09:17:55            0.7          5  
+ 4 2016-02-18 02:36:07  2016-02-18 02:41:45            0.8          6  
+ 5 2016-02-22 06:14:41  2016-02-22 06:31:52            4.51        17  
+ 6 2016-02-04 22:45:02  2016-02-04 22:50:26            1.8          7  
+ 7 2016-02-15 07:03:28  2016-02-15 07:18:45            2.58        12  
+ 8 2016-02-25 11:09:26  2016-02-25 11:24:50            1.4         11  
+ 9 2016-02-13 08:28:18  2016-02-13 08:36:36            1.21         7.5
+10 2016-02-13 16:03:48  2016-02-13 16:10:24            0.6          6  
+# ℹ more rows
+# ℹ 2 more variables: pickup_zip &lt;int&gt;, dropoff_zip &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>Now, you can proceed to work with the <code>trips</code> data!</p>
+<h2 id="query-the-data-and-get-results-back" class="anchored">Query the data and get results back</h2>
+<p>Since you have accessed the data via dplyr, you can perform data manipulations using your favorite dplyr functions. Below, we use the new native R pipe <code>|&gt;</code> introduced in R 4.1. You could also use the magrittr pipe <code>%&gt;%</code> for your dplyr operations. To learn more about this native R pipe and how it differs from the magrittr pipe, visit the <a href="https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/">tidyverse blog</a>.</p>
+<p>You can clean and explore the dataset by using dplyr commands on the <code>taxi</code> object. According to the <a href="https://www.nyc.gov/site/tlc/passengers/taxi-fare.page">NYC Taxi &amp; Limousine Commission</a>, the initial cab fare for taxis is $3. To remove data points below $3, you can use <code>filter()</code>. If you want to find out more about cab fares, you can use <code>summarize()</code> to calculate the minimum, average, and maximum fare amounts.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>trips <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(fare_amount <span class="sc">&gt;</span> <span class="dv">3</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_fare =</span> <span class="fu">min</span>(fare_amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_fare =</span> <span class="fu">mean</span>(fare_amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_fare =</span> <span class="fu">max</span>(fare_amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Source: spark&lt;?&gt; [?? x 3]
+  min_fare avg_fare max_fare
+     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1      3.5     12.4      275</code></pre>
+</div>
+</div>
+<p>The minimum fare amount is $3.50, the average fare amount for a cab ride is $12.40, and the maximum fare is $275!</p>
+<p>You can visualize your data to get a sense of the distribution of the fare amounts:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>trips <span class="sc">|&gt;</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> fare_amount)) <span class="sc">+</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>() <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Density Plot of NYC Taxi Fare Amounts"</span>,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">"Fare Amount"</span>,</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">ylab =</span> <span class="st">"Density"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>While most trips are lower than $25, you can see a high number of fares totaling just over $50. This might be due to fixed rates for rides from the airports to the city.</p>
+<p>Now that you have a sense of the distribution of fare amounts, let’s create another visualization. In the following example, you create a new column called <code>hour</code> to show the time of day for each taxi trip. Then, you can use ggplot2 to create a custom visualization that displays how the fares are distributed at different times of the day.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>trips <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(fare_amount <span class="sc">&gt;</span> <span class="dv">3</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">hour =</span> <span class="fu">case_when</span>(</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>      lubridate<span class="sc">::</span><span class="fu">hour</span>(tpep_pickup_datetime) <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"Evening"</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>      lubridate<span class="sc">::</span><span class="fu">hour</span>(tpep_pickup_datetime) <span class="sc">&gt;=</span> <span class="dv">12</span> <span class="sc">&amp;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        lubridate<span class="sc">::</span><span class="fu">hour</span>(tpep_pickup_datetime) <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"Afternoon"</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>      lubridate<span class="sc">::</span><span class="fu">hour</span>(tpep_pickup_datetime) <span class="sc">&gt;=</span> <span class="dv">6</span> <span class="sc">&amp;</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>        lubridate<span class="sc">::</span><span class="fu">hour</span>(tpep_pickup_datetime) <span class="sc">&lt;</span> <span class="dv">12</span> <span class="sc">~</span> <span class="st">"Morning"</span>,</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>      lubridate<span class="sc">::</span><span class="fu">hour</span>(tpep_pickup_datetime) <span class="sc">&lt;</span> <span class="dv">6</span> <span class="sc">~</span> <span class="st">"Night"</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> hour, <span class="at">y =</span> fare_amount)) <span class="sc">+</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  ggdist<span class="sc">::</span><span class="fu">stat_halfeye</span>(</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">adjust =</span> .<span class="dv">5</span>,</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> .<span class="dv">6</span>,</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">.width =</span> <span class="dv">0</span>,</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">justification =</span> <span class="sc">-</span>.<span class="dv">3</span>,</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">point_colour =</span> <span class="cn">NA</span>,</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">fill =</span> hour)</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">1.5</span>,</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> .<span class="dv">3</span>,</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> <span class="fu">position_jitter</span>(<span class="at">seed =</span> <span class="dv">1</span>, <span class="at">width =</span> .<span class="dv">1</span>),</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">color =</span> hour)</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of NYC Taxi Fare Amounts by Time of Day"</span>,</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Fare Amount ($)"</span>,</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time of Day"</span>) <span class="sc">+</span></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Morning"</span> <span class="ot">=</span> <span class="st">"#70A3A6"</span>,</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Afternoon"</span> <span class="ot">=</span> <span class="st">"#8AA67A"</span>,</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Evening"</span> <span class="ot">=</span> <span class="st">"#BF96A3"</span>,</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Night"</span> <span class="ot">=</span> <span class="st">"#E58066"</span></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(</span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Morning"</span> <span class="ot">=</span> <span class="st">"#1F4F4F"</span>,</span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Afternoon"</span> <span class="ot">=</span> <span class="st">"#3B4F29"</span>,</span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Evening"</span> <span class="ot">=</span> <span class="st">"#542938"</span>,</span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Night"</span> <span class="ot">=</span> <span class="st">"#80361C"</span></span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The distributions seem pretty similar for each time of day, and that $50 peak appears consistently across all hours. Additionally, it’s noticeable that afternoons and evenings have more extreme fare amounts, while mornings and late nights generally stay below $100.</p>
+<p>Great, you’ve dug into your dataset. Now, it’s time to create something to publish!</p>
+<h2 id="publish-your-content-and-share-your-insights" class="anchored">Publish your content and share your insights</h2>
+<p>Why uncover wonderful stories if you can’t share them with the world? This brings us to the final chapter of the journey - publishing your content.</p>
+<p>The upgrades to sparklyr allow you to create comprehensive, visually appealing reports in RStudio using the processing power of Databricks. Once you have queried your data and investigated the story you want to tell, you can proceed to create a report using <a href="https://quarto.org/">Quarto</a>:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode markdown md code-with-copy"><code class="sourceCode markdown"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "NYC Taxi Fare Amount Analysis"</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>While most NYC Taxi trips seem to be lower than \$25, you can see a high number of fares totaling just over \$50. This might be due to fixed rates for rides from the airports to the city.</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>The distributions seem pretty similar for each time of day, and that \$50 peak appears consistently across all hours. Additionally, it's noticeable that afternoons and evenings have more extreme fare amounts, while mornings and late nights generally stay below \$100.</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"1_user-story-reporting"</span>,</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"plot_script.R"</span>))</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>::: {layout="[<span class="co">[</span><span class="ot">1, 1</span><span class="co">]</span>, <span class="co">[</span><span class="ot">1</span><span class="co">]</span>]"}</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>density_plot</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>corr_plot</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>wday_plot</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Rendering the <code>.qmd</code> file, you generate a visually appealing report as the output:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/report.png" class="img-fluid"></p>
+</figure>
+</div>
+<p>To publish this report, you have several options. Posit offers <a href="https://posit.co/products/enterprise/connect/">Posit Connect</a>, an enterprise-level platform for deploying R and Python data products. Data scientists use Posit Connect to automate time-consuming tasks with code, schedule reports and emails, distribute custom-built tools and solutions across teams, and securely share insights with decision-makers.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img9.png" class="img-fluid"></p>
+</figure>
+</div>
+<p>To publish the report through Databricks, you can schedule it as a notebook job and email a link to the output to stakeholders.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img10.png" class="img-fluid"></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img11.png" class="img-fluid"></p>
+</figure>
+</div>
+<p>You can also publish Quarto documents on <a href="https://quartopub.com/">Quarto Pub</a> and <a href="https://pages.github.com/">GitHub Pages</a>. Find out more on Quarto’s <a href="https://quarto.org/docs/publishing/">publishing guide</a>.</p>
+<h2 id="disconnect-from-the-server" class="anchored">Disconnect from the server</h2>
+<p>Once you complete your analysis, you want to make sure you disconnect from Spark Connect.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<h2 id="try-rstudio-with-databricks" class="anchored">Try RStudio with Databricks</h2>
+<p>The integration between RStudio and Databricks enables users to get the benefits of both while getting a simplified developer experience. Try it out yourself with this <a href="https://spark.rstudio.com/deployment/databricks-spark-connect.html">documentation</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+
+
+
+</body></html>

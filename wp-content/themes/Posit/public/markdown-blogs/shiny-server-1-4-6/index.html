@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2016-09-22">
+
+<title>Shiny Server (Pro) 1.4.6</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Shiny Server (Pro) 1.4.6</h1>
+
+<p class="date">2016-09-22</p>
+</header>
+
+<p>We’ve just released Shiny Server and Shiny Server Pro 1.4.6. Relative to 1.4.2, our previously blogged-about version, the 1.4.6 release primarily includes bug fixes, and mitigations for low-severity security issues found by penetration testing. The full list of changes is after the jump.</p>
+<p>If you’re running a Shiny Server Pro release that is older than 1.4.3 <em>and</em> are configured to use SSL/TLS, it’s especially important that you upgrade, as the versions of Node.js that are bundled with Shiny Server Pro 1.4.3 and earlier include vulnerable versions of OpenSSL.</p>
+<p><strong>Shiny Server (Open Source):</strong> <a href="https://www.rstudio.com/products/shiny/download-server/">Download now</a></p>
+<p><strong>Shiny Server Pro:</strong> If you already have a license or evaluation key, please <a href="https://www.rstudio.com/products/shiny/download-commercial/">upgrade now</a>. Otherwise, you can <a href="https://www.rstudio.com/products/shiny-server-pro/evaluation/">start a free 45-day evaluation</a>.</p>
+<!-- more -->
+<h3 id="shiny-server-pro-1.4.6" class="anchored">Shiny Server Pro 1.4.6</h3>
+<p>Bug fix release.</p>
+<ul>
+<li>Fix a bug where a 404 response on some URLs could cause the server to exit with an unhandled exception.</li>
+</ul>
+<h3 id="shiny-server-pro-1.4.5" class="anchored">Shiny Server Pro 1.4.5</h3>
+<p>Security release to fix minor issues raised in penetration test results.</p>
+<ul>
+<li><p>Add <code>disable_login_autocomplete</code> directive that can be used to instruct browsers not to attempt to autocomplete on the login screen. Note that servers can only suggest this behavior to browsers (and in particular, Google Chrome chooses not to comply, as its developers argue that disabling autocomplete decreases security rather than increasing it).</p></li>
+<li><p>Add opt-in clickjacking protection via <code>frame_options</code> directive. Login and /admin URLs now served with <code>X-Frame-Options: DENY</code> (the former can be opted out with an <code>auth_frame_options allow;</code> directive).</p></li>
+<li><p>Fix open redirection on <strong>login</strong>. Previously, a URL created with malicious intent could cause you to go to an arbitrary URL after successful login. Now, it is only possible to be redirected to a path on Shiny Server.</p></li>
+<li><p>Add Cross-Site Request Forgery (CSRF) protection to login and other POST operations.</p></li>
+</ul>
+<h3 id="shiny-server-pro-1.4.4" class="anchored">Shiny Server Pro 1.4.4</h3>
+<ul>
+<li><p>Fix fatal EBADF error that could cause server crashes.</p></li>
+<li><p>Updated PAM integration to resolve bug with asynchronous PAM modules like pam_ldap, pam_vas, and nss_ldap.</p></li>
+<li><p>Upgrade to Node.js v0.10.46 (security patches).</p></li>
+</ul>
+<h3 id="shiny-server-pro-1.4.3" class="anchored">Shiny Server Pro 1.4.3</h3>
+<ul>
+<li><p>Added proxied authentication mechanism via the <code>auth_proxy</code> option.</p></li>
+<li><p>Upgrade to Node.js v0.10.45 (primarily for updated OpenSSL).</p></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

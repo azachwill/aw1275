@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-07-14">
+
+<title>RStudio Connect 1.8.4</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Connect 1.8.4</h1>
+
+<p class="date">2020-07-14</p>
+</header>
+
+<h2 id="a-place-for-python-applications" class="anchored">A place for Python applications</h2>
+<p>For data science teams looking to promote data-driven decision making within an organization, interactive applications built in R and Python are often the gold standard. These interactive tools, built by data science teams, are powerful when put in the hands of the right people, but they don’t do much good at all if they only run locally. R users who build Shiny applications hit this roadblock, and so do Python users working with tools like Dash, Bokeh, and Streamlit. IT departments want to help but often aren’t sure how. RStudio Connect solves this problem, for both R and Python applications.</p>
+<p>RStudio Connect 1.8.4 focuses on helping Python users by including support for a full suite of interactive application types. Support for publishing Dash applications is now generally available, and this release introduces new Beta offerings for <a href="https://bokeh.org/" target="_blank">Bokeh</a> and <a href="https://www.streamlit.io/" target="_blank">Streamlit</a> application deployment.</p>
+<h3 align="center" class="anchored">
+<a href="https://rstudio.chilipiper.com/book/rsc-demo">See RStudio Connect in Action</a>
+</h3>
+<h2 id="interactive-python-applications" class="anchored">Interactive Python Applications</h2>
+<h3 id="get-started-with-the-rstudio-connect-jump-start" class="anchored">Get started with the RStudio Connect Jump Start</h3>
+<p>For a hands-on approach to learning about Python content in RStudio Connect, try exploring the Jump Start Examples. This resource contains lightweight data science project examples built with various R and Python frameworks. The Jump Start Examples appear in the RStudio Connect dashboard when you first log in. You can download each project, run it locally, and follow the provided instructions to publish it back to the RStudio Connect server; or you could simply browse the examples and deployment steps to get a sense for how you might publish your own project.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="python-jump-start-184.png" class="img-fluid"></p>
+<p></p><figcaption>Python Jump Start Screenshot</figcaption><p></p>
+</figure>
+</div>
+<h3 id="develop-and-deploy-python-applications-from-your-favorite-python-ide" class="anchored">Develop and deploy Python applications from your favorite Python IDE</h3>
+<p>New users often ask, <em>Do I have to develop Python applications in the RStudio IDE in order to publish them in RStudio Connect?</em> The answer is no! You do not need to touch the RStudio IDE for Python content development or publishing.</p>
+<p>Publishing Python applications to RStudio Connect requires the <a href="https://pypi.org/project/rsconnect-python/" target="_blank"><code>rsconnect-python</code></a> package. This package is available to install with pip from PyPI and enables a command-line interface that can be used to publish from any Python IDE including PyCharm, VS Code, JupyterLab, Spyder, and others.</p>
+<p>Once you have the <code>rsconnect-python</code> package, the only additional information you need to supply is the RStudio Connect server address and a <a href="https://docs.rstudio.com/connect/user/api-keys/">publisher API key</a>.</p>
+<p>The application shown here is the Stock Pricing Dashboard built with Dash and available for download from the Jump Start Examples available in RStudio Connect. The example comes packaged with everything needed to run it locally in the Python IDE of your choice. When you’re ready to try publishing, the Jump Start will guide you through that process, including all the required commands from <code>rsconnect-python</code>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="dash-jumpstart-example.gif" class="img-fluid"></p>
+<p></p><figcaption>GIF of the Dash Jump Start example in RStudio Connect</figcaption><p></p>
+</figure>
+</div>
+<h3 id="streamlit-and-bokeh-applications" class="anchored">Streamlit and Bokeh Applications</h3>
+<p>Data scientists who develop Streamlit or Bokeh applications can also use the <a href="https://pypi.org/project/rsconnect-python/" target="_blank"><code>rsconnect-python</code></a> package to publish to RStudio Connect. If you’ve previously used the <code>rsconnect-python</code> package for other types of Python content deployment, make sure you upgrade to the latest version before attempting to use the Beta features with RStudio Connect 1.8.4.</p>
+<p>This release ships with a example for Streamlit, located in the Jump Start Examples Python tab. For Bokeh, we recommend starting with examples from the <a href="https://docs.bokeh.org/en/latest/docs/gallery.html#server-app-examples" target="_blank">Bokeh App Gallery</a>. Source code for the Bokeh gallery applications is available from the <a href="https://github.com/bokeh/bokeh/tree/master/examples/app/" target="_blank">Bokeh GitHub repository</a>.</p>
+<p>Visit the User Guide to learn more about our beta support for Streamlit and Bokeh:</p>
+<ul>
+<li>Learn more about <a href="https://docs.rstudio.com/connect/user/streamlit/">deploying Streamlit applications</a></li>
+<li>Learn more about <a href="https://docs.rstudio.com/connect/user/bokeh/">deploying Bokeh applications</a></li>
+</ul>
+<p><strong>What does “Beta” Mean?</strong> <em>Bokeh and Streamlit app deployment are beta features. This means they are still undergoing final testing before official release. Should you encounter any bugs, glitches, lack of functionality or other problems, please let us know so we can improve before public release.</em></p>
+<h3 align="center" class="anchored">
+Learn how data science teams use RStudio products<br><a href="https://rstudio.com/solutions/r-and-python/">Visit R &amp; Python - A Love Story</a>
+</h3>
+<h2 id="new-notable" class="anchored">New &amp; Notable</h2>
+<h3 id="scheduling-across-time-zones" class="anchored">Scheduling Across Time Zones</h3>
+<p>A new time zone option for scheduled reports can be used to prevent schedules from breaking during daylight savings time changes. Publishers can now configure a report to run in a specific time zone by modifying the settings available in the <a href="https://docs.rstudio.com/connect/user/scheduling/">Schedule panel</a>.</p>
+<h3 id="content-usage-tracking" class="anchored">Content Usage Tracking</h3>
+<p>In previous versions of RStudio Connect, content usage was only available for static and rendered content, as well as Shiny applications. With this release, Python content and Plumber API usage data is available via the <a href="https://docs.rstudio.com/connect/api/#instrumentation">Instrumentation API</a>. Learn more about tracking content usage on RStudio Connect in the <a href="https://docs.rstudio.com/connect/cookbook/user-activity/">Server API Cookbook</a>.</p>
+<p><img src="content-usage-past30.png" alt="Screenshot of the Content Usage Info Panel in RStudio Connect" width="40%"></p>
+<h2 id="authentication-changes" class="anchored">Authentication Changes</h2>
+<h3 id="openid-connect" class="anchored">OpenID Connect</h3>
+<p>RStudio Connect 1.8.4 introduces OpenID Connect as an authentication provider for single sign-on (SSO). This new functionality is built on top of the existing support for OAuth2, which was previously limited to Google authentication. For backwards compatibility, Google is the default configuration, so no action is necessary for existing installations. See the <a href="https://docs.rstudio.com/connect/admin/authentication/oauth2/">OAuth2</a> section of the Admin Guide for details.</p>
+<h3 id="automatic-user-role-mapping" class="anchored">Automatic User Role Mapping</h3>
+<p>RStudio Connect now supports assigning user roles from authentication systems that support remote groups. Roles can be assigned in a custom attribute or automatically mapped from an attribute or group name. See <a href="https://docs.rstudio.com/connect/admin/user-management/#user-role-mapping">Automatic User Role Mapping</a> for more details.</p>
+<h3 id="custom-login-logout-for-proxied-authentication" class="anchored">Custom Login &amp; Logout for Proxied Authentication</h3>
+<p>Proxied authentication now supports more customizable login and logout flows with the settings ProxyAuth.LoginURL and ProxyAuth.LogoutURL. See the <a href="https://docs.rstudio.com/connect/admin/authentication/proxied/">Proxied Authentication</a> section of the Admin Guide for details.</p>
+<h3 align="center" class="anchored">
+<a href="https://rstudio.com/products/connect/evaluation/">Try the free 45 day evaluation of RStudio Connect 1.8.4</a>
+</h3>
+<h2 id="deprecations-breaking-changes" class="anchored">Deprecations &amp; Breaking Changes</h2>
+<ul>
+<li><strong>Breaking Change</strong> SSLv3 is no longer supported, since it is considered cryptographically broken.</li>
+<li><strong>Deprecation</strong> The setting <code>Python.LibraryCheckIsFatal</code> has been deprecated. Python library version checks are now non-fatal and result in a warning in the RStudio Connect log at startup.</li>
+</ul>
+<p>Please review the <a href="http://docs.rstudio.com/connect/news">full release notes</a>.</p>
+<blockquote>
+<h4 id="upgrade-planning" class="anchored">Upgrade Planning</h4>
+<p>For RStudio Connect installations that make use of Python, note that the latest version of the virtualenv package (version 20) is now supported. This is a reversal of the previous RStudio Connect 1.8.2 requirement on virtualenv. This release also provides support for Ubuntu 20.04 LTS.</p>
+</blockquote>
+<p>To perform an upgrade, download and run the installation script. The script installs a new version of RStudio Connect on top of the earlier one, and existing configuration settings are respected.</p>
+<pre><code># Download the installation script
+curl -Lo rsc-installer.sh https://cdn.rstudio.com/connect/installer/installer-v1.1.0.sh
+
+# Run the installation script
+sudo bash ./rsc-installer.sh 1.8.4-11</code></pre>
+<h3 align="center" class="anchored">
+<a href="https://rstudio.com/products/connect/">Click through to learn more about RStudio Connect</a>
+</h3>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

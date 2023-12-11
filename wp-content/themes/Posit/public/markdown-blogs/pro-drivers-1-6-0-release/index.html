@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2019-10-24">
+
+<title>RStudio Professional Drivers 1.6.0</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Professional Drivers 1.6.0</h1>
+
+<p class="date">2019-10-24</p>
+</header>
+
+<p>Access to data is crucial for data science. Unfortunately, servers that run RStudio are often disconnected from databases, especially in organizations that are new to R. In order to help data scientists access their databases, RStudio offers ODBC data connectors that are supported, easy to install, and designed to work everywhere you use RStudio professional products. The 1.6.0 release of <a href="https://rstudio.com/products/drivers/">RStudio Professional Drivers</a> includes a few important updates.</p>
+<h2 id="new-data-sources" class="anchored">New data sources</h2>
+<p><img align="center" src="drivers.jpg" alt="RStudio Professional Drivers"></p>
+<p>The 1.6.0 release includes new drivers for the following data sources:</p>
+<ul>
+<li>Amazon Athena</li>
+<li>Google BigQuery</li>
+<li>Apache Cassandra</li>
+<li>MongoDB</li>
+<li>MySQL</li>
+<li>IBM Netezza</li>
+</ul>
+<p>These six new drivers complement the eight existing drivers from the prior release: Amazon Redshift, Apache Hive, Apache Impala, Oracle, PostgreSQL, Microsoft SQL Server, Teradata, and Salesforce. The existing drivers have also been updated with new features and improvements in the 1.6.0 release. For example, the SQL Server driver now supports the NTLM security protocol. For a full list of changes, refer to the <a href="https://docs.rstudio.com/drivers/1.6/release-notes/">RStudio Professional Drivers 1.6.0 release notes</a>.</p>
+<h2 id="new-packaging-.rpm-.deb" class="anchored">New packaging (<code>.rpm</code> / <code>.deb</code>)</h2>
+<p>Installations of drivers from the prior release of RStudio Professional Drivers relied on an installer script. In this release, the installer script has been eliminated and instead the drivers use standard Linux package management tools – <code>.rpm</code> and <code>.deb</code> packages – that we provide for RHEL/CentOS 6/7, Debian/Ubuntu, and SUSE 12/15. Standardized packaging makes installations and upgrades easier for administrators. Those needing custom installations (e.g.&nbsp;installations into a non-standard directory), can still download the <code>.tar</code> file. For step-by-step instructions see <a href="https://docs.rstudio.com/pro-drivers/installation/">Installing RStudio Professional Drivers</a>.</p>
+<ul>
+<li><strong>Breaking change</strong>. Installing 1.6.0 drivers on top of existing drivers could cause issues. Administrators should uninstall existing drivers and remove driver entries in <code>odbcinst.ini</code> before installing version 1.6.0. See <a href="https://docs.rstudio.com/pro-drivers/installation/">Installing RStudio Professional Drivers</a>.</li>
+<li><strong>Breaking change</strong>. Installing 1.6.0 drivers no longer updates <code>odbcinst.ini</code>. Administrators should manually add entries to <code>odbcinst.ini</code> based on <code>odbcinst.ini.sample</code> which is included in driver packaging. See <a href="https://docs.rstudio.com/pro-drivers/installation/">Installing RStudio Professional Drivers</a>.</li>
+</ul>
+<h2 id="using-with-python" class="anchored">Using with Python</h2>
+<p>RStudio Professional Drivers can be used with both R and Python. You can use the drivers with Jupyter Notebooks and JupyterLab sessions that launch from <a href="https://blog.rstudio.com/2019/09/19/rstudio-1-2-5-release/">RStudio Server Pro 1.2.5</a>. You can also use the drivers with Jupyter Notebooks that are published to <a href="https://blog.rstudio.com/2019/01/17/announcing-rstudio-connect-1-7-0/">RStudio Connect 1.7.0</a>+.</p>
+<h2 id="a-note-about-write-backs" class="anchored">A note about write-backs</h2>
+<p>RStudio Professional Drivers are just one part of a complex ODBC connection chain designed for doing data science. Typical data science tasks involve querying and extracting subsets of data into R. It can be tempting to use the ODBC connection chain for data engineering tasks such as bulk loads, high speed transactions, and general purpose ETL. However, heavy-duty data engineering tasks are better done with specialized third-party tools. We recommend using the ODBC connection chain primarily for querying and analyzing data.</p>
+<p><img align="center" src="odbc-data-connectors-white.png" alt="ODBC Data Connectors"></p>
+<p>While doing data science, it is often handy to write data from R into databases. ODBC write-backs can be challenging when creating tables or inserting records. Standards vary wildly across data sources, and matching data types to data sources can be exacting. Compared to specialized third-party tools, ODBC write-backs tend to be slow. We recommend ODBC write-backs from R only when appropriate and only for small tables.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

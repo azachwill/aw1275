@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-10-21">
+<meta name="description" content="This post introduces and walks through shinytableau, a package that allows you to create dashboard extensions that embed Shiny apps in Tableau. Users can take advantage of R’s powerful visualization and reporting capabilities when working in Tableau dashboards.">
+
+<title>Embedding Shiny Apps in Tableau Dashboards Using shinytableau</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Embedding Shiny Apps in Tableau Dashboards Using shinytableau</h1>
+
+<p class="date">2021-10-21</p>
+</header>
+
+<p><sup> Screenshot of a Tableau dashboard with a shinytableau extension </sup></p>
+<p>At RStudio, we strive to help you <a href="https://blog.rstudio.com/2021/03/18/bi-and-data-science-the-tradeoffs/" target="_blank" rel="noopener noreferrer">combine the power of code-first data science with the other tools in your toolkit</a>. Many organizations rely on <a href="https://www.tableau.com/" target="_blank" rel="noopener noreferrer">Tableau</a> for creating data dashboards, but there may be moments where you wish you could take advantage of R’s powerful reporting and visualization capabilities as well.</p>
+<p>With the experimental <a href="https://rstudio.github.io/shinytableau/index.html" target="_blank" rel="noopener noreferrer">shinytableau</a> package, you can use the power of R and Shiny to customize objects that you embed in your Tableau dashboards. This package opens up the possibility to include interactive features beyond Tableau’s native capabilities, allowing you to be more flexible in meeting your organization’s data needs.</p>
+<h2 id="embed-custom-r-objects-in-a-tableau-dashboard" class="anchored">Embed Custom R Objects in a Tableau Dashboard</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/image2.png" class="img-fluid"></p>
+<p></p><figcaption>Screenshot of Tableau barchart visualization and ggplot2 violin plot visualization together on a Tableau dashboard</figcaption><p></p>
+</figure>
+</div>
+<p>Is that a ggplot2 visualization in Tableau? With shinytableau, you can sit Tableau’s visualizations side-by-side with anything you can create in a Shiny application, including custom charts created with ggplot2. Since the Shiny app is embedded in Tableau, users of the dashboard won’t need to learn R or even realize they’re using a different tool.</p>
+<h2 id="configure-shiny-apps-to-talk-to-tableau" class="anchored">Configure Shiny Apps to “Talk” to Tableau</h2>
+<p>Say you want to interactively use your extension with Tableau, such as pulling data from a worksheet to populate your chart. You can use Shiny to create a friendly user interface for specifying settings for your extension. With the right configuration, your Shiny app and Tableau can interact so that you can tell a cohesive story in your Tableau dashboard.</p>
+<script src="https://fast.wistia.com/embed/medias/9zhoe1gnar.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:53.96% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_9zhoe1gnar videoFoam=true" style="height:100%;position:relative;width:100%">
+<div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;">
+<img src="https://fast.wistia.com/embed/medias/9zhoe1gnar/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;">
+</div>
+</div>
+</div>
+</div>
+<h2 id="deploy-and-host-shiny-apps-for-production" class="anchored">Deploy and Host Shiny Apps for Production</h2>
+<p>You can deploy shinytableau extensions like any other Shiny app, which allows you to use them in production. RStudio offers RStudio Connect and shinyapps.io as options to publish and host your Shiny apps. Read more on the <a href="https://rstudio.github.io/shinytableau/articles/deployment.html" target="_blank" rel="noopener noreferrer">Deployment and Hosting</a> page of the shinytableau documents.</p>
+<h2 id="how-to-use-shinytableau" class="anchored">How to Use shinytableau</h2>
+<p>The authors of the shinytableau package, Joe Cheng, Richard Iannone, and Javier Luraschi, wrote a <a href="https://rstudio.github.io/shinytableau/articles/shinytableau.html" target="_blank" rel="noopener noreferrer">great tutorial on getting started with shinytableau</a>. We highly recommend going through the tutorial to get a full understanding of the components of shinytableau, how they work together, and why each step is needed.</p>
+<p>Here, we’ll break down the main steps of creating the authors’ <code>ggviolin</code> extension and how to embed it in Tableau’s <a href="https://www.tableau.com/solutions/gallery/superstore" target="_blank" rel="noopener noreferrer">Superstore sample workbook</a>. Note that the violin plot in the videos has an applied palette and theme while the violin plot in the tutorial does not. Like any ggplot2 visualization, you can customize the plot to look how you would like!</p>
+<p>Let’s begin in your RStudio console.</p>
+<p><strong>1. Start a <a href="https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects" target="_blank" rel="noopener noreferrer">new RStudio project</a></strong></p>
+<p><strong>2. Install packages</strong></p>
+<p>Install your required packages. In addition to the packages you need for your Shiny app, you will also need remotes and shinytableau.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"rstudio/shinytableau"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>3. Edit the <code>manifest.yml</code> file</strong></p>
+<p>Once shinytableau is installed, run the code below to open the <code>manifest.yml</code> file. Edit the metadata to fit your extension. See an example in the <a href="https://github.com/rstudio/shinytableau/blob/7790a566dcef9092863ad231fd58ba14596a6300/inst/examples/ggviolin/manifest.yml" target="_blank" rel="noopener noreferrer">shinytableau Github repository</a>.</p>
+<p><code>{{r, eval = FALSE}} shinytableau::yaml_skeleton()</code></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<figure>
+<img src="images/image3.png" title="image_tooltip" class="img-fluid">
+</figure>
+<p></p><figcaption>Example of the manifest.yml file produced in shinytableau which details the metadata that you can provide your shinytableau extension</figcaption><p></p>
+</figure>
+</div>
+<p><strong>4. Create the shinytableau extension Shiny app</strong></p>
+<p>The next step is to create the extension. In addition to creating a Shiny app, you also need to configure the app so that it can interact with Tableau. This is the most technical part of the whole workflow and the tutorial details how to do this thoughtfully and in detail.</p>
+<p>You can use the <code>ggviolin</code> app code in the <a href="https://github.com/rstudio/shinytableau/blob/7790a566dcef9092863ad231fd58ba14596a6300/inst/examples/ggviolin/app.R" target="_blank" rel="noopener noreferrer">shinytableau Github repository</a> as an example. Save this file as <code>app.R</code> in your project.</p>
+<p><strong>5. Run the app and download the <code>.trex</code> file</strong></p>
+<p>Run the <code>app.R</code> file and a dialogue box will appear. Click “Download” to download a <code>.trex</code> file, which is what Tableau will use to create the extension.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<figure>
+<img src="images/image4.png" title="image_tooltip" class="img-fluid">
+</figure>
+<p></p><figcaption>Dialogue box for the shinytableau extension where you can downlown the .trex file</figcaption><p></p>
+</figure>
+</div>
+<p>Now, let’s move to Tableau. Be sure to leave your Shiny app running in RStudio! Otherwise, the connection will be lost and Tableau will not be able to open the extension.</p>
+<p><strong>6. Open the Superstore sample workbook in Tableau</strong></p>
+<p>The Superstore workbook should be available under Sample Workbooks:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<figure>
+<img src="images/image5.png" title="image_tooltip" class="img-fluid">
+</figure>
+<p></p><figcaption>First page of Tableau where you can open the Superstore workbook</figcaption><p></p>
+</figure>
+</div>
+<p>If you want to create the same violin plots as you see in the images in this post, go to the “Performance” workbook. Under “Measure Names”, you can find “Profit Ratio”. Drag “Profit Ratio” under “Marks”.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<figure>
+<img src="images/image6.png" title="image_tooltip" class="img-fluid">
+</figure>
+<p></p><figcaption>Screenshot of Superstore workbook’s measures with Profit Ration under Marks</figcaption><p></p>
+</figure>
+</div>
+<p><strong>7. Create the dashboard and load .trex file</strong></p>
+<p>Go to “Dashboard” then “New Dashboard”. In the new dashboard, drag the “Performance” workbook to where it says “Drop Sheets Here”, and then drag the “Extension” object to the dashboard. The “Add an Extension” box will automatically open.</p>
+<p>Click “Access Local Extensions”, which will open a window. Navigate to and open your .trex file. Tableau will ask if you agree to open the extension. Click “OK” and your extension will appear in the dashboard.</p>
+<script src="https://fast.wistia.com/embed/medias/glqjbeolmq.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:60.42% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_glqjbeolmq videoFoam=true" style="height:100%;position:relative;width:100%">
+<div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;">
+<img src="https://fast.wistia.com/embed/medias/glqjbeolmq/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;">
+</div>
+</div>
+</div>
+</div>
+<p><strong>8. Configure the extension</strong></p>
+<p>The Shiny app is in Tableau, but it doesn’t know what data to use. The next step is configuring the extension so that it uses the “Performance” worksheet data to render the violin plot.</p>
+<p>Click the triangle button of the extension object, then go to “Configure”. This will open a dialogue box created in the Shiny app.</p>
+<p>Fill out the form. Give it a title, choose the “Performance” worksheet, and select “Category” as the dimension and “AGG(Profit Ratio)” as the measure.</p>
+<script src="https://fast.wistia.com/embed/medias/gwzb58ff56.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:55.83% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_gwzb58ff56 videoFoam=true" style="height:100%;position:relative;width:100%">
+<div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;">
+<img src="https://fast.wistia.com/embed/medias/gwzb58ff56/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;">
+</div>
+</div>
+</div>
+</div>
+<p>When you click “OK”, you will see the violin plot populate in the extension object. Congratulations! With the shinytableau package, you created a Tableau dashboard extension using R and Shiny.</p>
+<h3 id="conclusion" class="anchored">Conclusion</h3>
+<p>Using the power of R and Shiny, you can combine your available tools to create insightful dashboards. The shinytableau package is still experimental and <a href="https://community.rstudio.com/?_ga=2.14181236.216058284.1634563605-1803916348.1631026563" target="_blank" rel="noopener noreferrer">we would love your feedback</a> on what you hope to see from the package.</p>
+<h3 id="learn-more" class="anchored">Learn More</h3>
+<p>We recommend reviewing the <a href="https://rstudio.github.io/shinytableau/articles/shinytableau.html?_ga=2.118303690.216058284.1634563605-1803916348.1631026563" target="_blank" rel="noopener noreferrer">tutorial</a> for shinytableau to learn more about how to customize it to your needs.</p>
+<p>Looking for other ways of leveraging the power of R and Python with Tableau? Last week, we announced <a href="https://blog.rstudio.com/2021/10/12/rstudio-connect-2021-09-0-tableau-analytics-extensions/" target="_blank" rel="noopener noreferrer">support for Tableau Analytics Extensions on RStudio Connect</a>, which allows you to create calculated fields in workbooks that can execute R and Python scripts outside of the Tableau environment.</p>
+<p><strong>Learn more about leveraging business intelligence tools like Tableau alongside open source data science at our RStudio Community Enterprise Meetup on <a href="https://www.meetup.com/RStudio-Enterprise-Community-Meetup/events/281209187/" target="_blank" rel="noopener noreferrer">Leveraging R &amp; Python in Tableau with RStudio Connect</a> on Friday, October 29, 2021.</strong></p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

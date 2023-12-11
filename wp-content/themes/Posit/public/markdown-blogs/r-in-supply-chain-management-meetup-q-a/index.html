@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-06-17">
+<meta name="description" content="Supply chain management presents a number of interesting and challenging problems to solve in topics such as demand and supply planning, inventory management, and forecasting. This post dives into questions from the R in Supply Chain Management meetup with Nicolas Nguyen.">
+
+<title>R in Supply Chain Management: Meetup Q&amp;A</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">R in Supply Chain Management: Meetup Q&amp;A</h1>
+
+<p class="date">2021-06-17</p>
+</header>
+
+<p>Supply chain management presents several unique challenges, with supply chain resilience particularly relevant due to disruptions from the pandemic. With thousands of SKUs and multi-tiered distribution networks, teams are using R and Python to improve forecasts, speed up operational planning, simulate variability, and design efficient supply chains.</p>
+<p>The RStudio Enterprise Community group recently hosted an R in Supply Chain Management <a href="https://community.rstudio.com/t/recording-of-r-in-supply-chain-management-rstudio-enterprise-virtual-meetup/104459" target="_blank">meetup</a> featuring Nicolas Nguyen, Digital Supply Chain and Global S&amp;OP Leader at Carl Zeiss Meditec. Nicolas shared the work that he is doing with Shiny to balance demand and supply to support sales. Using Shiny, he has designed powerful, scalable, and reproducible applications for the business.</p>
+<a style="display: block; text-align:center;" href="https://www.youtube.com/watch?v=rzs6aSr4XoU" target="_blank"><img src="https://videoapi-muybridge.vimeocdn.com/animated-thumbnails/image/a3948c82-214b-4b6a-b348-fcdad00cf415.gif?ClientID=vimeo-core-prod&amp;Date=1623431854&amp;Signature=b83235c85c3666fcc6ff134adb0f8df8c6e9db2b" alt="R in Supply Chain Management with Nicolas Nguyen | Carl Zeiss Meditec" style=" max-height:100%; max-width:100%;"></a>
+<div data-align="right">
+Full meetup recording <a href="https://www.youtube.com/watch?v=rzs6aSr4XoU" target="_blank">here</a>
+</div>
+<p></p>
+<p>It was awesome to see the beautiful applications that Nicolas built, as well as the reactions and support among the supply chain community that came together for the event. His Shiny applications served as inspiration for many of us that attended.</p>
+<p>While we had time for a handful of questions during the session, I’ve included the full Q&amp;A below, which also includes Nicolas’ response to any questions that went unanswered.</p>
+<p>We have paraphrased and distilled portions of the responses for brevity and narrative quality.</p>
+<h2 id="meetup-qa" class="anchored">Meetup Q&amp;A:</h2>
+<p><strong>How long did this take to create and what are the libraries used?</strong></p>
+<p><strong>Nicolas:</strong> I created the R script to calculate the projected inventories and replenishment plan in 2017 over a few days (with trial &amp; error). Since then, I have been reusing the same code with a bit of improvements. The libraries used are dplyr, DT, tidyverse, and lubridate.</p>
+<p>Depending on the complexity, the Shiny applications took anywhere from 4 hours to a couple of days.</p>
+<p><strong>Can you provide additional background about the algorithms for the prescriptive analytics, how you build supply chain scenarios, and how you find recommendations?</strong></p>
+<p><strong>Nicolas:</strong> Yes, I will also create some examples of prescriptive analytics to share with the group within a few months. The idea is to create a “virtual supply planning assistant” that is going to analyze a situation (based on our code &amp; parameters we defined) to propose potential solutions.</p>
+<p>A few examples of supply chain scenarios are:</p>
+<ul>
+<li>If sales grow 20% above the current level in the next 6-12 months, will we have enough production capacities to answer this demand?</li>
+<li>Should we anticipate production and build stock to be prepared?<br>
+</li>
+<li>Could we play on some safety stock levels in some markets, or shorter delivery lead time (shipping by air instead of sea), to reduce the production demand or accelerate our supplies?</li>
+<li>Could we play on the product mix and use the machines on a certain type of “similar” product to increase the overall output?</li>
+<li>In case of shortages, can we supply earlier to the market by doing a partial air shipment? Can we ship from another market?</li>
+</ul>
+<p><strong>Do you have any suggestions to start developing similar tools? Any material or examples related to Supply &amp; Demand?</strong></p>
+<p><strong>Nicolas:</strong> Perhaps the easiest way to get started is to look at the existing tools (Excel, APS, SAP, etc.) used by the supply chain team in your company.</p>
+<p>Looking at the way they are used for data transformation, analysis, and charts - what are the problems faced (if any)? What is the degree of automation? Then, do the same thing using R &amp; Shiny, and see if it answers some challenges.</p>
+<p>I will create a github in July/August to share a few examples:</p>
+<ul>
+<li>Basic Projected Inventories &amp; Coverages</li>
+<li>Single level DRP @ Monthly and Weekly Buckets</li>
+<li>Multi-Level DRP</li>
+<li>BOM (Bill Of Material) calculation</li>
+<li>Calculation of Dependent Demand (ex.: Kits / Promo Packs)</li>
+<li>Discontinuation of Products and NPL (New Product Launch) to replace them</li>
+<li>FeFo (First Expired First Out) calculation</li>
+<li>S&amp;OP (Sales &amp; Operations Planning) process app: illustrating Production Capacities</li>
+</ul>
+<p><strong>Do you have an example of using R for the right inventory in distribution channels and warehouses across geography depending on demand sensing?</strong></p>
+<p><strong>Nicolas:</strong> I currently do not have this, but this is to be created! :)</p>
+<p><strong>For products that have 0 demand/supply for a time-point, would the forecasting algorithm impute or take actual 0?</strong></p>
+<p><strong>Nicolas:</strong> The current algorithm works on projected coverages. If there is 0 demand next month but some demand the following months, it will maintain a coverage to be aligned with the demand of the following months. For any specific need, it’s always possible to modify the code to get the expected behaviour.</p>
+<p><strong>What did you use for the plots, graphs, and tables you are showing?</strong></p>
+<p><strong>Nicolas:</strong> The tables are <a href="https://rstudio.github.io/DT/" target="_blank">DT</a> and <a href="https://github.com/kcuilla/reactablefmtr" target="_blank">reactablefmtr</a>, and the plots are <a href="https://github.com/tidyverse/ggplot2" target="_blank">ggplot2</a> and <a href="https://jkunst.com/highcharter/">highcharter</a>. The Sankey diagrams are <a href="https://christophergandrud.github.io/networkD3/" target="_blank">networkD3</a>. I also used <a href="https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html" target="_blank">kableExtra</a>, <a href="https://github.com/renkun-ken/formattable" target="_blank">formattable</a>, and <a href="http://shinyapps.dreamrs.fr/shinyWidgets/" target="_blank">shinywidgets</a>.</p>
+<p><strong>Did you calculate the value you added to your company or the money you saved them? If so, how?</strong></p>
+<p><strong>Nicolas:</strong> The easiest calculation was on the automation of the process. People could spend 2 or 3 months per year just on data processing. This multiplied by the number of planners, indicates the money saved only by automating the process. Considering that R &amp; Shiny are free, this is a quick win!</p>
+<p>We also invested in RStudio Connect to be able to share those apps with different users (Supply Chain, Sales, Finance, Country Managers). The cost is really low compared to the savings done through automation and the time saved in sharing the analysis with different stakeholders.</p>
+<p>Then there were all the benefits around a proper calculation of demand &amp; supply planning (reduction of shortages, management of allocations, etc.) that we did not quantify but mentioned.</p>
+<p><strong>Is there any interaction with a database with your applications?</strong></p>
+<p><strong>Nicolas:</strong> Yes, for some apps using <a href="https://jrowen.github.io/rhandsontable/" target="_blank">rhandsontable</a> - (I also should try <a href="https://github.com/DillonHammill/DataEditR" target="_blank">DataEditR</a>). The user can input/change some data and launch a new calculation.</p>
+<p><strong>Where do you host your app? What about the security parameters and authorization matrix?</strong></p>
+<p><strong>Nicolas:</strong> We are using RStudio Connect to host the various Shiny applications (and R Markdown files) behind the company firewall. Using RStudio Connect, we can decide which users can see which app and we then define a list of users per app.</p>
+<p><strong>Did you build an API to communicate the data?</strong></p>
+<p>As per today, we haven’t built an API to communicate the data.</p>
+<h2 id="join-the-supply-chain-community-conversation" class="anchored">Join the Supply Chain Community Conversation:</h2>
+<p>Thank you to Nicolas for an awesome presentation on how he is using Shiny today. With all the interest from the community in this topic, we’d love to continue the discussion and connect us all through:</p>
+<ul>
+<li><a href="https://www.meetup.com/RStudio-Enterprise-Community-Meetup/" target="_blank">Future meetups</a> - Join us on July 26th for another R in Supply Chain Management event (details to be provided soon)</li>
+<li><a href="https://r4ds.io/join" target="_blank">R for Data Science Online Learning Community</a> (Slack channel: #chat-supply_chain)</li>
+<li>RStudio Community</li>
+</ul>
+<p>It would be great to hear from you on <a href="https://community.rstudio.com/t/recording-of-r-in-supply-chain-management-rstudio-enterprise-virtual-meetup/104459/2" target="_blank">RStudio Community</a> about your goals, challenges, and successes that you are having in this space.</p>
+<ul>
+<li>How did code-based solutions help you pivot and respond to the pandemic?</li>
+<li>How are you using R to succeed in inventory management, inventory reduction and replenishment, delivery/shipments optimization, or demand forecasting?</li>
+<li>If you had a magic wand to deliver unlimited resources and budget, what projects would you be working on?</li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

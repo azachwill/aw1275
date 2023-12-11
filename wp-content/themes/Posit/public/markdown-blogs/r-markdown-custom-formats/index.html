@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2016-03-21">
+
+<title>R Markdown Custom Formats</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">R Markdown Custom Formats</h1>
+
+<p class="date">2016-03-21</p>
+</header>
+
+<p>The R Markdown package ships with a raft of output formats including HTML, PDF, MS Word, R package vignettes, as well as Beamer and HTML5 presentations. This isn’t the entire universe of available formats though (far from it!). R Markdown formats are fully extensible and as a result there are several R packages that provide additional formats. In this post we wanted to highlight a few of these packages, including:</p>
+<ul>
+<li><p><a href="http://rstudio.github.io/tufte/">tufte</a> — Documents in the style of Edward Tufte</p></li>
+<li><p><a href="https://github.com/rstudio/rticles">rticles</a> — Formats for creating LaTeX based journal articles</p></li>
+<li><p><a href="https://github.com/juba/rmdformats">rmdformats</a> — Formats for creating HTML documents</p></li>
+</ul>
+<p>We’ll also discuss how to create your own custom formats as well as re-usable document templates for existing formats.</p>
+<h3 id="using-custom-formats" class="anchored">Using Custom Formats</h3>
+<p>Custom R Markdown formats are just R functions which return a definition of the format’s behavior. For example, here’s the metadata for a document that uses the <code>html_document</code> format:</p>
+<pre><code>---
+title: "My Document"
+output: html_document
+---</code></pre>
+<p>When rendering, R Markdown calls the <code>rmarkdown::html_document</code> function to get the definition of the output format. A custom format works just the same way but is also qualified with the name of the package that contains it. For example, here’s the metadata for a document that uses the <code>tufte_handout</code> format:</p>
+<pre><code>---
+title: "My Document"
+output: tufte::tufte_handout
+---</code></pre>
+<p>Custom formats also typically register a template that helps you get started with using them. If you are using RStudio you can easily create a new document based on a custom format via the <strong>New R Markdown</strong> dialog:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2016/03/screen-shot-2016-03-21-at-11-16-04-am.png" class="img-fluid"></p>
+<p></p><figcaption>Screen Shot 2016-03-21 at 11.16.04 AM</figcaption><p></p>
+</figure>
+</div>
+<h3 id="tufte-handouts" class="anchored">Tufte Handouts</h3>
+<p>The <a href="http://rstudio.github.io/tufte/">tufte</a> package includes custom formats for creating documents in the style that <a href="http://www.edwardtufte.com/tufte/">Edward Tufte</a> uses in his books and handouts. Tufte’s style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography. Formats for both LaTeX and HTML/CSS output are provided (these are in turn based on the work in <a href="https://github.com/tufte-latex/tufte-latex">tufte-latex</a> and <a href="https://github.com/edwardtufte/tufte-css">tufte-css</a>). Here’s some example output from the LaTeX format:</p>
+<p><img src="https://rmarkdown.rstudio.com/images/tufte-handout.png" class="img-fluid"></p>
+<p>If you want LaTeX/PDF output, you can use the <code>tufte_handout</code> format for handouts and <code>tufte_book</code> for books. For HTML output, you use the <code>tufte_html</code> format. For example:</p>
+<pre><code>---
+title: "An Example Using the Tufte Style"
+authors: "John Smith"
+output:
+  tufte::tufte_handout: default
+  tufte::tufte_html: default
+---</code></pre>
+<p>You can install the tufte package from CRAN as follows:</p>
+<pre><code>install.packages("tufte")</code></pre>
+<p>See the <a href="http://rstudio.github.io/tufte/">tufte package website</a> for additional documentation on using the Tufte custom formats.</p>
+<h3 id="journal-articles" class="anchored">Journal Articles</h3>
+<p>The <strong>rticles</strong> package provides a suite of custom <a href="https://rmarkdown.rstudio.com/">R Markdown</a> LaTeX formats and templates for various journal article formats, including:</p>
+<ul>
+<li><p><a href="http://www.jstatsoft.org/">JSS</a> articles</p></li>
+<li><p><a href="http://journal.r-project.org/">R Journal</a> articles</p></li>
+<li><p><a href="http://ctex.org/">CTeX</a> documents</p></li>
+<li><p><a href="http://www.acm.org/">ACM</a> articles</p></li>
+<li><p><a href="http://pubs.acs.org/">ACS</a> articles</p></li>
+<li><p><a href="https://www.elsevier.com/">Elsevier</a> journal submissions.</p></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2016/03/screen-shot-2016-03-21-at-11-48-40-am.png" class="img-fluid"></p>
+<p></p><figcaption>Screen Shot 2016-03-21 at 11.48.40 AM</figcaption><p></p>
+</figure>
+</div>
+<p>You can install the <a href="https://github.com/rstudio/rticles">rticles</a> package from CRAN as follows:</p>
+<pre><code>install.packages("rticles")</code></pre>
+<p>See the <a href="https://github.com/rstudio/rticles">rticles repository</a> for more details on using the formats included with the package. The <a href="https://github.com/rstudio/rticles/tree/master/R">source code</a> of the rticles package is an excellent resource for learning how to create LaTeX based custom formats.</p>
+<h3 id="rmdformats-package" class="anchored">rmdformats Package</h3>
+<p>The <a href="https://github.com/juba/rmdformats">rmdformats</a> package from Julien Barnier includes three HTML based document formats that provide nice alternatives to the default html_document format that is included in the rmarkdown package. The <code>readthedown</code> format is inspired by the <a href="https://readthedocs.org/">Read the docs</a> Sphinx theme and is fully responsive, with collapsible navigation:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2016/03/readthedown.png" class="img-fluid"></p>
+<p></p><figcaption>readthedown</figcaption><p></p>
+</figure>
+</div>
+<p>The <code>html_docco</code> and <code>html_clean</code> formats both provide provide automatic thumbnails for figures with lightbox display, and html_clean provides an automatic and dynamic table of contents:</p>
+<p><img src="https://rstudioblog.files.wordpress.com/2016/03/html_docco.png" class="img-fluid" alt="html_docco"> <img src="https://rstudioblog.files.wordpress.com/2016/03/html_clean.png" class="img-fluid" alt="html_clean"></p>
+<p>You can install the <a href="https://github.com/juba/rmdformats">rmdformats</a> package from CRAN as follows:</p>
+<pre><code>install.packages("rmdformats")</code></pre>
+<p>See the <a href="https://github.com/juba/rmdformats">rmdformats repository</a> for documentation on using the <code>readthedown</code>, <code>html_docco</code>, and <code>html_clean</code> formats.</p>
+<h3 id="creating-new-formats" class="anchored">Creating New Formats</h3>
+<p>Hopefully checking out some of the custom formats described above has you inspired to create your very own new formats. The R Markdown website includes documentation on <a href="https://rmarkdown.rstudio.com/developer_custom_formats.html">how to create a custom format</a>. In addition, the source code of the <a href="https://github.com/rstudio/tufte">tufte</a>, <a href="https://github.com/rstudio/rticles">rticles</a>, and <a href="https://github.com/juba/rmdformats">rmdformats</a> packages provide good examples to work from.</p>
+<p>Short of creating a brand new format, it’s also possible to create a re-usable document template that shows up within the RStudio <strong>New R Markdown</strong> dialog box. This would be appropriate if an existing template met your needs but you wanted to have an easy way to create documents with a pre-set list of options and skeletal content. See the article on <a href="https://rmarkdown.rstudio.com/developer_document_templates.html">document templates</a> for additional details on how to do this.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

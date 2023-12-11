@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2018-10-17">
+
+<title>Announcing RStudio Package Manager</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Announcing RStudio Package Manager</h1>
+
+<p class="date">2018-10-17</p>
+</header>
+
+<p>We’re excited to announce the general availability of our newest RStudio professional product, <a href="https://rstudio.com/products/package-manager">RStudio Package Manager</a>. RStudio Package Manager helps your team, department, or entire organization centralize and organize R packages.</p>
+<p>Get started with the <a href="https://rstudio.com/products/package-manager/eval">45 day evaluation</a> today!</p>
+<p>With more than 13,000 packages in the R ecosystem, managing the packages you and your teams need can be challenging. R users naturally want the latest, but everyone benefits from reproducibility, stability, and security in production code.</p>
+<p><img src="rspm-overview.png" class="img-fluid"></p>
+<p>RStudio Package Manager is an on-premises server product that allows R users and IT to work together to create a central repository for R packages. RStudio Package Manager supports your team wherever they run R, from bash scripts and Docker containers to RStudio, RStudio Server (Pro), Shiny Server (Pro), and RStudio Connect.</p>
+<p><img src="rspm-stakeholders.png" class="img-fluid"></p>
+<p>Administrators set up the server using a scriptable command line interface (CLI), and R users install packages from the server with their existing tools.</p>
+<p><img src="rspm-release-setup.png" class="img-fluid"></p>
+<p>We’ve spent the last year working with alpha and beta customers to ensure RStudio Package Manager is ready to meet the needs of your development and production use cases.</p>
+<h3 id="cran" class="anchored">CRAN</h3>
+<p>If you’re an R user, you know about CRAN. If you’re someone who helps R users get access to CRAN, you probably know about network exceptions on every production node. With RStudio Package Manager, you can enable your R users to access CRAN without requiring a network exception on every production node. You can also automate CRAN updates on your schedule. You can choose to optimize disk usage and only download the packages you need or, alternatively, download everything up-front for completely offline networks.</p>
+<p>Currently, RStudio Package Manager does not serve binary packages from CRAN – only source packages. This limitation won’t affect server-based users, but may impact desktop users. Future versions of RStudio Package Manager will address this limitation.</p>
+<p><img src="rspm-release-cran.png" class="img-fluid"></p>
+<h3 id="subsets-of-cran" class="anchored">Subsets of CRAN</h3>
+<p>We know some projects call for even tighter restrictions. RStudio Package Manager helps admins create approved subsets of CRAN packages, and ensures that those subsets stay stable even as packages are added or updated over time.</p>
+<p><img src="rspm-release-cmd.png" class="img-fluid"></p>
+<h3 id="internal-packages-and-packages-from-github" class="anchored">Internal Packages and Packages from GitHub</h3>
+<p>Sharing internal R code has never been easier. Administrators can add internal packages using the CLI. If your internal packages live in Git, RStudio Package Manager can automatically track your Git repositories and make commits or tagged releases accessible to users. The same tools make it painless to supplement CRAN with R packages from GitHub.</p>
+<p><img src="rspm-release-git.png" class="img-fluid"></p>
+<h3 id="optimized-for-r" class="anchored">Optimized for R</h3>
+<p>Regardless of your use case, RStudio Package Manager provides a seamless experience optimized for R users. Packages are versioned, automatically keeping older versions accessible to users, tools like Packrat, and platforms like RStudio Connect.</p>
+<p><img src="rspm-release-archive.png" class="img-fluid"></p>
+<p>RStudio Package Manager also versions the repositories themselves, preserving the ability to always return the same set of R packages or receive the latest versions.</p>
+<p><img src="rspm-release-repoversion.png" class="img-fluid"></p>
+<p>RStudio Package Manager records usage statistics. These metrics help administrators conduct audits and give R users an easy way to discover popular and useful packages.</p>
+<p><img src="rspm-release-usage.png" class="img-fluid"></p>
+<h3 id="download-today" class="anchored">Download Today</h3>
+<p>Get started with the <a href="https://rstudio.com/products/package-manager/eval">45-day evaluation</a> or check out our <a href="http://demo.rstudiopm.com">demo server</a>. Read the <a href="http://docs.rstudio.com/rspm/admin">admin guide</a> for answers to more questions and a guide to installation and setup. <a href="mailto:sales@rstudio.com">Contact Sales</a> for more information.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

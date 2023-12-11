@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-05-29">
+<meta name="description" content="A new release of pins is available on CRAN today. This release adds support to time travel across dataset versions, which improves collaboration and protects your code from breaking when remote resources change unexpectedly.">
+
+<title>posit-blogs - pins 0.4.0: Versioning</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">pins 0.4.0: Versioning</h1>
+
+<p class="date">2020-05-29</p>
+</header>
+
+<blockquote>
+<p class="body-md-regular body-sm-regular">
+Please note that the information presented in this post reflects the package as it stood when initially released, and may now be outdated. For the most up-to-date information, kindly refer to <a href="https://pins.rstudio.com/" class="uri">https://pins.rstudio.com/</a>.
+</p>
+</blockquote>
+<p>A new version of <code>pins</code> is available on CRAN today, which adds support for <a href="http://pins.rstudio.com/articles/advanced-versions.html">versioning</a> your datasets and <a href="http://pins.rstudio.com/articles/boards-dospace.html">DigitalOcean Spaces</a> boards!</p>
+<p>As a quick recap, the pins package allows you to cache, discover and share resources. You can use <code>pins</code> in a wide range of situations, from downloading a dataset from a URL to creating complex automation workflows (learn more at <a href="https://pins.rstudio.com">pins.rstudio.com</a>). You can also use <code>pins</code> in combination with TensorFlow and Keras; for instance, use <a href="https://tensorflow.rstudio.com/tools/cloudml">cloudml</a> to train models in cloud GPUs, but rather than manually copying files into the GPU instance, you can store them as pins directly from R.</p>
+<p>To install this new version of <code>pins</code> from CRAN, simply run:</p>
+<pre><code>install.packages("pins")</code></pre>
+<p>You can find a detailed list of improvements in the pins <a href="https://github.com/rstudio/pins/blob/master/NEWS.md">NEWS</a> file.</p>
+<h1 id="versioning">Versioning</h1>
+<p>To illustrate the new versioning functionality, let’s start by downloading and caching a remote dataset with pins. For this example, we will download the weather in London, this happens to be in JSON format and requires <code>jsonlite</code> to be parsed:</p>
+<pre><code>library(pins)
+
+weather_url &lt;- "https://samples.openweathermap.org/data/2.5/weather?q=London,uk&amp;appid=b6907d289e10d714a6e88b30761fae22"
+
+pin(weather_url, "weather") %&gt;%
+  jsonlite::read_json() %&gt;%
+  as.data.frame()</code></pre>
+<pre><code>  coord.lon coord.lat weather.id weather.main     weather.description weather.icon
+1     -0.13     51.51        300      Drizzle light intensity drizzle          09d</code></pre>
+<p>One advantage of using <code>pins</code> is that, even if the URL or your internet connection becomes unavailable, the above code will still work.</p>
+<p>But back to <code>pins 0.4</code>! The new <code>signature</code> parameter in <code>pin_info()</code> allows you to retrieve the “version” of this dataset:</p>
+<pre><code>pin_info("weather", signature = TRUE)</code></pre>
+<pre><code># Source: local&lt;weather&gt; [files]
+# Signature: 624cca260666c6f090b93c37fd76878e3a12a79b
+# Properties:
+#   - path: weather</code></pre>
+<p>You can then validate the remote dataset has not changed by specifying its signature:</p>
+<pre><code>pin(weather_url, "weather", signature = "624cca260666c6f090b93c37fd76878e3a12a79b") %&gt;%
+  jsonlite::read_json()</code></pre>
+<p>If the remote dataset changes, <code>pin()</code> will fail and you can take the appropriate steps to accept the changes by updating the signature or properly updating your code. The previous example is useful as a way of detecting version changes, but we might also want to retrieve specific versions even when the dataset changes.</p>
+<p><code>pins 0.4</code> allows you to display and retrieve versions from services like GitHub, Kaggle and RStudio Connect. Even in boards that don’t support versioning natively, you can opt-in by registering a board with <code>versions = TRUE</code>.</p>
+<p>To keep this simple, let’s focus on GitHub first. We will register a GitHub board and pin a dataset to it. Notice that you can also specify the <code>commit</code> parameter in GitHub boards as the commit message for this change.</p>
+<pre><code>board_register_github(repo = "javierluraschi/datasets", branch = "datasets")
+
+pin(iris, name = "versioned", board = "github", commit = "use iris as the main dataset")</code></pre>
+<p>Now suppose that a colleague comes along and updates this dataset as well:</p>
+<pre><code>pin(mtcars, name = "versioned", board = "github", commit = "slight preference to mtcars")</code></pre>
+<p>From now on, your code could be broken or, even worse, produce incorrect results!</p>
+<p>However, since GitHub was designed as a version control system and <code>pins 0.4</code> adds support for <code>pin_versions()</code>, we can now explore particular versions of this dataset:</p>
+<pre><code>pin_versions("versioned", board = "github")</code></pre>
+<pre><code># A tibble: 2 x 4
+  version created              author         message                     
+  &lt;chr&gt;   &lt;chr&gt;                &lt;chr&gt;          &lt;chr&gt;                       
+1 6e6c320 2020-04-02T21:28:07Z javierluraschi slight preference to mtcars 
+2 01f8ddf 2020-04-02T21:27:59Z javierluraschi use iris as the main dataset</code></pre>
+<p>You can then retrieve the version you are interested in as follows:</p>
+<pre><code>pin_get("versioned", version = "01f8ddf", board = "github")</code></pre>
+<pre><code># A tibble: 150 x 5
+   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+          &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+ 1          5.1         3.5          1.4         0.2 setosa 
+ 2          4.9         3            1.4         0.2 setosa 
+ 3          4.7         3.2          1.3         0.2 setosa 
+ 4          4.6         3.1          1.5         0.2 setosa 
+ 5          5           3.6          1.4         0.2 setosa 
+ 6          5.4         3.9          1.7         0.4 setosa 
+ 7          4.6         3.4          1.4         0.3 setosa 
+ 8          5           3.4          1.5         0.2 setosa 
+ 9          4.4         2.9          1.4         0.2 setosa 
+10          4.9         3.1          1.5         0.1 setosa 
+# … with 140 more rows</code></pre>
+<p>You can follow similar steps for <a href="http://pins.rstudio.com/articles/boards-rsconnect.html">RStudio Connect</a> and <a href="http://pins.rstudio.com/articles/boards-kaggle.html">Kaggle</a> boards, even for existing pins! Other boards like <a href="http://pins.rstudio.com/articles/boards-s3.html">Amazon S3</a>, <a href="http://pins.rstudio.com/articles/boards-gcloud.html">Google Cloud</a>, <a href="http://pins.rstudio.com/articles/boards-dospace.html">Digital Ocean</a> and <a href="http://pins.rstudio.com/articles/boards-azure.html">Microsoft Azure</a> require you explicitly enable versioning when registering your boards.</p>
+<h1 id="digitalocean">DigitalOcean</h1>
+<p>To try out the new <a href="http://pins.rstudio.com/articles/boards-dospace.html">DigitalOcean Spaces board</a>, first you will have to register this board and enable versioning by setting <code>versions</code> to <code>TRUE</code>:</p>
+<pre><code>library(pins)
+board_register_dospace(space = "pinstest",
+                       key = "AAAAAAAAAAAAAAAAAAAA",
+                       secret = "ABCABCABCABCABCABCABCABCABCABCABCABCABCA==",
+                       datacenter = "sfo2",
+                       versions = TRUE)</code></pre>
+<p>You can then use all the functionality pins provides, including versioning:</p>
+<pre><code># create pin and replace content in digitalocean
+pin(iris, name = "versioned", board = "pinstest")
+pin(mtcars, name = "versioned", board = "pinstest")
+
+# retrieve versions from digitalocean
+pin_versions(name = "versioned", board = "pinstest")</code></pre>
+<pre><code># A tibble: 2 x 1
+  version
+  &lt;chr&gt;  
+1 c35da04
+2 d9034cd</code></pre>
+<p>Notice that enabling versions in cloud services requires additional storage space for each version of the dataset being stored:</p>
+<p><img src="images/digitalocean-spaces-pins-versioned.png" class="img-fluid" style="width:100.0%"></p>
+<p>To learn more visit the <a href="http://pins.rstudio.com/articles/advanced-versions.html">Versioning</a> and <a href="http://pins.rstudio.com/articles/boards-dospace.html">DigitalOcean</a> articles. To catch up with previous releases:</p>
+<ul>
+<li><a href="https://blog.rstudio.com/2019/11/28/pins-0-3-0-azure-gcloud-and-s3/">pins 0.3</a>: Azure, GCloud and S3</li>
+<li><a href="https://blog.rstudio.com/2019/09/09/pin-discover-and-share-resources/">pins 0.2</a>: Pin, Discover and Share Resources</li>
+</ul>
+<p>Thanks for reading along!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+
+
+
+</body></html>

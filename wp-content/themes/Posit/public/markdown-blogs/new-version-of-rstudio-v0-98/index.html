@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2013-12-03">
+
+<title>New Version of RStudio (v0.98)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">New Version of RStudio (v0.98)</h1>
+
+<p class="date">2013-12-03</p>
+</header>
+
+<p>We’re pleased to announce that the final version of RStudio v0.98 is <a href="https://www.rstudio.com/ide/download">available for download</a> now. Highlights of the new release include:</p>
+<ul>
+<li><p>An <a href="https://www.rstudio.com/ide/docs/debugging/overview">interactive debugger</a> for R that is tightly integrated with base R debugging tools (browser, recover, etc.)</p></li>
+<li><p>Numerous improvements to the Workspace pane (which is now called the Environment pane).</p></li>
+<li><p><a href="https://www.rstudio.com/ide/docs/presentations/overview">R Presentations</a> for easy authoring of HTML5 presentations that include R code, output, and graphics.</p></li>
+<li><p>A new <a href="https://www.rstudio.com/ide/docs/advanced/viewer_pane">Viewer pane</a> for displaying local web content (e.g.&nbsp;graphical output from packages like googleVis).</p></li>
+<li><p>Additional support for developing and running <a href="https://www.rstudio.com/shiny">Shiny</a> web applications.</p></li>
+<li><p>Substantially improved UI performance on Mac OS X.</p></li>
+<li><p>A <a href="https://www.rstudio.com/ide/server/">Professional Edition</a> of RStudio Server with many new capabilities for enterprise deployment.</p></li>
+</ul>
+<p>There are also lots of smaller improvements and bug fixes across the product, check out the <a href="https://www.rstudio.com/ide/docs/release_notes_v0.98.html">release notes</a> for full details.</p>
+<h3 id="debugging-tools" class="anchored">Debugging Tools</h3>
+<p>The feature we’re most excited about is the addition of a full interactive debugger to the IDE. Noteworthy capabilities of the debugger include:</p>
+<ul>
+<li><p>Setting breakpoints within the source editor, both inside and outside functions</p></li>
+<li><p>Stepping through code line by line</p></li>
+<li><p>Inspecting object values and the call stack during debugging</p></li>
+<li><p>An error inspector for quick access to tracebacks and the debugger after runtime errors</p></li>
+<li><p>Tight integration with traditional R debugging tools, such as <code>browser()</code> and <code>debug()</code></p></li>
+</ul>
+<p>Here’s a screenshot of the IDE after hitting an editor breakpoint:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2013/09/rstudiodebugger.png" class="img-fluid"></p>
+<p></p><figcaption>RStudioDebugger</figcaption><p></p>
+</figure>
+</div>
+<p>For more details on how to take advantage of the new debugging tools, see <a href="https://www.rstudio.com/ide/docs/debugging/overview">Debugging with RStudio</a>.</p>
+<h3 id="environment-pane" class="anchored">Environment Pane</h3>
+<p>The Workspace pane is now called the Environment pane and has numerous improvements, including:</p>
+<ul>
+<li><p>Browse any environment on the search path</p></li>
+<li><p>Filtering by name/value</p></li>
+<li><p>Expand lists, data frames, and S4 objects inline</p></li>
+<li><p>Use <code>str()</code> to display object values</p></li>
+<li><p>Optional grid view sortable by various attributes</p></li>
+<li><p>Many other small correctness and robustness enhancements</p></li>
+</ul>
+<h3 id="r-presentations" class="anchored">R Presentations</h3>
+<p>R Presentations enable easy authoring of HTML5 presentations. R Presentations are based on <a href="https://www.rstudio.com/ide/docs/authoring/using_markdown.html">R Markdown</a>, and include the following features:</p>
+<ul>
+<li><p>Easy authoring of HTML5 presentations based on <a href="https://www.rstudio.com/ide/docs/authoring/using_markdown.html">R Markdown</a></p></li>
+<li><p>Extensive support for authoring and previewing inside the IDE</p></li>
+<li><p>Many options for customizing layout and appearance</p></li>
+<li><p>Publishing as either a standalone HTML file or to <a href="http://rpubs.com/">RPubs</a></p></li>
+</ul>
+<p>Here’s a screenshot showing a simple presentation being authored and previewed within the IDE:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2013/09/rpresentations1.png" class="img-fluid"></p>
+<p></p><figcaption>RPresentations</figcaption><p></p>
+</figure>
+</div>
+<p>For more details see the documentation on <a href="https://www.rstudio.com/ide/docs/presentations/overview">Authoring R Presentations</a>.</p>
+<h3 id="viewer-pane" class="anchored">Viewer Pane</h3>
+<p>RStudio now includes a Viewer pane that can be used to view local web content. This includes both static web content or even a local web application created using <a href="https://www.rstudio.com/shiny">Shiny</a>, <a href="http://cran.rstudio.com/web/packages/Rook/index.html">Rook</a>, or <a href="https://public.opencpu.org/">OpenCPU</a>. This is especially useful for packages that have R bindings to Javascript data visualization libraries.</p>
+<p>The <a href="http://lamages.blogspot.com/2013/11/googlevis-047-with-rstudio-integration.html">googleVis</a> and <a href="http://www.youtube.com/watch?v=wi2fUKqHtpM">rCharts</a> packages have already been updated to take advantage of the Viewer pane. Here’s a screenshot of the googleVis integration:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2013/11/googlevis1.png" class="img-fluid"></p>
+<p></p><figcaption>googleVis</figcaption><p></p>
+</figure>
+</div>
+<p>We’re hopeful that there will be many more compelling uses of the Viewer. For more details see the article <a href="https://www.rstudio.com/ide/docs/advanced/viewer_pane">Extending RStudio with the Viewer Pane</a>.</p>
+<h3 id="shiny-integration" class="anchored">Shiny Integration</h3>
+<p>We’ve added a number of features to support development of <a href="https://www.rstudio.com/shiny/">Shiny</a> web applications, including:</p>
+<ul>
+<li><p>The ability to develop and run Shiny applications on RStudio Server (localhost and websocket proxying is handled automatically)</p></li>
+<li><p>Running Shiny applications within an IDE pane (see the discussion of the Viewer pane below for details)</p></li>
+<li><p>Create a new Shiny application from within the New Project dialog</p></li>
+<li><p>Debugging of Shiny applications using the new RStudio debugging tools.</p></li>
+</ul>
+<h3 id="mac-ui-framework" class="anchored">Mac UI Framework</h3>
+<p>In RStudio v0.98 we also migrated our Mac <a href="http://en.wikipedia.org/wiki/WebKit">WebKit</a> engine from a cross-platform framework (Qt) to <a href="http://en.wikipedia.org/wiki/Cocoa_(API)">Cocoa</a>. The original motivation for this was compatibility problems between Qt and OS X Mavericks, but as it turned out the move to Cocoa WebKit yielded substantially faster editor, scrolling, layout, and graphics performance across the board. If you are a Mac user you’ll find everything about the product snappier in v0.98.</p>
+<p>In the next major version of RStudio we’re hoping to make comparable improvements in performance on both Linux and Windows by using a more modern WebKit on those platforms as well.</p>
+<h3 id="rstudio-server-professional-edition" class="anchored">RStudio Server Professional Edition</h3>
+<p>Over the years we’ve gotten lots of feedback from larger organizations deploying RStudio Server on the features they’d like to see for production deployments of the server. With RStudio v0.98 we’re introducing a new Professional Edition of RStudio Server that incorporates much of this feedback. Highlights include:</p>
+<ul>
+<li><p>An administrative dashboard that provides insight into active sessions, server health, and monitoring of system-wide and per-user performance and resource metrics.</p></li>
+<li><p>Authentication using system accounts, ActiveDirectory, LDAP, or Google Accounts.</p></li>
+<li><p>Full support for PAM (including PAM sessions for dynamically provisioning user resources).</p></li>
+<li><p>Ability to establish per-user or per-group CPU priorities and memory limits.</p></li>
+<li><p>HTTP enhancements including support for SSL and keep-alive for improved performance.</p></li>
+<li><p>Ability to restrict access to the server by IP.</p></li>
+<li><p>Customizable server health checks.</p></li>
+<li><p>Suspend, terminate, or assume control of user sessions.</p></li>
+<li><p>Impersonate users for assistance and troubleshooting.</p></li>
+</ul>
+<p>The RStudio Server product page has <a href="https://www.rstudio.com/ide/server/">full details</a> on the Professional Edition, and an <a href="https://www.rstudio.com/ide/download/server-pro-evaluation.html">evaluation version</a> of the server is also available for download.</p>
+<h3 id="new-support-site" class="anchored">New Support Site</h3>
+<p>With this release we’re also introducing a brand new support and documentation website, please <a href="http://support.rstudio.com">visit us</a> there with questions, feedback, as well as what other improvements you’d like to see in the product.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,171 @@
+---
+title: Translating Shiny Apps for International Audiences
+date: '2022-10-17'
+slug: translating-shiny-apps-for-international-audiences
+tags:
+  - Shiny
+authors:
+  - Nicola Rennie
+description: Translation capabilities in Shiny apps can help data scientists communicate with an international audience. Nicola Rennie from Jumping Rivers shares her experience developing multilingual Shiny apps.
+alttext: Shiny hex sticker with speech bubbles point surrounding the hex. The Jumping Rivers logo is in the lower right corner.
+blogcategories:
+  - Industry
+events: blog
+---
+
+<div class="lt-gray-box">
+This is a guest post from <a href="https://nrennie.rbind.io/" target = "_blank">Nicola Rennie</a>. Nicola is a statistician and data scientist, passionate about using R to solve problems. She currently works at <a href="https://www.jumpingrivers.com/" target = "_blank">Jumping Rivers</a> having previously completed her PhD in statistics and operational research at Lancaster University. She enjoys sharing her knowledge of R, creating data visualizations, and helping clients learn from their data.
+</div>
+
+Before we get started, I want to clarify that this blog post is about developing Shiny applications in multiple *spoken* languages - not multiple programming languages. 
+
+In the last few years, we've seen many <a href="https://shiny.rstudio.com/" target = "_blank">Shiny</a> dashboards that display COVID-19 statistics. Global public health data is a perfect example of the information you need to communicate to as wide an audience as possible. And that often means in as many languages as possible. However, the vast majority of websites and apps (not just Shiny apps) are developed in English. But most of the world doesn't speak English...
+
+Language selectors are becoming more commonplace in traditional web development, and we must ensure that Shiny apps aren't left behind. That being said, multilingual Shiny apps are not straightforward to build. Translation affects almost every single aspect of a Shiny app. Something that was a simple UI element suddenly becomes a reactive expression that relies on user input. Everything, from which logo is displayed, to the legend labels in a plot, to the text in the footer, needs to update with the user’s choice of language. 
+
+There are a few packages in existence (most notably <a href="https://github.com/datasketch/shi18ny/" target = "_blank">{shi18ny}</a>) which help developers automate the translation process. However, the number of languages these packages work with is often limited, and their built-in dictionaries don't often include domain-specific terms either. So when <a href="https://www.jumpingrivers.com/" target = "_blank">Jumping Rivers</a> was tasked with creating a bilingual Shiny app, we developed the translation capabilities directly in the app itself. 
+
+<h2>How We Internationalized a Shiny App</h2>
+
+The short version: every element, whether a UI or server component, contains a call to `lang()`, which specifies the language that a user currently has selected. Okay, so it's a bit more complicated than that...
+
+<h3>The Factor Problem</h3>
+
+During the development process, we stumbled upon many little issues that cropped up because of the translation. It was one of those seemingly simple tasks that I talked about in my <a href="https://www.rstudio.com/conference/2022/talks/say-hello-to-multilingual-shiny/" target = "_blank">rstudio::conf(2022) lightning talk</a> - reordering factors.
+
+Most of you will have come across the fact that, in the absence of other instructions, R will sort your character vectors alphabetically. There are two reasons this might be a problem. First of all, alphabetical ordering doesn’t always make sense. For example, let's say we have three age categories encoded as character strings:
+
+```{r}
+age_category <- c("Child", "Working-age Adult", "Pensioner")
+```
+
+If R sorts these by default, we get:
+
+```{r}
+sort(age_category)
+```
+
+```{r}
+#| fig.path = "figures",
+#| dpi = 300,
+#| fig.alt = "Barplot showing values for Child, Pensioner, and Working Age Adult in that order. The Child value is 1, Pensioner is 3, and Working Adult is 2."
+library(ggplot2)
+
+df <- data.frame(
+  EN = c("Child", 
+         "Working\nage\nadult", 
+         "Pensioner"),
+  value = c(1, 2, 3)
+  )
+      
+ggplot(df) +
+  geom_col(aes(x = EN, 
+               y = value, 
+               fill = EN), 
+           width = 0.8)  +
+  labs(title = "",
+       x = "",
+       y = "") +
+  scale_fill_manual("",
+                    values = c("#12a79d", 
+                               "#44b953", 
+                               "#a7a5a6")) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+which doesn't really make sense. For a single language, it’s an easy fix - we can explicitly set the levels of our factors:
+
+```{r}
+age_category <- factor(age_category,
+                       levels = c("Child",
+                                  "Working-age Adult",
+                                  "Pensioner"))
+```
+
+```{r}
+sort(age_category)
+```
+
+```{r}
+#| fig.path = "figures",
+#| dpi = 300,
+#| fig.alt = "Barplot showing values for Child, Working Age Adult, and Pensioner in that order. The Child value is 1, Working Adult is 2, and Pensioner is 3."
+df2 <- data.frame(EN = factor(
+  c("Child", 
+    "Working\nage\nadult", 
+    "Pensioner"),
+  levels = c("Child", 
+             "Working\nage\nadult", 
+             "Pensioner")
+  ),
+value = c(1, 2, 3))
+        
+ggplot(df2) +
+  geom_col(aes(x = EN, 
+               y = value, 
+               fill = EN), 
+           width = 0.8) +
+  labs(title = "Ordered",
+       x = "",
+       y = "")  +
+  scale_fill_manual("",
+                    values = c("#12a79d", 
+                               "#44b953", 
+                               "#a7a5a6")) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+But when dealing with multiple languages, factors like this create more problems. Even if the ordering doesn’t really matter and alphabetical sorting is fine, the second problem is that translated character vectors won’t appear in the same order in different languages. So we can’t just let R apply the default options. We also don’t want to manually specify the factor levels in every single language - it's a bit annoying for a few words in two languages, and unmanageable for thousands of words in many languages.
+
+<h3>The Factor Solution</h3>
+
+To fix this issue, we specified a default or primary language (in our case English) that we used for everything related to data processing. Factors were explicitly defined in English only. For our bar chart example, this means creating two separate functions --- one to set the break points of our x-axis based on the data in English only. 
+
+```{r}
+get_breaks = function(df) {
+  df %>%
+    dplyr::select(age) %>%
+    dplyr::pull() %>%
+    unique()
+}
+```
+
+Here, `age` is an ordered factor. Then a second function to compute the labels, based on the breaks in English, the user’s choice of language, and a look-up table of labels. Essentially, leaving translation to the very last second and translating as little as possible. 
+
+```{r}
+get_labels = function(df, lang, labels) {
+  breaks = get_breaks()
+  if (lang == "EN") {
+    labels_x = labels$EN[which(labels$EN %in% breaks)]
+  } else if (lang == "CY") {
+    labels_x = labels$CY[which(labels$EN %in% breaks)]
+  }
+  return(labels_x)
+}
+```
+
+<h2>The Problems Continue...</h2>
+
+I ended up chatting to quite a few people after my lightning talk who had faced similar issues. One problem that particularly caught my attention was the issue of translating between languages that read left-to-right versus right-to-left, for example, between English and Arabic. This adds a whole new level of complexity. Not only do the levels of the factors need to update, but the factor levels also need to be reversed, legends need re-ordering, alignment of text needs to change, and so on.  
+
+The easiest solution that comes to mind to address this problem is a language metadata table look-up, e.g.:
+
+```{r}
+#| echo = FALSE
+df_meta <- data.frame(lang = c("EN", "CY", "AR"), 
+                 direction = c("l2r", "l2r", "r2l"))
+
+knitr::kable(df_meta)
+```
+
+For the bar chart, the `breaks()` function would then be updated to look up this information and correctly sort (and reverse) the factors. The `labels()` function could then remain unchanged. If you also wanted to edit the colors or font sizes, this information could be stored in this same look-up table.
+
+The factor problem was just one of the small issues that arose when incorporating translation into the app, and I think it nicely highlights an important lesson we learned: to keep our Shiny app efficient, translation was always the first problem to think about but the last code to run. 
+
+The slides from my rstudio::conf(2022) lightning talk on this topic are available on <a href="https://github.com/rstudio/rstudio-conf/tree/master/2022/nicolarennie" target = "_blank">GitHub</a>. The recording is available on the <a href="https://www.rstudio.com/conference/2022/talks/say-hello-to-multilingual-shiny/" target = "_blank">conference website</a> or you can watch it below. If you've developed Shiny apps with outputs in multiple languages, we'd love to hear your thoughts on our approach!
+
+<center>
+<script src="https://fast.wistia.com/embed/medias/ok97aufcrg.jsonp" async></script><script src="https://fast.wistia.com/assets/external/E-v1.js" async></script><div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;"><div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;"><div class="wistia_embed wistia_async_ok97aufcrg videoFoam=true" style="height:100%;position:relative;width:100%"><div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;"><img src="https://fast.wistia.com/embed/medias/ok97aufcrg/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;" /></div></div></div></div>
+</center>

@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: '16'
       - run: |
-          cd wp-content/themes/twentytwentythree
+          cd wp-content/themes/Posit
           echo "npm install starts"
           npm install
           echo "npm install completed"
@@ -30,7 +30,7 @@ jobs:
           php_version: "7.4"
           version: 1
           args: --profile --ignore-platform-reqs
-          working_dir: wp-content/themes/twentytwentythree/
+          working_dir: wp-content/themes/Posit/
          
          
       - name: Prepare Environment
@@ -70,13 +70,13 @@ jobs:
       - name: Push to Pantheon
         run: |
 
-          rsync -avz --delete ~/work/twentytwentythree/twentytwentythree/wp-content/ ~/work/awbuild/wp-content --exclude="/uploads/" --include="/themes/" --include="/themes/twentytwentythree/dist/"  --include="/plugins/" --exclude="/mu-plugins/" --exclude="/themes/twentytwentythree/node_modules/"
-          cd  ~/work/awbuild/wp-content/themes/twentytwentythree
+          rsync -avz --delete ~/work/posit-web/posit-web/wp-content/ ~/work/rstudiobuild/wp-content --exclude="/uploads/" --include="/themes/" --include="/themes/Posit/dist/"  --include="/plugins/" --exclude="/mu-plugins/" --exclude="/themes/posit-web/node_modules/"
+          cd  ~/work/rstudiobuild/wp-content/themes/Posit
           echo '!dist'  >> .gitignore
           echo '!vendor' >> .gitignore
           echo '!dist/lottie' >> .gitignore
           cat .gitignore
-          cd ~/work/awbuild/wp-content/themes/twentytwentythree
+          cd ~/work/rstudiobuild/wp-content/themes/Posit
           git status
           git config --global user.name "Github deployment"
           git config --global user.email "andrewwilliams1275@gmail.com"

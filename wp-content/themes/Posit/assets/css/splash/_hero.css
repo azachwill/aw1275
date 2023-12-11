@@ -1,0 +1,46 @@
+/* Hero */
+
+#main-logo-arrows.black *,
+#logo-letters.black * {
+    fill: #fff !important;
+}
+
+.section-hero {
+    background-color: #000;
+    color: #fff;
+    position: relative;
+
+    .meet-us-subtitle {
+        font-size: 40px;
+    }
+
+    .overlay {
+        background-color: #000;
+        height: 100%;
+        left: 0;
+        opacity: 0.4;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 0;
+        transition: all 250ms ease;
+    }
+
+    .section-container {
+        position: relative;
+    }
+}
+
+.scroll-indicator {
+    &__text {
+        color: #fff;
+    }
+}
+
+.section-launch-date {
+    display: none !important;
+}
+
+.section-benefits-header {
+    display: none !important;
+}

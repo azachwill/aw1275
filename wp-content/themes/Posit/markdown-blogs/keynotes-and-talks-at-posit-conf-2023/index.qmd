@@ -1,0 +1,165 @@
+---
+title: "Keynotes and Talks at posit::conf(2023)"
+date: '2023-06-06'
+slug: keynotes-and-talks-at-posit-conf-2023
+tags:
+  - posit::conf
+  - conf
+authors:
+  - Posit Team
+description: Description here.
+alttext: Add alt text for header image.
+blogcategories:
+  - Company News and Events
+events: blog
+---
+
+The full list of talks for posit::conf(2023) is now available!
+
+Create your ideal conference schedule by selecting from our extensive selection of over 100 captivating keynotes and talks. Explore the complete lineup in the convenient table below, expertly crafted using [gt](https://gt.rstudio.com/). And, for the most up-to-date information and schedule, be sure to visit our [event portal](https://reg.conf.posit.co/flow/posit/positconf23/attendee-portal/page/sessioncatalog?search=&search.sessiontype=1684338401751002OADN&search.sessiontype=sessionType_keynote&search.sessiontype=1684338401751001OjxV).
+
+Excited? So are we. Visit [pos.it/conf](https://pos.it/conf) to learn more and register today.
+```{r}
+#| echo: false
+#| message: false
+library(gt)
+library(tidyverse)
+all_talks <-
+  readr::read_csv(
+    "~/R/posit-web/wp-content/themes/Posit/markdown-blogs/keynotes-and-talks-at-posit-conf-2023/conf_2023/talks.csv",
+    col_types = cols(
+      talk_id = col_character(),
+      decision = col_character(),
+      session_slug = col_character(),
+      session_title = col_character(),
+      order = col_integer(),
+      name = col_character(),
+      title = col_character(),
+      email = col_character(),
+      affiliation = col_character(),
+      abstract = col_character(),
+      in_person = col_character(),
+      session = col_character(),
+      slug = col_character()
+    )
+  ) |>
+  dplyr::mutate(name = gsub("^(.*?)\\(.*?$", "\\1", name))
+talks_with_timing <-
+  readr::read_csv(
+    "~/R/posit-web/wp-content/themes/Posit/markdown-blogs/keynotes-and-talks-at-posit-conf-2023/conf_2023/conf_2023_details.csv",
+    col_types = cols(
+      name = col_character(),
+      email = col_character(),
+      affiliation = col_character(),
+      session_type = col_character(),
+      talk_id = col_character(),
+      session_title = col_character(),
+      block_track_slug = col_character(),
+      block_track_title = col_character(),
+      session_date = col_character(),
+      session_start = col_character(),
+      session_length = col_double(),
+      abstract = col_character(),
+      tags = col_character()
+    )
+  )
+all_talks <-
+  dplyr::left_join(
+    all_talks,
+    talks_with_timing |>
+      dplyr::select(talk_id, session_date, session_start, session_length) |>
+      dplyr::distinct(),
+    by = "talk_id"
+  )
+all_talks |>
+  dplyr::group_by(session_title) |>
+  dplyr::mutate(track_start = min(session_start)) |>
+  dplyr::mutate(track_length = vec_fmt_duration(sum(session_length), input_units = "minutes")) |>
+  dplyr::ungroup() |>
+  dplyr::arrange(session_date, lubridate::hm(session_start)) |>
+  dplyr::mutate(encoded_name = URLencode(name, reserved = TRUE)) |>
+  dplyr::mutate(session_title = paste0(
+    "<br><div style='font-weight:bold;font-size:22px'>", session_title, "</div>",
+    "<div style='font-size:18px;padding-top:10px;'>", session_date, " (", track_start, ", ", track_length, ")</div>"
+    )
+  ) |>
+  dplyr::mutate(
+    title = glue::glue(
+    "<a href='https://reg.conf.posit.co/flow/posit/positconf23/attendee-portal/page/sessioncatalog?search={encoded_name}&search.sessiontype=sessionType_keynote&search.sessiontype=1684338401751001OjxV&search.sessiontype=1684338401751002OADN'>{title}</a>"
+    )
+  ) |>
+  dplyr::select(-c(
+    decision, session, slug, session_slug, session_start, session_length,
+    email, talk_id, session_date, track_start, track_length, encoded_name
+  )) |>
+  gt(
+    id = "talks",
+    groupname_col = "session_title",
+    process_md = TRUE
+  ) |>
+  fmt_markdown(columns = title) |>
+  tab_header(
+    title = md("Talks for posit::conf(2023)<br><br>")
+  ) |>
+  fmt_roman(columns = order, pattern = "{x}.") |>
+  cols_merge(
+    columns = c(order, title),
+    pattern = "{1} {2}"
+  ) |>
+  cols_merge(
+    columns = c(name, affiliation, abstract),
+    pattern = "{1}<<, {2}>><br>
+    <details style='padding: 0; padding-top: 6px;'><summary>Abstract</summary>{3}</details>"
+  ) |> 
+  text_case_match(
+    "Yes" ~ fontawesome::fa("person-chalkboard"),
+    "No" ~ fontawesome::fa("house-chimney-user"),
+    .locations = cells_body(columns = in_person)
+  ) |>
+  tab_style(
+    style = cell_text(v_align = 'top'),
+    locations = cells_body(columns = order)
+  ) |>
+  tab_style(
+    style = cell_text(v_align = 'top'),
+    locations = cells_body(columns = in_person)
+  ) |>
+  sub_missing(columns = order, missing_text = "") |>
+  cols_move(columns = in_person, after = order) |>
+  tab_options(column_labels.hidden = TRUE) |>
+  cols_width(
+    order ~ px(300),
+    in_person ~ px(30),
+    name ~ px(500)
+  ) |>
+  opt_css(
+    "#talks details {
+      width: 100%;
+    }
+    #talks a {
+      color: #333;
+      text-underline-offset: 2px;
+      text-decoration-color: teal;
+    }
+    #talks details > summary {
+      padding: 2px 6px;
+      width: 100%;
+      background-color: #efefef;
+      border: solid;
+      border-color: transparent;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #talks details > p {
+      border-radius: 0 0 10px 10px;
+      background-color: #efefef;
+      padding: 2px 6px;
+      margin: 0;
+    }
+    #talks details[open] > summary {
+      background-color: #ccf;
+    }
+    "
+  ) |>
+  opt_align_table_header(align = "left")
+```

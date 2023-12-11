@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-10-12">
+<meta name="description" content="RStudio Connect introduces support for Tableau Analytics Extensions, an integration that enables you to create R or Python HTTP API extensions for use in Tableau workbooks.">
+
+<title>RStudio Connect 2021.09.0 Tableau Analytics Extensions</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Connect 2021.09.0 Tableau Analytics Extensions</h1>
+
+<p class="date">2021-10-12</p>
+</header>
+
+<h2 id="improve-your-reach" class="anchored">Improve your reach</h2>
+<p>This edition of RStudio Connect introduces support for Tableau Analytics Extensions, our first external integration with a BI tool. Tableau Analytics Extensions provide a way to create calculated fields in workbooks that can execute scripts outside of the Tableau environment. This RStudio Connect integration enables you to create R or Python HTTP API extensions for use across all your Tableau workbooks.</p>
+<p>Compared to existing methods for integrating R and/or Python in Tableau, integration via APIs hosted on RStudio Connect provides better security and dependency management:</p>
+<ul>
+<li>Logic is contained within the API, preventing arbitrary code execution on the server.</li>
+<li>RStudio Connect is a commercially-supported platform that provides access management, dials for tuning performance to meet the expected demand, and the ability to manage dependencies for multiple versions of R and Python on a per-project basis.</li>
+<li>RStudio Connect also allows a single Tableau workbook to use R and Python extensions simultaneously.</li>
+</ul>
+<h3 id="why-build-web-apis" class="anchored">Why Build Web APIs?</h3>
+<p>Plumber and FastAPI are popular HTTP API generators for R and Python respectively. They can quickly and easily be leveraged to create powerful web APIs that get used by other developers, applications, and systems. Learning one (or both) of these frameworks allows you, a data scientist, to turn your functions into tools. In fact, by writing a function, you may have already created a powerful tool:</p>
+<blockquote>
+<h5 id="one-of-the-best-ways-to-improve-your-reach-as-a-data-scientist-is-to-write-functions.---r-for-data-science-chapter-19" class="anchored">One of the best ways to improve your reach as a data scientist is to write functions. - <em>R for Data Science, Chapter 19</em></h5>
+</blockquote>
+<p>In <a href="https://r4ds.had.co.nz/functions.html">R for Data Science</a>, authors Hadley and Garrett show us that functions are an excellent way to automate common tasks. Functions make code easier to understand and maintain, and reduce the chance of introducing unforced errors. But to truly extend your reach, you need a means for making those functions available to other people and systems. To distribute functions that reach users and consumers outside of your own domain, it’s hard to beat the benefits of building and hosting a web API. We wrote about the many advantages of building APIs in <a href="https://blog.rstudio.com/2021/05/04/rstudio-and-apis/">this blog post</a>.</p>
+<h3 align="center" class="anchored">
+<a href="https://www.rstudio.com/solutions/bi-and-data-science/">Visit our BI and Data Science overview page</a>
+</h3>
+<h3 id="r-python-for-tableau" class="anchored">R &amp; Python for Tableau</h3>
+<p>In principle, extending Tableau should be as simple as directing a workbook to reach out to any existing web API, but <a href="https://tableau.github.io/analytics-extensions-api/">Tableau Analytic Extensions</a> require special handling to make valid requests and receive results. To simplify this process, RStudio has introduced two new open source libraries which add functionality to Plumber and FastAPI:</p>
+<ul>
+<li>For R: <a href="https://rstudio.github.io/plumbertableau/"><code>plumbertableau</code></a></li>
+<li>For Python: <a href="https://github.com/rstudio/fastapitableau"><code>fastapitableau</code></a></li>
+</ul>
+<p>These libraries can be used to create as many extensions as you want to manage. Publishing Tableau extensions to RStudio Connect works just like regular Plumber and FastAPI content, and the new Tableau integration is enabled by default after upgrading Connect to this release. Publishers can learn more in the <a href="https://docs.rstudio.com/connect/user/tableau/">RStudio Connect User Guide</a>. Administrators should review the full <a href="https://docs.rstudio.com/rsc/integration/tableau/">integration and set up instructions</a> upon upgrade.</p>
+<p>Extensions hosted on RStudio Connect allow Tableau users to reference extensions without needing to know how the extension was implemented, or even what language the extension is using. <code>plumbertableau</code> and <code>fastapitableau</code> provide documentation for getting started:</p>
+<p><img src="fastapitableau.gif" title="Example fastapitableau extension" class="img-fluid"></p>
+<p>RStudio Connect is currently the only platform that allows a single Tableau workbook to use R and Python extensions simultaneously. This solution is different from Tableau’s existing integrations with Rserve and TabPy, both of which require passing R or Python scripts to an external language interpreter. By using <code>plumbertableau</code> and/or <code>fastapitableau</code>, all of the logic for the extension is contained in the API hosted on Connect. As shown in the documented example above, this should help simplify setup and usage in Tableau.</p>
+<h3 align="center" class="anchored">
+<a href="https://www.linkedin.com/events/6850853311420108800/">October 29th: Join us for a Tableau Integration Meetup</a>
+</h3>
+<h3 id="resources-for-getting-started" class="anchored">Resources for Getting Started</h3>
+<p>In addition to the documentation sites for <a href="https://rstudio.github.io/plumbertableau/"><code>plumbertableau</code></a> and <a href="https://github.com/rstudio/fastapitableau"><code>fastapitableau</code></a>, we have added a new chapter to <a href="https://docs.rstudio.com/connect/user/tableau/">RStudio Connect User Guide</a>, and deployable Jump Start extension examples that build on Tableau’s “Superstore” example dataset.</p>
+<p><img src="jumpstart.png" title="RStudio Connect Jump Start Examples" class="img-fluid"></p>
+<p>To learn more about Tableau Analytics Extensions, visit the <a href="https://tableau.github.io/analytics-extensions-api/">documentation site</a> maintained by Tableau.</p>
+<p>To learn more about how RStudio Team can be positioned in relation to traditional BI tooling, take a look at our <a href="https://blog.rstudio.com/2021/03/18/bi-and-data-science-the-tradeoffs/">Data Science Leadership article</a>.</p>
+<h3 id="interested-in-integrating-shiny-with-tableau" class="anchored">Interested in Integrating Shiny with Tableau?</h3>
+<p>RStudio also has a new experimental package called <a href="https://rstudio.github.io/shinytableau/"><code>shinytableau</code></a> and we’d love to <a href="https://community.rstudio.com/">get your feedback</a> on it. <code>shinytableau</code> makes use of a new extensibility feature in Tableau called Dashboard Extensions. This feature lets programmers use JavaScript to create custom objects that Tableau users can drop into their dashboard layouts, providing custom visualizations and interactive features beyond Tableau’s native capabilities. The <code>shinytableau</code> package is a bridge between the JavaScript-based Tableau Dashboard Extension API, and Shiny code that you as an R practitioner will write.</p>
+<p>To get started:</p>
+<ul>
+<li>Review the <a href="https://rstudio.github.io/shinytableau/">package documentation</a></li>
+<li>Read the Tutorial and Motivating Example: <a href="https://rstudio.github.io/shinytableau/articles/shinytableau.html">Introduction to shinytableau</a></li>
+</ul>
+<h2 id="rstudio-connect-administrator-digest" class="anchored">RStudio Connect Administrator Digest</h2>
+<p><strong>Important:</strong> Support for Ubuntu 16.04 LTS will be removed in the next RStudio Connect release. Please review our <a href="https://www.rstudio.com/about/platform-support/">Platform Support</a> page for information on which vendor operating systems are supported. Operating system server migrations can take time and planning. <a href="https://docs.rstudio.com/connect/admin/directories/#server-migrations">Server migration instructions</a> can be found in the Admin Guide.</p>
+<p><strong>New Features of Note:</strong></p>
+<ul>
+<li>The configuration option <code>Server.ViewerKiosk</code> will now take effect on content permission requests in addition to its existing role request behavior. When enabled, users with a “viewer” role will not be allowed to request access to individual content items or elevated role privileges.</li>
+<li>An <a href="https://docs.rstudio.com/connect/api/#get-/v1/experimental/groups/%7Bguid%7D/content">API endpoint has been added</a> to return a list of all the content items a given group has access to. This can be useful for auditing access control lists for content on your server, or validating that the various groups you manage have access to all the content they should. This API is being released as <a href="https://docs.rstudio.com/connect/api/#overview--experimentation">experimental</a> and requires administrator privileges to utilize. See the <a href="https://docs.rstudio.com/connect/cookbook/groups/#search-content-group-ownership">cookbook section</a> on this API for more information.</li>
+</ul>
+<p><strong>LDAP Authentication Updates:</strong></p>
+<ul>
+<li><strong>BUGFIX</strong> RStudio Connect will now correctly use locally-defined groups for access control in a double-bind LDAP setup.</li>
+<li><strong>KNOWN ISSUE</strong> <a href="https://docs.rstudio.com/connect/admin/authentication/ldap-based/ldap-double-bind/#user-role-mapping">Automatic user role mapping</a> currently contains a bug where user roles are only set on first login. This issue will be addressed in an upcoming release. If you need to change roles for users after they log in for the first time, the <a href="https://docs.rstudio.com/connect/__unreleased__/admin/appendix/cli/#usermanager">usermanager command line tool</a> can be used as a manual workaround.</li>
+</ul>
+<p>Additional updates are described in the <a href="http://docs.rstudio.com/connect/news">full release notes</a>.</p>
+<h2 id="upgrade-to-rstudio-connect-2021.09.0" class="anchored">Upgrade to RStudio Connect 2021.09.0</h2>
+<blockquote>
+<h4 id="upgrade-planning" class="anchored">Upgrade Planning</h4>
+<p>Upgrading RStudio Connect should require less than five minutes. If you are upgrading from a version earlier than 2021.08.2, be sure to consult the <a href="http://docs.rstudio.com/connect/news">release notes</a> for the intermediate releases, as well. As noted above, support for Ubuntu 16.04 LTS will be removed in an upcoming release. We recommend starting <a href="https://docs.rstudio.com/connect/admin/directories/#server-migrations">migration planning</a> as soon as possible.</p>
+</blockquote>
+<p>To perform an RStudio Connect upgrade, download and run the installation script. The script installs a new version of Connect on top of the earlier one. Existing configuration settings are respected.</p>
+<pre><code># Download the installation script
+curl -Lo rsc-installer.sh https://cdn.rstudio.com/connect/installer/installer-v1.9.4.sh
+
+# Run the installation script
+sudo bash ./rsc-installer.sh 2021.09.0</code></pre>
+<h3 align="center" class="anchored">
+<a href="https://rstudio.com/about/subscription-management/">Sign up for RStudio Professional Product Updates</a>
+</h3>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

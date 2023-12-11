@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2019-03-14">
+
+<title>RStudio 1.2 Preview: Jobs</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio 1.2 Preview: Jobs</h1>
+
+<p class="date">2019-03-14</p>
+</header>
+
+<p>When you run an R script in RStudio today, the R console waits for it to complete, and you can’t do much with RStudio until the script is finished running. When your R scripts take a long time to run, it can be difficult to get much done in RStudio while they do, unless you’re willing to juggle multiple instances of RStudio.</p>
+<p>In RStudio 1.2, we’re introducing two new features to keep you productive while your code’s working: <em>local jobs</em> and <em>remote jobs</em>. You can use these to run your scripts in the background while you continue to use the IDE.</p>
+<p><img src="running-jobs.png"></p>
+<h2 id="local-jobs" class="anchored">Local jobs</h2>
+<p>A “local job” is an R script that runs in a separate, dedicated R session. You can run any R script in a separate session by pulling down the Source menu and choosing <em>Source as Local Job</em>.</p>
+<p><img src="source-as-local-job.png" title="Source script as local job" class="img-fluid"></p>
+<p>This will give you some options for running your job.</p>
+<p><img src="run-script-dialog.png" title="Dialog showing options for starting R script job" class="img-fluid"></p>
+<p>By default, the job will run in a clean R session, and its temporary workspace will be discarded when the job is complete. This is the fastest and safest configuration, good for reproducible scripts that have no side effects.</p>
+<p>However, if you want to feed data from your current R session into the job, or have the job return data to your current R session, change the dialog options as follows:</p>
+<p><strong>Run job with copy of global environment</strong>: If ticked, this option saves your global environment and loads it into the job’s R session before it runs. This is useful because it will allow your job to see all the same variables you can see in the IDE. Note that this can be slow if you have large objects in your environment.</p>
+<p><strong>Copy job results</strong>: By default, the temporary workspace in which the job runs is not saved. If you’d like to import data from your job back into your R session, you have a couple of choices:</p>
+<p><em>Global environment</em>: This places all the R objects your job creates back in your R session’s global environment. Use this option with caution! The objects created by the job will overwrite, without a warning, any objects that have the same name in your environment.</p>
+<p><em>Results object</em>: This places all the R objects your job creates into a new environment named <code>yourscript_results</code>.</p>
+<h3 id="lifetime" class="anchored">Lifetime</h3>
+<p>Local jobs run as non-interactive child R processes of your main R process, which means that they will be shut down if R is. While your R session is running jobs:</p>
+<ul>
+<li>You will be warned if you attempt to close the window while jobs are still running (on RStudio Desktop)</li>
+<li>Your R session will not be suspended (on RStudio Server)</li>
+</ul>
+<p>While local jobs are running, a progress bar will appear in the R console summarizing the progress of all running jobs.</p>
+<p><img src="job-progress-summary.png" title="R console pane showing job progress tab" class="img-fluid"></p>
+<h3 id="detailed-progress" class="anchored">Detailed progress</h3>
+<p>The progress bar RStudio shows for your job represents the execution of each top-level statement in your R script. If you want a little more insight into which part of the script is currently running, you can use RStudio’s <a href="https://support.rstudio.com/hc/en-us/articles/200484568-Code-Folding-and-Sections">code sections</a> feature. Add a section marker like this to your R script:</p>
+<pre><code># Apply the model ----</code></pre>
+<p>When your job reaches that line in your script, the name of the section will appear on the progress bar.</p>
+<p><img src="job-progress-sections.png" title="Job progress bar showing section progress" class="img-fluid"></p>
+<p>You can also emit output using the usual R mechanisms, such as <code>print</code>, <code>message</code>, and <code>cat</code>. This output appears in the Jobs pane when you select your job.</p>
+<p><img src="local-job-output.png" title="Jobs pane with output of a local job" class="img-fluid"></p>
+<h3 id="scripting" class="anchored">Scripting</h3>
+<p>You can script the creation of jobs using the <strong>rstudioapi</strong> package method <a href="https://www.rdocumentation.org/packages/rstudioapi/versions/0.9.0/topics/jobRunScript">jobRunScript</a>; it has options which correspond to each dialog option above. This makes it possible to automate and orchestrate more complicated sets of background tasks.</p>
+<p>Note however that the IDE’s background job runner is generally designed for one-off, interactive script runs. If you are writing R code and need to run a subtask asynchronously in a background R session, we recommend using the new <a href="https://callr.r-lib.org/">callr package</a> instead.</p>
+<h2 id="remote-launcher-jobs" class="anchored">Remote (Launcher) jobs</h2>
+<p>On RStudio Server Pro, you also have the option of running your R script on your company’s compute infrastructure, using the new <a href="https://blog.rstudio.com/2018/11/05/rstudio-rsp-1.2-features/">Job Launcher</a>. To do this, select:</p>
+<p><img src="source-as-launcher-job.png" title="Source script as launcher job" class="img-fluid"></p>
+<p>When launching a job, you’ll have the opportunity to specify how you want to run it, depending of course on the configuration the compute infrastructure exposes to RStudio Server. This can include settings like resource constraints as well as configuration parameters like which Docker image to use.</p>
+<p><img src="launcher-job-options.png" title="Launcher job option dialog" class="img-fluid"></p>
+<h3 id="monitoring-launcher-jobs" class="anchored">Monitoring launcher jobs</h3>
+<p>Unlike local jobs, launcher jobs are <strong>independent from the R session</strong>. You can safely quit your R session without affecting any launcher jobs you may have started from it. Once you have started a job, you can see its status in the <em>Launcher</em> tab, which shows all your jobs (not just those launched from the current session).</p>
+<p><img src="ide-launcher-tab.png" title="IDE tab showing status of launcher jobs" class="img-fluid"></p>
+<p>You can also monitor the status and progress of your launcher jobs on your RStudio dashboard:</p>
+<p><img src="rsp-jobs-dashboard.png" title="RStudio Server Pro dashboard showing executing jobs" class="img-fluid"></p>
+<h2 id="showing-task-progress" class="anchored">Showing task progress</h2>
+<p>RStudio’s new Jobs pane can show more than just the progress of background jobs. It can also be scripted from R packages (and R code) to show status, progress, and output for any long-running task.</p>
+<p>If you’d like to show progress and/or output from a task using the jobs UI, refer to the <a href="https://www.rdocumentation.org/packages/rstudioapi/versions/0.9.0">rstudioapi documentation</a> for details; start with <code>addJob</code>, which creates a new job in the UI and returns a handle you can use to update the UI as the job progresses.</p>
+<h2 id="wrap-up" class="anchored">Wrap up</h2>
+<p>We hope RStudio’s new Jobs functionality helps streamline your workflow and get the most out of your hardware, especially if you often work with R scripts that take time to execute. Try out the new functionality in the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio 1.2 Preview Release</a> (stable release coming very soon), and let us know what you think on the <a href="https://community.rstudio.com/c/rstudio-ide">community forum</a>!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

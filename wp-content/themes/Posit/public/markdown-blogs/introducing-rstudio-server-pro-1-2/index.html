@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2019-05-09">
+
+<title>Introducing RStudio Server Pro 1.2 - New Features, Packaging, and Pricing</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Introducing RStudio Server Pro 1.2 - New Features, Packaging, and Pricing</h1>
+
+<p class="date">2019-05-09</p>
+</header>
+
+<p>
+<img src="2019-05-09-RSP-1-2.png" style="width: 40%; float: right">
+</p>
+<p>We are excited to announce the general availability of RStudio Server Pro 1.2, and to introduce RStudio Server Pro Standard and RStudio Server Pro Enterprise.</p>
+<p>RStudio customers have made it clear to us that the future of data analysis is moving to a more elastic and flexible computational model. RStudio Server Pro now allows you to execute R processes remotely, and introduces new packaging and pricing to reflect this new trend.</p>
+<p><br> <a href="https://rstudio.youcanbook.me" button="" type="button" style="padding: 12px 20px; border: none; font-size: 12px; border-radius: 3px; cursor: pointer; background-color: #4c83b6; color: #fff; box-shadow: 0, 1px, 3px, 0px, rgba(0,0,0,0.10);">Contact Sales</a>  <a href="https://www.rstudio.com/products/rstudio-server-pro/" button="" type="button" style="padding: 12px 20px; border: none; font-size: 12px; border-radius: 3px; cursor: pointer; background-color: #4c83b6; color: #fff; box-shadow: 0, 1px, 3px, 0px, rgba(0,0,0,0.10);">Learn More</a>  <a href="https://www.rstudio.com/products/rstudio-server-pro/evaluation/" button="" type="button" style="padding: 12px 20px; border: none; font-size: 12px; border-radius: 3px; cursor: pointer; background-color: #4c83b6; color: #fff; box-shadow: 0, 1px, 3px, 0px, rgba(0,0,0,0.10);">Try a 45 Day Evaluation</a> <br><br></p>
+<h3 id="new-rstudio-server-pro-features" class="anchored">New RStudio Server Pro Features</h3>
+<p>The most significant new feature of RStudio Server Pro is Launcher, the long-awaited capability to separate the execution of R processes from the server where RStudio Server Pro is installed. Launcher allows you to run RStudio sessions and ad-hoc R scripts within your existing cluster workload managers, so you can leverage your current infrastructure instead of provisioning load balancer nodes manually. Now organizations that want to use Kubernetes or other job managers can run interactive sessions or batch jobs remotely and scale them independently.</p>
+<p><a href="https://solutions.rstudio.com/launcher/overview/">Learn more about Launcher here</a>.</p>
+<p>Other <a href="https://blog.rstudio.com/2018/11/05/rstudio-rsp-1.2-features/">features exclusive to RStudio Server Pro 1.2 include</a> improved R version management and enhanced configuration reload.</p>
+<p>In addition, RStudio Server Pro has all of the new features of the new RStudio v1.2 * <a href="https://blog.rstudio.com/2018/10/02/rstudio-1-2-preview-sql/">SQL</a>: live feedback on your SQL queries and autocompletion * <a href="https://blog.rstudio.com/2018/10/29/rstudio-ide-custom-theme-support/">Custom Theme Support</a>: tune the editor colors exactly the way you like them * <a href="https://blog.rstudio.com/2018/10/05/r2d3-r-interface-to-d3-visualizations/">D3 Visualization Support</a>: create and preview web-native D3 visualizations * <a href="https://blog.rstudio.com/2018/10/09/rstudio-1-2-preview-reticulated-python/">Reticulated Python Support</a>: an embedded Python session with a REPL and autocompletion * <a href="https://blog.rstudio.com/2018/10/16/rstudio-1-2-preview-stan/">Stan Support</a>: including syntax highlighting, compilation, and document outlines * <a href="https://blog.rstudio.com/2018/10/23/rstudio-1-2-preview-plumber-integration/">Plumber Support</a>: create and interact with R APIs, and publish them to RStudio Connect * … <a href="https://www.rstudio.com/blog/rstudio-1-2-preview-the-little-things/">and more</a>.</p>
+<h3 id="new-named-user-packaging-and-pricing-for-rstudio-server-pro" class="anchored">New Named User Packaging and Pricing for RStudio Server Pro</h3>
+<p>Effective today, RStudio is introducing RStudio Server Pro Standard and RStudio Server Pro Enterprise. Standard and Enterprise are priced per user, and include the remote Launcher feature. Existing RStudio Server Pro customers may upgrade to Standard or Enterprise to take advantage of the remote Launcher feature, or continue to purchase RStudio Server Pro without Launcher under their current terms.</p>
+<p><strong>RStudio Server Pro Standard for smaller teams - an affordable place to start</strong></p>
+<p>RStudio Server Pro Standard is more affordable for smaller teams. Instead of $9,995 per year at a minimum, RStudio Server Pro Standard is now only $4,975 per year for 5 users on a single server. Additional Named Users are $995 each per year. Additional “Staging” servers for testing and “High Availability” servers for load balancing user sessions are optional. SMB, Academic, Volume, or Bundle discounts may apply.</p>
+<p><strong>RStudio Server Pro Enterprise for larger teams - unrestricted servers</strong></p>
+<p>RStudio Server Pro Enterprise eliminates restrictions on servers for larger teams. Containerized IT infrastructure using tools such as Docker and Kubernetes are increasingly popular. Larger teams often need more development, staging, production, and high availability servers and find license key management troublesome. RStudio Server Pro Enterprise starts at only $11,950 per year, allowing up to 10 Named Users to use the software on as many servers as needed. Additional Named Users are $1,195 each per year. SMB, Academic, Volume, or Bundle discounts may apply.</p>
+<p>The table below summarizes our new pricing and packages for RStudio Server Pro; visit <a href="https://www.rstudio.com/pricing/">RStudio Pricing on our website</a> to learn more.</p>
+<p>RStudio Server Pro 1.2 Packaging and Pricing</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Package</th>
+<th style="text-align: left;">Annual Price</th>
+<th style="text-align: left;">Named Users</th>
+<th style="text-align: left;">Launcher</th>
+<th style="text-align: left;">License Type</th>
+<th style="text-align: left;">Server Licenses</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">RStudio Server Pro Enterprise</td>
+<td style="text-align: left;">$11,995</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Named User</td>
+<td style="text-align: left;">Unrestricted. Additional Named Users $1,195 each</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RStudio Server Pro Standard</td>
+<td style="text-align: left;">$4,975</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Named User per Server</td>
+<td style="text-align: left;">One included. Staging and high availability servers available for additional charge. Additional Named Users $995 each</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">RStudio Server Pro*</td>
+<td style="text-align: left;">$9,995</td>
+<td style="text-align: left;">Unlimited</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Per Server</td>
+<td style="text-align: left;">One. Staging servers available for additional charge.</td>
+</tr>
+</tbody>
+</table>
+<p>*<strong>RStudio Server Pro per server licensing is available only to existing RStudio Server Pro customers who have purchased prior to May 2019.</strong></p>
+<p>For questions about RStudio Server Pro, RStudio Server Pro Standard, or RStudio Server Pro Enterprise, please contact <a href="mailto:sales@rstudio.com">sales@rstudio.com</a> or your customer success representative.</p>
+<p><strong>Additional information is also available on our Support FAQ</strong></p>
+<ul>
+<li><a href="https://support.rstudio.com/hc/en-us/articles/360022558754#named_user">Why did RStudio choose Named User packaging and pricing for RStudio Server Pro?</a></li>
+<li><a href="https://support.rstudio.com/hc/en-us/articles/360022558754#launcher">Why is Launcher only available in RStudio Server Pro Standard and Enterprise?</a></li>
+<li><a href="https://support.rstudio.com/hc/en-us/articles/360022558754#upgrades">How do current customers upgrade to RStudio Server Pro Standard or Enterprise?</a></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

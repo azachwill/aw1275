@@ -1,0 +1,200 @@
+---
+title: "Font stacks and Markdown improvements in {gt} 0.9.0"
+date: '2023-07-12'
+slug: font-stacks-and-markdown-improvements-in-gt-0-9-0
+tags:
+  - gt
+authors:
+  - Rich Iannone
+description: We've vastly improved the `summary_rows()` and `grand_summary_rows()` functions in {gt} version 0.9.0.
+alttext: Add alt text for header image.
+blogcategories:
+  - Open Source
+  - Products and Technology
+events: blog
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(gt)
+```
+
+Welcome to the seventh blog post on [**gt**](https://gt.rstudio.com/) `0.9.0`! We covered a lot in the first six blog posts, and this time, we're going to introduce you to something new regarding fonts in **gt**, and that is *font stacks*. We'll also have a look at some new and useful improvements to Markdown rendering.
+
+## A stack of fonts for every mood
+
+It's always been possible to adjust fonts within the different locations of a **gt** table, and there are many ways to go about this. This post will demonstrate another convenient method to use system fonts in a safer manner. First, we need a table for our examples going forward. For that, we'll make one that based on the `towny` dataset that's new in **gt** `0.9.0`:
+
+```{r}
+essex_pops <- 
+  towny |>
+  dplyr::filter(latitude < 43) |>
+  dplyr::filter(longitude < -82.5) |>
+  dplyr::arrange(longitude) |>
+  dplyr::select(name, latitude, longitude, starts_with("population")) |>
+  gt(rowname_col = "name") |>
+  tab_spanner(
+    columns = starts_with("population"),
+    label = "Population"
+  ) |>
+  tab_header(title = "Selected Essex County Population Figures from 1996 to 2021") |>
+  fmt_number(
+    columns = ends_with("tude"),
+    decimals = 4,
+    pattern = "{x}&deg;"
+  ) |>
+  fmt_integer(columns = starts_with("population")) |>
+  cols_merge(
+    columns = ends_with("tude"),
+    pattern = "{1}, {2}"
+  ) |>
+  cols_label(
+    latitude = "Location"
+  ) |>
+  cols_label_with(
+    fn = ~ gsub("population_", "", .)
+  )
+  
+essex_pops
+```
+
+We have the ability to selectively change fonts in different locations with the `tab_style()` function, using `cell_text(font = ...)` within the `style` argument. Now suppose there is a desire to use a monospace font (i.e., a typeface where every character has the same width) with all body cells that contain numerical values. Let's take the `essex_pops` table and use `tab_style()` to try that:
+
+```{r}
+essex_pops |>
+  tab_style(
+    style = cell_text(font = "Menlow"),
+    locations = cells_body()
+  )
+```
+
+This is not the intended result! We instead get numerical values that don't use a monospace font. Ah... the problem was that the font name was misspelled. I wanted to use the 'Menlo', font but it was incorrectly entered as `"Menlow"`. Because of that, the font used was something entirely different. There are actually numerous pitfalls when it comes to fonts, but I'll provide two very common issues:
+
+1. The font name used is incorrectly entered (as above)
+2. The font name corresponds to an actual font, but it's not available (for lots of reasons)
+
+I want to focus on the second issue since incorrectly-formed font names are somewhat easier to solve. Basically, it can be hard to account for all the different fonts in a users' systems. Sure, we can probably bypass this by using web fonts (and **gt** does have the ability to use web fonts from *Google Fonts*), but there are advantages to system fonts, like speed of rendering and no requirement to be online.
+
+The first thing that really helps to solve this problem is the ability to define a list of fonts that should be used. The list serves as a collection of fallbacks, so order matters here. If the first font listed is found, that one is used. If not, we go down the list until a font name actually exists on the user's system. We can use this facility in **gt**; the `font` argument of `cell_text()` accepts either a single font name or a vector of font names for this purpose.
+
+This is great! We can use this then:
+
+```{r}
+essex_pops |>
+  tab_style(
+    style = cell_text(font = c("Menlo", "Courier")),
+    locations = cells_body()
+  )
+```
+
+Which is *not bad*, but it probably won't look good everywhere. The 'Menlo' font comes preinstalled on Mac computers. The 'Courier' font is well-known and ubiquitous, but other alternatives might be better. And, this (short) list doesn't take into account any monospace fonts that might be available on Linux operating systems or phones and tablets.
+
+What **gt** can offer here is the implementation of font stacks. These are collections of font lists where each: (1) embodies a certain look and (2) uses fonts that are almost always present across different systems. The new `system_fonts()` function makes this possible, and it contains 15 font stacks that cover all sorts of cross-platform typesetting needs. You supply the name of one of the supported font stacks, and the function generates a vector of fonts for you. Let's try this out by revising the above example:
+
+```{r}
+essex_pops |>
+  tab_style(
+    style = cell_text(font = system_fonts(name = "monospace-code")),
+    locations = cells_body()
+  )
+```
+
+Depending on where you are viewing the table above, the table values will look a bit different, but *not that different*. The font stack was designed to use highly-available fonts that look and function similarly. The `system_fonts()` function is simple in that it generates a vector of font names from a keyword. Let's see which fonts are emitted from a standalone invocation:
+
+```{r}
+system_fonts(name = "monospace-code")
+```
+
+That's quite the list of fonts! Let's exclude the emoji fonts and look at which systems these fonts are typically found in:
+
+- `"ui-monospace"`: macOS 10.15+ and iOS 13.3+ (resolves to 'SF Mono')
+- `"Cascadia Code"`: Windows 11+
+- `"Source Code Pro"`: Linux
+- `"Menlo"`: macOS
+- `"Consolas"`: Windows 7+
+- `"DejaVu Sans Mono"`: Linux
+- `"monospace"`: Android (resolves to 'Droid Sans Mono')
+
+With this sort of coverage, you don't have to worry about generating your own list. You can just choose from any of the following font stacks:
+
+1. `"system-ui"`: *System UI*
+2. `"transitional"`: *Transitional*
+3. `"old-style"`: *Old Style*
+4. `"humanist"`: *Humanist*
+5. `"geometric-humanist"`: *Geometric Humanist*
+6. `"classical-humanist"`: *Classical Humanist*
+7. `"neo-grotesque"`: *Neo-Grotesque*
+8. `"monospace-slab-serif"`: *Monospace Slab Serif*
+9. `"monospace-code"`: *Monospace Code*
+10. `"industrial"`: *Industrial*
+11. `"rounded-sans"`: *Rounded Sans*
+12. `"slab-serif"`: *Slab Serif*
+13. `"antique"`: *Antique*
+14. `"didone"`: *Didone*
+15. `"handwritten"`: *Handwritten*
+
+All of this is adopted from the excellent `"modern-font-stacks"` [repository on *GitHub*](https://github.com/system-fonts/modern-font-stacks). The font selections for each stack are well-considered and the repo contains a wealth of information on the appearance of each typeface and the available font weights.
+
+Let's look at one more example that uses a small portion of the `sp500` dataset. Two different font stacks are chosen here: `"geometric-humanist"` for the row group labels and `"monospace-code"` for the body cells.
+
+```{r}
+sp500 |>
+  dplyr::slice_head(n = 10) |>
+  dplyr::select(date, open, close) |>
+  dplyr::arrange(-dplyr::row_number()) |>
+  dplyr::mutate(week = vec_fmt_datetime(date, format = "w")) |>
+  dplyr::mutate(week = paste("Week", week)) |>
+  gt(groupname_col = "week") |>
+  fmt_currency() |>
+  cols_merge(columns = c(open, close), pattern = "{1} \U02192 {2}") |>
+  tab_options(column_labels.hidden = TRUE) |>
+  tab_style(
+    style = cell_text(
+      font = system_fonts("geometric-humanist"),
+      weight = "bold"
+    ),
+    locations = cells_row_groups()
+  ) |>
+  tab_style(
+    style = cell_text(font = system_fonts("monospace-code")),
+    locations = cells_body()
+  )
+```
+
+We hope that using font stacks takes some of the guesswork out of selecting local fonts and making sure that fonts well work across different systems. Have a look at the help article in `?system_fonts` for more details related to each font stack.
+
+## Markdown in {gt} is much better now thanks to {markdown}
+
+One thing that was previously difficult in {gt} was using superscripts and subscripts in column labels, and this made measurement units somewhat hard to express. With `0.9.0`, we now default to using the [{markdown}](https://cran.r-project.org/web/packages/markdown/index.html) package if it is available. The extra Markdown features are worth it, as you can now express superscripts and subscripts by surrounding text with `^` or `~` characters. Here is an example that uses a table generated from the `towny` dataset. In the `cols_label()` statement, we generate superscripted `"2"` characters in the units for population density by using `^`.
+
+```{r}
+towny |>
+  dplyr::select(name, population_2021, density_2021) |>
+  dplyr::arrange(desc(population_2021)) |>
+  dplyr::slice_head(n = 5) |>
+  dplyr::mutate(density_2021_sqmi = density_2021 / 0.3861) |>
+  gt(rowname_col = "name") |>
+  fmt_number(columns = starts_with("density"), decimals = 1) |>
+  fmt_integer(columns = c(population_2021, density_2021_sqmi)) |>
+  cols_label(
+    population_2021 ~ "Population",
+    density_2021 ~ md("ppl/km^2^"),
+    density_2021_sqmi ~ md("ppl/mi^2^")
+  ) |>
+  cols_width(
+    stub() ~ px(200),
+    everything() ~ px(100)
+  ) |>
+  tab_spanner(
+    label = "Density",
+    columns = starts_with("density")
+  )
+```
+
+We hope that this change makes it easier to express units in column labels (a very common use case). And there are certainly many other places in a **gt** table where this enhanced Markdown functionality could be of great benefit!
+
+## Final remarks
+
+The **gt** package is always improving, and that's so that many more types of tables can be created. We certainly hope these changes are helpful to your table-making workflows. If ever there are problems or you have ideas for improvement, [file an issue](https://github.com/rstudio/gt/issues) on GitHub. There is also a **gt** [Discussions page](https://github.com/rstudio/gt/discussions) for usage questions.
+
+Follow the **gt** package's Twitter account at [@gt_package](https://twitter.com/gt_package) for package news and other table-related items. We also recommend joining the `gt_package` [*Discord server*](https://discord.gg/Ux7nrcXHVV), where you can share your beautiful tables with us in the Showcase section!

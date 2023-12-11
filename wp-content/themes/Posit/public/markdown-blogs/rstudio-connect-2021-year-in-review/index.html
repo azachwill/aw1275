@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-12-22">
+<meta name="description" content="In case you missed it, here are some features we introduced to RStudio Connect in 2021.">
+
+<title>RStudio Connect 2021 Year in Review</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Connect 2021 Year in Review</h1>
+
+<p class="date">2021-12-22</p>
+</header>
+
+<h1 id="rstudio-connect-highlights-for-data-scientists">RStudio Connect Highlights for Data Scientists</h1>
+<p>It’s been a busy year for the RStudio Connect team. In case you missed it, here is a quick summary of the most interesting product highlights for <strong>RStudio Connect Publishers</strong>:</p>
+<ul>
+<li><a href="#content-curation">Content curation with the <code>connectwidgets</code> package</a></li>
+<li><a href="#updates-for-python-developers">Updates for Python developers</a></li>
+<li><a href="#updates-for-developers-working-with-tableau">Updates for data scientists who work with Tableau</a></li>
+<li><a href="#upcoming-changes-preparing-for-2022">Upcoming changes: How to prepare for 2022</a></li>
+</ul>
+<h2 id="content-curation" class="anchored">Content Curation</h2>
+<p>As you publish more data science artifacts (applications, documents, APIs, etc.) to RStudio Connect, the organization, distribution, and discovery of those projects can become more challenging.</p>
+<h3 id="introducing-connectwidgets" class="anchored">Introducing <a href="https://rstudio.github.io/connectwidgets/">connectwidgets</a></h3>
+<p><em>This feature requires RStudio Connect version 1.9.0 or newer.</em></p>
+<p>This year the RStudio Connect team produced an R package that can be used to query a Connect server for your existing content items, then organize them within <code>htmlwidget</code> components in an R Markdown document or Shiny application.</p>
+<p><strong>Present your content</strong> in cards, grids, or tables:</p>
+<p><img src="images/card-grid-view.png" title="Example of a Card and a Grid created with connectwidgets" class="img-fluid"></p>
+<p>Card and grid components display metadata about each piece of content. Each card or grid item links to the “open solo” version of the associated content item on RStudio Connect.</p>
+<p><strong>Filter content</strong> using <code>connectwidgets</code> helper functions and <code>dplyr</code> to produce the curated set of content you’d like to display:</p>
+<ul>
+<li><code>by_tags()</code> Filters the data frame to only include content that has been tagged with the specified tag name(s).</li>
+<li><code>by_owners()</code> Filters the data frame to only include content with the specified owner(s) by username.</li>
+</ul>
+<p><strong>Customization is up to you</strong> - <code>connectwidgets</code> components support styling via the <code>bslib</code> package.</p>
+<p><img src="images/connectwidgets-themes.png" title="Customization examples with bootswatch themes" class="img-fluid"></p>
+<p><strong>Learn more:</strong></p>
+<ul>
+<li>Visit the <a href="https://docs.rstudio.com/connect/user/curating-content/">RStudio Connect User Guide</a></li>
+<li><a href="https://youtu.be/GBNzhIkObyE">Watch a webinar</a></li>
+</ul>
+<h3 id="content-access-requests" class="anchored">Content Access Requests</h3>
+<p><em>This feature requires RStudio Connect version 1.8.8 or newer.</em></p>
+<p>Since <code>connectwidgets</code> components are rendered with the same permissions you have on the RStudio Connect server, viewers of your curated presentation pages may encounter links to content they wouldn’t otherwise have access to. If a viewer follows a link to a content item they don’t have permission to visit, they will be directed to request access.</p>
+<p><img src="images/access-request.png" title="Publisher content access request flow" class="img-fluid"><br>
+In this example, the user is a <strong>Publisher</strong>, so they can choose to request either <strong>Collaborator</strong> or <strong>Viewer</strong> permissions. This action triggers an email notification to the content managers who can confirm or deny the request.</p>
+<p><strong>Note:</strong> Administrators can disable content access requests for an entire server with <a href="https://docs.rstudio.com/connect/admin/appendix/configuration/#Applications.PermissionRequest"><code>Applications.PermissionRequest</code></a>.</p>
+<h3 id="send-visitors-to-a-custom-page" class="anchored">Send Visitors to a Custom Page</h3>
+<p><em>This feature requires RStudio Connect version 2021.08.0 or newer.</em></p>
+<p>If you’ve created a showcase page that you’d like to route all RStudio Connect visitors to see upon logging in, work with your server administrator to configure <a href="https://docs.rstudio.com/connect/admin/appendix/configuration/#Server.RootRedirect"><code>Server.RootRedirect</code></a>.</p>
+<p><img src="images/root-redirect.png" title="Example options for Server.RootRedirect configuration" class="img-fluid"></p>
+<p><code>Server.RootRedirect</code> is a configuration setting that can be used to divert users to a URL other than the standard RStudio Connect dashboard.</p>
+<p>If your administrator customizes the <code>RootRedirect</code> URL, it will be important to notify publishers and other administrators about where they can access the content dashboard view of RStudio Connect. This URL can be customized with the <a href="https://docs.rstudio.com/connect/admin/appendix/configuration/#Server.DashboardPath"><code>Server.DashboardPath</code></a> setting. By default, the content dashboard is available at <code>/connect</code>.</p>
+<p>Follow this <a href="https://docs.rstudio.com/how-to-guides/users/pro-tips/widgets/">How To Guide</a> to learn more.</p>
+<p><strong>Note:</strong> If your organization would rather change the branding of RStudio Connect itself, there are new customization options available including logo, favicon, and platform display name. These can all be configured by a server administrator. <a href="https://docs.rstudio.com/connect/admin/appendix/branding/">Learn more here</a> or <a href="https://youtu.be/2cCOeC_bPxU">watch a video demo</a>.</p>
+<h2 id="updates-for-python-developers" class="anchored">Updates for Python Developers</h2>
+<p><em>These features require RStudio Connect version 2021.08.0 or newer.</em></p>
+<h3 id="asgi-frameworks" class="anchored">ASGI Frameworks</h3>
+<p>The list of supported Python content types has been growing over the last two years. In August, our team released an update to RStudio Connect which adds support for ASGI frameworks including FastAPI, Quart, Falcon, and Sanic.</p>
+<p><strong>RStudio Connect Supported Python Content Types in 2021</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Content Type</th>
+<th>Framework</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Documents &amp; Notebooks</td>
+<td>Jupyter Notebooks</td>
+</tr>
+<tr class="even">
+<td>Interactive Applications</td>
+<td>Dash, Streamlit, Bokeh</td>
+</tr>
+<tr class="odd">
+<td>WSGI Frameworks</td>
+<td>Flask</td>
+</tr>
+<tr class="even">
+<td>ASGI Frameworks</td>
+<td>FastAPI, Quart, Falcon, Sanic</td>
+</tr>
+</tbody>
+</table>
+<p>FastAPI and other ASGI-compatible APIs can be deployed to RStudio Connect with the <a href="https://docs.rstudio.com/rsconnect-python/index.html">rsconnect-python</a> package. To get started, follow the <a href="https://docs.rstudio.com/connect/user/publishing/#publishing-python-apis">same basic deployment steps</a> required from our other Python content types.</p>
+<p>Read more: <a href="https://www.rstudio.com/blog/rstudio-connect-2021-08-python-updates/">Announcement blog post</a></p>
+<h3 id="jupyter-notebooks-feature-hiding-code-cells" class="anchored">Jupyter Notebooks Feature: Hiding Code Cells</h3>
+<p>Hiding input code cells can be useful when preparing notebooks for audiences where a “cleaner” or less code-heavy presentation would be more appreciated.</p>
+<p><img src="images/input-shownvhidden.png" title="Comparison of an example notebook with code cells shown and hidden" class="img-fluid"></p>
+<p>RStudio Connect now supports two options for hiding input code cells in Jupyter Notebooks:</p>
+<ul>
+<li><a href="https://docs.rstudio.com/connect/user/jupyter-notebook/#hide-all-input">Hide all input code cells</a></li>
+<li><a href="https://docs.rstudio.com/connect/user/jupyter-notebook/#hide-tagged-input">Hide only selected input code cells</a></li>
+</ul>
+<p>Work with a server administrator to upgrade <a href="https://docs.rstudio.com/rsconnect-jupyter/upgrading/">rsconnect-jupyter</a> and <a href="https://docs.rstudio.com/rsconnect-python/#installation">rsconnect-python</a> so you can get access to the new publishing features.</p>
+<h2 id="updates-for-developers-working-with-tableau" class="anchored">Updates for Developers Working with Tableau</h2>
+<p><em>These features require RStudio Connect version 2021.09.0 or newer.</em></p>
+<p>In September, RStudio Connect introduced support for <a href="https://help.tableau.com/current/pro/desktop/en-us/r_connection_manage.htm">Tableau Analytics Extensions</a>, our first external integration with a BI tool. Data Scientists can use Analytics Extensions backed by Plumber and FastAPI to replace arbitrary R and Python code execution in Tableau Workbooks.</p>
+<ul>
+<li><a href="https://youtu.be/t25Lbi5D6kg">Watch the Webinar</a></li>
+</ul>
+<p><strong>Why did we do this?</strong></p>
+<p>When Tableau users want to leverage R scripts in their workbooks, they would use an open source tool called RServe to establish a connection with an execution server running an R session. The RServe solution was not developed or supported by RStudio, and this caused some confusion. Tableau users wanted RStudio to help solve various installation, environment management, configuration, and security challenges they encountered with RServe.</p>
+<p>As an alternative to RServe, we’ve invested in new open source packages for creating analytics extensions using Plumber (R) and FastAPI (Python). The APIs created with <a href="https://rstudio.github.io/plumbertableau/"><code>plumbertableau</code></a> and <a href="https://github.com/rstudio/fastapitableau"><code>fastapitableau</code></a> are easy to host on RStudio Connect which is configured by default to host and serve them.</p>
+<p><strong>What are Analytics Extensions?</strong></p>
+<p><a href="https://help.tableau.com/current/pro/desktop/en-us/r_connection_manage.htm">Tableau Analytics Extensions</a> provide a way to create calculated fields in workbooks that can execute scripts outside of the Tableau environment. To use Analytics Extensions, you must configure an instance of Tableau Server, Tableau Online or Tableau Desktop (<a href="https://docs.rstudio.com/rsc/integration/tableau/#tableau-setup">Instructions</a>).</p>
+<p><strong>Why not just build a Shiny application?</strong></p>
+<p>Do you already build interactive applications in Shiny or a Python framework? Great! We know many RStudio users don’t have or use Tableau, and that’s totally reasonable. We love when people choose Shiny over other alternatives. We also want to support data science teams who have access to both RStudio Pro products and Tableau. This integration is for the folks who need to bridge both worlds.</p>
+<p><strong>How do you get started?</strong></p>
+<p>In principle, extending Tableau should be as simple as directing a workbook to reach out to any existing web API, but Tableau Analytics Extensions require special handling to make valid requests and receive results. To simplify this process, we introduced two new open source libraries which add functionality to Plumber and FastAPI:</p>
+<ul>
+<li>For R: <a href="https://rstudio.github.io/plumbertableau/"><code>plumbertableau</code></a></li>
+<li>For Python: <a href="https://github.com/rstudio/fastapitableau"><code>fastapitableau</code></a></li>
+</ul>
+<p>These libraries can be used to create as many extensions as you want to manage. Data Scientists can learn more in the <a href="https://docs.rstudio.com/connect/user/tableau/">RStudio Connect User Guide</a>. Server administrators should review the full <a href="https://docs.rstudio.com/rsc/integration/tableau/">integration and set up instructions</a> upon upgrade.</p>
+<p><strong>Take a look at an example:</strong> <a href="https://github.com/sol-eng/tableau-examples/tree/main/superstore">Detect outliers and predict profit with the built-in Superstore Tableau dataset</a>.</p>
+<h2 id="upcoming-changes-preparing-for-2022" class="anchored">Upcoming Changes: Preparing for 2022</h2>
+<p>In early 2022, RStudio Connect will release an edition that removes support for the following:</p>
+<ul>
+<li><strong>Experimental v1 Server APIs</strong></li>
+<li><strong>Python 2</strong></li>
+</ul>
+<p>To prepare for these changes, we recommend reviewing the <a href="https://docs.rstudio.com/connect/api/#overview--versioning-of-the-api">API Reference Documentation</a> and the Python 2 support <a href="https://www.rstudio.com/blog/rstudio-connect-2021-08-python-updates/">announcement post</a> from August 2021.</p>
+<p><strong>Data Scientists</strong> should review the official porting guide and redeploy any mission critical content that currently relies on Python 2.</p>
+<ul>
+<li>Read the official <a href="https://docs.python.org/3/howto/pyporting.html">“Porting Python 2 Code to Python 3” guide</a> and the <a href="https://python3statement.org/practicalities/">Python 3 Statement Practicalities</a> for advice on how to sunset your Python 2 code.</li>
+</ul>
+<p>Notify your <strong>Administrators</strong> so they can determine whether Python 2 content exists on your RStudio Connect server today.</p>
+<ul>
+<li>Audit the complete list of content items on their server and which versions of R/Python they use by deploying <a href="https://github.com/sol-eng/rsc-audit-reports/blob/main/environment-audit/environment-audit-report.Rmd">this report</a>.</li>
+</ul>
+<p>If you have any questions or concerns about these upcoming changes, please contact your RStudio Customer Success representative.</p>
+<h2 id="upgrade-to-rstudio-connect-2021.12.0" class="anchored">Upgrade to RStudio Connect 2021.12.0</h2>
+<p>The latest release of RStudio Connect is 2021.12.0. To perform an upgrade, a <strong>server administrator</strong> should download and run the installation script. The script installs a new version of Connect on top of the earlier one. Existing configuration settings are respected. Be sure to consult the <a href="http://docs.rstudio.com/connect/news">release notes</a> before beginning an upgrade to make note of any breaking changes introduced since your last installation.</p>
+<pre><code># Download the installation script
+curl -Lo rsc-installer.sh https://cdn.rstudio.com/connect/installer/installer-v1.9.5.sh
+
+# Run the installation script
+sudo -E bash ./rsc-installer.sh 2021.12.0</code></pre>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,77 @@
+/* Starts */
+/* Container */
+.cmplz-cookiebanner {
+    @apply !bg-gray6 !px-[32px] !py-[32px] md:!px-[50px] !rounded-[8px] !w-full !border-neutral-light/20 !border-[1px] lg:!flex lg:!flex-col;
+    box-shadow: 0px 0px 40px -10px rgba(0, 0, 0, 0.25);
+}
+
+.cmplz-cookiebanner.cmplz-dismissed {
+    @apply !hidden;
+}
+
+/* Message */
+.cmplz-cookiebanner .cmplz-body {
+    @apply !self-center lg:!flex-col;
+}
+
+/* Content */
+.cmplz-cookiebanner .cmplz-body .cmplz-message,
+.cmplz-cookiebanner .cmplz-body .cmplz-categories {
+    @apply !w-full;
+}
+
+/* Message */
+.cmplz-cookiebanner .cmplz-message p {
+    @apply !body-sm-regular !text-blue1/[.62] !text-[14px];
+
+    font-size: 45px !important;
+}
+
+/* Logo */
+.cmplz-cookiebanner .cmplz-logo,
+.cmplz-cookiebanner .cmplz-title,
+.cmplz-cookiebanner .cmplz-close {
+    @apply !hidden;
+}
+
+.cmplz-cookiebanner .cmplz-buttons {
+    @apply !flex-col md:!flex-row lg:!self-start;
+}
+
+.cmplz-cookiebanner .cmplz-buttons .cmplz-btn {
+    @apply !w-auto !h-min;
+}
+
+/* Accept button */
+.cmplz-cookiebanner .cmplz-buttons .cmplz-btn.cmplz-accept {
+    @apply !btn-md-primary flex !justify-center !items-center;
+}
+
+.cmplz-cookiebanner .cmplz-buttons .cmplz-btn.cmplz-view-preferences {
+    @apply !btn-md-secondary flex !justify-center !items-center;
+}
+.cmplz-cookiebanner .cmplz-buttons .cmplz-btn.cmplz-save-preferences {
+    @apply !btn-md-secondary !justify-center !items-center;
+}
+
+/* Categories */
+.cmplz-cookiebanner .cmplz-category {
+}
+.cmplz-cookiebanner .cmplz-category-title {
+    @apply !body-sm-regular !text-blue1/[.62];
+}
+
+.cmplz-cookiebanner .cmplz-categories .cmplz-category .cmplz-description {
+    @apply !body-sm-regular !text-blue1/[.62];
+}
+
+.cmplz-cookiebanner .cmplz-categories .cmplz-category .cmplz-category-header,
+.cmplz-cookiebanner .cmplz-categories .cmplz-category .cmplz-description {
+    @apply bg-gray6;
+}
+
+#cmplz-manage-consent .cmplz-manage-consent {
+    @apply !bg-blue1 !text-neutral-light;
+}
+
+/* ENDS */

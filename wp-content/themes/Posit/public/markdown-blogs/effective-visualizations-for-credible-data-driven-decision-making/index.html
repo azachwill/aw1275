@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-04-16">
+
+<title>Effective Visualizations for Credible, Data-Driven Decision Making</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Effective Visualizations for Credible, Data-Driven Decision Making</h1>
+
+<p class="date">2020-04-16</p>
+</header>
+
+<p>Recently, we were joined by the smart folks at Roche &amp; Novartis to present a webinar on effective data visualization. You can watch the recording of the <a href="https://resources.rstudio.com/webinars/effective-visualizations-for-data-driven-decisions">full presentation here</a>. It was the latest installment in a series of webinars highlighting industry leaders in the Pharmaceutical and Life Science spaces that are doing world-changing data science work.</p>
+<p>They presented many great insights, most of which are relevant to data scientists in every industry, and we wanted to share our learnings.</p>
+<p><strong>“Graphics and visuals are such an important component of the work that we do as quantitative data scientists.”</strong></p>
+<p><a href="https://www.linkedin.com/in/marc-vandemeulebroecke-b394046/">Marc Vandemeulebroecke</a>, biostatistician at Novartis, stated this, then went on to say that effective visualizations help data scientists achieve two important things:</p>
+<ol type="1">
+<li>better insight into data and</li>
+<li>the ability to communicate results and conclusions to stakeholders.</li>
+</ol>
+<p>Imagine you have only 3 minutes to present your hard work to stakeholders. You’re probably going to rely on some sort of visualization. The stakeholders are then going to use the conclusions they draw from that presentation to make important decisions, such as what product to invest in or what initiative to approve. The stakes are set. Marc is clearly right: being able to effectively visualize data is an important part of any data scientist’s job.</p>
+<p>So what’s the issue? Why spend an hour presenting on this topic?</p>
+<p><strong>“Unfortunately we’re not always good at creating effective visualizations.”</strong></p>
+<p>And the consequences can be brutal. “When we get [data visualization] wrong, it can lead to misinformation, confusion, or harm, especially in clinical and medical research”, <a href="https://www.linkedin.com/in/mark-baillie-52486735/">Mark Baillie</a>, Director of Statistical Methodology at Novartis, continues.</p>
+<p>He says this while displaying a graphic recently published by the New York Times that shows the importance of social distancing during COVID 19. To be clear: this was an example of a good data visualization, one that potentially contributed to lives being saved.</p>
+<p><img align="center" style="padding: 35px;" src="curve.jpg" alt="A data visualization using red and blue on the Covid-19 curve"></p>
+<p>He transitioned to a lighter example, a bad data visualization: a confusing graphic that attempts to relay the results of a pizza topping survey by YouGov, a government entity in the UK:</p>
+<p><img align="center" style="padding: 35px;" src="pizza-pie.jpg" alt="A data visualization using a pizza"></p>
+<p>Certainly no harm was inflicted by botching a pizza graphic, but the graphic is confusing. The results were posted on <a href="https://twitter.com/yougov/status/838720989991223297?lang=en">Twitter</a> and the most popular reply questioned how YouGov managed to poll 695% <em>of the population</em>. YouGov had to make another post clarifying its analysis.</p>
+<p>So why aren’t we great at data visualizations? Back to Marc’s introduction: The focus in advanced education is primarily on doing the analysis, not communicating and visualizing the results. Rightfully so or not, that in turn means data visualization is a skill frequently learned on the job.</p>
+<p><strong>“So what do we mean by effective? We don’t necessarily mean beautiful.”</strong></p>
+<p>We also make common missteps when creating data visualizations. These missteps include selecting the wrong graph type, misusing color, and not considering scale. The singular error that most of these missteps roll up into: we’re overly concerned with making visualizations that are beautiful, so much so that we’re willing to sacrifice the visualization’s effectiveness.</p>
+<p><strong>“Effective visualization = effective communication” and the 3 laws for improving visual communication.</strong></p>
+<p>The teams at Roche &amp; Novartis distill the goal of effective visualization down to effective communication. The purpose of any data visualization is to communicate with stakeholders in a way that results in true understanding and better decision making.</p>
+<p>So, how do we achieve that? This has been such a focus at Novartis that they actually penned the Three Laws for Improving Visual Communication org-wide:</p>
+<h2 id="law-1-have-a-clear-purpose" class="anchored">Law 1: Have a Clear Purpose</h2>
+<p>Mark introduces this law by calling it “just advanced common sense”. Before jumping into your visualization, you should work through a why, what, who, and where mental framework:</p>
+<p><strong>Why</strong> do you need a graph? You should be able to identify a specific purpose for the graph, such as delivering a message or exploration.</p>
+<p><strong>What</strong> quantitative evidence do you have to support the purpose?</p>
+<p><strong>Who</strong> is the intended audience? Once you figure that out, you can adjust the design to support their needs.</p>
+<p><strong>Where</strong> is your visualization going to live? Once you know that, you should make design choices that fit formatting constraints.</p>
+<p>Your decisions when creating a visualization should work in harmony to achieve its purpose. You may opt for a tool like RMarkdown when distributing a visualization to senior stakeholders internally, with the purpose of quickly showing clinical trial results without the need for deep exploration. The choices you make for this data visualization are likely different than the choices you’d make for a visualization that you were to submit to the FDA or teammates that you work with.</p>
+<p>Mark expands on this law with a slide dedicated to a quote by John Tukey, who argues that the quality of an analysis is related to the quality of the question being asked.</p>
+<p><em>“An approximate answer to the right question is worth a great deal more than a precise answer to the wrong question.”</em></p>
+<p>The message here is to spend more time thinking about the questions that set your analysis and visualization building process in motion.</p>
+<h2 id="law-2-show-the-data-clearly" class="anchored">Law 2: Show the Data Clearly</h2>
+<p>Mark’s recommendation for this rule: do not lie or misrepresent with data. Your reporting should be open and transparent. When you’re clear, open, and transparent, you build trust with your audience, a necessary ingredient that enables your analysis to drive decision-making.</p>
+<p>Once you make the decision to be open and transparent, you can start thinking about the design and the graph type of your visualizations. Choosing the correct graph type aids in interpretation. “Often, we don’t need to reinvent the wheel here”, Mark adds. If you want to show a deviation, correlation, or ranking, there are common graph types you can usually select from to achieve your visualization’s purpose in a clear way.</p>
+<p>Additionally, you don’t want to make your audience members have to work when looking at a particular graph type. Unnecessary components in data visualizations, or overly stylistic choices, may do more harm than good.</p>
+<p><img align="center" style="padding: 35px;" src="1waldo.jpg" alt="A scene from Where's Waldo? with a beach packed with people"></p>
+<p>More specifically, you should carefully consider the scaling and spacing of your data visualizations. “Avoid plotting log-normally distributed variables on a linear scale”, Mark presents, then goes on to add, “measurements displayed close together are perceived to be closer in time.”</p>
+<h2 id="law-3-make-the-message-obvious" class="anchored">Law 3: Make the Message Obvious</h2>
+<p>The key to this law is: do not assume your reader understands what message your data visualization is trying to portray. Instead, really work at your visualization to make the takeaway obvious.</p>
+<p>What are some best-practices you can follow to achieve this? Mark highlights several:</p>
+<ul>
+<li><p><strong>Try not to set text at angle.</strong> Instead, think of alternatives such as transposing the graph.</p></li>
+<li><p><strong>Avoid unnecessary color.</strong> Don’t use color to differentiate between categories of the same variable. Doing so can contribute to confusion.</p></li>
+<li><p><strong>Only use color when it adds value.</strong> Use bold, saturated, or contrasting color to emphasize important details.</p></li>
+</ul>
+<p><img align="center" style="padding: 35px;" src="color2.jpg" alt="A graph showing how to use color to emphasize data"></p>
+<ul>
+<li><strong>Use informative labels and annotations to support the message.</strong> Emphasize the components of your data visualization that will make your message most obvious.</li>
+</ul>
+<p>All of your design choices should be made with the purpose of making your message more obvious to the audience. There are lots of bells and whistles you can add to your data visualizations. What you don’t want to do is add unnecessary or confusing distractions to your visualization.</p>
+<h2 id="closing-thoughts" class="anchored">Closing Thoughts</h2>
+<p>We’re grateful for the teams at Roche &amp; Novartis for giving a fantastic presentation and the 1,400 live attendees that chose to spend an hour with us during truly strange times. If you were one of those live attendees, thank you. If you are interested in watching the full recording of the presentation, <a href="https://resources.rstudio.com/webinars/effective-visualizations-for-data-driven-decisions">you can find it here</a>.</p>
+<p>Many of the lessons from this webinar are core to RStudio’s mission: we love helping data scientists maximize the impact of their work. We also believe that it shouldn’t be difficult for data scientists to reproduce that impact time and time again as projects change.</p>
+<p>If you’re hungry for more resources that may enhance your data visualization skills and ability to drive value at your organization, you should consider the following resources:</p>
+<ul>
+<li><a href="https://resources.rstudio.com/webinars/reproducibility-in-production">Reproducibility in Production</a> - a webinar presentation by Garrett Grolemund</li>
+<li><a href="https://resources.rstudio.com/webinars/the-tidyverse-and-rstudio-connect">The Tidyverse and RStudio Connect</a> - a webinar presentation by Nathan Stephens</li>
+<li><a href="https://rstudio.com/resources/webinars/introducing-flexdashboards/">Introducing Flexdashboards</a> - a webinar presentation by Garrett Grolemund</li>
+<li><a href="https://rstudio.com/resources/cheatsheets/">Our Data Visualization cheat sheets</a> - located on our cheat sheet page under the resource tab in the navigation bar</li>
+</ul>
+<p>Finally, if you want to watch the other episodes in this webinar series, you can find them here:</p>
+<ul>
+<li><a href="https://resources.rstudio.com/webinars/scaling-data-science-with-r-at-janssen-pharmaceuticals">Scaling Data Science with R at Janssen Pharmaceuticals</a><br>
+</li>
+<li><a href="https://resources.rstudio.com/webinars/scaling-data-science-at-the-epa">Scaling Data Science at the EPA</a><br>
+</li>
+<li><a href="https://resources.rstudio.com/webinars/the-role-of-r-in-drug-discovery-research-and-development">The Role of R in Drug Discovery, Research, and Development</a></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

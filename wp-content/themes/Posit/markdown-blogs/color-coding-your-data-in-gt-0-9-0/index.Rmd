@@ -1,0 +1,326 @@
+---
+title: "Color coding your data in {gt} 0.9.0"
+date: '2023-05-17'
+slug: color-coding-your-data-in-gt-0-9-0
+tags:
+  - gt
+authors:
+  - Rich Iannone
+description: We've vastly improved the `summary_rows()` and `grand_summary_rows()` functions in {gt} version 0.9.0.
+alttext: Add alt text for header image.
+blogcategories:
+  - Open Source
+  - Products and Technology
+events: blog
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(gt)
+```
+
+There are many improvements in the new `0.9.0` release of [gt](https://gt.rstudio.com/)! In fact, there is so much that is new that we couldn't fit it all in a single blog post. This blog post (number three in a larger series on **gt** `0.9.0`) focuses on the improvements to `data_color()`, a function that lets you perform data cell colorization.
+
+## A basic example on how to use `data_color()`
+
+Let's introduce the `data_color()` function with a simple example. For the sake of simplicity, let's use **gt**'s `exibble` dataset for this:
+
+```{r}
+exibble |>
+  gt() |>
+  data_color()
+```
+
+What's happened is that `data_color()` applies background colors to all cells of every column with the default palette in R (internally accessed through the `grDevices::palette()` function). The default method for applying color is `"auto"`, and this is through the new `method` argument. With `method = "auto"`, **gt** will decide on a column-by-column basis which colorization method to use. For numeric values, the method will be `"numeric"`; for character or factor values, the `"factor"` method is chosen. (We'll get more into the various color computation methods a bit later in the post.)
+
+An interesting thing about `data_color()` in **gt** `0.9.0` is that it works without having to supply any argument values! Previously, you needed to provide something for `columns` and a color-mapping function to `colors`. This made the function very difficult to use without first looking at a working example. We think that the new interface that prioritizes choosing a `method` will be better for most users (and you can still use a color-mapping function with the new `fn` argument).
+
+## Choosing a palette
+
+Virtually nobody will want to rely on the default palette, so let's take a look at some of the color-specification possibilities available in the new `palette` argument. It can take any of the following types of inputs:
+
+1. a vector of color names
+2. the name of an **RColorBrewer** palette
+3. the name of a viridis palette (e.g., `"viridis"`, `"magma"`, etc.)
+4. a discrete palette accessible from the **paletteer** package using the `⁠<package>::<palette>`⁠ syntax
+
+Let's try each of these with four separate calls of `data_color()` on a simple table:
+
+```{r}
+dplyr::tibble(red_green = 1:10, brewer = 1:10, viridis = 1:10, zissou = 1:10) |>
+  gt() |>
+  data_color(columns = red_green, palette = c("red", "green")) |>
+  data_color(columns = brewer, palette = "Oranges") |>
+  data_color(columns = viridis, palette = "viridis") |>
+  data_color(columns = zissou, palette = "wesanderson::Zissou1") |>
+  cols_width(everything() ~ px(100))
+```
+
+Notice how in the first column (`red_green`), there is interpolation between `"red"` (value `1`) and `"green"` (value `10`). The palette's colors will be distributed evenly in the range of data available. This is the default behavior, and the range can be set with the `domain` argument. We can experiment with that using a new table:
+
+```{r}
+dplyr::tibble(values = 1:10) |>
+  gt() |>
+  data_color(
+    palette = c("red", "green"),
+    domain = 3:7
+  )
+```
+
+When constraining the domain like this, any values that are outside of it are treated as `NA` (we even get a warning about it) and given a gray color reserved for `NA` values. We can use the `na_color` argument to provide a custom color if `"#808080"` isn't suitable.
+
+```{r}
+dplyr::tibble(values = 1:10) |>
+  gt() |>
+  data_color(
+    palette = c("red", "green"),
+    domain = 3:7,
+    na_color = "steelblue"
+  )
+```
+
+We only should provide a single color to `na_color`, but it's worth noting that when providing any sort of color, it can be a color name (R/X11 or CSS 3.0) or a hexadecimal string in the form of `"#RRGGBB"` or `"#RRGGBBAA"`.
+
+## Color mapping methods
+
+The previous uses of `data_color()` all used the `"numeric"` method of color mapping. Let's take a look at the different methods and how you would use them. It's instructive to use examples, so here's one that uses all four `method` types:
+
+```{r}
+dplyr::tibble(
+  numeric = 1:10,
+  bin = 1:10,
+  quantile = 1:10,
+  factor = vec_fmt_spelled_num(c(1:5, 1:5))
+) |>
+  gt() |>
+  data_color(
+    columns = numeric,
+    method = "numeric",
+    palette = "viridis"
+  ) |>
+  data_color(
+    columns = bin,
+    method = "bin",
+    palette = "viridis",
+    bins = c(1, 5, 7, 10)
+  ) |>
+  data_color(
+    columns = quantile,
+    method = "quantile",
+    palette = "viridis",
+    quantiles = 5
+  ) |>
+  data_color(
+    columns = factor,
+    method = "factor",
+    palette = "viridis",
+    levels = vec_fmt_spelled_num(1:5)
+  ) |>
+  cols_width(everything() ~ px(100))
+```
+
+The first three columns use numbers from `1` to `10`, and the different methods (`"numeric"`, `"bin"`, and `"quantile"`) allow us to easily generate a color-mapping function with a few supporting arguments.
+
+In the first column, using `method = "numeric"` creates a smooth ramp of colors across the `"viridis"` palette. The second column has the `"bin"` method applied, and this allows for the construction of bins in the `bins` argument. The `"quantile"` method used in the third column subdivides the values into equally-sized bins, settable through the `quantiles` argument. Finally, the `"factor"` method is best used for text-based values, as seen in the fourth column (though any type is valid). Factor levels are, by default, alphabetical, but the supporting `levels` argument lets you specify them directly.
+
+Before **gt** `0.9.0`, you were *required* to supply your own color-mapping function. This is still possible with the `fn` argument. Here's an example of that using the `col_numeric()` function from the **scales** package:
+
+```{r}
+countrypops |>
+  dplyr::filter(country_name == "Mongolia") |>
+  dplyr::select(-contains("code")) |>
+  tail(10) |>
+  gt() |>
+  fmt_integer(columns = population) |>
+  data_color(
+    columns = population,
+    fn = scales::col_numeric(
+      palette = "viridis",
+      domain = c(2.5E6, 3.4E6)
+    )
+  )
+```
+
+If you're not familiar with the color-mapping functions available in the **scales** package, just know that invoking `col_numeric()` will return a function (which is what the `fn` argument actually requires) that takes a vector of numeric values and returns color values.
+
+Using **scales**-based functions in `fn` can be very useful if you want to make use of the specialized arguments available in the `⁠col_*()`⁠ functions. You could even supply your own custom function for performing more complex colorizing treatments!
+
+## Applying color to other columns
+
+The `data_color()` function now lets you apply colorization indirectly to other columns. That is, you can apply colors to a column different from the one used to generate those specific colors. This can be done with the new `target_columns` argument. Let's look at how it's done with a `countrypops`-based table example.
+
+```{r}
+countrypops |>
+  dplyr::filter(country_code_3 %in% c("FRA", "GBR")) |>
+  dplyr::filter(year %% 10 == 0) |>
+  dplyr::select(-contains("code")) |>
+  dplyr::mutate(color = "") |>
+  gt(groupname_col = "country_name") |>
+  fmt_integer(columns = population) |>
+  data_color(
+    columns = population,
+    target_columns = color,
+    method = "numeric",
+    palette = "viridis",
+    domain = c(4E7, 7E7)
+  ) |>
+  cols_width(year ~ px(60), population ~ px(120), color ~ px(10)) |>
+  tab_options(column_labels.hidden = TRUE) |>
+  opt_vertical_padding(scale = 0.65)
+```
+
+So, the colors are based on the data in the `population` column, but the colors are actually placed in the `color` column (which was made intentionally 'blank' by setting it entirely with empty strings).
+
+When specifying a single column in `columns`, we can use as many `target_columns` values as we want. Let's make another table where we map the generated colors from the `year` column to all columns in the table. We'll use the underrated `"inferno"` palette (from the `"viridis"` collection) for this one.
+
+```{r}
+countrypops |>
+  dplyr::filter(country_code_3 %in% c("FRA", "GBR", "ITA")) |>
+  dplyr::select(-contains("code")) |>
+  dplyr::filter(year %% 5 == 0) |>
+  tidyr::pivot_wider(
+    names_from = "country_name",
+    values_from = "population"
+  ) |>
+  gt() |>
+  fmt_integer(columns = c(everything(), -year)) |>
+  data_color(
+    columns = year,
+    target_columns = everything(),
+    palette = "inferno"
+  ) |>
+  cols_width(
+    year ~ px(80),
+    everything() ~ px(160)
+  ) |>
+  opt_all_caps() |>
+  opt_horizontal_padding(scale = 3) |>
+  opt_vertical_padding(scale = 0.75) |>
+  tab_options(
+    table_body.hlines.style = "none",
+    column_labels.border.top.color = "black",
+    column_labels.border.bottom.color = "black",
+    table_body.border.bottom.color = "black"
+  )
+```
+
+Another interesting thing that can be done now in `0.9.0` is the task of indirectly applying color in pairs. To do this, we make sure that the resolved number of columns in `columns` matches the number of columns in `target_columns`.
+
+The `towny` dataset has columns with population values at different census years. It also has an associated set of columns that provide the percent change (as fractional values) across census years. In this next example, we will do the following things:
+
+1. perform color mapping on those change values (in `columns`)
+2. apply the colors indirectly to the population figures (with `target_columns`)
+3. hide the columns used to generate the color mappings (with `cols_hide()`)
+
+```{r}
+towny |>
+  dplyr::filter(census_div %in% c("Oxford", "Essex")) |>
+  dplyr::select(
+    name, starts_with("population"), ends_with("pct"),
+    -population_1996
+  ) |>
+  gt(rowname_col = "name") |>
+  fmt_integer() |>
+  data_color(
+    columns = ends_with("pct"),
+    target_columns = starts_with("population"),
+    palette = c("red", "white", "green"),
+    domain = c(-0.5, 0.5),
+    na_color = "lightblue"
+  ) |>
+  cols_hide(columns = ends_with("pct")) |>
+  cols_label_with(fn = function(x) gsub("population_", "", x)) |>
+  opt_vertical_padding(scale = 0.6)
+```
+
+We used a few more **gt** functions to clean up the table somewhat, but the bulk of the presentation lies in the use of `data_color()`. Because this is a fairly complex example, we recommended running the code in a statement-by-statement manner to see how each function call changes the output table.
+
+An important note to make here is that the order of columns in both the `columns` and `target_columns` arguments should match the intended mapping order. That is the case in the above example, but other situations might vary (thus, it's important to keep this in mind).
+
+## Row-wise color mapping
+
+Colorization can now occur in a row-wise manner. The key to making that happen is by using `direction = "row"`. Let's try this out using the `sza` dataset. After some very necessary **dplyr** and **tidyr** work, we'll put that data into a **gt** table and apply color to values across each 'month' of data in that table. We won't set a `domain` value and instead use the bounds of the data in each row.
+
+```{r}
+sza |>
+  dplyr::filter(latitude == 20 & tst <= "1200") |>
+  dplyr::select(-latitude) |>
+  dplyr::filter(!is.na(sza)) |>
+  tidyr::pivot_wider(
+    names_from = tst,
+    values_from = sza,
+    names_sort = TRUE
+  ) |>
+  gt(rowname_col = "month") |>
+  sub_missing(missing_text = "") |>
+  data_color(
+    direction = "row",
+    palette = "PuOr",
+    na_color = "white"
+  ) |>
+  tab_options(table.font.size = px(12)) |>
+  opt_vertical_padding(scale = 0.75)
+```
+
+When using `direction = "row"`, we can see that each row has cell coloring that is relative to the range of values in the particular row. This is useful in those situations where you might feel the colorization should be made specific to the row.
+
+## One last thing, also to do with rows
+
+The `data_color()` function now has a `rows` argument. Before that wasn't there, and you had no choice but to color each and every row in the `columns` specified. Of course, sometimes you just want colorization in a specific region of the table. Here's an example that demonstrates this (and we're using the new `metro` dataset):
+
+```{r}
+metro |>
+  dplyr::select(name, passengers, connect_other) |>
+  dplyr::arrange(desc(passengers)) |>
+  head(15) |>
+  gt(locale = "fr") |>
+  tab_header(
+    title = "Les stations de métro les plus fréquentées et
+    leurs nombre annuel de passagers",
+    subtitle = "Ceux qui sont à côté des gares sont surlignés en vert"
+  ) |>
+  fmt_integer() |>
+  tab_row_group(
+    label = "a côté d'une gare",
+    rows = grepl("TGV", connect_other),
+    id = "gare"
+  ) |>
+  data_color(
+    columns = passengers,
+    rows = grepl("TGV", connect_other),
+    method = "numeric",
+    palette = c("lightgreen", "green" |> adjust_luminance(steps = -2))
+  ) |>
+  cols_hide(columns = connect_other) |>
+  cols_label(
+    name ~ "station de métro",
+    passengers = "passagers"
+  ) |>
+  cols_width(
+    name ~ px(375),
+    passengers ~ px(150)
+  ) |>
+  tab_style(
+    style = cell_text(align = "center"),
+    locations = cells_row_groups(groups = "gare")
+  ) |>
+  opt_all_caps() |>
+  opt_align_table_header(align = "left") |>
+  opt_horizontal_padding(scale = 3) |>
+  opt_table_font(stack = "rounded-sans")
+```
+
+Ce tableau de données là, *c'est le fun*!
+
+## In conclusion
+
+We've wanted to improve the `data_color()` function of **gt** for a few years now, and we are so glad it is now a thing accomplished in version `0.9.0`! The new version of this function is *way* more powerful than before (and hopefully easier to use too).
+
+This is blog post number three of a series on **gt** version `0.9.0`. There's more to come, owing to the fact that this release of **gt** is a big one. We always want your feedback, and there are many different ways to get in touch with us. You can:
+
+- [file an issue](https://github.com/rstudio/gt/issues) on GitHub
+- engage in discussions through the **gt** [Discussions page](https://github.com/rstudio/gt/discussions), again on GitHub
+- follow us on Twitter at [@gt_package](https://twitter.com/gt_package)
+- join the new `gt_package` [*Discord server*](https://discord.gg/Ux7nrcXHVV)
+
+Until next time!

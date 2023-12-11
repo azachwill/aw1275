@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-06-27">
+<meta name="description" content="A match made in high-performance-web-application heaven.">
+
+<title>Shiny and Arrow</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Shiny and Arrow</h1>
+
+<p class="date">2022-06-27</p>
+</header>
+
+<div class="lt-gray-box">
+<p>This is a guest post from Michael Thomas, Chief Data Scientist at Ketchbrook Analytics. At Ketchbrook, Michael and his team help businesses gain significant competitive advantages by leveraging data effectively. Keep in touch with Michael on <a href="https://www.linkedin.com/in/michaeljthomas2/" target="_blank">LinkedIn</a>.</p>
+</div>
+<p>Shiny apps are incredible tools for bringing data science to life. They can help communicate your analysis to non-technical stakeholders, or enable self-service data exploration for any audience. At <a href="https://www.ketchbrookanalytics.com" target="_blank">Ketchbrook Analytics</a>, we care a lot about building <em>production-grade</em> quality Shiny apps; in other words, we strive to ensure that the apps we develop for you will run successfully inside your organization with minimal maintenance.</p>
+<p>Building a working Shiny app that runs on your own laptop can be a tricky process itself! However, there are some additional things you need to consider when taking the next step of <em>deploying</em> your app to <strong>production</strong> so that others can reap the benefits of your hard work. One of these considerations is where to <em>store</em> the data.</p>
+<blockquote>
+<p>“Where should the data live? Should we use a database or flat file(s)? Is our data small enough to fit there?”</p>
+</blockquote>
+<center>
+<img src="data_soup.png" alt="Databases and File Storage Formats Floating Together in Data Soup" width="600">
+</center>
+<h2 id="storing-your-data" class="anchored">Storing Your Data</h2>
+<p>There are <em>so</em> many options to choose from when it comes to how you want to store the data behind your Shiny app. Sometimes a traditional database doesn’t make sense for your project. Databases can take a while to configure, and if your data isn’t relational then a <em>data lake</em> approach might be a better option. A <strong>data lake</strong> is just a fancy term for a collection of flat files that are organized in a thoughtful way.</p>
+<p>When you think about storing data in flat files, formats like <strong>.csv</strong> or <strong>.txt</strong> probably come to mind. However, as your data becomes <em>“big”</em>, transitioning your data to more modern, column-oriented file types (e.g., <strong>.parquet</strong>) can drastically reduce the size of the file containing your data and increase the speed at which other applications can read that data.</p>
+<h3 id="the-benefits-of-.parquet" class="anchored">The Benefits of .parquet</h3>
+<p>First, let’s dig a little deeper into the advantages of <strong>.parquet</strong> over <strong>.csv</strong>. The main benefits are:</p>
+<ul>
+<li>smaller file sizes</li>
+<li>improved read speed</li>
+</ul>
+<p>The compression and columnar storage format lead to file sizes that are significantly smaller than if that same data were stored in a typical delimited file. From our experience – and also backed by <a href="https://tomaztsql.wordpress.com/2022/05/08/comparing-performances-of-csv-to-rds-parquet-and-feather-data-types/" target="_blank">this great blog post by Tomaž Kaštrun</a> – <strong>.parquet</strong> typically comes in at a little less than half the size of a data-equivalent <strong>.csv</strong>; however, this margin widens even further as the data volume increases. Included in Tomaž’s article is this fantastic chart (below) illustrating the read, write, and file size metrics he gathered while experimenting across many different file types and sizes.</p>
+<center>
+<img src="read_write_comparison_chart.png" alt="Chart from Tomaž Kaštrun, comparing file type sizes and respective read/write performance" width="600">
+</center>
+<p>Interestingly, <strong>.parquet</strong> files not only store your data, but they also store <em>data about your data</em> (i.e., metadata). Information such as minimum &amp; maximum values are stored for each column, which helps make aggregation blazing fast.</p>
+<p>Still not sold? Maybe you are wondering,</p>
+<blockquote>
+<p>Is “.parquet” a sustainable file format for storing my data, or is it just a fad?</p>
+</blockquote>
+<p>That’s a fair question! The last thing we want to do as data scientists is to create more technical debt for our organization. Rest assured, <strong>.parquet</strong> format is not going anywhere – many production workflows at major organizations are driven by <strong>.parquet</strong> files in a data lake.</p>
+<p><a href="https://voltrondata.com/" target="_blank">Voltron Data</a> is the company behind <strong>.parquet</strong> format and the greater <a href="https://arrow.apache.org/" target="_blank">Apache Arrow</a> project. They recently finished their Series A round by <a href="https://voltrondata.com/news/fundinglaunch/" target="_blank">raising $110 million in funding</a> to continue to develop this technology. Needless to say, we won’t be seeing <strong>.parquet</strong> format going away any time soon.</p>
+<p>Lastly, unlike <strong>.RDS</strong> files, <strong>.parquet</strong> is a cross-platform file storage format, which means you can work with <strong>.parquet</strong> files from <a href="https://github.com/apache/arrow#powering-in-memory-analytics" target="_blank">just about any programming language</a> including R. This is where the <a href="https://github.com/apache/arrow/tree/master/r#arrow" target="_blank">{arrow}</a> package can help.</p>
+<h3 id="the-benefits-of-arrow" class="anchored">The Benefits of {arrow}</h3>
+<p>The <strong>{arrow}</strong> package provides major benefits:</p>
+<ol type="1">
+<li>It has the ability to read &amp; write <strong>.parquet</strong> files (among other file types)</li>
+<li>You can query the data in that file <em>before</em> bringing it into an R data frame, using <strong>{dplyr}</strong> verbs, which provides for dramatic speed improvements</li>
+</ol>
+<p>The combination of <strong>{arrow}</strong> and <strong>{dplyr}</strong> also results in <em>lazy evaluation</em> of your data manipulation statements. This means that your {dplyr} functions build a “recipe” of transformation steps that will only evaluate once you are finally ready to bring the transformed data into memory (through the use of <code>dplyr::collect()</code>). Don’t take our word for it, though; hear it <a href="https://arrow.apache.org/docs/r/articles/dataset.html" target="_blank">straight from the Apache Arrow team</a>:</p>
+<blockquote>
+<p>“…[A]ll work is pushed down to the individual data files, and depending on the file format, chunks of data within the files. As a result, you can select a subset of data from a much larger dataset by collecting the smaller slices from each file – you don’t have to load the whole dataset in memory to slice from it.”</p>
+</blockquote>
+<p>The concept of lazy evaluation with <strong>{dplyr}</strong> is also paramount when performing data manipulations and summaries on data stored in relational databases. The fact that a data science team can leverage those same principles to analyze data stored in <strong>.parquet</strong> files, without having to learn a completely new approach, is another massive benefit!</p>
+<h2 id="how-it-all-fits-together-in-shiny-a-use-case-at-ketchbrook-analytics" class="anchored">How It All Fits Together in Shiny: A Use Case at Ketchbrook Analytics</h2>
+<p>We have learned that the combination of <strong>{arrow}</strong> + <strong>{dplyr}</strong> + <strong>.parquet</strong> gives us all of the memory-saving benefits we would get from querying a database, but with the simplicity of flat files.</p>
+<p>Ketchbrook was developing a Shiny app for a client, for which the relevant data was stored in a large, single <strong>.csv</strong> that was causing two problems:</p>
+<ol type="1">
+<li>There wasn’t enough room for the file on their <strong>shinyapps.io</strong> server</li>
+<li>Even when run locally, applying filters and aggregations to the data from within the app was slow</li>
+</ol>
+<p>After converting the large <strong>.csv</strong> file into <strong>.parquet</strong> format, the data became one-sixth of the size of the original <strong>.csv</strong> – plenty of room available on the server for the <strong>.parquet</strong> data.</p>
+<p>Further, executing <code>dplyr::filter()</code> on the already-in-memory <strong>.csv</strong> data was taking quite a few seconds for the app to respond. The conversion of the data to <strong>.parquet</strong> format, coupled with executing the <strong>{dplyr}</strong> functions against an <strong>{arrow}</strong> table (instead of an R data frame), drastically reduced the processing time to less than one second.</p>
+<p>To demonstrate this powerful combination of <strong>{shiny}</strong> + <strong>{arrow}</strong>, Ketchbrook Analytics developed an <a href="https://ketchbrookanalytics.shinyapps.io/shiny_arrow/" target="_blank">example Shiny app</a> and accompanying <a href="https://github.com/ketchbrookanalytics/shiny_arrow" target="_blank">GitHub repository</a>.</p>
+<p>Play around with the app, dive into the code, and try incorporating <strong>{arrow}</strong> into your next Shiny project!</p>
+<h3 id="the-proof-is-in-the-pudding-and-the-file-size" class="anchored">The Proof is in the Pudding (and the File Size)</h3>
+<p>For our <a href="https://ketchbrookanalytics.shinyapps.io/shiny_arrow/" target="_blank">example Shiny app</a>, we created a mock dataset, and stored it in both <strong>.txt</strong> and <strong>.parquet</strong> format. You can create this data yourself by running <a href="https://github.com/ketchbrookanalytics/shiny_arrow/tree/main/data-raw" target="_blank">these two scripts</a>.</p>
+<p>For comparison, let’s view the size of the data that’s stored in tab-delimited <strong>.txt</strong> file format:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>files <span class="ot">&lt;-</span> fs<span class="sc">::</span><span class="fu">file_info</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="fu">list.files</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    dir, </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">full.names =</span> <span class="cn">TRUE</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span> </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(path, size) <span class="sc">|&gt;</span> </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> fs<span class="sc">::</span><span class="fu">path_file</span>(path), </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">file_type =</span> stringr<span class="sc">::</span><span class="fu">str_extract</span>(</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">string =</span> path, </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">pattern =</span> <span class="st">"[^.]+$"</span>   <span class="co"># extract text after period</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>files <span class="sc">|&gt;</span> </span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(file_type <span class="sc">==</span> <span class="st">"txt"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">
+path
+</th>
+<th style="text-align: right;">
+size
+</th>
+<th style="text-align: left;">
+file_type
+</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">
+half_of_the_data.txt
+</td>
+<td style="text-align: right;">
+170M
+</td>
+<td style="text-align: left;">
+txt
+</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">
+the_other_half_of_the_data.txt
+</td>
+<td style="text-align: right;">
+170M
+</td>
+<td style="text-align: left;">
+txt
+</td>
+</tr>
+</tbody>
+
+</table>
+<p>We can see that the <strong>.txt</strong> files total 339M in size.</p>
+<p>Now let’s look at the data when stored as <strong>.parquet</strong> file format:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>files <span class="sc">|&gt;</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(file_type <span class="sc">==</span> <span class="st">"parquet"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">
+path
+</th>
+<th style="text-align: right;">
+size
+</th>
+<th style="text-align: left;">
+file_type
+</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">
+all_of_the_data.parquet
+</td>
+<td style="text-align: right;">
+158M
+</td>
+<td style="text-align: left;">
+parquet
+</td>
+</tr>
+</tbody>
+
+</table>
+<p>Wow! The same dataset is less than half the size when stored as <strong>.parquet</strong> as compared to <strong>.txt</strong>.</p>
+<h3 id="the-need-for-speed" class="anchored">The Need for Speed</h3>
+<p>We saw the storage savings in action – now let’s take a look at the speed improvements.</p>
+<p>As a practical example, let’s run a sequence of <code>dplyr::filter()</code>, <code>dplyr::group_by()</code>, and <code>dplyr::summarise()</code> statements against the <strong>.txt</strong> file:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>tic <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>vroom<span class="sc">::</span><span class="fu">vroom</span>(</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list.files</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> dir, </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">full.names =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">pattern =</span> <span class="st">".txt$"</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  ), </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">delim =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span> </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(Variable_H <span class="sc">&gt;</span> <span class="dv">50</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(Item_Code) <span class="sc">|&gt;</span> </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Variable_A_Total =</span> <span class="fu">sum</span>(Variable_A)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code># A tibble: 1,000 × 2
+   Item_Code Variable_A_Total
+   &lt;chr&gt;                &lt;dbl&gt;
+ 1 A1G740              49453.
+ 2 A1J731              49481.
+ 3 A1N838              51610.
+ 4 A1O339              52633.
+ 5 A1R990              47588.
+ 6 A2E381              50823.
+ 7 A2J681              51575.
+ 8 A2N118              49840.
+ 9 A2U328              51106.
+10 A2W136              48013.
+# … with 990 more rows</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>toc <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>time_txt <span class="ot">&lt;-</span> <span class="fu">difftime</span>(toc, tic)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>time_txt</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>Time difference of 6.38838 secs</code></pre>
+<p>When run against the <strong>.txt</strong> file, the process takes 6.39 seconds to run.</p>
+<p>Now let’s try the same <strong>{dplyr}</strong> query against the <strong>.parquet</strong> file:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>tic <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>arrow<span class="sc">::</span><span class="fu">open_dataset</span>(</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">sources =</span> <span class="fu">list.files</span>(</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> dir, </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">full.names =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">pattern =</span> <span class="st">".parquet$"</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  ), </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">format =</span> <span class="st">"parquet"</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span> </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(Variable_H <span class="sc">&gt;</span> <span class="dv">50</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(Item_Code) <span class="sc">|&gt;</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Variable_A_Total =</span> <span class="fu">sum</span>(Variable_A)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">collect</span>()</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code># A tibble: 1,000 × 2
+   Item_Code Variable_A_Total
+   &lt;chr&gt;                &lt;dbl&gt;
+ 1 Z8B631              49545.
+ 2 J8O195              52941.
+ 3 I5Y383              46572.
+ 4 O8N416              51525.
+ 5 I2E912              49862.
+ 6 D4M22               50317.
+ 7 L1G322              46862.
+ 8 C3C179              51791.
+ 9 N4Q977              49013.
+10 L6T273              48561.
+# … with 990 more rows</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>toc <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>time_parquet <span class="ot">&lt;-</span> <span class="fu">difftime</span>(toc, tic)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>time_parquet</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>Time difference of 1.975953 secs</code></pre>
+<p>Wow! It might not seem like much, but the difference between a user having to wait 6.39 seconds for your Shiny app to execute a process versus having to wait 1.98 seconds is incredibly significant from a <em>user experience</em> standpoint.</p>
+<p>But don’t just take our word for it. Make your next Shiny app an <strong>{arrow}</strong>-driven, high-performance experience for your own users!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,56 @@
+@layer utilities {
+    .input-primary,
+    .input-secondary {
+        @apply h-full w-full rounded-[10px] pl-[32px] bg-neutral-light text-neutral-dark body-medium border border-gray3 outline-none ui-small
+        placeholder:focus:text-gray1 placeholder:ui-small
+        focus:outline-none focus:border-gray1 focus:text-gray1
+        disabled:text-gray1 disabled:placeholder-gray1 disabled:border-gray3
+        py-[12px]
+        md:py-[18px];
+    }
+
+    input:-webkit-autofill,
+    :-webkit-autofill:focus,
+    :-webkit-autofill:active {
+        -webkit-text-fill-color: #404041;
+        -webkit-box-shadow: 0 0 0 100px #ffffff inset;
+    }
+
+    input:-webkit-autofill:invalid {
+        -webkit-text-fill-color: #0e0e0e;
+        -webkit-box-shadow: 0 0 0 100px #ff723f inset;
+    }
+
+    .input-primary {
+        @apply placeholder-neutral-dark;
+    }
+
+    .input-secondary {
+        @apply placeholder-gray2 disabled:bg-gray3;
+    }
+
+    input.invalid {
+        @apply bg-error focus:border-error border-error text-neutral-dark focus:text-neutral-dark !important;
+    }
+
+    .typed {
+        @apply text-neutral-dark border-neutral-dark;
+    }
+
+    .input-error {
+        @apply absolute right-0 invisible text-error
+        body-medium bottom-[-30px] body-medium;
+    }
+
+    .input-error.invalid {
+        @apply visible;
+    }
+
+    .input-error-secondary {
+        @apply text-neutral-light;
+    }
+
+    .input-success {
+        @apply block visible ui-large text-green uppercase;
+    }
+}

@@ -1,0 +1,326 @@
+---
+title: "Big changes to making summary rows in {gt} 0.9.0"
+date: '2023-05-03'
+slug: big-changes-to-making-summary-rows-in-gt-0-9-0
+tags:
+  - gt
+authors:
+  - Rich Iannone
+description: We've vastly improved the `summary_rows()` and `grand_summary_rows()` functions in {gt} version 0.9.0.
+alttext: Add alt text for header image.
+blogcategories:
+  - Open Source
+  - Products and Technology
+events: blog
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(gt)
+```
+
+The [gt](https://gt.rstudio.com/) package did a lot in version `0.9.0`. It is truly a big release. We showed you all about the new formatting functions in a [recent blog post](https://posit.co/blog/new-formatting-functions-in-gt-0-9-0). In this one, we're going to have a look at some functions that are not new, but rather they have been vastly improved in this release: the `summary_rows()` and `grand_summary_rows()` functions. The first of the aforementioned functions lets you add summary rows to row groups (i.e., groups of rows). The second one applies to the table as a whole. Quite a bit has changed with these functions, so let's get right into it! 
+
+## A basic example of how to use `summary_rows()`
+
+Let's look at how `summary_rows()` works before we even get to the `0.9.0` changes. We'll find that you don't need to supply much to `summary_rows()` to get a set of summary rows generated. As an example of that, the `sp500` dataset will be used to create a very simple **gt** table with row groups (they can be defined by using `gt()`'s `groupname_col` argument). The `summary_rows()` function will then be used to generate summary rows in each of the two groups (`"W02"` and `"W03"`). We can simply list the names of several aggregation functions in the `fns` argument of `summary_rows()`. In this example, we will use `"min"`, `"max"`, and `"mean"`:
+
+```{r}
+sp500 |>
+  dplyr::filter(date >= "2015-01-05" & date <= "2015-01-16") |>
+  dplyr::arrange(date) |>
+  dplyr::mutate(week = paste0("W", strftime(date, format = "%V"))) |>
+  dplyr::select(-adj_close, -volume) |>
+  gt(rowname_col = "date", groupname_col = "week") |>
+  summary_rows(fns = list("min", "max", "mean"))
+```
+
+Notice that with this simple usage of `summary_rows()`, we get an equal number of summary rows within each group, and the number of summary rows corresponds to the number of functions provided in `fns`. Here, the function names are used as the summary row labels (these go into the table stub). Incidentally, the function names are also used as the ID values for each of the summary rows. This is important to know if using the `tab_style()` function to style the summary rows because these ID values can help us target the individual rows. Here's an updated example that adds a `tab_style()` statement:
+
+```{r}
+sp500 |>
+  dplyr::filter(date >= "2015-01-05" & date <= "2015-01-16") |>
+  dplyr::arrange(date) |>
+  dplyr::mutate(week = paste0("W", strftime(date, format = "%V"))) |>
+  dplyr::select(-adj_close, -volume) |>
+  gt(rowname_col = "date", groupname_col = "week") |>
+  summary_rows(fns = list("min", "max", "mean")) |>
+  tab_style(
+    style = cell_fill(color = "lightgreen"),
+    locations = cells_summary(groups = "W02", rows = "max")
+  )
+```
+
+This constitutes the basics of summary row generation in **gt**, and this manner of using `summary_rows()` has been there since the first public release. With `0.9.0`, we gain a lot more functionality in two key aspects:
+
+1. Aggregation expressions (for the `fns` argument)
+2. Formatting expressions (for the *new* `fmt` argument)
+
+Prior to `0.9.0`, expressing aggregation and subsequent formatting was less than optimal, often requiring several calls of `summary_rows()` or `grand_summary_rows()`. But now, we can do a lot more in each call thanks to the redesign work done for this release. Let's take a look at how aggregation and formatting are now *a lot* better!
+
+## Aggregation expressions for `fns`
+
+New in `0.9.0` is increased flexibility in how to express how an aggregation should work for each summary row. We now gain the ability to define a summary row ID value that is distinct from the label. The ID is necessary for subsequent targeting of summary rows with `tab_style()` or `tab_footnote()`; the label is used for display in the rendered table.
+
+The new and preferred way to express aggregation for `fns` in `summary_rows()` is to use a double-sided formula (in the form `⁠<LHS> ~ <RHS>`⁠) that expresses everything about a summary row. The left-hand side (LHS) contains a list with the `id` and `label`, the right-hand side (RHS) has the aggregation expression.
+
+It's best to learn through examples. Let's first prepare a **gt** table (based on the `countrypops` dataset) that doesn't contain any summary rows.
+
+```{r}
+pop_compare_tbl <-
+  countrypops |>
+  dplyr::filter(
+    country_code_2 %in% c("BR", "RU", "IN", "CN", "FR", "DE", "IT", "GB")
+  ) |>
+  dplyr::filter(year %% 10 == 0) |>
+  dplyr::select(country_name, year, population) |>
+  tidyr::pivot_wider(names_from = year, values_from = population) |>
+  gt(rowname_col = "country_name") |>
+  tab_row_group(
+    label = md("*BRIC*"),
+    rows = c("Brazil", "Russian Federation", "India", "China"),
+    id = "bric"
+  ) |>
+  tab_row_group(
+    label = md("*Big Four*"),
+    rows = c("France", "Germany", "Italy", "United Kingdom"),
+    id = "big4"
+  ) |>
+  row_group_order(groups = c("bric", "big4")) |>
+  tab_stub_indent(rows = everything()) |>
+  tab_header(title = "Populations of the BRIC and Big Four Countries") |>
+  tab_spanner(columns = everything(), label = "Year") |>
+  fmt_number(n_sigfig = 3, suffixing = TRUE)
+
+pop_compare_tbl
+```
+
+Now, we want to sum all of the population values in each of the years. We'd like to supply the label of the summary row in each group to be **ALL**, and we'll use Markdown and the `md()` helper for that. Finally, we want the ID value to be `totals`. Here is how we could do all of that:
+
+```{r}
+pop_compare_tbl |>
+  summary_rows(
+    fns = list(label = md("**ALL**"), id = "totals") ~ sum(.)
+  )
+```
+
+This gives us what we need! Well, almost, since the default formatting of the summary values is not consistent with that of the body cells (we will handle formatting in the next section). At any rate, we can now target the summary rows with the `id` value and here's an example of that with `tab_style()`:
+
+```{r}
+pop_compare_tbl |>
+  summary_rows(
+    fns = list(label = md("**ALL**"), id = "totals") ~ sum(.)
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = "gray40"),
+      cell_text(color = "white")
+    ),
+    locations = cells_summary(rows = "totals")
+  )
+```
+
+There are a number of other ways to express aggregation for `fns` in an equivalent manner. We've seen in the very first example that a list of function names in quotes works (i.e., `fns = list("min", "max", "mean")`). RHS formula expressions (as in `fns = list(~ min(., na.rm = TRUE), ~ max(., na.rm = TRUE), ~ mean(., na.rm = TRUE))`) also work, and **gt** will take the function name as both the `id` and the `label`. 
+
+While there are many other variations, I recommend using the `⁠<LHS> ~ <RHS>` construction from the above `pop_compare_tbl` examples for all new code. Take a look at `?summary_rows` to understand the pros and cons of the different syntax variations. Version `0.9.0` is fully compatible with ways of expressing `fns` in previous versions, so your existing code won't break when upgrading to the latest. 
+
+## Formatting expressions for `fmt`
+
+We saw that an admixture of formatted and unformatted values in a column is really not good at all. Given that we are generating new data in a table, we'd want to format those new values right away. We can do this in the new `fmt` argument, either with a single RHS formula expression or a number of them in a list.
+
+```{r}
+pop_compare_tbl |>
+  summary_rows(
+    fns = list(label = md("**ALL**"), id = "totals") ~ sum(.),
+    fmt = ~ fmt_number(., n_sigfig = 3, suffixing = TRUE)
+  )
+```
+
+We are unsurprisingly using formatting functions (i.e., those of the form `fmt_*()`) to do the work here. In the above usage of `fmt_number()`, note that the leading `.` stands in for the data. While not visible in the above example, every formatting function has the `columns` and `rows` arguments. The defaults of `everything()` for both are just fine here. However, we could try a variation of this where `columns` is used in conjunction with two different formatting statements.
+
+```{r}
+pop_compare_tbl |>
+  summary_rows(
+    fns = list(label = md("**ALL**"), id = "totals") ~ sum(.),
+    fmt = list(
+      ~ fmt_number(., columns = starts_with("1"), n_sigfig = 3, suffixing = TRUE),
+      ~ fmt_scientific(., columns = starts_with("2"))
+    )
+  )
+```
+
+Enclosing the separate formatting statements in a list is the way to go here (this also works for `fns`). We see that the columns beginning with `"1"` (`1960` to `1990`) get the `fmt_number()` formatting while the last three columns (beginning with `"2"`) get formatting that is furnished by `fmt_scientific()`.
+
+But what if you just wanted the scientific notation formatting to happen only in the last three columns of the `"Big Four"` group. There's a way to get just that by supplying the group ID values on the LHS of a formatting expression:
+
+```{r}
+pop_compare_tbl |>
+  summary_rows(
+    fns = list(label = md("**ALL**"), id = "totals") ~ sum(.),
+    fmt = list(
+      ~ fmt_number(., n_sigfig = 3, suffixing = TRUE),
+      "big4" ~ fmt_scientific(., columns = starts_with("2"))
+    )
+  )
+```
+
+The LHS takes group ID values, and we set those previously in a `tab_row_group()` statement via the `id` argument:
+
+```
+  ... |>
+  tab_row_group(
+    label = md("*Big Four*"),
+    rows = c("France", "Germany", "Italy", "United Kingdom"),
+    id = "big4"
+  ) |>
+  ...
+```
+
+You can use vectors or **tidyselect** statements like `matches()` or `starts_with()` on the left-hand side to match multiple groups. Check out the help available in `?summary_rows` to get more examples of all the formatting you can do with the `fmt` argument.
+
+## Grand summary rows
+
+Let us not forget the summary rows of the 'grand' variety! Grand summary rows involve all the rows of a dataset and include data from all groups if any groups are present. The `grand_summary_rows()` function was similarly improved, and it gains all the new features for expressing aggregations and formatting. Here is another `countrypops`-flavored example, one that contains grand summary rows:
+
+```{r}
+countrypops |>
+  dplyr::filter(country_code_2 %in% c("BE", "NU", "LU")) |>
+  dplyr::filter(year %% 10 == 0) |>
+  dplyr::select(country_name, year, population) |>
+  tidyr::pivot_wider(names_from = year, values_from = population) |>
+  gt(rowname_col = "country_name") |>
+  tab_header(title = "Populations of the Benelux Countries") |>
+  tab_spanner(columns = everything(), label = "Year") |>
+  fmt_integer() |>
+  grand_summary_rows(
+    fns = list(label = "TOTALS", id = "totals") ~ sum(.),
+    fmt = ~ fmt_integer(.),
+  ) |>
+  tab_style(
+    locations = cells_grand_summary(),
+    style = list(
+      cell_fill(color = "steelblue"),
+      cell_text(color = "white")
+    )
+  )
+```
+
+We can always use `grand_summary_rows()` with `summary_rows()` to create summaries within groups and a summary for the entire table. Here's an example that uses the `pizzaplace` dataset:
+
+```{r}
+pizzaplace |>
+  dplyr::mutate(type = case_when(
+    type == "chicken" ~ "Chicken (pizzas with chicken as a major ingredient)",
+    type == "classic" ~ "Classic (classical pizzas)",
+    type == "supreme" ~ "Supreme (pizzas that try a little harder)",
+    type == "veggie" ~ "Veggie (pizzas without any meats whatsoever)",
+  )) |>
+  dplyr::mutate(size = factor(size, levels = c("S", "M", "L", "XL", "XXL"))) |>
+  dplyr::group_by(type, size) |>
+  dplyr::summarize(
+    sold = dplyr::n(),
+    income = sum(price),
+    .groups = "drop"
+  ) |>
+  gt(rowname_col = "size", groupname_col = "type") |>
+  tab_header(title = md("&#127829; Pizzas Sold in 2015 &#127829;")) |>
+  fmt_integer(columns = sold) |>
+  fmt_currency(columns = income) |>
+  summary_rows(
+    fns = list(label = md("**Total**"), id = "total") ~ sum(.),
+    fmt = list(
+      ~ fmt_integer(., columns = sold),
+      ~ fmt_currency(., columns = income)
+    )
+  ) |>
+  grand_summary_rows(
+    fns =  list(label = md("**Grand Total**"), id = "grand_total") ~ sum(.),
+    fmt = list(
+      ~ fmt_integer(., columns = sold),
+      ~ fmt_currency(., columns = income)
+    )
+  ) |>
+  cols_width(stub() ~ px(100), everything() ~ px(225)) |>
+  opt_stylize(style = 6, color = "red") |>
+  opt_all_caps()
+```
+
+It's always fun to use `opt_stylize()` and each of the numbered `style` options within that function clearly distinguishes the group-based summary rows from the grand summary rows! 
+
+## Placing the summary rows on top
+
+We received several requests for choosing the placement of the summary rows, and in `0.9.0`, we delivered! You can choose whether to anchor the summary rows to the top or bottom of a group, and the grand summary rows can be placed at the top of the table. Both `summary_rows()` and `grand_summary_rows()` gained the `side` argument, where you can supply either `"bottom"` (the default) or `"top"` to control placement.
+
+Here is an example with a table generated from the `towny` dataset. With this table, we'll generate both types of summary rows and place them at the top with `side = "top"`.
+
+```{r}
+towny |>
+  dplyr::select(name, census_div, population_2021, density_2021) |>
+  dplyr::arrange(desc(population_2021)) |>
+  dplyr::filter(census_div %in% c(
+    "Toronto", "Peel", "York", "Durham", "Halton"
+  )) |>
+  dplyr::mutate(density_2021_sqmi = density_2021 / 0.3861) |>
+  gt(rowname_col = "name", groupname_col = "census_div") |>
+  tab_header(title = "Population Summary of the Greater Toronto Area") |>
+  row_group_order(groups = c(
+    "Toronto", "Peel", "York", "Durham", "Halton"
+  )) |>
+  fmt_number(columns = starts_with("density"), decimals = 1) |>
+  fmt_integer(columns = c(population_2021, density_2021_sqmi)) |>
+  text_replace(
+    pattern = "Toronto",
+    replacement = "City of Toronto (single-tier)",
+    locations = cells_row_groups(groups = "Toronto")
+  ) |>
+  tab_stub_indent(rows = everything(), indent = 2) |>
+  cols_label(
+    population_2021 ~ md("Population"),
+    density_2021 ~ md("ppl/km^2^"),
+    density_2021_sqmi ~ md("ppl/mi^2^")
+  ) |>
+  cols_width(
+    stub() ~ px(200),
+    everything() ~ px(100)
+  ) |>
+  tab_spanner(
+    label = "Density",
+    columns = starts_with("density")
+  ) |>
+  grand_summary_rows(
+    columns = population_2021,
+    fns = list(
+      list(label = "Total Population", id = "total_pop", fn = "sum"),
+      list(label = "Percentage of Province", id = "pct") ~ sum(.) / 14.2E6
+    ),
+    fmt = list(
+      ~ fmt_integer(., rows = "total_pop"),
+      ~ fmt_percent(., rows = "pct", decimals = 1)
+    ),
+    side = "top",
+    missing_text = ""
+  ) |>
+  summary_rows(
+    columns = population_2021,
+    groups = c("Peel", "York", "Durham", "Halton"),
+    fns = list(
+      list(label = "Regional Population", id = "pop_region") ~ sum(.),
+      list(label = "Percentage of GTA", id = "pct_gta") ~ sum(.) / 6711985
+    ),
+    fmt = list(
+      ~ fmt_integer(., rows = "pop_region"),
+      ~ fmt_percent(., rows = "pct_gta", decimals = 1)
+    ),
+    side = "top",
+    missing_text = "",
+  ) |>
+  opt_stylize(style = 1, color = "cyan")
+```
+
+There's truly a lot going on in this table, but I hope it demonstrates that the improved summary-generation functions make it possible to specify your aggregations with relative ease while also allowing for targeted formatting.
+
+## In summary
+
+We've wanted to improve the summary-row generation functions of **gt** for quite a while, and we're glad these improvements made it in **gt** version `0.9.0`. I mean, if you're making summary tables then these functions need to be as useful as can be.
+
+This is blog post number two of a series on **gt** version `0.9.0`. We will keep making more of these since this version of **gt** is particularly huge. We care about your feedback, and there are plenty of ways to communicate with us! You can [file an issue](https://github.com/rstudio/gt/issues) or engage in more informal discussion through the **gt** [Discussions page](https://github.com/rstudio/gt/discussions). Follow us on Twitter at [@gt_package](https://twitter.com/gt_package) or engage through the new [gt_package Discord server](https://discord.gg/Ux7nrcXHVV). That last option is a good one for asking about the development of **gt**, pitching ideas that may become features, and sharing your table creations!

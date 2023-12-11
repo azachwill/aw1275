@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2019-11-26">
+
+<title>Package Manager 1.1.0.1 Patch Release</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Package Manager 1.1.0.1 Patch Release</h1>
+
+<p class="date">2019-11-26</p>
+</header>
+
+<p>Earlier this month we <a href="https://blog.rstudio.com/2019/11/07/package-manager-v1-1-no-interruptions/">announced RStudio Package Manager version 1.1.0</a>, a major update to RStudio Package Manager that added support for:</p>
+<ul>
+<li>Faster package installs on Linux with pre-compiled binaries<br>
+</li>
+<li>Easier installs through the display of system requirements<br>
+</li>
+<li>A calendar of repository checkpoints to make it easier to reproduce work</li>
+</ul>
+<p>This patch release updates the 1.1.0 version without introducing any new features. The 1.1.0.1 patch fixes a bug in the prior release that impacts performance when serving binary packages from historical checkpoints. There is also a small chance that an incorrect historical binary could be served under specific repository and source configurations. These problems were discovered internally, and no customers reported any impact.</p>
+<blockquote>
+<h4 id="patch-instructions" class="anchored">Patch Instructions</h4>
+<p>We strongly encourage all customers using version 1.1.0 to apply the patch by simply by installing version 1.1.0.1 on top of the existing 1.1.0 release.</p>
+</blockquote>
+<p>If you are upgrading from an earlier version, be sure to consult the <a href="https://doc.rstudio.com/rspm/news">release notes</a> for the intermediate releases, as well.</p>
+<h4 id="new-to-rstudio-package-manager" class="anchored">New to RStudio Package Manager?</h4>
+<p><a href="https://rstudio.com/products/package-manager/">Download</a> the 45-day evaluation today to see how RStudio Package Manager can help you, your team, and your entire organization access and organize R packages. Learn more with our <a href="https://demo.rstudiopm.com">online demo server</a> or <a href="https://resources.rstudio.com/webinars/introduction-to-the-rstudio-package-manager-sean-lopp">latest webinar</a>.</p>
+<ul>
+<li><a href="https://docs.rstudio.com/rspm/admin">Admin Guide</a></li>
+<li><a href="https://www.rstudio.com/wp-content/uploads/2018/07/RStudio-Package-Manager-Overview.pdf">Overview PDF</a></li>
+<li><a href="https://resources.rstudio.com/webinars/introduction-to-the-rstudio-package-manager-sean-lopp">Introductory Webinar</a></li>
+<li><a href="https://demo.rstudiopm.com">Online Demo</a></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

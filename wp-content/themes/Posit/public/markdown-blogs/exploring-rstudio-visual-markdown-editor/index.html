@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-05-11">
+<meta name="description" content="The RStudio IDE includes a visual markdown editor that displays changes in real-time and provides support for technical writing. This post walks through several features of visual editing mode.">
+
+<title>Exploring RStudio’s Visual Markdown Editor</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Exploring RStudio’s Visual Markdown Editor</h1>
+
+<p class="date">2022-05-11</p>
+</header>
+
+<p><a href="https://www.rstudio.com/blog/announcing-rstudio-1-4/" target="_blank">RStudio 1.4</a> was released in January 2021 and switched to calendar-based versioning as of 2021.09. Starting with 1.4, the IDE includes a visual markdown editor that works on any markdown-based document, such as <code>.md</code> or <code>.Rmd</code> files. Visual editing mode provides a better experience when writing reports and analyses. You can see changes in real-time and preview what your document looks like without re-knitting.</p>
+<p>In addition, the visual markdown editor provides extensive support for citations, scientific and technical writing features, outline navigation, and more.</p>
+<p>In this blog post, we’d like to show how to use the visual markdown editor and highlight some features that you should know.</p>
+<ul>
+<li><a href="#get-started-with-the-visual-markdown-editor">How to get started with the visual markdown editor</a></li>
+<li><a href="#create-content-in-the-visual-markdown-editor">How to create content in the visual markdown editor</a></li>
+<li><a href="#edit-content-in-visual-editing-mode">How to edit content in visual editing mode</a></li>
+</ul>
+<h2 id="get-started-with-the-visual-markdown-editor" class="anchored">Get Started With the Visual Markdown Editor</h2>
+<p>To switch into the visual mode for a markdown document:</p>
+<ul>
+<li>In RStudio v2022.02, click the “Visual” button located on the left side of the editor toolbar.</li>
+<li>In earlier versions, click the compass icon located on the right side of the editor toolbar.</li>
+</ul>
+<p>Alternatively, use the <kbd>⇧</kbd> + <kbd>⌘</kbd> + <kbd>F4</kbd> keyboard shortcut.</p>
+<script src="https://fast.wistia.com/embed/medias/am9337b81b.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:57.29% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_am9337b81b videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<center>
+<i>
+
+Switching into the visual markdown editor mode
+
+</i>
+</center>
+<p>You can customize various editor settings. Go to Tools -&gt; Global Options -&gt; R Markdown -&gt; Visual to choose your options, such as:</p>
+<ul>
+<li>Whether your new documents use the visual markdown editor by default.</li>
+<li>Whether the document outline shows by default.</li>
+<li>How to wrap text in the document.</li>
+</ul>
+<center>
+<img src="images/image1.png" alt="RStudio options in the visual editing mode dialogue box" width="60%">
+</center>
+<center>
+<i>
+
+Editor options
+
+</i>
+</center>
+<h2 id="create-content-in-the-visual-markdown-editor" class="anchored">Create Content in the Visual Markdown Editor</h2>
+<h3 id="how-to-embed-rich-media" class="anchored">How to embed rich media</h3>
+<p>Once in visual editing mode, you can paste rich content (tables, images, some formatting, etc.) into a document and match it in the source document.</p>
+<script src="https://fast.wistia.com/embed/medias/opxbr5wnre.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:33.54% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_opxbr5wnre videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<center>
+<i>
+
+Dragging and dropping an image into a document in visual editing mode
+
+</i>
+</center>
+<h3 id="how-to-use-keyboard-and-markdown-shortcuts" class="anchored">How to use keyboard and markdown shortcuts</h3>
+<p>The visual mode supports both standard keyboard shortcuts (e.g., <kbd>⌘</kbd> + <kbd>B</kbd> for bold) and markdown syntax.</p>
+<script src="https://fast.wistia.com/embed/medias/yvzc3efjr2.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:50.42% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_yvzc3efjr2 videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<center>
+<i>
+
+Italicizing and bolding text with markdown and keyboard shortcuts
+
+</i>
+</center>
+<p>Here are some commonly used shortcuts:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>Keyboard Shortcut</th>
+<th>Markdown Shortcut</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bold</td>
+<td>⌘ B</td>
+<td><strong>bold</strong></td>
+</tr>
+<tr class="even">
+<td>Italic</td>
+<td>⌘ I</td>
+<td><em>italic</em></td>
+</tr>
+<tr class="odd">
+<td>Code</td>
+<td>⌘ D</td>
+<td><code>code</code></td>
+</tr>
+<tr class="even">
+<td>Link</td>
+<td>⌘ K</td>
+<td><href></href></td>
+</tr>
+<tr class="odd">
+<td>Heading 1</td>
+<td>⌥⌘ 1</td>
+<td>#</td>
+</tr>
+<tr class="even">
+<td>Heading 2</td>
+<td>⌥⌘ 2</td>
+<td>##</td>
+</tr>
+<tr class="odd">
+<td>Heading 3</td>
+<td>⌥⌘ 3</td>
+<td>###</td>
+</tr>
+<tr class="even">
+<td>R Code Chunk</td>
+<td>⌥⌘ I</td>
+<td>```{{r}}</td>
+</tr>
+</tbody>
+</table>
+<p>Check out more on the <a href="https://rstudio.github.io/visual-markdown-editing/shortcuts.html" target="_blank">Editing Shortcuts page</a> of the Visual R Markdown site.</p>
+<h3 id="how-to-use-the-catch-all-shortcut-to-insert-anything" class="anchored">How to use the catch-all shortcut to insert anything</h3>
+<p>You can also use the catch-all <kbd>⌘</kbd> + <kbd>/</kbd> shortcut to insert headings, comments, symbols, and more.</p>
+<script src="https://fast.wistia.com/embed/medias/0ytilauj0j.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:57.08% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_0ytilauj0j videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<h3 id="how-to-use-the-editor-toolbar" class="anchored">How to use the editor toolbar</h3>
+<p>The editor toolbar includes buttons for common commands to edit formatting or insert content.</p>
+<script src="https://fast.wistia.com/embed/medias/pw2tuib05h.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:50.63% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_pw2tuib05h videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<center>
+<i>
+
+Inserting a table using the editor toolbar
+
+</i>
+</center>
+<h2 id="edit-content-in-visual-editing-mode" class="anchored">Edit content in visual editing mode</h2>
+<p>The visual markdown editor also provides efficient tools to edit and customize content.</p>
+<h3 id="how-to-edit-a-tables-rows-columns-and-alignment" class="anchored">How to edit a table’s rows, columns, and alignment</h3>
+<p>Right-click on a table in your document. You can set the alignment, add or delete rows and columns, add a header, and more.</p>
+<script src="https://fast.wistia.com/embed/medias/p1zdt2pggj.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:50.63% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_p1zdt2pggj videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<center>
+<i>
+
+Adding a row and aligning a column
+
+</i>
+</center>
+<h3 id="how-to-change-an-images-height-width-and-aspect-ratio" class="anchored">How to change an image’s height, width, and aspect ratio</h3>
+<p>Once you have an image in your document, you can edit the size and aspect ratio with the visual markdown editor. Click on the image and a small window will appear. Edit the numbers to change the height, width, and aspect ratio.</p>
+<script src="https://fast.wistia.com/embed/medias/yagn8fs2vi.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:61.25% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_yagn8fs2vi videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<h2 id="learn-more" class="anchored">Learn More</h2>
+<p>The visual markdown editor has many other features for efficient report writing.</p>
+<ul>
+<li>Check out more information on the <a href="https://rstudio.github.io/visual-markdown-editing/" target="_blank">Visual R Markdown website</a>.</li>
+<li>Download the <a href="https://rstudio.com/products/rstudio/download/" target="_blank">latest RStudio IDE version</a> to try out the editor.</li>
+<li>Watch Tom Mock live code in visual editing mode in his webinar, <a href="https://youtu.be/WkF7nqEYF1E" target="_blank">R Markdown Advanced Tips to Become a Better Data Scientist &amp; RStudio Connect</a>.</li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

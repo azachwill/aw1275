@@ -1,0 +1,390 @@
+---
+title: "New formatting functions in {gt} 0.9.0"
+authors: 
+  - Rich Iannone
+date: '2023-04-19'
+categories: 
+  - Products and Technology
+tags: 
+  - gt
+description: "Learn all about the new formatting functions in {gt} 0.9.0."
+slug: new-formatting-functions-in-gt-0-9-0
+blogcategories:
+- Products and Technology
+events: blog
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+A new version of [gt](https://gt.rstudio.com/) is out: version `0.9.0`. Is it a big release? Yes, very much so. It's not at all possible to cover everything that is new in just one blog post. Instead, we’re going to spread the **gt** goodness over a great many blog posts. This is the first of those, and we’re going to learn all about the new formatting functions in **gt** `0.9.0`. 
+
+## Formatting URLs with `fmt_url()`
+
+Some tables feature URLs and, previously, it wasn’t easy to create links from those. For HTML output tables, you either had to create Markdown links and apply the `fmt_markdown()` function, or use `text_transform()` and construct tags. Now, with **gt** `0.9.0`, we can use the new `fmt_url()` function. Here’s an example that uses the new `towny` dataset (which contains URLs in its `website` column). What we see and get are URLs as navigable links.
+
+```{r}
+#| message: false
+#| warning: false
+library(gt)
+library(dplyr)
+
+towny |>
+  dplyr::slice(65:70) |>
+  dplyr::arrange(desc(population_2021)) |>
+  dplyr::select(name, website) |>
+  gt() |>
+  fmt_url(columns = website)
+```
+
+By default, the links are underlined, and the color will be chosen for you by default (it's dark cyan here). You can choose a different color with the `color` argument. 
+
+Let's try something else now. It's possible to set a static text label for the link with the `label` argument (and we'll use the word `"site"` for this). The link underline is removable with `show_underline = FALSE`, and we're going to use that option. With these changes to the defaults, it now seems sensible to merge the link to the `name` column and enclose that link text in parentheses (the trusty `cols_merge()` function can handle all that).
+
+```{r}
+towny |>
+  dplyr::filter(csd_type == "city") |>
+  dplyr::arrange(desc(population_2021)) |>
+  dplyr::select(name, website, population_2021) |>
+  dplyr::slice_head(n = 10) |>
+  gt() |>
+  tab_header(
+    title = md("The 10 Largest Municipalities in `towny`"),
+    subtitle = "Population values taken from the 2021 census."
+  ) |>
+  fmt_integer() |>
+  cols_label(
+    name = "Name",
+    population_2021 = "Population"
+  ) |>
+  fmt_url(
+    columns = website,
+    label = "site",
+    show_underline = FALSE
+  ) |>
+  cols_merge(
+    columns = c(name, website),
+    pattern = "{1} ({2})"
+  )
+```
+
+In that example we used a few other functions (`tab_header()`, `fmt_integer()`, and `cols_label()`) to make the table present a bit better. A title, formatted numbers, and nice column labels are always good to have!
+
+The `fmt_url()` function allows for the styling of links as 'buttons'. This is as easy as setting `as_button = TRUE`. Doing that allows us to set a `button_fill` color. This color can automatically selected by **gt** (this is the default with `button_fill = "auto"`) but here we're going to instead opt for `"steelblue"`. The `label` argument is flexible in that it also accepts a function. With that we choose to construct the label text from the URLs by eliminating any leading `"https://"` and `"www."` parts via `gsub()`.
+
+```{r}
+towny |>
+  dplyr::filter(csd_type == "city") |>
+  dplyr::arrange(desc(population_2021)) |>
+  dplyr::select(name, website, population_2021) |>
+  dplyr::slice_head(n = 10) |>
+  dplyr::mutate(ranking = dplyr::row_number()) |>
+  gt(rowname_col = "ranking") |>
+  tab_header(
+    title = md("The 10 Biggest Municipalities in `towny`"),
+    subtitle = "The population values were taken from the 2021 census."
+  ) |>
+  fmt_integer() |>
+  cols_move_to_end(columns = website) |>
+  cols_align(align = "center", columns = website) |>
+  cols_width(
+    ranking ~ px(40),
+    website ~ px(200)
+  ) |>
+  tab_options(column_labels.hidden = TRUE) |>
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_stub()
+  ) |>
+  opt_vertical_padding(scale = 0.75) |>
+    fmt_url(
+    columns = website,
+    label = function(x) gsub("https://|www.", "", x),
+    as_button = TRUE,
+    button_fill = "steelblue",
+    button_width = px(150)
+  )
+```
+
+Missing values are a fact of life when doing things in R, but thankfully the `fmt_url()` function will preserve input `NA` values, allowing you to handle them with `sub_missing()`. Here's an example of that:
+
+```{r}
+towny |>
+  dplyr::arrange(population_2021) |>
+  dplyr::select(name, website, population_2021) |>
+  dplyr::slice_head(n = 10) |>
+  gt() |>
+  tab_header(
+    title = md("The 10 Smallest Municipalities in `towny`"),
+    subtitle = "Population values taken from the 2021 census."
+  ) |>
+  cols_label(
+    name = "Name",
+    website = "Site",
+    population_2021 = "Population"
+  ) |>
+  fmt_integer() |>
+  fmt_url(
+    columns = website,
+    color = "forestgreen"
+  ) |>
+  sub_missing(
+    columns = website,
+    missing_text = "No website available."
+  )
+```
+
+Some places just don't have a website (can't really blame them) and we can provide a simple explanation for the lack of one by using `sub_missing()` on the column formatted with `fmt_url()`.
+
+Many tables have URLs (we've all seen them), and having them be links shouldn't be an arduous process. The `fmt_url()` function makes handling this type of cell data easier, and we can't wait to see all the tables that use it!
+
+## Transforming numbers with `fmt_index()` and `fmt_spelled_num()`
+
+The two new formatting functions `fmt_index()` and `fmt_spelled_num()` take in numbers (whole numbers, that is), and the former returns letters while the latter gives us numbers that are fully spelled out (with letters). These are great little formatting functions to have when you need to have ordering or classifying text that originate from numbers. Also, these functions have a lot of internationalization built in! Both have a `locale` argument for controlling which index values and which spelled out numbers are returned. 
+
+The `fmt_index()` function can give us index values, which are *usually* based on letters (depending on the locale chosen). For example, the value `4` will be rendered as `"D"` if the locale is an English-language one. The characters chosen for indexing here are based on character sets intended for ordering (and these often leave out characters with diacritical marks).
+
+Let's get to an example to understand one use case. We'll use that `towny` dataset and do some serious **dplyr**ing to it. After introducing the transformed/summarized data to `gt()`, the `fmt_index()` function is used to transform the incrementing integer values into capitalized letters (in the `ranking` column). That formatted column of `"A"` to `"E"` values is merged with the `census_div` column (through `cols_merge()`) to create an indexed listing of census subdivisions, here ordered by increasing total municipal population.
+
+```{r}
+towny |>
+  dplyr::select(name, csd_type, census_div, population_2021) |>
+  dplyr::group_by(census_div) |>
+  dplyr::summarize(
+    population = sum(population_2021),
+    .groups = "drop_last"
+  ) |>
+  dplyr::arrange(population) |>
+  dplyr::slice_head(n = 5) |>
+  dplyr::mutate(ranking = dplyr::row_number()) |>
+  dplyr::select(ranking, dplyr::everything()) |>
+  gt() |>
+  tab_header(title = md("The smallest  \ncensus subdivisions")) |>
+  fmt_integer() |>
+  cols_align(align = "left", columns = ranking) |>
+  tab_options(table.width = px(325)) |>
+  fmt_index(columns = ranking, pattern = "{x}.") |>
+  cols_merge(columns = c(ranking, census_div)) |>
+  cols_label(
+    ranking = md("Census  \nSubdivision"),
+    population = md("Population  \nin 2021")
+  )
+```
+
+Let's move on to the `fmt_spelled_num()` function. We added that so that numeric values could be transformed to spelled out numbers. Any values from `0` to `100` can be spelled out according to a given locale value. For example, the value `26` will be rendered as `"twenty-six"` if the locale is an English-language one (or, not provided at all). We mentioned that these number-based formatting functions have i18n powers and it's true. Using a Finnish locale (i.e., `"fi"`) gives us the number `26` spelled out as `"kaksikymmentäkuusi"`.
+
+Using the `gtcars` dataset, we look at how `fmt_spelled_num()` might be useful. After the requisite summarizing and arranging of rows, the `fmt_spelled_num()` function can be used to transform integer values into spelled-out numbering (in the `n` column). That formatted column of numbers-as-words is given cell background colors via `data_color()`.
+
+```{r}
+gtcars |>
+  dplyr::select(mfr, ctry_origin) |>
+  dplyr::group_by(mfr, ctry_origin) |>
+  dplyr::count() |>
+  dplyr::ungroup() |>
+  dplyr::arrange(ctry_origin) |>
+  gt(rowname_col = "mfr", groupname_col = "ctry_origin") |>
+  cols_label(n = "No. of Entries") |>
+  tab_stub_indent(rows = everything(), indent = 2) |>
+  opt_all_caps() |>
+  opt_vertical_padding(scale = 0.5) |>
+  cols_align(align = "center", columns = n) |>
+  fmt_spelled_num() |>
+  data_color(
+    columns = n,
+    method = "numeric",
+    palette = "viridis",
+    alpha = 0.8
+  )
+```
+
+Why does `data_color()` work? It might be confusing but the underlying data in the `n` column are still numeric (even though they've been formatted to text-based values).
+
+Anyway, both `fmt_index()` and `fmt_spelled_num()` have vector-formatting analogue functions: `vec_fmt_index()` and `vec_fmt_spelled_num()`. This is useful when you want to apply this type of formatting on numeric vectors. You never really know when you'll need any of these four new functions, but they will be ready when you are. 
+
+## Easily using images in data cells with `fmt_image()`
+
+To easily insert graphics into body cells, we can use the new `fmt_image()` function. This allows for one or more images to be placed in the targeted cells. For this to work optimally, the cells undergoing formatting have to contain some reference to an image file. This can be in one of three basic forms:
+
+1. complete http/https or local paths to the files,
+2. the file names, where a common path can be provided via `path`, or
+3. a fragment of the file name, where the `file_pattern` helps to compose the entire file name and `path` provides the path information
+
+This should be expressly used on columns that contain only references to image files (i.e., no image references as part of a larger block of text). A cool aspect of `fmt_image()` is that multiple images can be included per cell by separating image references by commas.
+
+In our next example, we are going to use the new `metro` dataset to create a **gt** table full of images (though we'll only include a few columns and rows from that table). The `lines` and `connect_rer` columns have comma-separated listings of numbers/letters (corresponding to Metro and RER lines served at each Metro station, respectively). We actually have a directory of SVG graphics for all of these lines in the package (the path for the image directory can be accessed via `system.file("metro_svg", package = "gt")`), and the filenames for those SVG graphics have some correspondence to the data in those two columns. The `fmt_image()` function can be used with these inputs since the `path` and `file_pattern` arguments allow us to compose complete and valid file locations.
+
+```{r}
+metro |>
+  dplyr::select(name, caption, lines, connect_rer) |>
+  dplyr::slice_head(n = 10) |>
+  gt() |>
+  cols_merge(
+    columns = c(name, caption),
+    pattern = "{1}<< ({2})>>"
+  ) |>
+  text_replace(
+    locations = cells_body(columns = name),
+    pattern = "\\((.*?)\\)",
+    replacement = "<br>(<em>\\1</em>)"
+  ) |>
+  sub_missing(columns = connect_rer, missing_text = "") |>
+  cols_label(
+    name = "Station",
+    lines = "Lines",
+    connect_rer = "RER"
+  ) |>
+  cols_align(align = "left") |>
+  tab_style(
+    style = cell_borders(
+      sides = c("left", "right"),
+      weight = px(1),
+      color = "gray85"
+    ),
+    locations = cells_body(columns = lines)
+  ) |>
+  opt_stylize(style = 6, color = "blue") |>
+  opt_all_caps() |>
+  opt_horizontal_padding(scale = 1.75) |>
+  fmt_image(
+    columns = lines,
+    path = system.file("metro_svg", package = "gt"),
+    file_pattern = "metro_{x}.svg"
+  ) |>
+  fmt_image(
+    columns = connect_rer,
+    path = system.file("metro_svg", package = "gt"),
+    file_pattern = "rer_{x}.svg"
+  )
+```
+
+We can see sequences of images in the table cells, and they're taken from the referenced graphics files on disk. The string `"1,5,8"` in row 2 of the table (in the `lines` column) corresponds to the SVG images `"metro_1.svg"`, `"metro_5.svg"`, and `"metro_8.svg"` in the directory referenced in the `path` argument.
+
+Images used to be non-trivial to insert into **gt** tables. It is hoped that this eases the burden of making image-laden tables and that the functionality fits in well with most table-making workflows.
+
+## Country flags with `fmt_flag()` and easier formatting of ranges with `fmt_bins()`
+
+While it is fairly straightforward to insert images into body cells (using `fmt_image()` is one way to it), there is often the need to incorporate specialized types of graphics within a table. One such group of graphics involves iconography representing different countries, and the `fmt_flag()` function helps with inserting a flag icon (or multiple) in body cells.
+
+To make this work seamlessly, the input cells need to contain some reference to a country, and this is in the form of a 2-letter ISO 3166-1 country code (e.g., Mauritania has the `"MR"` country code). This function will parse the targeted body cells for those codes and insert the appropriate flag iconography. Multiple flag icons can be included per cell by having input data that separates country codes with commas (e.g., `"DO,PA"`).
+
+Let's use the (now updated) `countrypops` dataset to create a **gt** table for our next example. We will only include a few columns and rows from that table. The `country_code_2` column has 2-letter country codes in the format required for `fmt_flag()` and using that function transforms the codes in circular flag icons.
+
+```{r}
+countrypops |>
+  dplyr::filter(year == 2021) |>
+  dplyr::filter(grepl("^S", country_name)) |>
+  dplyr::arrange(country_name) |>
+  dplyr::select(-country_code_3, -year) |>
+  dplyr::slice_head(n = 10) |>
+  gt() |>
+  cols_move_to_start(columns = country_code_2) |>
+  fmt_integer() |>
+  cols_label(
+    country_code_2 = "",
+    country_name = "Country",
+    population = "Population (2021)"
+  ) |>
+  fmt_flag(columns = country_code_2)
+```
+
+I personally enjoy these little flag icons so let's look at another example. We'll use `countrypops` again to make a table containing populations the Benelux countries (`"BE"`, `"NU"`, and `"LU"`) at five-year intervals. This requires a little manipulation with **dplyr** and **tidyr** before introducing the table to **gt** but it's worth it. As before, we'll use `fmt_flag()` to generate flag icons in the `country_code_2` column. Now here comes the interesting part: we can merge the flag icons into the stub column, and generate row labels that have a combination of icon and text. This mainly involves using a `pattern` where the flags are placed before the stub text (`"{2} {1}"`). 
+
+```{r}
+countrypops |>
+  dplyr::filter(country_code_2 %in% c("BE", "NU", "LU")) |>
+  dplyr::filter(year %% 10 == 0) |>
+  dplyr::select(country_name, country_code_2, year, population) |>
+  tidyr::pivot_wider(names_from = year, values_from = population) |>
+  dplyr::slice(1, 3, 2) |>
+  gt(rowname_col = "country_name") |>
+  tab_header(title = "Populations of the Benelux Countries") |>
+  tab_spanner(columns = everything(), label = "Year") |>
+  fmt_integer() |>
+  fmt_flag(columns = country_code_2) |>
+  cols_merge(
+    columns = c(country_name, country_code_2),
+    pattern = "{2} {1}"
+  )
+```
+
+The `fmt_flag()` function works well even when there are multiple country codes within the same cell. It can operate on comma-separated codes without issue (e.g., `"AD,BM,KY,DM"` from the second row). When rendered to HTML, hovering over each of the flag icons results in tooltip text showing the name of the country.
+
+```{r}
+countrypops |>
+  dplyr::filter(year == 2021, population < 100000) |>
+  dplyr::select(country_code_2, population) |>
+  dplyr::mutate(population_class = case_when(
+    population >= 80000 ~ "80K-100K",
+    population >= 60000 ~ "60K-80K",
+    population >= 40000 ~ "40K-60K",
+    population >= 20000 ~ "20K-40K",
+    population <  20000 ~ "0-20K"
+  )) |>
+  dplyr::group_by(population_class) |>
+  dplyr::summarize(
+    countries = paste0(country_code_2, collapse = ",")
+  ) |>
+  dplyr::arrange(desc(population_class)) |>
+  gt() |>
+  tab_header(title = "Countries with Small Populations") |>
+  fmt_flag(columns = countries) |>
+  cols_label(
+    population_class = "Population Range",
+    countries = "Countries"
+  ) |>
+  cols_width(population_class ~ px(150))
+```
+
+Now onto `fmt_bins()` and what it does. In the above example, we used the `dplyr::mutate()`/`case_when()` combination. However, it might be better in many cases to use a `dplyr::mutate()`/`cut()` approach. The `cut()` function has a lot of power behind it, and it produces intervals/bins that can look like this: `"(0,10]"`, `"(10,15]"`, `"(15,20]"`, etc. That output doesn't look great in a table, but `fmt_bins()` can format all of that to something that presents way better in a display table.
+
+This is best seen in an example, and this one will tie together a few of the functions we explored earlier. The goal of this example is to present a table of countries that are binned by population. We don't want any of the bins to be excessively large, so we'll employ the `cut()` function in conjunction with the `scales::breaks_log()` function. With this, every country's population (using year 2021 population estimates) will be assigned to a bin; these bins have the type of formatting that `fmt_bins()` can interpret. Here is the code and the resulting table:
+
+```{r}
+countrypops |>
+  dplyr::filter(year == 2021) |>
+  dplyr::select(country_code_2, population) |>
+  dplyr::mutate(population_class = cut(
+    population,
+    breaks = scales::breaks_log(n = 20)(population)
+  )) |>
+  dplyr::group_by(population_class) |>
+  dplyr::summarize(
+    count = dplyr::n(),
+    countries = paste0(country_code_2, collapse = ",")
+  ) |>
+  dplyr::arrange(desc(population_class)) |>
+  dplyr::mutate(tier = dplyr::row_number(), .before = population_class) |>
+  gt() |>
+  tab_header(title = "All Countries Grouped by Population Range") |>
+  fmt_flag(columns = countries) |>
+  fmt_spelled_num() |>
+  fmt_index(columns = tier) |>
+  cols_label(
+    tier = "",
+    population_class = "Population Range",
+    count = "Count",
+    countries = "Countries"
+  ) |>
+  cols_width(
+    population_class ~ px(150),
+    count ~ px(100)
+  ) |>
+  cols_align(align = "center", columns = c(tier, count)) |>
+  opt_stylize(style = 6, color = "gray") |>
+  opt_table_font(font = google_font("IBM Plex Sans")) |>
+  opt_align_table_header(align = "left") |>
+  data_color(columns = count, method = "numeric", palette = "viridis") |>
+  fmt_bins(
+    columns = population_class,
+    fmt = ~ fmt_integer(., suffixing = TRUE)
+  )
+```
+
+Using `fmt_bins()` can oftentimes be better than other methods for creating ranges. This is mainly because we can work directly with the interval output from `cut()`, and we can easily customize the presentation of those ranges. For instance, we have formatted the left and right values of the ranges with the `fmt_integer()` function (using formula syntax) in the example above. The default range separator, `"--"` (an en-dash), is nicely suited to expressing ranges, but we always have the option to modify that aspect of the presentation as well.
+
+## In closing
+
+We enjoy putting in the work to improve the formatting functions in the package, and with **gt** version `0.9.0`, we wanted to add some new members to the `fmt_*()` family. They can unlock new ways of expressing data in tabular form, and it will be fun to see all the new tables that use them!
+
+We always want your feedback so always feel free to [file an issue](https://github.com/rstudio/gt/issues). Want to ask a question or discuss improvements before filing an issue? Try out the [Discussions page](https://github.com/rstudio/gt/discussions) in the **gt** repository for that. For news on **gt** and other table packages, follow the engaging [@gt_package](https://twitter.com/gt_package) account on Twitter! We also have a new [gt_package Discord server](https://discord.gg/Ux7nrcXHVV) that's both fun and educational.

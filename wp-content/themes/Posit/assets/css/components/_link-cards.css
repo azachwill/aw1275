@@ -1,0 +1,46 @@
+@layer utilities {
+    .card {
+        @apply flex flex-col justify-between bg-gray4/[0.2] p-[32px] rounded-[8px] outline-0 ring-inset;
+    }
+}
+
+.link-card {
+    @apply card;
+
+    &:hover,
+    &:focus-visible {
+        @apply bg-blue3/[.1];
+
+        .link {
+            @apply text-blue1;
+
+            & svg {
+                @apply ease-in-out duration-[150ms] translate-x-[2px];
+            }
+
+            &::after {
+                @apply scale-x-100;
+            }
+
+            &::before {
+                @apply bg-blue1;
+            }
+
+            path {
+                @apply stroke-blue1;
+            }
+        }
+
+        .arrow {
+            @apply translate-x-0 duration-300;
+        }
+    }
+
+    &:active {
+        @apply lg:bg-blue3/[.2];
+    }
+
+    &:focus {
+        @apply ring-[6px] ring-blue4/[.20];
+    }
+}

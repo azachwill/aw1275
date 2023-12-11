@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2015-02-24">
+
+<title>RStudio v0.99 Preview: Data Viewer Improvements</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio v0.99 Preview: Data Viewer Improvements</h1>
+
+<p class="date">2015-02-24</p>
+</header>
+
+<p>RStudio’s data viewer provides a quick way to look at the contents of data frames and other column-based data in your R environment. You invoke it by clicking on the grid icon in the Environment pane, or at the console by typing <code>View(mydata)</code>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/02/screen-shot-2015-02-23-at-1-28-17-pm.png" class="img-fluid"></p>
+<p></p><figcaption>grid icon</figcaption><p></p>
+</figure>
+</div>
+<p>As part of the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio Preview Release</a>, we’ve completely overhauled RStudio’s data viewer with modern features provided in part by a new interface built on <a href="http://www.datatables.net/">DataTables</a>.</p>
+<h3 id="no-row-limit" class="anchored">No Row Limit</h3>
+<p>While the data viewer in 0.98 was limited to the first 1,000 rows, you can now view all the rows of your data set. RStudio loads just the portion of the data you’re looking at into the user interface, so things won’t get sluggish even when you’re working with large data sets.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/02/screen-shot-2015-02-23-at-1-03-13-pm.png" class="img-fluid"></p>
+<p></p><figcaption>no row limit</figcaption><p></p>
+</figure>
+</div>
+<p>We’ve also added fixed column headers, and support for column labels imported from SPSS and other systems.</p>
+<h3 id="sorting-and-filtering" class="anchored">Sorting and Filtering</h3>
+<p>RStudio isn’t designed to act like a spreadsheet, but sometimes it’s helpful to do a quick sort or filter to get some idea of the data’s characteristics before moving into reproducible data analysis. Towards that end, we’ve built some basic sorting and filtering into the new data viewer.</p>
+<h4 id="sorting" class="anchored">Sorting</h4>
+<p>Click a column once to sort data in ascending order, and again to sort in descending order. For instance, how big is the biggest diamond?</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/02/screen-shot-2015-02-23-at-11-53-35-am.png" class="img-fluid"></p>
+<p></p><figcaption>sorting</figcaption><p></p>
+</figure>
+</div>
+<p>To clear all sorts and filters on the data, click the upper-left column header.</p>
+<h4 id="filtering" class="anchored">Filtering</h4>
+<p>Click the new <em>Filter</em> button to enter Filter mode, then click the white filter value box to filter a column. You might, for instance, want to look at only at smaller diamonds:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/02/screen-shot-2015-02-23-at-12-02-04-pm.png" class="img-fluid"></p>
+<p></p><figcaption>filter</figcaption><p></p>
+</figure>
+</div>
+<p>Not all data types can be filtered; at the moment, you can filter only numeric types, characters, and factors.</p>
+<p>You can also stack filters; for instance, let’s further restrict this view to small diamonds with a Very Good cut:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/02/screen-shot-2015-02-23-at-12-03-29-pm.png" class="img-fluid"></p>
+<p></p><figcaption>filter factor</figcaption><p></p>
+</figure>
+</div>
+<h4 id="full-text-search" class="anchored">Full-Text Search</h4>
+<p>You can search the full text of your data frame using the new Search box in the upper right. This is useful for finding specific records; for instance, how many people named John were born in 2013?</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/02/screen-shot-2015-02-23-at-12-13-04-pm.png" class="img-fluid"></p>
+<p></p><figcaption>full-text search</figcaption><p></p>
+</figure>
+</div>
+<h3 id="live-update" class="anchored">Live Update</h3>
+<p>If you invoke the data viewer on a variable as in <code>View(mydata)</code>, the data viewer will (in most cases) automatically refresh whenever data in the variable changes.</p>
+<p>You can use this feature to watch data change as you manipulate it. It continues to work even when the data viewer is popped out, a configuration that combines well with multi-monitor setups.</p>
+<p>We hope these improvements help make you understand your data more quickly and easily. Try out the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio Preview Release</a> and let us know what you think!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

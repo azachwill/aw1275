@@ -1,0 +1,5147 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.340">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2023-06-14">
+<meta name="description" content="DESCRIPTION HERE">
+
+<title>posit-blogs - Merging columns together and fixing up column labels in {gt} 0.9.0</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Merging columns together and fixing up column labels in {gt} <code>0.9.0</code></h1>
+
+<p class="date">2023-06-14</p>
+</header>
+
+<p>The newest version of <a href="https://gt.rstudio.com/">gt</a> (<code>0.9.0</code>) has many refinements to what was already there. Sure, new functions <em>were added</em>, but we also took the time to fix up many existing functions and make them better. This (fifth) blog post about <strong>gt</strong> <code>0.9.0</code> is concerned with two major enhancements to existing functionality: (1) merging column data together and (2) modifying column labels to make them more suitable for presentation.</p>
+<h2 id="column-merging-via-cols_merge" class="anchored">Column merging via <code>cols_merge()</code></h2>
+<p>The <code>cols_merge()</code> function has been in the package since the first public release of <strong>gt</strong>. It’s useful! What it does is take input from two or more columns and allows the contents to be merged into a single column, using a pattern that specifies the arrangement.</p>
+<p>Let’s try using this function in an example; only then will it all make some sense. With a portion of the <code>metro</code> dataset, we’ll format the numbers in the <code>latitude</code> and <code>longitude</code> columns, combine the data from both those columns into a single column (in this case, collapsing them into <code>latitude</code> column), and then clean up the column labels with <code>cols_label()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>metro_merge <span class="ot">&lt;-</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  metro <span class="sc">|&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">grepl</span>(<span class="st">"3rd"</span>, location)) <span class="sc">|&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(name, caption, latitude, longitude) <span class="sc">|&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(latitude, longitude),</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">4</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_merge</span>(</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(latitude, longitude),</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">pattern =</span> <span class="st">"({1}, {2})"</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>   name <span class="sc">~</span> <span class="st">"Station"</span>,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>   latitude <span class="sc">~</span> <span class="st">"Coordinates"</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_hide</span>(<span class="at">columns =</span> caption)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>metro_merge</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="mzxkdrwidq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mzxkdrwidq table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#mzxkdrwidq thead, #mzxkdrwidq tbody, #mzxkdrwidq tfoot, #mzxkdrwidq tr, #mzxkdrwidq td, #mzxkdrwidq th {
+  border-style: none;
+}
+
+#mzxkdrwidq p {
+  margin: 0;
+  padding: 0;
+}
+
+#mzxkdrwidq .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#mzxkdrwidq .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#mzxkdrwidq .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#mzxkdrwidq .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#mzxkdrwidq .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mzxkdrwidq .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mzxkdrwidq .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mzxkdrwidq .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#mzxkdrwidq .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#mzxkdrwidq .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#mzxkdrwidq .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#mzxkdrwidq .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#mzxkdrwidq .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#mzxkdrwidq .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#mzxkdrwidq .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#mzxkdrwidq .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#mzxkdrwidq .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#mzxkdrwidq .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#mzxkdrwidq .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mzxkdrwidq .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#mzxkdrwidq .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#mzxkdrwidq .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#mzxkdrwidq .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mzxkdrwidq .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#mzxkdrwidq .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#mzxkdrwidq .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mzxkdrwidq .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mzxkdrwidq .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#mzxkdrwidq .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mzxkdrwidq .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#mzxkdrwidq .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mzxkdrwidq .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mzxkdrwidq .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mzxkdrwidq .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mzxkdrwidq .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mzxkdrwidq .gt_left {
+  text-align: left;
+}
+
+#mzxkdrwidq .gt_center {
+  text-align: center;
+}
+
+#mzxkdrwidq .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#mzxkdrwidq .gt_font_normal {
+  font-weight: normal;
+}
+
+#mzxkdrwidq .gt_font_bold {
+  font-weight: bold;
+}
+
+#mzxkdrwidq .gt_font_italic {
+  font-style: italic;
+}
+
+#mzxkdrwidq .gt_super {
+  font-size: 65%;
+}
+
+#mzxkdrwidq .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#mzxkdrwidq .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#mzxkdrwidq .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#mzxkdrwidq .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#mzxkdrwidq .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#mzxkdrwidq .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#mzxkdrwidq .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Station">Station</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Coordinates">Coordinates</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="name" class="gt_row gt_left">Arts et Métiers</td>
+<td headers="latitude" class="gt_row gt_right">(48.8655, 2.3561)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Réaumur—Sébastopol</td>
+<td headers="latitude" class="gt_row gt_right">(48.8661, 2.3525)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">République</td>
+<td headers="latitude" class="gt_row gt_right">(48.8675, 2.3638)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Temple</td>
+<td headers="latitude" class="gt_row gt_right">(48.8665, 2.3606)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Strasbourg—Saint-Denis</td>
+<td headers="latitude" class="gt_row gt_right">(48.8697, 2.3539)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Chemin Vert</td>
+<td headers="latitude" class="gt_row gt_right">(48.8568, 2.3683)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Filles du Calvaire</td>
+<td headers="latitude" class="gt_row gt_right">(48.8642, 2.3661)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Saint-Sébastien—Froissart</td>
+<td headers="latitude" class="gt_row gt_right">(48.8605, 2.3674)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Rambuteau</td>
+<td headers="latitude" class="gt_row gt_right">(48.8612, 2.3534)</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<p>A table that had three columns now has two. What’s happening is that the formatted data from two columns is being combined in the <code>latitude</code> column (why that column? It’s the first column cited in the <code>columns</code> argument of <code>cols_merge()</code>), and the remaining column (<code>longitude</code>) undergoes the useful process of being hidden. The <code>hide_columns</code> argument of <code>cols_merge()</code> lets you modify this default behavior.</p>
+<p>When merging column data, the thing <strong>gt</strong> will do is just put the values together, separated by a space character. Usually, this is not what you really want, so, a <code>pattern</code> specification can be used. In the above example, we used <code>pattern = "({1}, {2})"</code>. Breaking this down, the <code>"{1}"</code> is the first column cited in <code>columns</code>, and the <code>"{2}"</code> is the second of the two. The rest of that string is made up of string literals. What we get in the end is the latitude and longitude values separated by a comma and a space, and all of that surrounded by parentheses.</p>
+<p>This pattern syntax is great, so let’s look at a bit more of that in a continuation of the above example. Station names in the <code>metro</code> dataset sometimes have a caption value. To combine the caption with the station name in a readable format, we can use <code>cols_merge()</code> with the pattern <code>"{1} ({2})"</code> (where <code>"{1}"</code> corresponds to the <code>name</code> column, and <code>"{2}"</code> is the <code>caption</code> column). This is sensible, but as noted, not every station has an associated caption, so <code>NA</code>s unfortunately make their way into the table output:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>metro_merge <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_unhide</span>(<span class="at">columns =</span> caption) <span class="sc">|&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_merge</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(name, caption),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">pattern =</span> <span class="st">"{1} ({2})"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="acifdovsmp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#acifdovsmp table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#acifdovsmp thead, #acifdovsmp tbody, #acifdovsmp tfoot, #acifdovsmp tr, #acifdovsmp td, #acifdovsmp th {
+  border-style: none;
+}
+
+#acifdovsmp p {
+  margin: 0;
+  padding: 0;
+}
+
+#acifdovsmp .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#acifdovsmp .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#acifdovsmp .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#acifdovsmp .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#acifdovsmp .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#acifdovsmp .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#acifdovsmp .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#acifdovsmp .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#acifdovsmp .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#acifdovsmp .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#acifdovsmp .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#acifdovsmp .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#acifdovsmp .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#acifdovsmp .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#acifdovsmp .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#acifdovsmp .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#acifdovsmp .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#acifdovsmp .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#acifdovsmp .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#acifdovsmp .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#acifdovsmp .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#acifdovsmp .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#acifdovsmp .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#acifdovsmp .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#acifdovsmp .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#acifdovsmp .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#acifdovsmp .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#acifdovsmp .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#acifdovsmp .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#acifdovsmp .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#acifdovsmp .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#acifdovsmp .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#acifdovsmp .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#acifdovsmp .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#acifdovsmp .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#acifdovsmp .gt_left {
+  text-align: left;
+}
+
+#acifdovsmp .gt_center {
+  text-align: center;
+}
+
+#acifdovsmp .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#acifdovsmp .gt_font_normal {
+  font-weight: normal;
+}
+
+#acifdovsmp .gt_font_bold {
+  font-weight: bold;
+}
+
+#acifdovsmp .gt_font_italic {
+  font-style: italic;
+}
+
+#acifdovsmp .gt_super {
+  font-size: 65%;
+}
+
+#acifdovsmp .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#acifdovsmp .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#acifdovsmp .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#acifdovsmp .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#acifdovsmp .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#acifdovsmp .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#acifdovsmp .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Station">Station</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Coordinates">Coordinates</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="name" class="gt_row gt_left">Arts et Métiers (NA)</td>
+<td headers="latitude" class="gt_row gt_right">(48.8655, 2.3561)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Réaumur—Sébastopol (NA)</td>
+<td headers="latitude" class="gt_row gt_right">(48.8661, 2.3525)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">République (NA)</td>
+<td headers="latitude" class="gt_row gt_right">(48.8675, 2.3638)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Temple (NA)</td>
+<td headers="latitude" class="gt_row gt_right">(48.8665, 2.3606)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Strasbourg—Saint-Denis (NA)</td>
+<td headers="latitude" class="gt_row gt_right">(48.8697, 2.3539)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Chemin Vert (NA)</td>
+<td headers="latitude" class="gt_row gt_right">(48.8568, 2.3683)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Filles du Calvaire (NA)</td>
+<td headers="latitude" class="gt_row gt_right">(48.8642, 2.3661)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Saint-Sébastien—Froissart (NA)</td>
+<td headers="latitude" class="gt_row gt_right">(48.8605, 2.3674)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Rambuteau (Centre Georges Pompidou)</td>
+<td headers="latitude" class="gt_row gt_right">(48.8612, 2.3534)</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<p>This is a problem, but <strong>gt</strong> <code>0.9.0</code> now has a solution for it. We can now use <code>&lt;&lt;</code> <code>&gt;&gt;</code>⁠ to surround spans of text that will be removed if any of the contained <code>{n}</code> values yields a missing value. So if a particular station doesn’t have a <code>caption</code> value (i.e., it is <code>NA</code>), we will want to remove not only the missing value but also the parentheses we used in our pattern. The pattern should then change from <code>"{1} ({2})"</code> to <code>"{1}&lt;&lt; ({2})&gt;&gt;"</code>. Let’s try it out!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>metro_merge <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_unhide</span>(<span class="at">columns =</span> caption) <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_merge</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(name, caption),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">pattern =</span> <span class="st">"{1}&lt;&lt; ({2})&gt;&gt;"</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="izpudjwkvo" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#izpudjwkvo table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#izpudjwkvo thead, #izpudjwkvo tbody, #izpudjwkvo tfoot, #izpudjwkvo tr, #izpudjwkvo td, #izpudjwkvo th {
+  border-style: none;
+}
+
+#izpudjwkvo p {
+  margin: 0;
+  padding: 0;
+}
+
+#izpudjwkvo .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#izpudjwkvo .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#izpudjwkvo .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#izpudjwkvo .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#izpudjwkvo .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#izpudjwkvo .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#izpudjwkvo .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#izpudjwkvo .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#izpudjwkvo .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#izpudjwkvo .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#izpudjwkvo .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#izpudjwkvo .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#izpudjwkvo .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#izpudjwkvo .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#izpudjwkvo .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#izpudjwkvo .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#izpudjwkvo .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#izpudjwkvo .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#izpudjwkvo .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#izpudjwkvo .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#izpudjwkvo .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#izpudjwkvo .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#izpudjwkvo .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#izpudjwkvo .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#izpudjwkvo .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#izpudjwkvo .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#izpudjwkvo .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#izpudjwkvo .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#izpudjwkvo .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#izpudjwkvo .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#izpudjwkvo .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#izpudjwkvo .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#izpudjwkvo .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#izpudjwkvo .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#izpudjwkvo .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#izpudjwkvo .gt_left {
+  text-align: left;
+}
+
+#izpudjwkvo .gt_center {
+  text-align: center;
+}
+
+#izpudjwkvo .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#izpudjwkvo .gt_font_normal {
+  font-weight: normal;
+}
+
+#izpudjwkvo .gt_font_bold {
+  font-weight: bold;
+}
+
+#izpudjwkvo .gt_font_italic {
+  font-style: italic;
+}
+
+#izpudjwkvo .gt_super {
+  font-size: 65%;
+}
+
+#izpudjwkvo .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#izpudjwkvo .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#izpudjwkvo .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#izpudjwkvo .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#izpudjwkvo .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#izpudjwkvo .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#izpudjwkvo .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Station">Station</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Coordinates">Coordinates</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="name" class="gt_row gt_left">Arts et Métiers</td>
+<td headers="latitude" class="gt_row gt_right">(48.8655, 2.3561)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Réaumur—Sébastopol</td>
+<td headers="latitude" class="gt_row gt_right">(48.8661, 2.3525)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">République</td>
+<td headers="latitude" class="gt_row gt_right">(48.8675, 2.3638)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Temple</td>
+<td headers="latitude" class="gt_row gt_right">(48.8665, 2.3606)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Strasbourg—Saint-Denis</td>
+<td headers="latitude" class="gt_row gt_right">(48.8697, 2.3539)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Chemin Vert</td>
+<td headers="latitude" class="gt_row gt_right">(48.8568, 2.3683)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Filles du Calvaire</td>
+<td headers="latitude" class="gt_row gt_right">(48.8642, 2.3661)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Saint-Sébastien—Froissart</td>
+<td headers="latitude" class="gt_row gt_right">(48.8605, 2.3674)</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Rambuteau (Centre Georges Pompidou)</td>
+<td headers="latitude" class="gt_row gt_right">(48.8612, 2.3534)</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<p>So much better! The <code>cols_merge()</code> function is now a bit more powerful thanks to the enhanced <code>pattern</code> syntax and functionality. Please check out the help article accessible through <code>?cols_merge</code> for more details (particularly in the <em>How the <code>pattern</code> works</em> section). The syntax can even handle nested uses of <code>&lt;&lt;</code> <code>&gt;&gt;</code> for more complex <code>NA</code>-handling situations.</p>
+<h2 id="fixing-up-column-labels-with-cols_label_with" class="anchored">Fixing up column labels with <code>cols_label_with()</code></h2>
+<p>Column names do not often make for good column labels in tables for publication. Because of this, it’s very common to apply new labels to columns in a <strong>gt</strong> table with <code>cols_label()</code>. But sometimes you’re so close, you might want to replace underscores with spaces and put the separate words in title case. Using <code>cols_label()</code> to type out all the desired column labels can be such a drag. To make this situation better, <strong>gt</strong> <code>0.9.0</code> introduces the function called <code>cols_label_with()</code>. This new addition to the <code>cols_*()</code> family of functions lets you label columns using a function in its <code>fn</code> argument.</p>
+<p>Let’s use <code>sp500</code> to create a new <strong>gt</strong> table. We want all of the column labels to be entirely capitalized versions of the default labels, but instead of using <code>cols_label()</code> and rewriting each label manually in capital letters, we will use <code>cols_label_with()</code> and instruct it to apply the <code>toupper()</code> function to all column labels.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sp500 <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(date <span class="sc">&gt;=</span> <span class="st">"2015-12-01"</span> <span class="sc">&amp;</span> date <span class="sc">&lt;=</span> <span class="st">"2015-12-11"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(adj_close, volume)) <span class="sc">|&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label_with</span>(<span class="at">fn =</span> toupper)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="rvfwmbxfnl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#rvfwmbxfnl table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#rvfwmbxfnl thead, #rvfwmbxfnl tbody, #rvfwmbxfnl tfoot, #rvfwmbxfnl tr, #rvfwmbxfnl td, #rvfwmbxfnl th {
+  border-style: none;
+}
+
+#rvfwmbxfnl p {
+  margin: 0;
+  padding: 0;
+}
+
+#rvfwmbxfnl .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#rvfwmbxfnl .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#rvfwmbxfnl .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#rvfwmbxfnl .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#rvfwmbxfnl .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rvfwmbxfnl .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rvfwmbxfnl .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rvfwmbxfnl .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#rvfwmbxfnl .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#rvfwmbxfnl .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#rvfwmbxfnl .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#rvfwmbxfnl .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#rvfwmbxfnl .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#rvfwmbxfnl .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#rvfwmbxfnl .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#rvfwmbxfnl .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#rvfwmbxfnl .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#rvfwmbxfnl .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#rvfwmbxfnl .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rvfwmbxfnl .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#rvfwmbxfnl .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#rvfwmbxfnl .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#rvfwmbxfnl .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rvfwmbxfnl .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#rvfwmbxfnl .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#rvfwmbxfnl .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rvfwmbxfnl .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rvfwmbxfnl .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#rvfwmbxfnl .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rvfwmbxfnl .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#rvfwmbxfnl .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rvfwmbxfnl .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rvfwmbxfnl .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rvfwmbxfnl .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rvfwmbxfnl .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rvfwmbxfnl .gt_left {
+  text-align: left;
+}
+
+#rvfwmbxfnl .gt_center {
+  text-align: center;
+}
+
+#rvfwmbxfnl .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#rvfwmbxfnl .gt_font_normal {
+  font-weight: normal;
+}
+
+#rvfwmbxfnl .gt_font_bold {
+  font-weight: bold;
+}
+
+#rvfwmbxfnl .gt_font_italic {
+  font-style: italic;
+}
+
+#rvfwmbxfnl .gt_super {
+  font-size: 65%;
+}
+
+#rvfwmbxfnl .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#rvfwmbxfnl .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#rvfwmbxfnl .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#rvfwmbxfnl .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#rvfwmbxfnl .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#rvfwmbxfnl .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#rvfwmbxfnl .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="DATE">DATE</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="OPEN">OPEN</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="HIGH">HIGH</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="LOW">LOW</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="CLOSE">CLOSE</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="date" class="gt_row gt_right">2015-12-11</td>
+<td headers="open" class="gt_row gt_right">2047.27</td>
+<td headers="high" class="gt_row gt_right">2047.27</td>
+<td headers="low" class="gt_row gt_right">2008.80</td>
+<td headers="close" class="gt_row gt_right">2012.37</td></tr>
+    <tr><td headers="date" class="gt_row gt_right">2015-12-10</td>
+<td headers="open" class="gt_row gt_right">2047.93</td>
+<td headers="high" class="gt_row gt_right">2067.65</td>
+<td headers="low" class="gt_row gt_right">2045.67</td>
+<td headers="close" class="gt_row gt_right">2052.23</td></tr>
+    <tr><td headers="date" class="gt_row gt_right">2015-12-09</td>
+<td headers="open" class="gt_row gt_right">2061.17</td>
+<td headers="high" class="gt_row gt_right">2080.33</td>
+<td headers="low" class="gt_row gt_right">2036.53</td>
+<td headers="close" class="gt_row gt_right">2047.62</td></tr>
+    <tr><td headers="date" class="gt_row gt_right">2015-12-08</td>
+<td headers="open" class="gt_row gt_right">2073.39</td>
+<td headers="high" class="gt_row gt_right">2073.85</td>
+<td headers="low" class="gt_row gt_right">2052.32</td>
+<td headers="close" class="gt_row gt_right">2063.59</td></tr>
+    <tr><td headers="date" class="gt_row gt_right">2015-12-07</td>
+<td headers="open" class="gt_row gt_right">2090.42</td>
+<td headers="high" class="gt_row gt_right">2090.42</td>
+<td headers="low" class="gt_row gt_right">2066.78</td>
+<td headers="close" class="gt_row gt_right">2077.07</td></tr>
+    <tr><td headers="date" class="gt_row gt_right">2015-12-04</td>
+<td headers="open" class="gt_row gt_right">2051.24</td>
+<td headers="high" class="gt_row gt_right">2093.84</td>
+<td headers="low" class="gt_row gt_right">2051.24</td>
+<td headers="close" class="gt_row gt_right">2091.69</td></tr>
+    <tr><td headers="date" class="gt_row gt_right">2015-12-03</td>
+<td headers="open" class="gt_row gt_right">2080.71</td>
+<td headers="high" class="gt_row gt_right">2085.00</td>
+<td headers="low" class="gt_row gt_right">2042.35</td>
+<td headers="close" class="gt_row gt_right">2049.62</td></tr>
+    <tr><td headers="date" class="gt_row gt_right">2015-12-02</td>
+<td headers="open" class="gt_row gt_right">2101.71</td>
+<td headers="high" class="gt_row gt_right">2104.27</td>
+<td headers="low" class="gt_row gt_right">2077.11</td>
+<td headers="close" class="gt_row gt_right">2079.51</td></tr>
+    <tr><td headers="date" class="gt_row gt_right">2015-12-01</td>
+<td headers="open" class="gt_row gt_right">2082.93</td>
+<td headers="high" class="gt_row gt_right">2103.37</td>
+<td headers="low" class="gt_row gt_right">2082.93</td>
+<td headers="close" class="gt_row gt_right">2102.63</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<p>Let’s have a look at another example, this time using a portion of the <code>countrypops</code> dataset. We can, if we prefer, apply multiple types of column label changes in sequence with multiple calls of <code>cols_label_with()</code>. Here, we use the <code>make_clean_names()</code> function from the <strong>janitor</strong> package and follow up with the removal of a numeral with <code>gsub()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>countrypops <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2021</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">grepl</span>(<span class="st">"^C"</span>, country_code_3)) <span class="sc">|&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>country_code_2, <span class="sc">-</span>year) <span class="sc">|&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">8</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_move_to_start</span>(<span class="at">columns =</span> country_code_3) <span class="sc">|&gt;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_integer</span>(<span class="at">columns =</span> population) <span class="sc">|&gt;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label_with</span>(</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">fn =</span> <span class="sc">~</span> janitor<span class="sc">::</span><span class="fu">make_clean_names</span>(., <span class="at">case =</span> <span class="st">"title"</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label_with</span>(</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">fn =</span> <span class="sc">~</span> <span class="fu">gsub</span>(<span class="st">"[0-9]"</span>, <span class="st">""</span>, .)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="phvzbixwdp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#phvzbixwdp table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#phvzbixwdp thead, #phvzbixwdp tbody, #phvzbixwdp tfoot, #phvzbixwdp tr, #phvzbixwdp td, #phvzbixwdp th {
+  border-style: none;
+}
+
+#phvzbixwdp p {
+  margin: 0;
+  padding: 0;
+}
+
+#phvzbixwdp .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#phvzbixwdp .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#phvzbixwdp .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#phvzbixwdp .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#phvzbixwdp .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#phvzbixwdp .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#phvzbixwdp .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#phvzbixwdp .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#phvzbixwdp .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#phvzbixwdp .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#phvzbixwdp .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#phvzbixwdp .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#phvzbixwdp .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#phvzbixwdp .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#phvzbixwdp .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#phvzbixwdp .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#phvzbixwdp .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#phvzbixwdp .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#phvzbixwdp .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#phvzbixwdp .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#phvzbixwdp .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#phvzbixwdp .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#phvzbixwdp .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#phvzbixwdp .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#phvzbixwdp .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#phvzbixwdp .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#phvzbixwdp .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#phvzbixwdp .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#phvzbixwdp .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#phvzbixwdp .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#phvzbixwdp .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#phvzbixwdp .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#phvzbixwdp .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#phvzbixwdp .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#phvzbixwdp .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#phvzbixwdp .gt_left {
+  text-align: left;
+}
+
+#phvzbixwdp .gt_center {
+  text-align: center;
+}
+
+#phvzbixwdp .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#phvzbixwdp .gt_font_normal {
+  font-weight: normal;
+}
+
+#phvzbixwdp .gt_font_bold {
+  font-weight: bold;
+}
+
+#phvzbixwdp .gt_font_italic {
+  font-style: italic;
+}
+
+#phvzbixwdp .gt_super {
+  font-size: 65%;
+}
+
+#phvzbixwdp .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#phvzbixwdp .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#phvzbixwdp .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#phvzbixwdp .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#phvzbixwdp .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#phvzbixwdp .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#phvzbixwdp .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Country Code ">Country Code </th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Country Name">Country Name</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Population">Population</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="country_code_3" class="gt_row gt_left">CAF</td>
+<td headers="country_name" class="gt_row gt_left">Central African Republic</td>
+<td headers="population" class="gt_row gt_right">5,457,154</td></tr>
+    <tr><td headers="country_code_3" class="gt_row gt_left">CAN</td>
+<td headers="country_name" class="gt_row gt_left">Canada</td>
+<td headers="population" class="gt_row gt_right">38,246,108</td></tr>
+    <tr><td headers="country_code_3" class="gt_row gt_left">CHE</td>
+<td headers="country_name" class="gt_row gt_left">Switzerland</td>
+<td headers="population" class="gt_row gt_right">8,703,405</td></tr>
+    <tr><td headers="country_code_3" class="gt_row gt_left">CHL</td>
+<td headers="country_name" class="gt_row gt_left">Chile</td>
+<td headers="population" class="gt_row gt_right">19,493,184</td></tr>
+    <tr><td headers="country_code_3" class="gt_row gt_left">CHN</td>
+<td headers="country_name" class="gt_row gt_left">China</td>
+<td headers="population" class="gt_row gt_right">1,412,360,000</td></tr>
+    <tr><td headers="country_code_3" class="gt_row gt_left">CIV</td>
+<td headers="country_name" class="gt_row gt_left">Cote d'Ivoire</td>
+<td headers="population" class="gt_row gt_right">27,478,249</td></tr>
+    <tr><td headers="country_code_3" class="gt_row gt_left">CMR</td>
+<td headers="country_name" class="gt_row gt_left">Cameroon</td>
+<td headers="population" class="gt_row gt_right">27,198,628</td></tr>
+    <tr><td headers="country_code_3" class="gt_row gt_left">COD</td>
+<td headers="country_name" class="gt_row gt_left">Congo (Democratic Republic)</td>
+<td headers="population" class="gt_row gt_right">95,894,118</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<p>With the <code>sza</code> dataset, we can make a table where the column names are dates. The labels can be generated as month names in any language using <code>cols_label_with()</code> with <code>vec_fmt_datetime()</code> as the function given in <code>fn</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sza <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(latitude <span class="sc">==</span> <span class="dv">50</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">paste0</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"2000-"</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">formatC</span>(</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">match</span>(month, <span class="fu">tolower</span>(month.abb)),</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">width =</span> <span class="dv">2</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">flag =</span> <span class="st">"0"</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"-01"</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">|&gt;</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(latitude, month)) <span class="sc">|&gt;</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_wider</span>(<span class="at">names_from =</span> date, <span class="at">values_from =</span> sza) <span class="sc">|&gt;</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>(<span class="at">rowname_col =</span> <span class="st">"tst"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sub_missing</span>(<span class="at">missing_text =</span> <span class="st">""</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_width</span>(<span class="fu">everything</span>() <span class="sc">~</span> <span class="fu">px</span>(<span class="dv">50</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data_color</span>(</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">palette =</span> <span class="fu">c</span>(<span class="st">"yellow"</span>, <span class="st">"darkblue"</span>),</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">domain =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">90</span>),</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">na_color =</span> <span class="st">"darkblue"</span> <span class="sc">|&gt;</span> <span class="fu">adjust_luminance</span>(<span class="at">steps =</span> <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_options</span>(</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">table_body.hlines.style =</span> <span class="st">"none"</span>,</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">table_body.border.bottom.color =</span> <span class="st">"black"</span>,</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">column_labels.border.top.color =</span> <span class="st">"black"</span>,</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">column_labels.border.bottom.color =</span> <span class="st">"black"</span>,</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">stub.border.color =</span> <span class="st">"black"</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label_with</span>(<span class="at">fn =</span> <span class="cf">function</span>(x) {</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">vec_fmt_datetime</span>(x, <span class="at">format =</span> <span class="st">"MMM"</span>, <span class="at">locale =</span> <span class="st">"de"</span>)</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="qavntxzqkx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#qavntxzqkx table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#qavntxzqkx thead, #qavntxzqkx tbody, #qavntxzqkx tfoot, #qavntxzqkx tr, #qavntxzqkx td, #qavntxzqkx th {
+  border-style: none;
+}
+
+#qavntxzqkx p {
+  margin: 0;
+  padding: 0;
+}
+
+#qavntxzqkx .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#qavntxzqkx .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#qavntxzqkx .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#qavntxzqkx .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#qavntxzqkx .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#qavntxzqkx .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#qavntxzqkx .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #000000;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #000000;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#qavntxzqkx .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#qavntxzqkx .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#qavntxzqkx .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#qavntxzqkx .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#qavntxzqkx .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #000000;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#qavntxzqkx .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#qavntxzqkx .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#qavntxzqkx .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#qavntxzqkx .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#qavntxzqkx .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#qavntxzqkx .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: none;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#qavntxzqkx .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #000000;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qavntxzqkx .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#qavntxzqkx .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#qavntxzqkx .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#qavntxzqkx .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qavntxzqkx .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#qavntxzqkx .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#qavntxzqkx .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#qavntxzqkx .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qavntxzqkx .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#qavntxzqkx .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#qavntxzqkx .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#qavntxzqkx .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #000000;
+}
+
+#qavntxzqkx .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#qavntxzqkx .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qavntxzqkx .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#qavntxzqkx .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qavntxzqkx .gt_left {
+  text-align: left;
+}
+
+#qavntxzqkx .gt_center {
+  text-align: center;
+}
+
+#qavntxzqkx .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#qavntxzqkx .gt_font_normal {
+  font-weight: normal;
+}
+
+#qavntxzqkx .gt_font_bold {
+  font-weight: bold;
+}
+
+#qavntxzqkx .gt_font_italic {
+  font-style: italic;
+}
+
+#qavntxzqkx .gt_super {
+  font-size: 65%;
+}
+
+#qavntxzqkx .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#qavntxzqkx .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#qavntxzqkx .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#qavntxzqkx .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#qavntxzqkx .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#qavntxzqkx .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#qavntxzqkx .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" style="table-layout: fixed;; width: 0px" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <colgroup>
+    <col style="width:50px;">
+    <col style="width:50px;">
+    <col style="width:50px;">
+    <col style="width:50px;">
+    <col style="width:50px;">
+    <col style="width:50px;">
+    <col style="width:50px;">
+    <col style="width:50px;">
+    <col style="width:50px;">
+    <col style="width:50px;">
+    <col style="width:50px;">
+    <col style="width:50px;">
+    <col style="width:50px;">
+  </colgroup>
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id=""></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Jan.">Jan.</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Feb.">Feb.</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="März">März</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Apr.">Apr.</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Mai">Mai</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Juni">Juni</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Juli">Juli</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Aug.">Aug.</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Sept.">Sept.</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Okt.">Okt.</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Nov.">Nov.</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Dez.">Dez.</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><th id="stub_1_1" scope="row" class="gt_row gt_right gt_stub">0400</th>
+<td headers="stub_1_1 2000-01-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_1 2000-02-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_1 2000-03-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_1 2000-04-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_1 2000-05-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_1 2000-06-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_1 2000-07-01" class="gt_row gt_right" style="background-color: #06018B; color: #FFFFFF;">89.7</td>
+<td headers="stub_1_1 2000-08-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_1 2000-09-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_1 2000-10-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_1 2000-11-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_1 2000-12-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td></tr>
+    <tr><th id="stub_1_2" scope="row" class="gt_row gt_right gt_stub">0430</th>
+<td headers="stub_1_2 2000-01-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_2 2000-02-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_2 2000-03-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_2 2000-04-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_2 2000-05-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_2 2000-06-01" class="gt_row gt_right" style="background-color: #270A8A; color: #FFFFFF;">86.7</td>
+<td headers="stub_1_2 2000-07-01" class="gt_row gt_right" style="background-color: #2D0D89; color: #FFFFFF;">85.7</td>
+<td headers="stub_1_2 2000-08-01" class="gt_row gt_right" style="background-color: #06018B; color: #FFFFFF;">89.7</td>
+<td headers="stub_1_2 2000-09-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_2 2000-10-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_2 2000-11-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_2 2000-12-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td></tr>
+    <tr><th id="stub_1_3" scope="row" class="gt_row gt_right gt_stub">0500</th>
+<td headers="stub_1_3 2000-01-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_3 2000-02-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_3 2000-03-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_3 2000-04-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_3 2000-05-01" class="gt_row gt_right" style="background-color: #1E068A; color: #FFFFFF;">87.8</td>
+<td headers="stub_1_3 2000-06-01" class="gt_row gt_right" style="background-color: #3E1888; color: #FFFFFF;">82.4</td>
+<td headers="stub_1_3 2000-07-01" class="gt_row gt_right" style="background-color: #421A87; color: #FFFFFF;">81.5</td>
+<td headers="stub_1_3 2000-08-01" class="gt_row gt_right" style="background-color: #2F0E89; color: #FFFFFF;">85.4</td>
+<td headers="stub_1_3 2000-09-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_3 2000-10-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_3 2000-11-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_3 2000-12-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td></tr>
+    <tr><th id="stub_1_4" scope="row" class="gt_row gt_right gt_stub">0530</th>
+<td headers="stub_1_4 2000-01-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_4 2000-02-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_4 2000-03-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_4 2000-04-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_4 2000-05-01" class="gt_row gt_right" style="background-color: #3A1588; color: #FFFFFF;">83.2</td>
+<td headers="stub_1_4 2000-06-01" class="gt_row gt_right" style="background-color: #502486; color: #FFFFFF;">78.0</td>
+<td headers="stub_1_4 2000-07-01" class="gt_row gt_right" style="background-color: #532685; color: #FFFFFF;">77.1</td>
+<td headers="stub_1_4 2000-08-01" class="gt_row gt_right" style="background-color: #451C87; color: #FFFFFF;">80.8</td>
+<td headers="stub_1_4 2000-09-01" class="gt_row gt_right" style="background-color: #1A058A; color: #FFFFFF;">88.3</td>
+<td headers="stub_1_4 2000-10-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_4 2000-11-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_4 2000-12-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td></tr>
+    <tr><th id="stub_1_5" scope="row" class="gt_row gt_right gt_stub">0600</th>
+<td headers="stub_1_5 2000-01-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_5 2000-02-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_5 2000-03-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_5 2000-04-01" class="gt_row gt_right" style="background-color: #280A8A; color: #FFFFFF;">86.6</td>
+<td headers="stub_1_5 2000-05-01" class="gt_row gt_right" style="background-color: #4E2386; color: #FFFFFF;">78.5</td>
+<td headers="stub_1_5 2000-06-01" class="gt_row gt_right" style="background-color: #5F3183; color: #FFFFFF;">73.3</td>
+<td headers="stub_1_5 2000-07-01" class="gt_row gt_right" style="background-color: #623383; color: #FFFFFF;">72.5</td>
+<td headers="stub_1_5 2000-08-01" class="gt_row gt_right" style="background-color: #562985; color: #FFFFFF;">76.2</td>
+<td headers="stub_1_5 2000-09-01" class="gt_row gt_right" style="background-color: #391488; color: #FFFFFF;">83.6</td>
+<td headers="stub_1_5 2000-10-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_5 2000-11-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_5 2000-12-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td></tr>
+    <tr><th id="stub_1_6" scope="row" class="gt_row gt_right gt_stub">0630</th>
+<td headers="stub_1_6 2000-01-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_6 2000-02-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_6 2000-03-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_6 2000-04-01" class="gt_row gt_right" style="background-color: #411987; color: #FFFFFF;">81.8</td>
+<td headers="stub_1_6 2000-05-01" class="gt_row gt_right" style="background-color: #5E3083; color: #FFFFFF;">73.7</td>
+<td headers="stub_1_6 2000-06-01" class="gt_row gt_right" style="background-color: #6D3D81; color: #FFFFFF;">68.6</td>
+<td headers="stub_1_6 2000-07-01" class="gt_row gt_right" style="background-color: #6F3F80; color: #FFFFFF;">67.8</td>
+<td headers="stub_1_6 2000-08-01" class="gt_row gt_right" style="background-color: #653682; color: #FFFFFF;">71.4</td>
+<td headers="stub_1_6 2000-09-01" class="gt_row gt_right" style="background-color: #4D2286; color: #FFFFFF;">78.8</td>
+<td headers="stub_1_6 2000-10-01" class="gt_row gt_right" style="background-color: #20078A; color: #FFFFFF;">87.6</td>
+<td headers="stub_1_6 2000-11-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_6 2000-12-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td></tr>
+    <tr><th id="stub_1_7" scope="row" class="gt_row gt_right gt_stub">0700</th>
+<td headers="stub_1_7 2000-01-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_7 2000-02-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_7 2000-03-01" class="gt_row gt_right" style="background-color: #2A0B89; color: #FFFFFF;">86.3</td>
+<td headers="stub_1_7 2000-04-01" class="gt_row gt_right" style="background-color: #532785; color: #FFFFFF;">76.9</td>
+<td headers="stub_1_7 2000-05-01" class="gt_row gt_right" style="background-color: #6C3C81; color: #FFFFFF;">68.9</td>
+<td headers="stub_1_7 2000-06-01" class="gt_row gt_right" style="background-color: #7A4A7E; color: #FFFFFF;">63.8</td>
+<td headers="stub_1_7 2000-07-01" class="gt_row gt_right" style="background-color: #7C4C7D; color: #FFFFFF;">63.0</td>
+<td headers="stub_1_7 2000-08-01" class="gt_row gt_right" style="background-color: #734280; color: #FFFFFF;">66.6</td>
+<td headers="stub_1_7 2000-09-01" class="gt_row gt_right" style="background-color: #5D2F84; color: #FFFFFF;">74.0</td>
+<td headers="stub_1_7 2000-10-01" class="gt_row gt_right" style="background-color: #3C1688; color: #FFFFFF;">82.8</td>
+<td headers="stub_1_7 2000-11-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_7 2000-12-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td></tr>
+    <tr><th id="stub_1_8" scope="row" class="gt_row gt_right gt_stub">0730</th>
+<td headers="stub_1_8 2000-01-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_8 2000-02-01" class="gt_row gt_right" style="background-color: #0A018B; color: #FFFFFF;">89.5</td>
+<td headers="stub_1_8 2000-03-01" class="gt_row gt_right" style="background-color: #411987; color: #FFFFFF;">81.8</td>
+<td headers="stub_1_8 2000-04-01" class="gt_row gt_right" style="background-color: #633483; color: #FFFFFF;">72.2</td>
+<td headers="stub_1_8 2000-05-01" class="gt_row gt_right" style="background-color: #79497E; color: #FFFFFF;">64.1</td>
+<td headers="stub_1_8 2000-06-01" class="gt_row gt_right" style="background-color: #86577B; color: #FFFFFF;">59.0</td>
+<td headers="stub_1_8 2000-07-01" class="gt_row gt_right" style="background-color: #88597A; color: #FFFFFF;">58.2</td>
+<td headers="stub_1_8 2000-08-01" class="gt_row gt_right" style="background-color: #7F4F7D; color: #FFFFFF;">61.8</td>
+<td headers="stub_1_8 2000-09-01" class="gt_row gt_right" style="background-color: #6B3B81; color: #FFFFFF;">69.2</td>
+<td headers="stub_1_8 2000-10-01" class="gt_row gt_right" style="background-color: #4F2386; color: #FFFFFF;">78.2</td>
+<td headers="stub_1_8 2000-11-01" class="gt_row gt_right" style="background-color: #24098A; color: #FFFFFF;">87.1</td>
+<td headers="stub_1_8 2000-12-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td></tr>
+    <tr><th id="stub_1_9" scope="row" class="gt_row gt_right gt_stub">0800</th>
+<td headers="stub_1_9 2000-01-01" class="gt_row gt_right" style="background-color: #212100; color: #FFFFFF;"></td>
+<td headers="stub_1_9 2000-02-01" class="gt_row gt_right" style="background-color: #300F89; color: #FFFFFF;">85.3</td>
+<td headers="stub_1_9 2000-03-01" class="gt_row gt_right" style="background-color: #522685; color: #FFFFFF;">77.4</td>
+<td headers="stub_1_9 2000-04-01" class="gt_row gt_right" style="background-color: #704080; color: #FFFFFF;">67.6</td>
+<td headers="stub_1_9 2000-05-01" class="gt_row gt_right" style="background-color: #85557B; color: #FFFFFF;">59.4</td>
+<td headers="stub_1_9 2000-06-01" class="gt_row gt_right" style="background-color: #926378; color: #FFFFFF;">54.2</td>
+<td headers="stub_1_9 2000-07-01" class="gt_row gt_right" style="background-color: #936677; color: #FFFFFF;">53.4</td>
+<td headers="stub_1_9 2000-08-01" class="gt_row gt_right" style="background-color: #8B5C7A; color: #FFFFFF;">57.0</td>
+<td headers="stub_1_9 2000-09-01" class="gt_row gt_right" style="background-color: #78487E; color: #FFFFFF;">64.6</td>
+<td headers="stub_1_9 2000-10-01" class="gt_row gt_right" style="background-color: #5E2F84; color: #FFFFFF;">73.8</td>
+<td headers="stub_1_9 2000-11-01" class="gt_row gt_right" style="background-color: #3B1688; color: #FFFFFF;">83.0</td>
+<td headers="stub_1_9 2000-12-01" class="gt_row gt_right" style="background-color: #0F028B; color: #FFFFFF;">89.2</td></tr>
+    <tr><th id="stub_1_10" scope="row" class="gt_row gt_right gt_stub">0830</th>
+<td headers="stub_1_10 2000-01-01" class="gt_row gt_right" style="background-color: #280B89; color: #FFFFFF;">86.5</td>
+<td headers="stub_1_10 2000-02-01" class="gt_row gt_right" style="background-color: #421A87; color: #FFFFFF;">81.5</td>
+<td headers="stub_1_10 2000-03-01" class="gt_row gt_right" style="background-color: #5F3183; color: #FFFFFF;">73.3</td>
+<td headers="stub_1_10 2000-04-01" class="gt_row gt_right" style="background-color: #7B4B7E; color: #FFFFFF;">63.2</td>
+<td headers="stub_1_10 2000-05-01" class="gt_row gt_right" style="background-color: #906278; color: #FFFFFF;">54.7</td>
+<td headers="stub_1_10 2000-06-01" class="gt_row gt_right" style="background-color: #9C7074; color: #FFFFFF;">49.5</td>
+<td headers="stub_1_10 2000-07-01" class="gt_row gt_right" style="background-color: #9E7274; color: #FFFFFF;">48.7</td>
+<td headers="stub_1_10 2000-08-01" class="gt_row gt_right" style="background-color: #966876; color: #FFFFFF;">52.4</td>
+<td headers="stub_1_10 2000-09-01" class="gt_row gt_right" style="background-color: #83547C; color: #FFFFFF;">60.1</td>
+<td headers="stub_1_10 2000-10-01" class="gt_row gt_right" style="background-color: #6A3A81; color: #FFFFFF;">69.6</td>
+<td headers="stub_1_10 2000-11-01" class="gt_row gt_right" style="background-color: #4C2186; color: #FFFFFF;">79.0</td>
+<td headers="stub_1_10 2000-12-01" class="gt_row gt_right" style="background-color: #2E0E89; color: #FFFFFF;">85.5</td></tr>
+    <tr><th id="stub_1_11" scope="row" class="gt_row gt_right gt_stub">0900</th>
+<td headers="stub_1_11 2000-01-01" class="gt_row gt_right" style="background-color: #3A1588; color: #FFFFFF;">83.2</td>
+<td headers="stub_1_11 2000-02-01" class="gt_row gt_right" style="background-color: #502486; color: #FFFFFF;">78.0</td>
+<td headers="stub_1_11 2000-03-01" class="gt_row gt_right" style="background-color: #6A3A81; color: #FFFFFF;">69.6</td>
+<td headers="stub_1_11 2000-04-01" class="gt_row gt_right" style="background-color: #86567B; color: #FFFFFF;">59.1</td>
+<td headers="stub_1_11 2000-05-01" class="gt_row gt_right" style="background-color: #9A6E75; color: #FFFFFF;">50.3</td>
+<td headers="stub_1_11 2000-06-01" class="gt_row gt_right" style="background-color: #A67D70; color: #FFFFFF;">44.9</td>
+<td headers="stub_1_11 2000-07-01" class="gt_row gt_right" style="background-color: #A87F70; color: #FFFFFF;">44.1</td>
+<td headers="stub_1_11 2000-08-01" class="gt_row gt_right" style="background-color: #A07573; color: #FFFFFF;">47.9</td>
+<td headers="stub_1_11 2000-09-01" class="gt_row gt_right" style="background-color: #8E5F79; color: #FFFFFF;">55.9</td>
+<td headers="stub_1_11 2000-10-01" class="gt_row gt_right" style="background-color: #75457F; color: #FFFFFF;">65.7</td>
+<td headers="stub_1_11 2000-11-01" class="gt_row gt_right" style="background-color: #582B84; color: #FFFFFF;">75.5</td>
+<td headers="stub_1_11 2000-12-01" class="gt_row gt_right" style="background-color: #3F1988; color: #FFFFFF;">82.1</td></tr>
+    <tr><th id="stub_1_12" scope="row" class="gt_row gt_right gt_stub">0930</th>
+<td headers="stub_1_12 2000-01-01" class="gt_row gt_right" style="background-color: #471E87; color: #FFFFFF;">80.2</td>
+<td headers="stub_1_12 2000-02-01" class="gt_row gt_right" style="background-color: #5A2C84; color: #FFFFFF;">74.9</td>
+<td headers="stub_1_12 2000-03-01" class="gt_row gt_right" style="background-color: #74437F; color: #FFFFFF;">66.2</td>
+<td headers="stub_1_12 2000-04-01" class="gt_row gt_right" style="background-color: #8F6079; color: #FFFFFF;">55.4</td>
+<td headers="stub_1_12 2000-05-01" class="gt_row gt_right" style="background-color: #A47971; color: #FFFFFF;">46.2</td>
+<td headers="stub_1_12 2000-06-01" class="gt_row gt_right" style="background-color: #B0896C; color: #FFFFFF;">40.6</td>
+<td headers="stub_1_12 2000-07-01" class="gt_row gt_right" style="background-color: #B28B6C; color: #FFFFFF;">39.7</td>
+<td headers="stub_1_12 2000-08-01" class="gt_row gt_right" style="background-color: #A9806F; color: #FFFFFF;">43.7</td>
+<td headers="stub_1_12 2000-09-01" class="gt_row gt_right" style="background-color: #976976; color: #FFFFFF;">52.0</td>
+<td headers="stub_1_12 2000-10-01" class="gt_row gt_right" style="background-color: #7E4E7D; color: #FFFFFF;">62.1</td>
+<td headers="stub_1_12 2000-11-01" class="gt_row gt_right" style="background-color: #623383; color: #FFFFFF;">72.3</td>
+<td headers="stub_1_12 2000-12-01" class="gt_row gt_right" style="background-color: #4C2186; color: #FFFFFF;">79.1</td></tr>
+    <tr><th id="stub_1_13" scope="row" class="gt_row gt_right gt_stub">1000</th>
+<td headers="stub_1_13 2000-01-01" class="gt_row gt_right" style="background-color: #512585; color: #FFFFFF;">77.7</td>
+<td headers="stub_1_13 2000-02-01" class="gt_row gt_right" style="background-color: #633483; color: #FFFFFF;">72.2</td>
+<td headers="stub_1_13 2000-03-01" class="gt_row gt_right" style="background-color: #7B4B7E; color: #FFFFFF;">63.2</td>
+<td headers="stub_1_13 2000-04-01" class="gt_row gt_right" style="background-color: #976976; color: #FFFFFF;">52.0</td>
+<td headers="stub_1_13 2000-05-01" class="gt_row gt_right" style="background-color: #AC836E; color: #FFFFFF;">42.5</td>
+<td headers="stub_1_13 2000-06-01" class="gt_row gt_right" style="background-color: #B89468; color: #FFFFFF;">36.6</td>
+<td headers="stub_1_13 2000-07-01" class="gt_row gt_right" style="background-color: #BA9767; color: #FFFFFF;">35.6</td>
+<td headers="stub_1_13 2000-08-01" class="gt_row gt_right" style="background-color: #B18B6C; color: #FFFFFF;">39.9</td>
+<td headers="stub_1_13 2000-09-01" class="gt_row gt_right" style="background-color: #9F7373; color: #FFFFFF;">48.5</td>
+<td headers="stub_1_13 2000-10-01" class="gt_row gt_right" style="background-color: #86567B; color: #FFFFFF;">59.1</td>
+<td headers="stub_1_13 2000-11-01" class="gt_row gt_right" style="background-color: #6A3B81; color: #FFFFFF;">69.5</td>
+<td headers="stub_1_13 2000-12-01" class="gt_row gt_right" style="background-color: #552885; color: #FFFFFF;">76.5</td></tr>
+    <tr><th id="stub_1_14" scope="row" class="gt_row gt_right gt_stub">1030</th>
+<td headers="stub_1_14 2000-01-01" class="gt_row gt_right" style="background-color: #582A84; color: #FFFFFF;">75.7</td>
+<td headers="stub_1_14 2000-02-01" class="gt_row gt_right" style="background-color: #693982; color: #FFFFFF;">70.0</td>
+<td headers="stub_1_14 2000-03-01" class="gt_row gt_right" style="background-color: #81517C; color: #FFFFFF;">60.9</td>
+<td headers="stub_1_14 2000-04-01" class="gt_row gt_right" style="background-color: #9D7174; color: #FFFFFF;">49.3</td>
+<td headers="stub_1_14 2000-05-01" class="gt_row gt_right" style="background-color: #B28C6B; color: #FFFFFF;">39.4</td>
+<td headers="stub_1_14 2000-06-01" class="gt_row gt_right" style="background-color: #BF9E65; color: #FFFFFF;">33.1</td>
+<td headers="stub_1_14 2000-07-01" class="gt_row gt_right" style="background-color: #C1A163; color: #000000;">32.1</td>
+<td headers="stub_1_14 2000-08-01" class="gt_row gt_right" style="background-color: #B89468; color: #FFFFFF;">36.6</td>
+<td headers="stub_1_14 2000-09-01" class="gt_row gt_right" style="background-color: #A57B71; color: #FFFFFF;">45.7</td>
+<td headers="stub_1_14 2000-10-01" class="gt_row gt_right" style="background-color: #8C5D79; color: #FFFFFF;">56.5</td>
+<td headers="stub_1_14 2000-11-01" class="gt_row gt_right" style="background-color: #714080; color: #FFFFFF;">67.3</td>
+<td headers="stub_1_14 2000-12-01" class="gt_row gt_right" style="background-color: #5B2D84; color: #FFFFFF;">74.5</td></tr>
+    <tr><th id="stub_1_15" scope="row" class="gt_row gt_right gt_stub">1100</th>
+<td headers="stub_1_15 2000-01-01" class="gt_row gt_right" style="background-color: #5C2E84; color: #FFFFFF;">74.2</td>
+<td headers="stub_1_15 2000-02-01" class="gt_row gt_right" style="background-color: #6D3D81; color: #FFFFFF;">68.5</td>
+<td headers="stub_1_15 2000-03-01" class="gt_row gt_right" style="background-color: #86567B; color: #FFFFFF;">59.1</td>
+<td headers="stub_1_15 2000-04-01" class="gt_row gt_right" style="background-color: #A17672; color: #FFFFFF;">47.2</td>
+<td headers="stub_1_15 2000-05-01" class="gt_row gt_right" style="background-color: #B79369; color: #FFFFFF;">37.0</td>
+<td headers="stub_1_15 2000-06-01" class="gt_row gt_right" style="background-color: #C5A561; color: #000000;">30.4</td>
+<td headers="stub_1_15 2000-07-01" class="gt_row gt_right" style="background-color: #C7A960; color: #000000;">29.3</td>
+<td headers="stub_1_15 2000-08-01" class="gt_row gt_right" style="background-color: #BD9B66; color: #FFFFFF;">34.1</td>
+<td headers="stub_1_15 2000-09-01" class="gt_row gt_right" style="background-color: #A9816F; color: #FFFFFF;">43.5</td>
+<td headers="stub_1_15 2000-10-01" class="gt_row gt_right" style="background-color: #906278; color: #FFFFFF;">54.7</td>
+<td headers="stub_1_15 2000-11-01" class="gt_row gt_right" style="background-color: #75457F; color: #FFFFFF;">65.7</td>
+<td headers="stub_1_15 2000-12-01" class="gt_row gt_right" style="background-color: #603183; color: #FFFFFF;">73.0</td></tr>
+    <tr><th id="stub_1_16" scope="row" class="gt_row gt_right gt_stub">1130</th>
+<td headers="stub_1_16 2000-01-01" class="gt_row gt_right" style="background-color: #5F3183; color: #FFFFFF;">73.3</td>
+<td headers="stub_1_16 2000-02-01" class="gt_row gt_right" style="background-color: #704080; color: #FFFFFF;">67.5</td>
+<td headers="stub_1_16 2000-03-01" class="gt_row gt_right" style="background-color: #88597A; color: #FFFFFF;">58.0</td>
+<td headers="stub_1_16 2000-04-01" class="gt_row gt_right" style="background-color: #A47A71; color: #FFFFFF;">45.9</td>
+<td headers="stub_1_16 2000-05-01" class="gt_row gt_right" style="background-color: #BA9767; color: #FFFFFF;">35.5</td>
+<td headers="stub_1_16 2000-06-01" class="gt_row gt_right" style="background-color: #C8AB5F; color: #000000;">28.6</td>
+<td headers="stub_1_16 2000-07-01" class="gt_row gt_right" style="background-color: #CBAE5D; color: #000000;">27.5</td>
+<td headers="stub_1_16 2000-08-01" class="gt_row gt_right" style="background-color: #C09F64; color: #000000;">32.5</td>
+<td headers="stub_1_16 2000-09-01" class="gt_row gt_right" style="background-color: #AC856E; color: #FFFFFF;">42.1</td>
+<td headers="stub_1_16 2000-10-01" class="gt_row gt_right" style="background-color: #936577; color: #FFFFFF;">53.5</td>
+<td headers="stub_1_16 2000-11-01" class="gt_row gt_right" style="background-color: #78477F; color: #FFFFFF;">64.7</td>
+<td headers="stub_1_16 2000-12-01" class="gt_row gt_right" style="background-color: #633483; color: #FFFFFF;">72.1</td></tr>
+    <tr><th id="stub_1_17" scope="row" class="gt_row gt_right gt_stub">1200</th>
+<td headers="stub_1_17 2000-01-01" class="gt_row gt_right" style="background-color: #603183; color: #FFFFFF;">73.0</td>
+<td headers="stub_1_17 2000-02-01" class="gt_row gt_right" style="background-color: #714180; color: #FFFFFF;">67.2</td>
+<td headers="stub_1_17 2000-03-01" class="gt_row gt_right" style="background-color: #895A7A; color: #FFFFFF;">57.7</td>
+<td headers="stub_1_17 2000-04-01" class="gt_row gt_right" style="background-color: #A57B71; color: #FFFFFF;">45.5</td>
+<td headers="stub_1_17 2000-05-01" class="gt_row gt_right" style="background-color: #BB9867; color: #FFFFFF;">35.0</td>
+<td headers="stub_1_17 2000-06-01" class="gt_row gt_right" style="background-color: #CAAC5E; color: #000000;">28.0</td>
+<td headers="stub_1_17 2000-07-01" class="gt_row gt_right" style="background-color: #CCAF5D; color: #000000;">26.9</td>
+<td headers="stub_1_17 2000-08-01" class="gt_row gt_right" style="background-color: #C2A163; color: #000000;">31.9</td>
+<td headers="stub_1_17 2000-09-01" class="gt_row gt_right" style="background-color: #AE866D; color: #FFFFFF;">41.6</td>
+<td headers="stub_1_17 2000-10-01" class="gt_row gt_right" style="background-color: #946677; color: #FFFFFF;">53.1</td>
+<td headers="stub_1_17 2000-11-01" class="gt_row gt_right" style="background-color: #78487E; color: #FFFFFF;">64.4</td>
+<td headers="stub_1_17 2000-12-01" class="gt_row gt_right" style="background-color: #643582; color: #FFFFFF;">71.8</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<p>Here’s one more <strong>gt</strong> table example with <code>cols_label_with()</code>, and this time, we just have to use the venerable <code>pizzaplace</code> dataset. There are ways to use one instance of <code>cols_label_with()</code> with multiple functions called on the column labels. We’ll try that out here by providing an anonymous function (with the <code>function(x) { ... }</code> construction) that performs multiple mutations of <code>x</code> (the vector of column labels). In this example code, we’re even going to use the <code>md()</code> helper function to signal to <strong>gt</strong> that the column label should be interpreted as Markdown text.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pizzaplace <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">month =</span> <span class="fu">substr</span>(date, <span class="dv">6</span>, <span class="dv">7</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(month) <span class="sc">|&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarize</span>(<span class="at">pizze_vendute =</span> dplyr<span class="sc">::</span><span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">frazione_della_quota =</span> pizze_vendute <span class="sc">/</span> <span class="dv">4000</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">paste0</span>(<span class="st">"2015/"</span>, month, <span class="st">"/01"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>month) <span class="sc">|&gt;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>(<span class="at">rowname_col =</span> <span class="st">"date"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_date</span>(date, <span class="at">date_style =</span> <span class="st">"month"</span>, <span class="at">locale =</span> <span class="st">"it"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_percent</span>(<span class="at">columns =</span> frazione_della_quota) <span class="sc">|&gt;</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_integer</span>(<span class="at">columns =</span> pizze_vendute) <span class="sc">|&gt;</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_width</span>(<span class="fu">everything</span>() <span class="sc">~</span> <span class="fu">px</span>(<span class="dv">100</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label_with</span>(</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">fn =</span> <span class="cf">function</span>(x) {</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>      janitor<span class="sc">::</span><span class="fu">make_clean_names</span>(x, <span class="at">case =</span> <span class="st">"title"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">toupper</span>() <span class="sc">|&gt;</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        stringr<span class="sc">::</span><span class="fu">str_replace_all</span>(<span class="st">"^|$"</span>, <span class="st">"**"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">md</span>()</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="znzallvkte" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#znzallvkte table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#znzallvkte thead, #znzallvkte tbody, #znzallvkte tfoot, #znzallvkte tr, #znzallvkte td, #znzallvkte th {
+  border-style: none;
+}
+
+#znzallvkte p {
+  margin: 0;
+  padding: 0;
+}
+
+#znzallvkte .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#znzallvkte .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#znzallvkte .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#znzallvkte .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#znzallvkte .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#znzallvkte .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#znzallvkte .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#znzallvkte .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#znzallvkte .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#znzallvkte .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#znzallvkte .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#znzallvkte .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#znzallvkte .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#znzallvkte .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#znzallvkte .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#znzallvkte .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#znzallvkte .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#znzallvkte .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#znzallvkte .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#znzallvkte .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#znzallvkte .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#znzallvkte .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#znzallvkte .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#znzallvkte .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#znzallvkte .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#znzallvkte .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#znzallvkte .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#znzallvkte .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#znzallvkte .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#znzallvkte .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#znzallvkte .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#znzallvkte .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#znzallvkte .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#znzallvkte .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#znzallvkte .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#znzallvkte .gt_left {
+  text-align: left;
+}
+
+#znzallvkte .gt_center {
+  text-align: center;
+}
+
+#znzallvkte .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#znzallvkte .gt_font_normal {
+  font-weight: normal;
+}
+
+#znzallvkte .gt_font_bold {
+  font-weight: bold;
+}
+
+#znzallvkte .gt_font_italic {
+  font-style: italic;
+}
+
+#znzallvkte .gt_super {
+  font-size: 65%;
+}
+
+#znzallvkte .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#znzallvkte .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#znzallvkte .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#znzallvkte .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#znzallvkte .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#znzallvkte .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#znzallvkte .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" style="table-layout: fixed;; width: 0px" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <colgroup>
+    <col style="width:100px;">
+    <col style="width:100px;">
+    <col style="width:100px;">
+  </colgroup>
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id=""></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="<strong>PIZZE VENDUTE</strong>"><strong>PIZZE VENDUTE</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="<strong>FRAZIONE DELLA QUOTA</strong>"><strong>FRAZIONE DELLA QUOTA</strong></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><th id="stub_1_1" scope="row" class="gt_row gt_right gt_stub">gennaio</th>
+<td headers="stub_1_1 pizze_vendute" class="gt_row gt_right">4,232</td>
+<td headers="stub_1_1 frazione_della_quota" class="gt_row gt_right">105.80%</td></tr>
+    <tr><th id="stub_1_2" scope="row" class="gt_row gt_right gt_stub">febbraio</th>
+<td headers="stub_1_2 pizze_vendute" class="gt_row gt_right">3,961</td>
+<td headers="stub_1_2 frazione_della_quota" class="gt_row gt_right">99.02%</td></tr>
+    <tr><th id="stub_1_3" scope="row" class="gt_row gt_right gt_stub">marzo</th>
+<td headers="stub_1_3 pizze_vendute" class="gt_row gt_right">4,261</td>
+<td headers="stub_1_3 frazione_della_quota" class="gt_row gt_right">106.53%</td></tr>
+    <tr><th id="stub_1_4" scope="row" class="gt_row gt_right gt_stub">aprile</th>
+<td headers="stub_1_4 pizze_vendute" class="gt_row gt_right">4,151</td>
+<td headers="stub_1_4 frazione_della_quota" class="gt_row gt_right">103.77%</td></tr>
+    <tr><th id="stub_1_5" scope="row" class="gt_row gt_right gt_stub">maggio</th>
+<td headers="stub_1_5 pizze_vendute" class="gt_row gt_right">4,328</td>
+<td headers="stub_1_5 frazione_della_quota" class="gt_row gt_right">108.20%</td></tr>
+    <tr><th id="stub_1_6" scope="row" class="gt_row gt_right gt_stub">giugno</th>
+<td headers="stub_1_6 pizze_vendute" class="gt_row gt_right">4,107</td>
+<td headers="stub_1_6 frazione_della_quota" class="gt_row gt_right">102.68%</td></tr>
+    <tr><th id="stub_1_7" scope="row" class="gt_row gt_right gt_stub">luglio</th>
+<td headers="stub_1_7 pizze_vendute" class="gt_row gt_right">4,392</td>
+<td headers="stub_1_7 frazione_della_quota" class="gt_row gt_right">109.80%</td></tr>
+    <tr><th id="stub_1_8" scope="row" class="gt_row gt_right gt_stub">agosto</th>
+<td headers="stub_1_8 pizze_vendute" class="gt_row gt_right">4,168</td>
+<td headers="stub_1_8 frazione_della_quota" class="gt_row gt_right">104.20%</td></tr>
+    <tr><th id="stub_1_9" scope="row" class="gt_row gt_right gt_stub">settembre</th>
+<td headers="stub_1_9 pizze_vendute" class="gt_row gt_right">3,890</td>
+<td headers="stub_1_9 frazione_della_quota" class="gt_row gt_right">97.25%</td></tr>
+    <tr><th id="stub_1_10" scope="row" class="gt_row gt_right gt_stub">ottobre</th>
+<td headers="stub_1_10 pizze_vendute" class="gt_row gt_right">3,883</td>
+<td headers="stub_1_10 frazione_della_quota" class="gt_row gt_right">97.08%</td></tr>
+    <tr><th id="stub_1_11" scope="row" class="gt_row gt_right gt_stub">novembre</th>
+<td headers="stub_1_11 pizze_vendute" class="gt_row gt_right">4,266</td>
+<td headers="stub_1_11 frazione_della_quota" class="gt_row gt_right">106.65%</td></tr>
+    <tr><th id="stub_1_12" scope="row" class="gt_row gt_right gt_stub">dicembre</th>
+<td headers="stub_1_12 pizze_vendute" class="gt_row gt_right">3,935</td>
+<td headers="stub_1_12 frazione_della_quota" class="gt_row gt_right">98.38%</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<p>Bellissimo! We hope that the <code>cols_label_with()</code> is something you can use to avoid unnecessary repetition in your table-making code! Much more information can be found in the detailed help file for this function (use <code>?cols_label_with</code> to access).</p>
+<h2 id="an-improved-cols_label-function" class="anchored">An improved <code>cols_label()</code> function</h2>
+<p>Aside from the new <code>cols_label_with()</code> function, we also took the time to make some targeted improvements to <code>cols_label()</code>. If you never really used it, what it does is allow for column labels to be modified. The basic model is that you provide the column names (i.e., those from the input data table) on the left and the column labels on the right.</p>
+<p>A new thing that was added is the inclusion of a <code>.fn</code> argument. This gives you the opportunity to supply a function that is to be called on each label provided. For example, you can use the <code>md()</code> helper function (which signals to <strong>gt</strong> that the labels are given as Markdown text) in <code>.fn</code> once instead of calling it on each and every label.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>metro <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(name, lines, passengers, connect_other) <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(<span class="fu">desc</span>(passengers)) <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_hide</span>(<span class="at">columns =</span> passengers) <span class="sc">|&gt;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sub_missing</span>(<span class="at">missing_text =</span> <span class="st">""</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">"Name of&lt;br&gt;Metro Station"</span>,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">lines =</span> <span class="st">"Metro&lt;br&gt;Lines"</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">connect_other =</span> <span class="st">"Train&lt;br&gt;Services"</span>,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">.fn =</span> md</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="ciqjfvvrdj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ciqjfvvrdj table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#ciqjfvvrdj thead, #ciqjfvvrdj tbody, #ciqjfvvrdj tfoot, #ciqjfvvrdj tr, #ciqjfvvrdj td, #ciqjfvvrdj th {
+  border-style: none;
+}
+
+#ciqjfvvrdj p {
+  margin: 0;
+  padding: 0;
+}
+
+#ciqjfvvrdj .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#ciqjfvvrdj .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#ciqjfvvrdj .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#ciqjfvvrdj .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#ciqjfvvrdj .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ciqjfvvrdj .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ciqjfvvrdj .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ciqjfvvrdj .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#ciqjfvvrdj .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#ciqjfvvrdj .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#ciqjfvvrdj .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#ciqjfvvrdj .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#ciqjfvvrdj .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#ciqjfvvrdj .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#ciqjfvvrdj .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#ciqjfvvrdj .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#ciqjfvvrdj .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#ciqjfvvrdj .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#ciqjfvvrdj .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ciqjfvvrdj .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#ciqjfvvrdj .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#ciqjfvvrdj .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#ciqjfvvrdj .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ciqjfvvrdj .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#ciqjfvvrdj .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#ciqjfvvrdj .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ciqjfvvrdj .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ciqjfvvrdj .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#ciqjfvvrdj .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ciqjfvvrdj .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#ciqjfvvrdj .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ciqjfvvrdj .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ciqjfvvrdj .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ciqjfvvrdj .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ciqjfvvrdj .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ciqjfvvrdj .gt_left {
+  text-align: left;
+}
+
+#ciqjfvvrdj .gt_center {
+  text-align: center;
+}
+
+#ciqjfvvrdj .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ciqjfvvrdj .gt_font_normal {
+  font-weight: normal;
+}
+
+#ciqjfvvrdj .gt_font_bold {
+  font-weight: bold;
+}
+
+#ciqjfvvrdj .gt_font_italic {
+  font-style: italic;
+}
+
+#ciqjfvvrdj .gt_super {
+  font-size: 65%;
+}
+
+#ciqjfvvrdj .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#ciqjfvvrdj .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#ciqjfvvrdj .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#ciqjfvvrdj .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#ciqjfvvrdj .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#ciqjfvvrdj .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#ciqjfvvrdj .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Name of<br>Metro Station">Name of<br>Metro Station</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Metro<br>Lines">Metro<br>Lines</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Train<br>Services">Train<br>Services</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="name" class="gt_row gt_left">Gare du Nord</td>
+<td headers="lines" class="gt_row gt_right">4, 5</td>
+<td headers="connect_other" class="gt_row gt_left">TGV, TER, Thalys, Eurostar</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Saint-Lazare</td>
+<td headers="lines" class="gt_row gt_right">3, 12, 13, 14</td>
+<td headers="connect_other" class="gt_row gt_left">TGV, TER, Intercités</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Gare de Lyon</td>
+<td headers="lines" class="gt_row gt_right">1, 14</td>
+<td headers="connect_other" class="gt_row gt_left">TGV, TGV Lyria, Renfe-SNCF, OUIGO, Frecciarossa</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Montparnasse—Bienvenüe</td>
+<td headers="lines" class="gt_row gt_right">4, 6, 12, 13</td>
+<td headers="connect_other" class="gt_row gt_left">TGV, TER, Intercités, OUIGO</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Gare de l'Est</td>
+<td headers="lines" class="gt_row gt_right">4, 5, 7</td>
+<td headers="connect_other" class="gt_row gt_left">TGV, TER, OUIGO, Nightjet</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Bibliothèque François Mitterrand</td>
+<td headers="lines" class="gt_row gt_right">14</td>
+<td headers="connect_other" class="gt_row gt_left"></td></tr>
+    <tr><td headers="name" class="gt_row gt_left">République</td>
+<td headers="lines" class="gt_row gt_right">3, 5, 8, 9, 11</td>
+<td headers="connect_other" class="gt_row gt_left"></td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Les Halles</td>
+<td headers="lines" class="gt_row gt_right">4</td>
+<td headers="connect_other" class="gt_row gt_left"></td></tr>
+    <tr><td headers="name" class="gt_row gt_left">La Défense</td>
+<td headers="lines" class="gt_row gt_right">1</td>
+<td headers="connect_other" class="gt_row gt_left"></td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Châtelet</td>
+<td headers="lines" class="gt_row gt_right">1, 4, 7, 11, 14</td>
+<td headers="connect_other" class="gt_row gt_left"></td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<p>We have a new way of expressing column labels in <code>cols_label()</code>, and that is through the use of two-sided formulas (<code>⁠&lt;LHS&gt; ~ &lt;RHS&gt;</code> instead of <code>⁠&lt;LHS&gt; = &lt;RHS&gt;</code>). By using <strong>tidyselect</strong> expressions on the left side of the formulas, we can easily relabel multiple columns with common label text. Let’s create an interesting <strong>gt</strong> table that exemplifies this (using the <code>towny</code> dataset):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>towny <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    name, <span class="fu">ends_with</span>(<span class="st">"2001"</span>), <span class="fu">ends_with</span>(<span class="st">"2006"</span>), <span class="fu">matches</span>(<span class="st">"2001_2006"</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(population_2001 <span class="sc">&gt;</span> <span class="dv">100000</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(<span class="fu">desc</span>(pop_change_2001_2006_pct)) <span class="sc">|&gt;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_integer</span>() <span class="sc">|&gt;</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_percent</span>(<span class="at">columns =</span> <span class="fu">matches</span>(<span class="st">"change"</span>), <span class="at">decimals =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="st">"Population"</span>, <span class="at">columns =</span> <span class="fu">starts_with</span>(<span class="st">"population"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="st">"Density"</span>, <span class="at">columns =</span> <span class="fu">starts_with</span>(<span class="st">"density"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ends_with</span>(<span class="st">"01"</span>) <span class="sc">~</span> <span class="st">"2001"</span>,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ends_with</span>(<span class="st">"06"</span>) <span class="sc">~</span> <span class="st">"2006"</span>,</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">matches</span>(<span class="st">"change"</span>) <span class="sc">~</span> <span class="fu">md</span>(<span class="st">"Population Change,&lt;br&gt;2001 to 2006"</span>)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_width</span>(<span class="fu">everything</span>() <span class="sc">~</span> <span class="fu">px</span>(<span class="dv">120</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="akdklnhsea" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#akdklnhsea table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#akdklnhsea thead, #akdklnhsea tbody, #akdklnhsea tfoot, #akdklnhsea tr, #akdklnhsea td, #akdklnhsea th {
+  border-style: none;
+}
+
+#akdklnhsea p {
+  margin: 0;
+  padding: 0;
+}
+
+#akdklnhsea .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#akdklnhsea .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#akdklnhsea .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#akdklnhsea .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#akdklnhsea .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#akdklnhsea .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#akdklnhsea .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#akdklnhsea .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#akdklnhsea .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#akdklnhsea .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#akdklnhsea .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#akdklnhsea .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#akdklnhsea .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#akdklnhsea .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#akdklnhsea .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#akdklnhsea .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#akdklnhsea .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#akdklnhsea .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#akdklnhsea .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#akdklnhsea .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#akdklnhsea .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#akdklnhsea .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#akdklnhsea .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#akdklnhsea .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#akdklnhsea .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#akdklnhsea .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#akdklnhsea .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#akdklnhsea .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#akdklnhsea .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#akdklnhsea .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#akdklnhsea .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#akdklnhsea .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#akdklnhsea .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#akdklnhsea .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#akdklnhsea .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#akdklnhsea .gt_left {
+  text-align: left;
+}
+
+#akdklnhsea .gt_center {
+  text-align: center;
+}
+
+#akdklnhsea .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#akdklnhsea .gt_font_normal {
+  font-weight: normal;
+}
+
+#akdklnhsea .gt_font_bold {
+  font-weight: bold;
+}
+
+#akdklnhsea .gt_font_italic {
+  font-style: italic;
+}
+
+#akdklnhsea .gt_super {
+  font-size: 65%;
+}
+
+#akdklnhsea .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#akdklnhsea .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#akdklnhsea .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#akdklnhsea .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#akdklnhsea .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#akdklnhsea .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#akdklnhsea .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" style="table-layout: fixed;; width: 0px" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <colgroup>
+    <col style="width:120px;">
+    <col style="width:120px;">
+    <col style="width:120px;">
+    <col style="width:120px;">
+    <col style="width:120px;">
+    <col style="width:120px;">
+  </colgroup>
+  <thead>
+    
+    <tr class="gt_col_headings gt_spanner_row">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1" scope="col" id="name">name</th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2" scope="colgroup" id="Population">
+        <span class="gt_column_spanner">Population</span>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2" scope="colgroup" id="Density">
+        <span class="gt_column_spanner">Density</span>
+      </th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="2" colspan="1" scope="col" id="Population Change,<br>2001 to 2006">Population Change,<br>2001 to 2006</th>
+    </tr>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="2001">2001</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="2006">2006</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="2001">2001</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="2006">2006</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="name" class="gt_row gt_left">Brampton</td>
+<td headers="population_2001" class="gt_row gt_right">325,428</td>
+<td headers="population_2006" class="gt_row gt_right">433,806</td>
+<td headers="density_2001" class="gt_row gt_right">1,224</td>
+<td headers="density_2006" class="gt_row gt_right">1,632</td>
+<td headers="pop_change_2001_2006_pct" class="gt_row gt_right">33.3%</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Vaughan</td>
+<td headers="population_2001" class="gt_row gt_right">182,022</td>
+<td headers="population_2006" class="gt_row gt_right">238,866</td>
+<td headers="density_2001" class="gt_row gt_right">668</td>
+<td headers="density_2006" class="gt_row gt_right">877</td>
+<td headers="pop_change_2001_2006_pct" class="gt_row gt_right">31.2%</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Markham</td>
+<td headers="population_2001" class="gt_row gt_right">208,615</td>
+<td headers="population_2006" class="gt_row gt_right">261,573</td>
+<td headers="density_2001" class="gt_row gt_right">989</td>
+<td headers="density_2006" class="gt_row gt_right">1,240</td>
+<td headers="pop_change_2001_2006_pct" class="gt_row gt_right">25.4%</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Barrie</td>
+<td headers="population_2001" class="gt_row gt_right">103,710</td>
+<td headers="population_2006" class="gt_row gt_right">128,430</td>
+<td headers="density_2001" class="gt_row gt_right">1,047</td>
+<td headers="density_2006" class="gt_row gt_right">1,297</td>
+<td headers="pop_change_2001_2006_pct" class="gt_row gt_right">23.8%</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Richmond Hill</td>
+<td headers="population_2001" class="gt_row gt_right">132,030</td>
+<td headers="population_2006" class="gt_row gt_right">162,704</td>
+<td headers="density_2001" class="gt_row gt_right">1,310</td>
+<td headers="density_2006" class="gt_row gt_right">1,614</td>
+<td headers="pop_change_2001_2006_pct" class="gt_row gt_right">23.2%</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Oakville</td>
+<td headers="population_2001" class="gt_row gt_right">144,738</td>
+<td headers="population_2006" class="gt_row gt_right">165,613</td>
+<td headers="density_2001" class="gt_row gt_right">1,042</td>
+<td headers="density_2006" class="gt_row gt_right">1,192</td>
+<td headers="pop_change_2001_2006_pct" class="gt_row gt_right">14.4%</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Mississauga</td>
+<td headers="population_2001" class="gt_row gt_right">612,925</td>
+<td headers="population_2006" class="gt_row gt_right">668,599</td>
+<td headers="density_2001" class="gt_row gt_right">2,094</td>
+<td headers="density_2006" class="gt_row gt_right">2,284</td>
+<td headers="pop_change_2001_2006_pct" class="gt_row gt_right">9.1%</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Cambridge</td>
+<td headers="population_2001" class="gt_row gt_right">110,372</td>
+<td headers="population_2006" class="gt_row gt_right">120,371</td>
+<td headers="density_2001" class="gt_row gt_right">977</td>
+<td headers="density_2006" class="gt_row gt_right">1,065</td>
+<td headers="pop_change_2001_2006_pct" class="gt_row gt_right">9.1%</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Burlington</td>
+<td headers="population_2001" class="gt_row gt_right">150,836</td>
+<td headers="population_2006" class="gt_row gt_right">164,415</td>
+<td headers="density_2001" class="gt_row gt_right">810</td>
+<td headers="density_2006" class="gt_row gt_right">883</td>
+<td headers="pop_change_2001_2006_pct" class="gt_row gt_right">9.0%</td></tr>
+    <tr><td headers="name" class="gt_row gt_left">Guelph</td>
+<td headers="population_2001" class="gt_row gt_right">106,170</td>
+<td headers="population_2006" class="gt_row gt_right">114,943</td>
+<td headers="density_2001" class="gt_row gt_right">1,214</td>
+<td headers="density_2006" class="gt_row gt_right">1,315</td>
+<td headers="pop_change_2001_2006_pct" class="gt_row gt_right">8.3%</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<p>Note that we cannot use an <code>=</code> sign in any of the expressions within <code>cols_label()</code> in the above example. Because the LHS is not a single-column name, we must use formula syntax (i.e., with the <code>~</code>). We are not limited to just using <strong>tidyselect</strong> expressions on the LHS. We can alternatively supply vectors of column names (and this is great for using repetitive labels across many columns).</p>
+<h2 id="signing-off" class="anchored">Signing off</h2>
+<p>We want to make things better in <strong>gt</strong> (always). If you identify points of friction that impede your own <strong>gt</strong> workflows, let us know! You can <a href="https://github.com/rstudio/gt/issues">file an issue</a> on GitHub. Don’t be shy about sharing ideas or asking questions. We are there for you on the <strong>gt</strong> <a href="https://github.com/rstudio/gt/discussions">Discussions page</a>.</p>
+<p>We occasionally share things on Twitter at <a href="https://twitter.com/gt_package"><span class="citation" data-cites="gt_package">@gt_package</span></a>, so you should follow us there. Our <code>gt_package</code> <a href="https://discord.gg/Ux7nrcXHVV"><em>Discord server</em></a> is active and also lots of fun (drop by and show us your table creations in there!).</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+
+
+
+</body></html>

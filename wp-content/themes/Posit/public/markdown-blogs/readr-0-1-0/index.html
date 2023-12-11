@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2015-04-09">
+
+<title>posit-blogs - readr 0.1.0</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">readr 0.1.0</h1>
+
+<p class="date">2015-04-09</p>
+</header>
+
+<blockquote>
+<p class="body-md-regular body-sm-regular">
+Please note that the information presented in this post reflects the package as it stood when initially released, and may now be outdated. For the most up-to-date information, kindly refer to <a href="https://readr.tidyverse.org/" class="uri">https://readr.tidyverse.org/</a>.
+</p>
+</blockquote>
+<p>I’m pleased to announced that readr is now available on CRAN. Readr makes it easy to read many types of tabular data:</p>
+<ul>
+<li><p>Delimited files with<code>read_delim()</code>, <code>read_csv()</code>, <code>read_tsv()</code>, and <code>read_csv2()</code>.</p></li>
+<li><p>Fixed width files with <code>read_fwf()</code>, and <code>read_table()</code>.</p></li>
+<li><p>Web log files with <code>read_log()</code>.</p></li>
+</ul>
+<p>You can install it by running:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"readr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Compared to the equivalent base functions, readr functions are around 10x faster. They’re also easier to use because they’re more consistent, they produce data frames that are easier to use (no more <code>stringsAsFactors = FALSE</code>!), they have a more flexible column specification, and any parsing problems are recorded in a data frame. Each of these features is described in more detail below.</p>
+<h2 id="input" class="anchored">Input</h2>
+<p>All readr functions work the same way. There are four important arguments:</p>
+<ul>
+<li><code>file</code> gives the file to read; a url or local path. A local path can point to a a zipped, bzipped, xzipped, or gzipped file - it’ll be automatically uncompressed in memory before reading. You can also pass in a connection or a raw vector.</li>
+</ul>
+<p>For small examples, you can also supply literal data: if <code>file</code> contains a new line, then the data will be read directly from the string. Thanks to <a href="https://github.com/Rdatatable/data.table">data.table</a> for this great idea!</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">"x,y</span><span class="sc">\n</span><span class="st">1,2</span><span class="sc">\n</span><span class="st">3,4"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   x y</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 1 2</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 3 4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li><p><code>col_names</code>: describes the column names (equivalent to <code>header</code> in base R). It has three possible values:</p>
+<ul>
+<li><p><code>TRUE</code> will use the the first row of data as column names.</p></li>
+<li><p><code>FALSE</code> will number the columns sequentially.</p></li>
+<li><p>A character vector to use as column names.</p></li>
+</ul></li>
+<li><p><code>col_types</code>: overrides the default column types (equivalent to <code>colClasses</code> in base R). More on that below.</p></li>
+<li><p><code>progress</code>: By default, readr will display a progress bar if the estimated loading time is greater than 5 seconds. Use <code>progress = FALSE</code> to suppress the progress indicator.</p></li>
+</ul>
+<h2 id="output" class="anchored">Output</h2>
+<p>The output has been designed to make your life easier:</p>
+<ul>
+<li><p>Characters are never automatically converted to factors (i.e.&nbsp;no more <code>stringsAsFactors = FALSE</code>!).</p></li>
+<li><p>Column names are left as is, not munged into valid R identifiers (i.e.&nbsp;there is no <code>check.names = TRUE</code>). Use backticks to refer to variables with unusual names, e.g.&nbsp;`<code>df$</code>Income ($000)```.</p></li>
+<li><p>The output has class <code>c("tbl_df", "tbl", "data.frame")</code> so if you also use <a href="https://blog.rstudio.com/2015/01/09/dplyr-0-4-0/">dplyr</a> you’ll get an enhanced print method (i.e.&nbsp;you’ll see just the first ten rows, not the first 10,000!).</p></li>
+<li><p>Row names are never set.</p></li>
+</ul>
+<h2 id="column-types" class="anchored">Column types</h2>
+<p>Readr heuristically inspects the first 100 rows to guess the type of each columns. This is not perfect, but it’s fast and it’s a reasonable start. Readr can automatically detect these column types:</p>
+<ul>
+<li><p><code>col_logical()</code> [l], contains only <code>T</code>, <code>F</code>, <code>TRUE</code> or <code>FALSE</code>.</p></li>
+<li><p><code>col_integer()</code> [i], integers.</p></li>
+<li><p><code>col_double()</code> [d], doubles.</p></li>
+<li><p><code>col_euro_double()</code> [e], “Euro” doubles that use <code>,</code> as the decimal separator.</p></li>
+<li><p><code>col_date()</code> [D]: Y-m-d dates.</p></li>
+<li><p><code>col_datetime()</code> [T]: ISO8601 date times</p></li>
+<li><p><code>col_character()</code> [c], everything else.</p></li>
+</ul>
+<p>You can manually specify other column types:</p>
+<ul>
+<li><p><code>col_skip()</code> [_], don’t import this column.</p></li>
+<li><p><code>col_date(format)</code> and <code>col_datetime(format, tz)</code>, dates or date times parsed with given format string. Dates and times are rather complex, so they’re described in more detail in the next section.</p></li>
+<li><p><code>col_numeric()</code> [n], a sloppy numeric parser that ignores everything apart from 0-9, <code>-</code> and <code>.</code> (this is useful for parsing currency data).</p></li>
+<li><p><code>col_factor(levels, ordered)</code>, parse a fixed set of known values into a (optionally ordered) factor.</p></li>
+</ul>
+<p>There are two ways to override the default choices with the <code>col_types</code> argument:</p>
+<ul>
+<li><p>Use a compact string: <code>"dc__d"</code>. Each letter corresponds to a column so this specification means: read first column as double, second as character, skip the next two and read the last column as a double. (There’s no way to use this form with column types that need parameters.)</p></li>
+<li><p>With a (named) list of col objects:</p></li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">"iris.csv"</span>, <span class="at">col_types =</span> <span class="fu">list</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Sepal.Length =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Sepal.Width =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Petal.Length =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Petal.Width =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">Species =</span> <span class="fu">col_factor</span>(<span class="fu">c</span>(<span class="st">"setosa"</span>, <span class="st">"versicolor"</span>, <span class="st">"virginica"</span>))</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Any omitted columns will be parsed automatically, so the previous call is equivalent to:</p>
+<pre><code>read_csv("iris.csv", col_types = list(
+  Species = col_factor(c("setosa", "versicolor", "virginica"))
+)</code></pre>
+<h3 id="dates-and-times" class="anchored">Dates and times</h3>
+<p>One of the most helpful features of readr is its ability to import dates and date times. It can automatically recognise the following formats:</p>
+<ul>
+<li><p>Dates in year-month-day form: <code>2001-10-20</code> or <code>2010/15/10</code> (or any non-numeric separator). It can’t automatically recongise dates in m/d/y or d/m/y format because they’re ambiguous: is <code>02/01/2015</code> the 2nd of January or the 1st of February?</p></li>
+<li><p>Date times as <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO8601</a> form: e.g.&nbsp;<code>2001-02-03 04:05:06.07 -0800</code>, <code>20010203 040506</code>, <code>20010203</code> etc. I don’t support every possible variant yet, so please let me know if it doesn’t work for your data (more details in <code>?parse_datetime</code>).</p></li>
+</ul>
+<p>If your dates are in another format, don’t despair. You can use <code>col_date()</code> and <code>col_datetime()</code> to explicit specify a format string. Readr implements it’s own <code>strptime()</code> equivalent which supports the following format strings:</p>
+<ul>
+<li><p>Year: <code>\%Y</code> (4 digits). <code>\%y</code> (2 digits); 00-69 -&gt; 2000-2069, 70-99 -&gt; 1970-1999.</p></li>
+<li><p>Month: <code>\%m</code> (2 digits), <code>\%b</code> (abbreviated name in current locale), <code>\%B</code> (full name in current locale).</p></li>
+<li><p>Day: <code>\%d</code> (2 digits), <code>\%e</code> (optional leading space)</p></li>
+<li><p>Hour: <code>\%H</code></p></li>
+<li><p>Minutes: <code>\%M</code></p></li>
+<li><p>Seconds: <code>\%S</code> (integer seconds), <code>\%OS</code> (partial seconds)</p></li>
+<li><p>Time zone: <code>\%Z</code> (as name, e.g.&nbsp;<code>America/Chicago</code>), <code>\%z</code> (as offset from UTC, e.g.&nbsp;<code>+0800</code>)</p></li>
+<li><p>Non-digits: <code>\%.</code> skips one non-digit charcater, <code>\%*</code> skips any number of non-digit characters.</p></li>
+<li><p>Shortcuts: <code>\%D</code> = <code>\%m/\%d/\%y</code>, <code>\%F</code> = <code>\%Y-\%m-\%d</code>, <code>\%R</code> = <code>\%H:\%M</code>, <code>\%T</code> = <code>\%H:\%M:\%S</code>, <code>\%x</code> = <code>\%y/\%m/\%d</code>.</p></li>
+</ul>
+<p>To practice parsing date times with out having to load the file each time, you can use <code>parse_datetime()</code> and <code>parse_date()</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_date</span>(<span class="st">"2015-10-10"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "2015-10-10"</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_datetime</span>(<span class="st">"2015-10-10 15:14"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "2015-10-10 15:14:00 UTC"</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_date</span>(<span class="st">"02/01/2015"</span>, <span class="st">"%m/%d/%Y"</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "2015-02-01"</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_date</span>(<span class="st">"02/01/2015"</span>, <span class="st">"%d/%m/%Y"</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "2015-01-02"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2 id="problems" class="anchored">Problems</h2>
+<p>If there are any problems parsing the file, the <code>read_</code> function will throw a warning telling you how many problems there are. You can then use the <code>problems()</code> function to access a data frame that gives information about each problem:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>csv <span class="ot">&lt;-</span> <span class="st">"x,y</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="st">1,a</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="st">b,2</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(csv, <span class="at">col_types =</span> <span class="st">"ii"</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: 2 problems parsing literal data. See problems(...) for more</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; details.</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">problems</span>(df)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   row col   expected actual</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1   1   2 an integer      a</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2   2   1 an integer      b</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>df</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    x  y</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  1 NA</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 NA  2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2 id="helper-functions" class="anchored">Helper functions</h2>
+<p>Readr also provides a handful of other useful functions:</p>
+<ul>
+<li><p><code>read_lines()</code> works the same way as <code>readLines()</code>, but is a lot faster.</p></li>
+<li><p><code>read_file()</code> reads a complete file into a string.</p></li>
+<li><p><code>type_convert()</code> attempts to coerce all character columns to their appropriate type. This is useful if you need to do some manual munging (e.g.&nbsp;with regular expressions) to turn strings into numbers. It uses the same rules as the <code>read_*</code> functions.</p></li>
+<li><p><code>write_csv()</code> writes a data frame out to a csv file. It’s quite a bit faster than <code>write.csv()</code> and it never writes row.names. It also escapes <code>"</code> embedded in strings in a way that <code>read_csv()</code> can read.</p></li>
+</ul>
+<h2 id="development" class="anchored">Development</h2>
+<p>Readr is still under very active development. If you have problems loading a dataset, please try the <a href="https://github.com/hadley/readr">development version</a>, and if that doesn’t work, <a href="https://github.com/hadley/readr/issues">file an issue</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+
+
+
+</body></html>

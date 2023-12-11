@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-08-08">
+<meta name="description" content="rstudio::conf was an eventful four days! This post details some of the bigger announcements from RStudio.">
+
+<title>Four announcements from rstudio::conf(2022)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Four announcements from rstudio::conf(2022)</h1>
+
+<p class="date">2022-08-08</p>
+</header>
+
+<p>What a week! Thank you for a fantastic rstudio::conf(2022). It was so exciting to learn and share with you during these eventful four days.</p>
+<p>This post will share some of the big announcements from RStudio. We will highlight amazing packages, resources, and processes shared by others during conf in upcoming posts.</p>
+<ul>
+<li><a href="#rstudio-pbc-is-changing-its-name-to-posit">RStudio, PBC is changing its name to Posit</a></li>
+<li><a href="#use-quarto-for-creating-content-with-python-r-julia-and-observable">Announcing Quarto, a new open-source scientific and technical publishing system</a></li>
+<li><a href="#new-developments-in-shiny-shiny-for-python-shiny-without-a-server-a-visual-shiny-ui-editor-and-more">New developments in the Shiny ecosystem</a></li>
+<li><a href="#updates-from-the-tidymodels-and-vetiver-teams">Updates from the tidymodels and vetiver teams</a></li>
+</ul>
+<h2 id="rstudio-pbc-is-changing-its-name-to-posit" class="anchored">RStudio, PBC is changing its name to Posit</h2>
+<p>RStudio is <a href="https://www.rstudio.com/blog/rstudio-is-becoming-posit/" target="_blank">changing its name to Posit</a>. Our mission is to create free and open source software for <em>data science, scientific research, and technical communication</em>. In the decade since RStudio became a company, we’ve learned much about creating a sustainable and organic model for open-source software.</p>
+<ul>
+<li>First is the importance of independence and community. As a Public Benefit Corporation (PBC), we’re legally bound to consider the benefits of our actions on our customers, employees, and the community at large in every decision we make.</li>
+<li>Second is upholding the virtuous cycle. The free and open source tools we build are core productivity tools that anybody can access, regardless of economic means. Our commercial products provide features needed in enterprise settings while enabling us to invest back into our open source tools. We will always respect the difference between these lines of work; we aim not to grow at all costs but to build a company still fulfilling its mission in 100 years.</li>
+</ul>
+<p>We also want to impact the practice of science more broadly. For years, RStudio has made R more approachable and usable for millions of users. More recently, we’ve also worked on open source tools for other programming languages, such as reticulate, Quarto, vetiver, and Shiny for Python.</p>
+<blockquote>
+<p>We are not changing our name because we are changing what we are doing. We are changing our name to reflect what we are already doing. We have been working multilingual for many years. Now, we want to announce that to the world. — Hadley Wickham, Chief Scientist</p>
+</blockquote>
+<p>Our new name tells our multilingual story and reflects our ambitions to make scientific communication better for everyone. With Posit, we’re excited to share what we love about R and RStudio with the wider world.</p>
+<p>Read more in <a href="https://www.rstudio.com/blog/rstudio-is-becoming-posit/" target="_blank">J.J. Allaire and Hadley Wickham’s blog post</a>. RStudio will officially rebrand as Posit in October 2022. Until then, we will continue to do business as RStudio.</p>
+<h2 id="use-quarto-for-creating-content-with-python-r-julia-and-observable" class="anchored">Use Quarto for creating content with Python, R, Julia, and Observable</h2>
+<p><a href="https://quarto.org/" target="_blank">Quarto</a> is a new open-source scientific and technical publishing system that works with R, Python, Julia, Javascript, and many other languages. While R Markdown is fundamentally tied to R, the goal of Quarto is to bring the power and flexibility of R Markdown to everyone. Crucially, Quarto enables Python users who prefer to write code in Jupyter Notebooks or VS Code to enjoy the benefits that R Markdown has brought to R users for years.</p>
+<p>With Quarto, you can make websites, books, blogs, and more. The <a href="https://quarto.org/docs/guide/" target="_blank">User Guide</a> is a resource with detailed walkthroughs of Quarto’s functionality. Check out the <a href="https://quarto.org/docs/gallery/" target="_blank">Gallery</a> to see examples of what’s possible.</p>
+<p>Read more in <a href="https://www.rstudio.com/blog/announcing-quarto-a-new-scientific-and-technical-publishing-system/" target="_blank">J.J. Allaire’s blog post</a> and join us on August 9th for Tom Mock’s <a href="https://www.youtube.com/watch?v=yvi5uXQMvu4" target="_blank">Welcome to Quarto workshop</a>.</p>
+<h2 id="new-developments-in-shiny-shiny-for-python-shiny-without-a-server-a-visual-shiny-ui-editor-and-more" class="anchored">New developments in Shiny: Shiny for Python, Shiny without a server, a visual Shiny UI editor, and more</h2>
+<p>🎂 Happy 10th birthday, Shiny!</p>
+<p>Shiny is a framework for building interactive web applications without knowing CSS, HTML, and Javascript. Released ten years ago, it is a powerful tool used across many contexts and industries. R programmers use Shiny to <a href="https://calcat.covid19.ca.gov/cacovidmodels/" target="_blank">track COVID cases in California</a> and <a href="https://shiny.rstudio.com/gallery/didacting-modeling.html" target="_blank">teach linear regression</a>. There are conferences dedicated to Shiny, such as Appsilon’s <a href="https://appsilon.com/shiny-conference/" target="_blank">Shiny Conference</a> earlier this year to Jumping River’s <a href="https://www.jumpingrivers.com/blog/shiny-in-production-conference/" target="_blank">Shiny in Production</a> event in October. As stated in <a href="https://mastering-shiny.org/preface.html" target="_blank">Mastering Shiny</a> by Hadley Wickham, “Shiny gives you the ability to pass on some of your R superpowers to anyone who can use the web.”</p>
+<p>Presenters at this year’s rstudio::conf unveiled new, exciting developments for Shiny, expanding these superpowers to a larger audience.</p>
+<h3 id="write-shiny-web-applications-with-python" class="anchored">Write Shiny web applications with Python</h3>
+<p>In his keynote speech, Joe Cheng announced <a href="https://shiny.rstudio.com/py/" target="_blank">Shiny for Python</a>. Python programmers can now try out Shiny’s approachable, reactive framework to create interactive web apps.</p>
+<p>Currently in alpha, many resources exist for those interested in trying Shiny for Python. <a href="https://shiny.rstudio.com/py/" target="_blank">The Shiny for Python website</a> provides API documents, examples, and articles. VS Code users can download the <a href="https://marketplace.visualstudio.com/items?itemName=rstudio.pyshiny" target="_blank">Shiny for Python extension</a> to write and preview apps in the editor. Deployment options include <a href="https://www.rstudio.com/products/connect/" target="_blank">RStudio Connect</a>, shinyapps.io, Shiny Server Open Source, and static web servers.</p>
+<p>Check out the <a href="https://www.youtube.com/watch?v=R0vu3zSdvgM&amp;list=PL9HYL-VRX0oTJtI1dWaT9T827fe7OqFhC" target="_blank">Shiny for Python YouTube playlist</a> to see it in action.</p>
+<h3 id="test-shiny-applications-with-shinytest2" class="anchored">Test Shiny applications with shinytest2</h3>
+<p>Barret Schloerke presented <a href="https://rstudio.github.io/shinytest2/" target="_blank">shinytest2</a>, a new package on CRAN that leverages the <a href="https://testthat.r-lib.org/" target="_blank">testthat</a> library for Shiny. Shinytest2 provides regression testing for Shiny applications: users can check existing behavior for consistency over time. Written entirely in R, shinytest2 is a streamlined toolkit for unit testing Shiny applications.</p>
+<p>Explore the <a href="https://www.youtube.com/watch?v=7KLv6HdIxvU&amp;list=PL9HYL-VRX0oR_tSCCvpNKBdFtTXfohdTK" target="_blank">shinytest2 YouTube playlist</a> to get started.</p>
+<h3 id="use-a-visual-editor-for-designing-shiny-apps" class="anchored">Use a visual editor for designing Shiny apps</h3>
+<p>Nick Strayer demonstrated two tools for easier, faster development of Shiny apps:</p>
+<ul>
+<li><a href="https://github.com/rstudio/gridlayout" target="_blank">gridlayout</a>, a package that helps you build dashboard layouts using an intuitive table-like declaration format</li>
+<li><a href="https://rstudio.github.io/shinyuieditor/index.html" target="_blank">shinyuieditor</a>, a drag-and-drop visual tool for creating and editing the UI of your Shiny app. The editor produces code so that the app is reproducible.</li>
+</ul>
+<p>Now, it’s easier than ever for anyone to get started designing Shiny user interfaces, even without detailed knowledge of Shiny’s UI functions or HTML layout.</p>
+<p>Watch a <a href="https://www.youtube.com/watch?v=Zac1qdaYNsY" target="_blank">tour of Shiny UI Editor</a> and a <a href="https://www.youtube.com/watch?v=gYPnLiudtGU" target="_blank">project walking through how to use the editor</a>.</p>
+<script src="https://fast.wistia.com/embed/medias/lvc3v4p834.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:52.08% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_lvc3v4p834 videoFoam=true" style="height:100%;position:relative;width:100%">
+&nbsp;
+</div>
+</div>
+</div>
+<h3 id="run-shiny-without-a-server" class="anchored">Run Shiny without a server</h3>
+<p>Winston Chang showed how to run “ShinyLive” — Shiny for Python without a server. The application runs on the client with no computational load on the server. This is possible because Python can be compiled to <a href="https://webassembly.org/" target="_blank">WebAssembly</a> (Wasm), a binary format that can run in the browser. With ShinyLive, you can share Shiny apps with just a URL or deploy them to a static web hosting service.</p>
+<p>Winston walks through a <a href="https://www.youtube.com/watch?v=sG2dWWothoM" target="_blank">Beginner’s Guide to ShinyLive on YouTube</a>. See <a href="https://shinylive.io/py/examples/" target="_blank">some ShinyLive examples</a> on the Shiny for Python website.</p>
+<h2 id="updates-from-the-tidymodels-and-vetiver-teams" class="anchored">Updates from the tidymodels and vetiver teams</h2>
+<p><a href="https://www.tidymodels.org/" target="_blank">tidymodels</a> is a collection of R packages for modeling and machine learning using tidyverse principles. It provides users with a consistent, modular, and extensible framework for working with models in R. During their keynote, Julia Silge and Max Kuhn shared how tidymodels helps create ergonomic, effective, and safe code (and announced their new book, <a href="https://www.oreilly.com/library/view/tidy-modeling-with/9781492096474/" target="_blank">Tidy Modeling with R</a>!).</p>
+<p>The tidymodels team also demonstrated several new packages during conf, extending the framework to more areas and applications.</p>
+<h3 id="deploy-and-maintain-machine-learning-models-with-vetiver" class="anchored">Deploy and maintain machine learning models with vetiver</h3>
+<p>Machine learning operations, or MLOps, is a set of practices to deploy and maintain machine learning in production reliably and efficiently. Isabel Zimmerman presented how the new <a href="https://vetiver.rstudio.com/" target="_blank">vetiver</a> framework provides fluent tooling for MLOps in R and Python.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/vetiver.png" class="img-fluid"></p>
+<p></p><figcaption>Isabel’s slide showing the vetiver workflow where you version, deploy, monitor a model, collect data, understand and clean model, and train and evaluate. Different parts are represented by a cookie. The tools associated with the steps are shown and the vetiver hex sticker is on the left hand side.</figcaption><p></p>
+</figure>
+</div>
+<center>
+
+<a href="https://isabelizimm.github.io/rstudioconf2022-mlops/#/section" target="_blank">Slides from Isabel’s presentation</a>
+
+</center>
+<h3 id="run-survival-analysis-with-the-censored-package" class="anchored">Run survival analysis with the censored package</h3>
+<p>Survival analysis is a statistical procedure for data analysis where the outcome variable of interest is time until an event occurs. Hannah Frick showcased the <a href="https://censored.tidymodels.org/" target="_blank">censored</a> package, a <a href="https://parsnip.tidymodels.org/" target="_blank">parsnip</a> extension that provides support for survival analysis in tidymodels. The package offers several models, engines, and prediction types for users.</p>
+<h3 id="build-unsupervised-models-with-the-tidyclust-package" class="anchored">Build unsupervised models with the tidyclust package</h3>
+<p>Unsupervised learning learns patterns and provides insight from untagged data. Emil Hvitfeldt unveiled the <a href="https://emilhvitfeldt.github.io/tidyclust/" target="_blank">tidyclust</a> package, a reimplementation of tidymodels for clustering models. Users can use the tidy, unified tidymodels framework for unsupervised learning algorithms like k-means clustering.</p>
+<p>Follow the tidyverse blog to receive the <a href="https://www.tidyverse.org/blog/2022/07/tidymodels-2022-q2/" target="_blank">quarterly tidymodels digest</a>.</p>
+<h2 id="learn-more" class="anchored">Learn more</h2>
+<p>We have so much more to come. Stay in touch:</p>
+<ul>
+<li>See a preview of our new brand at <a href="https://posit.co/" target="_blank">posit.co</a></li>
+<li><a href="https://www.rstudio.com/blog/subscribe/" target="_blank">Subscribe to our blog updates</a></li>
+<li><a href="https://rstd.io/glimpse-newsletter" target="_blank">Subscribe to the new open source rstudio::glimpse() newsletter</a></li>
+<li><a href="https://www.rstudio.com/blog/rstudio-community-monthly-events-roundup-august-2022/" target="_blank">Attend an upcoming Data Science Hangout or Enterprise Meetup</a></li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2016-03-21">
+
+<title>R Markdown v0.9.5</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">R Markdown v0.9.5</h1>
+
+<p class="date">2016-03-21</p>
+</header>
+
+<p>A new release of the <a href="https://rmarkdown.rstudio.com/">rmarkdown</a> package is now available on CRAN. This release features some long-requested enhancements to the <a href="https://rmarkdown.rstudio.com/html_document_format.html">HTML document</a> format, including:</p>
+<ol type="1">
+<li><p>The ability to have a floating (i.e.&nbsp;always visible) table of contents.</p></li>
+<li><p>Folding and unfolding for R code (to easily show and hide code for either an entire document or for individual chunks).</p></li>
+<li><p>Support for presenting content within tabbed sections (e.g.&nbsp;several plots could each have their own tab).</p></li>
+<li><p>Five new themes including “lumen”, “paper”, “sandstone”, “simplex”, &amp; “yeti”.</p></li>
+</ol>
+<p>There are also three new formats for creating <a href="https://rmarkdown.rstudio.com/github_document_format.html">GitHub</a>, <a href="https://rmarkdown.rstudio.com/odt_document_format.html">OpenDocument</a>, and <a href="https://rmarkdown.rstudio.com/rtf_document_format.html">RTF</a> documents as well as a number of smaller enhancements and bug fixes (see the package <a href="https://cran.r-project.org/web/packages/rmarkdown/NEWS">NEWS</a> for all of the details).</p>
+<h3 id="floating-toc" class="anchored">Floating TOC</h3>
+<p>You can specify the <code>toc_float</code> option to float the table of contents to the left of the main document content. The floating table of contents will always be visible even when the document is scrolled. For example:</p>
+<pre><code>---
+title: &amp;quot;Habits&amp;quot;
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---</code></pre>
+<p>Here’s what the floating table of contents looks like on one of the R Markdown website’s pages:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2016/03/screen-shot-2016-03-21-at-7-19-59-am.png" class="img-fluid"></p>
+<p></p><figcaption>FloatingTOC</figcaption><p></p>
+</figure>
+</div>
+<h3 id="code-folding" class="anchored">Code Folding</h3>
+<p>When the knitr chunk option <code>echo = TRUE</code> is specified (the default behavior) the R source code within chunks is included within the rendered document. In some cases it may be appropriate to exclude code entirely (<code>echo = FALSE</code>) but in other cases you might want the code available but not visible by default.</p>
+<p>The <code>code_folding: hide</code> option enables you to include R code but have it hidden by default. Users can then choose to show hidden R code chunks either indvidually or document wide. For example:</p>
+<pre><code>---
+title: &amp;quot;Habits&amp;quot;
+output:
+  html_document:
+    code_folding: hide
+---</code></pre>
+<p>Here’s the default HTML document template with code folding enabled. Note that each chunk has it’s own toggle for showing or hiding code and there is also a global menu for operating on all chunks at once.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2016/03/screen-shot-2016-03-21-at-7-27-40-am.png" class="img-fluid"></p>
+<p></p><figcaption>Screen Shot 2016-03-21 at 7.27.40 AM</figcaption><p></p>
+</figure>
+</div>
+<p>Note that you can specify <code>code_folding: show</code> to still show all R code by default but then allow users to hide the code if they wish.</p>
+<h3 id="tabbed-sections" class="anchored">Tabbed Sections</h3>
+<p>You can organize content using tabs by applying the <code>.tabset</code> class attribute to headers within a document. This will cause all sub-headers of the header with the <code>.tabset</code> attribute to appear within tabs rather than as standalone sections. For example:</p>
+<pre><code>## Sales Report {.tabset}
+
+### By Product
+
+(tab content)
+
+### By Region
+
+(tab content)</code></pre>
+<p>Here’s what tabbed sections look like within a rendered document:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2016/03/screen-shot-2016-03-21-at-7-43-38-am.png" class="img-fluid"></p>
+<p></p><figcaption>Screen Shot 2016-03-21 at 7.43.38 AM</figcaption><p></p>
+</figure>
+</div>
+<h3 id="authoring-enhancements" class="anchored">Authoring Enhancements</h3>
+<p>We also shouldn’t fail to mention that the <a href="https://www.rstudio.com/products/rstudio/download/">most recent release</a> of RStudio included several enhancements to R Markdown document editing. There’s now an optional outline view that enables quick navigation across larger documents:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/12/screen-shot-2015-12-22-at-9-27-34-am.png&amp;h=502" class="img-fluid"></p>
+<p></p><figcaption>Screen Shot 2015-12-22 at 9.27.34 AM</figcaption><p></p>
+</figure>
+</div>
+<p>We also also added inline UI to code chunks for running individual chunks, running all previous chunks, and specifying various commonly used knit options:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="https://rstudioblog.files.wordpress.com/2015/12/screen-shot-2015-12-22-at-9-30-11-am.png&amp;h=800" class="img-fluid"></p>
+<p></p><figcaption>Screen Shot 2015-12-22 at 9.30.11 AM</figcaption><p></p>
+</figure>
+</div>
+<h3 id="whats-next" class="anchored">What’s Next</h3>
+<p>We’ve got lots of additional work planned for R Markdown including new document formats, additional authoring enhancements in RStudio, and some new tools to make it easier to publish and manage documents created with R Markdown. More details to follow soon!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

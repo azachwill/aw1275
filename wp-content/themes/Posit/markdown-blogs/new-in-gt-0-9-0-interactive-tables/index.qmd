@@ -1,0 +1,179 @@
+---
+title: "New in {gt} `0.9.0`: interactive tables"
+date: '2023-05-31'
+slug: new-in-gt-0-9-0-interactive-tables
+tags:
+  - gt
+authors:
+  - Rich Iannone
+description: We've vastly improved the `summary_rows()` and `grand_summary_rows()` functions in {gt} version 0.9.0.
+alttext: Add alt text for header image.
+blogcategories:
+  - Open Source
+  - Products and Technology
+events: blog
+---
+
+The new version of [gt](https://gt.rstudio.com/), version `0.9.0`, has interactive HTML tables. This type of functionality has been requested often and for a very long time (since the first public release). This post is entirely dedicated to showing you how you can make interactive tables and what you can do with them.
+
+## Turning on the interactivity
+
+There are a few ways to 'switch on' the interactivity. The preferred way is to use the new `opt_interactive()` function. 
+
+```{r}
+#| message: false
+#| warning: false
+library(tidyverse)
+library(gt)
+library(janitor)
+
+towny_tbl <-
+  towny |>
+  dplyr::select(
+    name, latitude, longitude,
+    land_area = land_area_km2,
+    population = population_2021,
+    density = density_2021
+  )
+
+towny_tbl |>
+  gt() |>
+  opt_interactive()
+```
+
+We do get an interactive table. We can page through all the different records and we can sort the data in different columns by interacting with the up/down arrows. The text in the lower left informs us how many rows there are and which page of data we are on.
+
+The first argument in `opt_interactive` is `active`, where you can turn the interactivity 'on' or 'off' (default is `TRUE`, or 'on'). There are a number of arguments within that function that control aspects of the interactive HTML. Here's a listing of those options that activate different features with either a `TRUE` or `FALSE` (along with their defaults):
+
+- `use_pagination` (`TRUE`)
+- `use_pagination_info` (`TRUE`)
+- `use_sorting` (`TRUE`)
+- `use_search` (`FALSE`)
+- `use_filters` (`FALSE`)
+- `use_resizers` (`FALSE`)
+- `use_highlight` (`FALSE`)
+- `use_compact_mode` (`FALSE`)
+- `use_text_wrapping` (`TRUE`)
+- `use_page_size_select` (`FALSE`)
+
+Let's try using some of these options in another example based on the same table just to see what they really do:
+
+```{r}
+towny_tbl |>
+  gt() |>
+  opt_interactive(
+    use_search = TRUE,
+    use_filters = TRUE,
+    use_resizers = TRUE,
+    use_highlight = TRUE,
+    use_compact_mode = TRUE,
+    use_text_wrapping = FALSE,
+    use_page_size_select = TRUE
+  )
+```
+
+The `use_search` option gives us a search field on the top-right of the table. Using it will globally filter rows to strict matches. This option works both for searched text and for numbers too. With `use_filters`, we get dedicated search fields for each of the columns. With that, you can constrain searches to one or more columns.
+
+You'll get the ability to resize columns with the `use_resizers` option. When hovering over rows, `use_highlight` will highlight them with a subtle shading effect. If you find that the table is taking up a bit too much vertical space, that can be reduced a bit with the `use_compact_mode` option. Text wrapping can be turned off with `use_text_wrapping = FALSE`, and this is good for those situations where you need a predictable height for the table (since overly long pieces of text will be truncated and not go past a single line).
+
+Finally, with `use_page_size_select` we get extra pagination controls that allow the user to select the number of data rows shown per page.
+
+That's a lot of interactive options!
+
+## Formatting and styling interactive tables
+
+You can format your data as you normally might with interactive tables. The `fmt_*()` functions all work in the interactive context. Let's format all the numeric values to display numbers with one decimal place, then a second pass will format the `population` values as integers.
+
+```{r}
+towny_tbl |>
+  gt() |>
+  fmt_number(decimals = 1) |>
+  fmt_integer(population) |>
+  opt_interactive()
+```
+
+We can take this table a bit further and style cells with background colors. The `data_color()` function can be used to colorize cells based on their values. In the next example, we'll use that function twice, once with a green palette for the `density` column and the other invocation will use a blue palette for the `population` column.
+
+```{r}
+towny_tbl_styled <-
+  towny_tbl |>
+  dplyr::arrange(desc(population)) |>
+  gt() |>
+  fmt_number(decimals = 1) |>
+  fmt_integer(population) |>
+  cols_label_with(
+    fn = ~ janitor::make_clean_names(., case = "title")
+  ) |>
+  data_color(
+    columns = density,
+    palette = "Greens"
+  ) |>
+  data_color(
+    columns = population,
+    palette = "Blues"
+  ) |>
+  tab_style(
+    style = cell_fill(color = "gray95"),
+    locations = cells_body(columns = c(latitude, longitude))
+  ) |>
+  tab_style(
+    locations = cells_body(columns = name),
+    style = cell_text(weight = "bold")
+  ) |>
+  opt_interactive(
+    use_filters = TRUE,
+    use_compact_mode = TRUE,
+    use_text_wrapping = FALSE
+  )
+
+towny_tbl_styled
+```
+
+The `tab_style()` function was also used in the above example for two different bits of styling: (1) bolding the text in the `name` column and (2) adding a light-gray background to the data in the `latitude` and `longitude` columns.
+
+## Adding a header and a footer
+
+The header and footer table parts can be added to an interactive HTML table in the usual fashion. With `tab_header()`, a title and an optional subtitle can be specified, and this occupies the header of the table.
+
+```{r}
+towny_tbl_header <-
+  towny_tbl_styled |>
+  tab_header(
+    title = md("**Population** and **Density** Data"),
+    subtitle = "Arranged from largest to smallest municipality"
+  ) |>
+  opt_align_table_header(align = "left") |>
+  tab_options(heading.padding = px(1))
+
+towny_tbl_header
+```
+
+The `opt_align_table_header()` function is a popular one for aligning the header differently than the default `"center"` alignment, so that was used to change the look of the above table. Additionally, we reduced the amount of padding between the title and subtitle with the `heading.padding` option available in `tab_options()`.
+
+We can certainly add a footer section, and the way we do that is by adding footnotes or source notes. The `tab_source_note()` function makes it possible and really easy to add general notes about the table. With `tab_footnote()`, we add footnotes, and in addition to the note, this requires `locations` (for the footnote marks in the table, not in the footer). We'll reference the `population` and `density` column labels in two separate footnotes. This gives us a chance, also, to use the `opt_footnote_marks()` function to specify the actual marks and the new-in-`0.9.0` `opt_footnote_spec()` function for specifying how the marks should look (both inside and outside of the footer).
+
+```{r}
+towny_tbl_header |>
+  tab_source_note(source_note = md(
+    "Data taken from the `towny` dataset in the **gt** package."
+  )) |>
+  tab_footnote(
+    footnote = "Density here is the population divided by
+    the land area.",
+    locations = cells_column_labels(columns = density)
+  ) |>
+  tab_footnote(
+    footnote = "Population values obtained from the 2021 census.",
+    locations = cells_column_labels(columns = population)
+  ) |>
+  opt_footnote_marks(marks = c("†", "‡")) |>
+  opt_footnote_spec(spec_ref = "i", spec_ftr = "i")
+```
+
+This highly-interactive table looks *superfine*, and it's quite a delight to explore all that data in such a compact form!
+
+## In conclusion
+
+This is really only the beginning of interactive tables in **gt**. Given it's a brand-new feature, there are bound to be more than a few issues and shortcomings. For our part, we will keep improving things to make it better. If you find things that don't quite work the way they should, please [file an issue](https://github.com/rstudio/gt/issues) on GitHub. If you'd like to share ideas or ask questions, you can also engage in discussions with us through the **gt** [Discussions page](https://github.com/rstudio/gt/discussions).
+
+As ever, we'd like you to keep in touch with us as we work toward making **gt** better and better. You can follow us on Twitter at [@gt_package](https://twitter.com/gt_package) for news and other interesting tidbits on tables. If you'd like to chat and perhaps show off your table creations, please join the `gt_package` [*Discord server*](https://discord.gg/Ux7nrcXHVV).

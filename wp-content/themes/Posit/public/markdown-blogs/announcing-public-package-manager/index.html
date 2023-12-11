@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-07-01">
+
+<title>Announcing Public Package Manager and v1.1.6</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Announcing Public Package Manager and v1.1.6</h1>
+
+<p class="date">2020-07-01</p>
+</header>
+
+<p>Today we are excited to release version 1.1.6 of RStudio Package Manager and announce https://packagemanager.rstudio.com. This service builds on top of the work done by CRAN, to offer the R community:</p>
+<ul>
+<li>Access to <strong>pre-compiled packages on Linux</strong> via <code>install.packages</code> resulting in <a href="https://blog.rstudio.com/2019/11/07/package-manager-v1-1-no-interruptions/">significantly faster</a> package install times on Linux systems including cloud servers, CI/CD systems, and Docker containers.<br>
+</li>
+<li><strong>Historical checkpoints for CRAN</strong> enabling reproducible work, and even <a href="https://blog.rstudio.com/2019/01/30/time-travel-with-rstudio-package-manager-1-0-4/">time travel</a>, by freezing package dependencies with a one-line repository option.</li>
+<li>Expanded <strong>Windows support for older versions of R</strong>, allowing you to access the latest versions of packages on older versions of R without compiling from source.</li>
+</ul>
+<p>We invite everyone to try this service, but please note we do not currently support package binaries for Mac OS though we are considering adding support in the future. The easiest way to get started is by visiting the <a href="https://packagemanager.rstudio.com/client/#/repos/1/overview">Package Manager Setup Page</a>. You can also view <a href="https://support.rstudio.com/hc/en-us/articles/360046703913">frequently asked questions</a> or <a href="https://rstudio.com/products/package-manager">learn more about RStudio Package Manager</a>.</p>
+<h3 id="relationship-to-cran" class="anchored">Relationship to CRAN</h3>
+<p>This service builds off of the work done by CRAN and is a supplement to RStudio’s <a href="https://cran.rstudio.com">popular CRAN mirror</a>. If CRAN were a brewery, Package Manager would be your local liquor store; Package Manager wouldn’t be possible without CRAN, but we hope it makes it a little easier to install packages without having to go to the (literal) source each time.</p>
+<p>For <strong>package authors</strong>, before a package is available on Package Manager it must be accepted, tested, and distributed on CRAN. Package Manager watches for those updates and then carefully builds updated or new packages on additional operating systems and R versions, finally adding them as a versioned checkpoint.</p>
+<p>For <strong>R users</strong>, Package Manager acts like a regular CRAN mirror, ensuring all the code you know how to write automatically works. Note that Package Manager can lag behind CRAN by a few days, so if you need the latest packages you can add both Package Manager and CRAN to your repo option.</p>
+<h3 id="community-integrations" class="anchored">Community Integrations</h3>
+<p>In addition to using the Public Package Manager directly, R users can benefit from community integrations that access the service automatically:</p>
+<ul>
+<li><p>The <a href="https://github.com/rstudio/renv">renv</a> package helps R users manage package environments over time, and is able to use the service to provide faster install times and increase cross-platform project portability.</p></li>
+<li><p>The <a href="https://github.com/r-lib/actions">actions</a> package provides GitHub Actions for package authors taking advantage of CI/CD workflows such as automated testing. The package uses Public Package Manager to speed up actions and eliminate redundant package compilation.</p></li>
+<li><p>The popular <a href="https://www.rocker-project.org/">rocker</a> project gives R users a convenient way to work with Docker. This ecosystem increasingly takes advantage of Public Package Manager to provide faster package installs within a container as well as versioned installs for reproducible research.</p></li>
+</ul>
+<p>If your community project would benefit from Public Package Manager please <a href="https://community.rstudio.com/c/r-admin/package-manager?tags=package-manager%2Cpublic-rspm">create a topic</a> on the RStudio Community.</p>
+<h3 id="support-legal-terms-and-feedback" class="anchored">Support, Legal Terms, and Feedback</h3>
+<p>Please consult the <a href="https://rstudio.com/about/rstudio-service-terms-of-use/">RStudio Terms of Use</a> prior to use. If you use R in an organization, we recommend <a href="https://rstudio.com/products/package-manager">evaluating RStudio Package Manager</a> which includes all the benefits of the public Package Manager plus additional controls and features for professional data science teams: the ability to serve packages in offline environments, access to curated subsets of CRAN, and the ability to share private R packages.</p>
+<p>RStudio does not provide direct support for this service you can get help through RStudio Community. The best way to ask a question is to <a href="https://community.rstudio.com/c/r-admin/package-manager?tags=package-manager%2Cpublic-rspm">create a topic</a> on RStudio Community after reviewing the <a href="https://support.rstudio.com/hc/en-us/articles/360046703913">FAQ</a>. This forum is also the best place to leave suggestions or feedback, we’re eager to learn how we can better support your needs!</p>
+<p>If you are interested in learning more about how Package Manager works, these open source repositories provide information on how we <a href="https://github.com/rstudio/r-builds">build and distribute R</a>, handle <a href="https://github.com/rstudio/r-system-requirements">system requirements</a>, and <a href="https://github.com/rstudio/r-docker">manage our build environment</a>. Package Manager relies on the tireless work of a team of engineers, thousands of compute hours, and TBs of storage and network IO.</p>
+<p>The RStudio Package Manager <a href="https://docs.rstudio.com/rspm/admin">admin guide</a> also provides details on how Package Manager <a href="https://docs.rstudio.com/rspm/admin/repositories/#repo-syncing">interacts with CRAN</a>, how it <a href="https://docs.rstudio.com/rspm/admin/serving-binaries/">serves binary packages</a>, and details the <a href="https://docs.rstudio.com/rspm/admin/getting-started/configuration/">additional options</a> available for on-premise use.</p>
+<h3 id="new-updates-in-rstudio-package-manager-v1.1.6" class="anchored">New Updates in RStudio Package Manager v1.1.6</h3>
+<p>In addition to https://packagemanager.rstudio.com, the 1.1.6 release offers the community and customers incremental updates including:<br>
+- Access to an <a href="https://packagemanager.rstudio.com/__api__/swagger/index.html">API to easily integrate Package Manager</a> with other systems and services<br>
+- Support for R 4.0 and Ubuntu 20<br>
+- More robust access and debugging when distributing packages from Git (applicable to on-premise customers only)</p>
+<p>Please review the full <a href="https://docs.rstudio.com/rspm/news/">release notes</a> and consider <a href="https://docs.rstudio.com/rpm/installation/">upgrading to the latest version</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

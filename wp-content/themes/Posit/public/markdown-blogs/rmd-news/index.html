@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-12-21">
+<meta name="description" content="An end-of-2020 round-up of all the latest news from the R Markdown family of packages so that you know all you need to know to take advantage of the newest features.">
+
+<title>Latest News from the R Markdown Family</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Latest News from the R Markdown Family</h1>
+
+<p class="date">2020-12-21</p>
+</header>
+
+<p>Seasons greetings from the R Markdown family! We know many folks are headed into holiday breaks, and we hope you all take time away from work to enjoy…the rest of 2020. If you are like most people, you may be having a hard time keeping up with the latest news and current events in the world. We cannot help much with that (we’re in the same boat), but we are here to make your working lives easier! We wanted to take a moment to round up all the latest news from the R Markdown family of packages so that when you re-surface in 2021, you know all you need to know to take advantage of the newest features that will improve your knitting experience. Without further ado, let’s get started!</p>
+<h2 id="rmarkdown" class="anchored">rmarkdown</h2>
+<table>
+<colgroup>
+<col style="width: 100%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Last release</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><img src="https://img.shields.io/badge/CRAN-2.6-brightgreen" class="img-fluid" alt="Last rmarkdown release 2.6 cran badge"></td>
+</tr>
+</tbody>
+</table>
+<p>We are happy to share that <strong>rmarkdown</strong> (<a href="https://rmarkdown.rstudio.com/docs/" class="uri">https://rmarkdown.rstudio.com/docs/</a>) version 2.6 is now on CRAN. rmarkdown is a package that helps you create dynamic documents that combine code, rendered output (such as figures), and markdown-formatted text.</p>
+<p>You can install rmarkdown from CRAN with:</p>
+<pre><code>install.packages("rmarkdown")</code></pre>
+<p>There have been three new versions released on CRAN since this fall. Below we share some highlights, but you may want to look at the <a href="https://rmarkdown.rstudio.com/docs/news/">release notes</a> for the full details.</p>
+<h3 id="anchor-links" class="anchored">Anchor links</h3>
+<p>An anchor link (also known as a “page jump”) can help you share the URL to a specific section of a web page. Anchor links can now easily be added to headers in <code>html_document()</code> by using <code>anchor_sections = TRUE</code> in your YAML. First introduced in <strong>rmarkdown</strong> v2.5 as <code>TRUE</code> by default, we reverted to <code>FALSE</code> following community feedback. In v2.6 and later, you can enable anchor links in your YAML header:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{yaml}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">output</span><span class="kw">:</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">html_document</span><span class="kw">:</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">anchor_sections</span><span class="kw">:</span><span class="at"> </span><span class="ch">TRUE</span><span class="co"> # default is FALSE</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This works for any HTML-based output format, including those from the <strong>bookdown</strong> package. The default symbol is a pound sign (<code>#</code>). You can customize the anchor link using CSS (see <a href="https://rmarkdown.rstudio.com/docs/reference/html_document.html"><code>?html_document()</code></a>).</p>
+<h3 id="numbered-sections" class="anchored">Numbered sections</h3>
+<p>Automatically numbered sections have long been available in HTML and PDF output formats, but were missing from other output formats. It is now there! Users who knit to Word (<code>word_document()</code>), PowerPoint (<code>powerpoint_presentation()</code>), and markdown document (e.g., <code>github_document()</code>) output formats can now benefit from automatic numbering of sections, too. This new feature also makes it easier for your outputted report to look the same when you knit the same report to multiple output formats.</p>
+<p>You can enable numbered sections in your YAML header:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{yaml}</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">output</span><span class="kw">:</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">word_document</span><span class="kw">:</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">number_sections</span><span class="kw">:</span><span class="at"> </span><span class="ch">TRUE</span><span class="co"> # default is FALSE</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h3 id="publishing-r-markdown-websites" class="anchored">Publishing R Markdown websites</h3>
+<p>A new <a href="https://rmarkdown.rstudio.com/docs/reference/publish_site.html"><code>publish_site()</code></a> function is now included to easily publish your R Markdown website, as the ‘One-Button’ publishing experience in the RStudio IDE. It will help you setup your environment for publishing, build your website and deploy to RStudio Connect. Under the hood, it uses the <a href="https://rstudio.github.io/rsconnect/"><strong>rsconnect</strong></a> package.</p>
+<h3 id="and-more-little-things" class="anchored">And more little things…</h3>
+<p>We also have made some smaller but important changes:</p>
+<ul>
+<li>Support for Pandoc 2.11’s new citation processing system. <strong>rmarkdown</strong> 2.5 is required if you already upgraded Pandoc. Pandoc 2.11 is an important version update and it will be shipped with next release of <a href="https://blog.rstudio.com/2020/09/30/rstudio-v1-4-preview-visual-markdown-editing/">Rstudio 1.4</a>. We recommend using last Pandoc (which is currently 2.11.3.1) if you are managing your Pandoc version yourself and you want to update.</li>
+<li>The previous default <code>clean_site(preview = FALSE)</code> has been changed to <code>preview = TRUE</code>, which means it will now show which files and folders to delete without actually deleting them. This will now be also the default behavior of ‘Clean All’ button in the IDE build pane. If you want to actually delete the files, you need to call <code>rmarkdown::clean_site(preview = FALSE)</code> in the R console.</li>
+<li>Lua filters are now better handled internally. For developers of output formats for R Markdown, this means that you can now pass Lua filters as part of <code>output_format()</code> using <code>pandoc_options(lua_filters = )</code>. A new function <code>pandoc_lua_filter_args()</code> has been added to help build the right commandline argument for Pandoc. If you are new to Lua filters and want to learn more, see <a href="https://rmarkdown.rstudio.com/docs/articles/lua-filters.html"><code>vignette("lua-filters", "rmarkdown")</code></a>.</li>
+</ul>
+<p style="text-align: right;">
+• See the <a href="https://github.com/rstudio/rmarkdown/releases">release note</a> for full list of changes.
+</p>
+<h2 id="bookdown" class="anchored">bookdown</h2>
+<table>
+<colgroup>
+<col style="width: 100%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Last release</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><img src="https://img.shields.io/badge/CRAN-0.21-brightgreen" class="img-fluid" alt="Last bookdown release 0.21 cran badge"></td>
+</tr>
+</tbody>
+</table>
+<p>We are also happy to share that <strong>bookdown</strong> (<a href="https://bookdown.org/yihui/bookdown/" class="uri">https://bookdown.org/yihui/bookdown/</a>) version 0.21 is now on CRAN. <strong>bookdown</strong> is a package that facilitates writing books and long-form articles/reports with R Markdown.</p>
+<p>You can install bookdown from CRAN with:</p>
+<pre><code>install.packages("bookdown")</code></pre>
+<h3 id="numbered-sections-and-smarter-figure-numbering" class="anchored">Numbered sections and smarter figure numbering</h3>
+<p>You always had the ability to number sections in HTML and PDF books (in fact, it was the default because it was so necessary), but because of the new feature described above added to <strong>rmarkdown</strong>, now you get your nice numbered sections in <strong>bookdown</strong>’s non-HTML output formats too, like <code>bookdown::word_document2()</code> or <code>bookdown::powerpoint_presentation2()</code>.</p>
+<p>This is especially helpful because <strong>bookdown</strong>’s output formats already have automatic figure numbering enabled (see: <a href="https://bookdown.org/yihui/rmarkdown-cookbook/figure-number.html" class="uri">https://bookdown.org/yihui/rmarkdown-cookbook/figure-number.html</a>). For example, this code chunk:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r cars, fig.cap = "An amazing plot", echo = FALSE}</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cars)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In a <strong>bookdown</strong> output format is rendered as:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="img/Fig-cap-num.png" class="img-fluid"></p>
+<p></p><figcaption>Examples of figure caption numbering</figcaption><p></p>
+</figure>
+</div>
+<p>With the new section numbering capability, your numbered figures will be numbered by chapter even in output formats other than HTML and PDF. For example, in a <code>word_document2</code>, before the fourth figure of your document would have been labeled <code>Fig. 4</code>, even if it was really the second figure in Chapter 3. Now, the same figure will be labeled <code>Fig. 3.2</code>. If you prefer the former numbering behavior, you may deactivate this by setting <code>number_sections: FALSE</code> in the <code>index.Rmd</code> YAML or in your <code>_output.yaml</code> file.</p>
+<h3 id="a-new-way-to-use-theorem-and-proof-environments" class="anchored">A new way to use theorem and proof environments</h3>
+<p>You may already know (or not) that <strong>bookdown</strong> has <a href="https://bookdown.org/yihui/bookdown/markdown-extensions-by-bookdown.html">special Markdown extensions</a>, one of which is the theorems and proofs. They offer (un)numbered and labeled environments to your book. Currently, you can add them using one of the custom knitr’s engines:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{theorem, pyth, name="Pythagorean theorem"}</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="in">For a right triangle, if $c$ denotes the length of the hypotenuse</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="in">and $a$ and $b$ denote the lengths of the other two sides, we have</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="in">$$a^2 + b^2 = c^2$$</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="img/bookdown-theorem-engine.png" class="img-fluid"></p>
+<p></p><figcaption>A theorem with the knitr’s engine</figcaption><p></p>
+</figure>
+</div>
+<p>Taking advantage of Pandoc <a href="https://pandoc.org/MANUAL.html#divs-and-spans" title="Pandoc's fenced divs">fenced <code>Div</code>s</a> to create <a href="https://bookdown.org/yihui/rmarkdown-cookbook/custom-blocks.html" title="creating custom blocks">custom blocks</a>, now you have another way of creating such an environment:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{markdown}</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>::: {.theorem #pyth name="Pythagorean theorem"}</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>For **a right triangle**, if $c$ denotes the length of the hypotenuse</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>and $a$ and $b$ denote the lengths of the other two sides, we have</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>$$a^2 + b^2 = c^2$$</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="img/bookdown-new-theorem.png" class="img-fluid"></p>
+<p></p><figcaption>A theorem with the new fenced Div syntax</figcaption><p></p>
+</figure>
+</div>
+<p>It will produce the same type of environment that you can reference in your book. However, we gain a very important feature-‐-with this new syntax, you can use any Markdown syntax inside the custom blocks, which was not possible using the <strong>knitr</strong> engine. Have you spotted the bold text in the last example?</p>
+<p>This new syntax is currently only available to PDF and HTML document output formats. To use this new syntax in your existing documents, <code>bookdown::fence_theorems()</code> can help you convert the old syntax to the new syntax.</p>
+<pre><code># Shows the converted text
+bookdown::fence_theorems("01-intro.Rmd")
+# Convert the document overwriting it
+bookdown::fence_theorems("01-intro.Rmd", output = "01-intro.Rmd")</code></pre>
+<p style="text-align: right;">
+• See the <a href="https://github.com/rstudio/bookdown/blob/master/NEWS.md">release note</a> for full list of changes.
+</p>
+<h2 id="tinytex" class="anchored">tinytex</h2>
+<table>
+<colgroup>
+<col style="width: 100%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Last release</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><img src="https://img.shields.io/badge/CRAN-0.28-brightgreen" class="img-fluid" alt="Last tinytex release 0.28 cran badge"></td>
+</tr>
+</tbody>
+</table>
+<p>The latest version of the <strong>tinytex</strong> (<a href="https://yihui.org/tinytex/" class="uri">https://yihui.org/tinytex/</a>) package is also now on CRAN. <strong>tinytex</strong> is the companion package of the LaTeX distribution TinyTeX based on TeX Live, and the package allows R users to install and maintain their LaTeX distribution using R. You can install tinytex from CRAN with:</p>
+<pre><code>install.packages("tinytex")</code></pre>
+<p>In September, we made an important package update with three main improvements that should make the installation process for users run smoother.</p>
+<ol type="1">
+<li><code>tinytex::install_tinytex()</code> will now install pre-built binaries of TinyTeX by default, instead of installing TeX Live with its source installer. The latter is not only slower, but also could end up installing a cutting-edge version of TeX Live that happens to be broken. With the change, these problems will be gone, because the binaries have been fully tested for common R Markdown documents and projects before a new release is made, and they include a set of pre-installed TeX packages required by common R Markdown projects.</li>
+<li>You can now easily install a specific version using, for example, <code>tinytex::install_tinytex("2020.12")</code>. The TinyTeX releases live in the repo <a href="https://github.com/yihui/tinytex-releases" class="uri">https://github.com/yihui/tinytex-releases</a>, where you could find the different versions. There will be a monthly release of 3 binaries for Linux, Windows and Mac. These binaries can also be used by non-R users (see the repo README for how to install for non-R users).</li>
+<li>Lastly, <code>tinytex::install_tinytex()</code> will now detect and re-install all currently installed packages so that you don’t lose anything when re-installing or upgrading TinyTeX.</li>
+</ol>
+<p style="text-align: right;">
+• See the <a href="https://github.com/yihui/tinytex/releases">release note</a> for full list of changes.
+</p>
+<h2 id="rticles" class="anchored">rticles</h2>
+<table>
+<colgroup>
+<col style="width: 100%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Last release</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><img src="https://img.shields.io/badge/CRAN-0.17-brightgreen" class="img-fluid" alt="Last rticles release 0.17 cran badge"></td>
+</tr>
+</tbody>
+</table>
+<p>We are also happy to announce that <strong>rticles</strong> (<a href="https://github.com/rstudio/rticles" class="uri">https://github.com/rstudio/rticles</a>) version 0.17 is now on CRAN. The <strong>rticles</strong> package provides a suite of custom R Markdown LaTeX formats and templates for journal articles. You can install <strong>rticles</strong> from CRAN with:</p>
+<pre><code>install.packages("rticles")</code></pre>
+<p>Most of the article templates are provided and maintained by the community, and anyone can contribute a new template. Since this summer, three new versions of this package have been released on CRAN with:</p>
+<ul>
+<li><p>New article formats available: <code>bioinformatics_article()</code> and <code>arxiv_article()</code></p></li>
+<li><p>Improved <code>jss_article()</code> and <code>rjournal_article()</code> article templates to better follow submission guidelines.</p></li>
+<li><p>A brand new <a href="https://github.com/rstudio/rticles">README</a> to show all available templates with their contributor and to explain how to contribute more. The function <code>rticles::journals()</code> allows you to quickly look at all available formats.</p></li>
+<li><p>A reorganization of the templates internally which led to a breaking change when using <code>rmarkdown::draft()</code>. Now, only the journal name needs to be provided (e.g., <code>rjournal</code> instead of <code>rjournal_article</code>):</p>
+<pre><code>rmarkdown::draft("MyArticle.Rmd", template = "rjournal", package = "rticles")</code></pre></li>
+<li><p>Several bug fixes for existing templates and better support for Pandoc 2.11+</p></li>
+</ul>
+<p style="text-align: right;">
+• See the <a href="https://github.com/rstudio/rticles/blob/master/NEWS.md">release note</a> for full list of changes.
+</p>
+<h2 id="xaringan" class="anchored">xaringan</h2>
+<table>
+<colgroup>
+<col style="width: 100%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Last release</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><img src="https://img.shields.io/badge/CRAN-0.19-brightgreen" class="img-fluid" alt="Last xaringan release 0.19 cran badge"></td>
+</tr>
+</tbody>
+</table>
+<p>In 2016, Wojciech Francuzik filed <a href="https://github.com/yihui/xaringan/issues/3">a feature request</a> for self-contained <strong>xaringan</strong> slides. Over the years, several other users (notably, <a href="https://yihui.org/en/2019/01/rstudio-conf/#jared-lander-s-annual-feature-requests">Jared Lander</a>) requested the same feature. We are happy to announce that this has finally become possible since <strong>xaringan</strong> 0.18! With the option <code>self_contained: true</code>, your images and plots will be embedded in the <code>.html</code> output file.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{yaml}</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">output</span><span class="kw">:</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span>xaringan:<span class="fu">:moon_reader</span><span class="kw">:</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">self_contained</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We’d like to thank Susan VanderPlas for contributing the pull request to implement this feature.</p>
+<p style="text-align: right;">
+• See the <a href="https://github.com/yihui/xaringan/blob/master/NEWS.md">release note</a> for full list of changes.
+</p>
+<h2 id="distill" class="anchored">distill</h2>
+<table>
+<colgroup>
+<col style="width: 100%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Last release</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><img src="https://img.shields.io/badge/CRAN-1.1-brightgreen" class="img-fluid" alt="Last distill release 1.1 cran badge"></td>
+</tr>
+</tbody>
+</table>
+<p>Finally, we are proud to announce that version 1.0 of the <a href="https://pkgs.rstudio.com/distill/"><strong>distill</strong> package</a> is now on <a href="https://cran.r-project.org/package=distill">CRAN</a>. The goal of the <strong>distill</strong> package is to provide an R Markdown-based output format optimized for online scientific and technical communication. You can install the latest version from CRAN:</p>
+<pre><code>install.packages("distill")</code></pre>
+<p>In a post earlier this month, we shared some highlights from the <a href="https://www.rstudio.com/blog/distill/">latest version of the <strong>distill</strong> package</a>, which now includes site-wide search, a built-in themer, a syntax highlighter optimized for accessibility, and <strong>downlit</strong> integration, to name a few features we are excited about.</p>
+<p style="text-align: right;">
+• See the <a href="https://pkgs.rstudio.com/distill/news/index.html#distill-v10-cran">release note</a> for full list of changes.
+</p>
+<h2 id="last-but-not-least" class="anchored">Last but not least!</h2>
+<p>Let’s not forget other packages in the R Markdown family that have been updated within the last 6 months:</p>
+<ul>
+<li><p><a href="https://github.com/rstudio/tufte"><strong>tufte</strong></a> is in version 0.9 now with mainly updates for Pandoc 2.11+ support and a new <code>runningheader</code> variable for setting it different than <code>title</code>. <small>See <a href="https://github.com/rstudio/tufte/blob/master/NEWS.md">Changelog</a></small></p></li>
+<li><p><a href="https://yihui.org/knitr/"><strong>knitr</strong></a> is in version 1.30 now updated in September with, among internal and small changes, a set of new exported <code>knitr::hooks_*</code> functions. <small>See <a href="https://github.com/yihui/knitr/blob/master/NEWS.md">Changelog</a></small></p></li>
+<li><p><a href="https://github.com/rstudio/pagedown"><strong>pagedown</strong></a> had 3 releases with mainly bug fixes but 2 new features. A new <code>loa-title</code> to set a title to the list of abbreviations and a news <code>outline</code> argument in <code>pagedown::chrome_print()</code> to generate a bookmarks outline in the PDF. <small>See <a href="https://github.com/rstudio/pagedown/blob/master/NEWS.md">Changelog</a></small></p></li>
+<li><p><a href="https://github.com/rstudio/blogdown"><strong>blogdown</strong></a> had an important release with version 0.21 in October. It was just step one in <a href="https://github.com/rstudio/blogdown/blob/master/NEWS.md">a larger package overhaul</a> that is planned for release in January 2021. Now three years old, the package is currently under heavy development to better support beginners, improve the quality of life for existing users, and offer Hugo support with a versioning system. Version 1.0 will deserve its own blog post - stay tuned! We will definitely appreciate it if you could test the development version with <code>remotes::install_github("rstudio/blogdown")</code>, and <a href="https://github.com/rstudio/blogdown/issues">let us know if you have any feedback</a>! <small>See <a href="https://github.com/rstudio/blogdown/blob/master/NEWS.md">Changelog</a></small></p></li>
+</ul>
+<p>We hope this round-up helps you start thinking about some new possibilities for your 2021 knitting projects. A big thank you to all the contributors who helped with these releases by discussing problems, proposing features, and contributing code. Happy holidays!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

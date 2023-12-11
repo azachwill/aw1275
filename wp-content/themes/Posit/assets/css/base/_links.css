@@ -1,0 +1,138 @@
+@layer utilities {
+    .link-light {
+        @apply border-b-[1px] border-blue3 text-blue3 bg-gradient-to-r from-blue3/10 to-blue3/10 transition-all ease-in-out duration-300 bg-[length:0px] bg-[left_0px] bg-no-repeat px-[2px] hover:bg-[length:100%] active:bg-[length:100%] active:bg-gradient-to-r active:from-blue3/20 active:to-blue3/20;
+    }
+
+    .link-dark {
+        @apply border-b-[1px] border-neutral-light text-blue5 bg-gradient-to-r from-neutral-light/10 to-neutral-light/10 transition-all ease-in-out duration-300 bg-[length:0px] bg-[left_0px] bg-no-repeat hover:text-neutral-light hover:bg-[length:100%] active:bg-[length:100%] active:bg-gradient-to-r active:from-neutral-light/20 active:to-neutral-light/20;
+    }
+
+    .link-dark-plain {
+        @apply border-neutral-light text-blue5 bg-gradient-to-r from-neutral-light/10 to-neutral-light/10 transition-all ease-in-out duration-300 bg-[length:0px] bg-[left_0px] bg-no-repeat hover:text-neutral-light hover:bg-[length:100%] active:bg-[length:100%] active:bg-gradient-to-r active:from-neutral-light/20 active:to-neutral-light/20;
+    }
+
+    .link-lg-light,
+    .link-md-light,
+    .link-sm-light {
+        @apply relative px-[4px] flex items-center font-source-pro font-semibold tracking-wide uppercase text-blue3 leading-[160%] w-fit duration-[150ms];
+
+        &::before {
+            @apply content-[''] absolute w-full h-[1px] bottom-0 left-0 bg-blue3;
+        }
+
+        &::after {
+            @apply content-[''] absolute w-full h-full bottom-0 left-0 w-full h-full bottom-0 bg-blue6 -z-[1] origin-left duration-[150ms] ease-in-out scale-x-0;
+        }
+
+        & svg {
+            @apply ease-in-out duration-[150ms];
+        }
+
+        &:hover::after,
+        &:focus-visible::after {
+            @apply scale-x-100;
+        }
+
+        &:hover::before {
+            @apply bg-blue1;
+        }
+
+        &:focus-visible::before {
+            @apply bg-blue1;
+        }
+
+        &:hover svg,
+        &:focus-visible svg {
+            @apply translate-x-[2px];
+        }
+
+        &:active::after {
+            @apply bg-blue3/20;
+        }
+
+        &:hover,
+        &:focus-visible {
+            @apply text-blue1 z-0;
+        }
+
+        &:focus-visible {
+            @apply text-blue1 outline-0;
+        }
+
+        &:hover path {
+            @apply stroke-blue1;
+        }
+    }
+
+    .link-lg-dark,
+    .link-md-dark,
+    .link-sm-dark {
+        @apply relative px-[4px] flex items-center font-source-pro font-semibold tracking-wide uppercase text-blue5 leading-[160%] w-fit duration-[150ms];
+
+        &::before {
+            @apply content-[''] absolute w-full h-[1px] bottom-0 left-0 bg-blue5;
+        }
+
+        &::after {
+            @apply content-[''] absolute w-full h-full bottom-0 w-full h-full bottom-0 left-0 bg-blue3/20 origin-left duration-[150ms] ease-in-out scale-x-0;
+        }
+
+        & svg {
+            @apply ease-in-out duration-[150ms];
+        }
+
+        &:hover::after,
+        &:focus-visible::after {
+            @apply scale-x-100;
+        }
+
+        &:hover::before,
+        &:focus-visible::before {
+            @apply bg-neutral-light;
+        }
+
+        &:hover svg,
+        &:focus-visible svg {
+            @apply translate-x-[2px];
+        }
+
+        &:active::after {
+            @apply bg-blue3/40;
+        }
+
+        &:hover {
+            @apply text-neutral-light;
+        }
+
+        &:focus-visible {
+            @apply text-neutral-light outline-none;
+        }
+
+        &:hover path {
+            @apply stroke-neutral-light;
+        }
+    }
+
+    .link-lg-light,
+    .link-lg-dark {
+        @apply text-20;
+    }
+
+    .link-md-light,
+    .link-md-dark {
+        @apply text-16;
+    }
+
+    .link-sm-light,
+    .link-sm-dark {
+        @apply text-14;
+    }
+
+    .focus-link {
+        @apply outline-none outline-0 focus:shadow-focus-share-link focus-visible:shadow-focus-share-link;
+    }
+
+    .focus-visible-link {
+        @apply outline-0 focus-visible:shadow-focus-share-link focus-visible:rounded-[4px];
+    }
+}

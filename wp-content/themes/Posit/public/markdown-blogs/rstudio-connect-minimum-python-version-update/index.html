@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="R package build">
+<meta name="dcterms.date" content="2022-04-11">
+<meta name="description" content="The March 2022 release of RStudio Connect has updated the minimum version of Python supported to 3.5 and removed support for Python 2. This post outlines things Connect Administrators and Publishers should know about this change.">
+
+<title>RStudio Connect Python Minimum Version Update</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Connect Python Minimum Version Update</h1>
+<p class="author">R package build</p>
+
+<p class="date">2022-04-11</p>
+</header>
+
+<h1 id="what-administrators-and-publishers-should-know">What Administrators and Publishers should know</h1>
+<blockquote>
+<p>The March 2022 RStudio Connect release removes support for Python 2 and updates the minimum version supported to Python 3.5.</p>
+</blockquote>
+<h2 id="why-now" class="anchored">Why now?</h2>
+<p>Python 2.7 has reached end of life (EOL) maintenance status. On January 1, 2020, the Python language governing body ended support for this version, and they are no longer providing security patches. RStudio Connect continued to support Python 2.7 beyond its EOL status announcement, but several factors have influenced our decision to end support:</p>
+<ul>
+<li>Python 3 is now widely adopted and is the actively-developed version of the Python language.</li>
+<li>In January 2021, the <code>pip</code> 21.0 release officially dropped support for Python 2.</li>
+<li>A large number of projects pledged to drop support for Python 2 in 2020 including TensorFlow, scikit-learn, Apache Spark, pandas, XGBoost, NumPy, Bokeh, Matplotlib, IPython, and Jupyter Notebook.</li>
+</ul>
+<h2 id="how-does-this-affect-my-connect-installation-and-published-content-using-an-older-version-of-python" class="anchored">How does this affect my Connect installation and published content using an older version of Python?</h2>
+<p>The March 2022 release of RStudio Connect introduces a breaking change for installations and content that use a Python version below 3.5.</p>
+<ul>
+<li>If an older version of Python is listed as an available option in the Connect configuration file, Connect will fail to start.</li>
+<li>Published R Markdown reports and Jupyter Notebooks that use older Python versions can still be viewed. However, they cannot be re-rendered. Scheduled reports that continue to run will send error message emails.</li>
+<li>Existing applications and APIs that use older Python versions will no longer run. An HTTP 502 error will be returned for all requests to these applications.</li>
+</ul>
+<h2 id="what-action-needs-to-be-taken" class="anchored">What action needs to be taken?</h2>
+<p>Connect Administrators need to remove older versions of Python from the Connect installation. Publishers need to update their deployed content to use Python version 3.5 or higher.</p>
+<h3 id="update-the-connect-configuration-file" class="anchored">Update the Connect configuration file</h3>
+<p>In order to upgrade RStudio Connect, verify that your configuration file does not include Python 2 or Python 3 versions prior to 3.5. If it does, and you do not remove those configuration settings, the Connect service will throw an error during start-up. This is a breaking change.</p>
+<p>The configuration file should only contain Python 3 versions that meet the minimum requirements (Example):</p>
+<pre><code>; /etc/rstudio-connect/rstudio-connect.gcfg
+[Python]
+Enabled = true
+Executable = /shared/Python/3.7.6/bin/python3
+Executable = /shared/Python/3.8.1/bin/python3</code></pre>
+<p>In addition to the new minimum version requirements, Python installations no longer require the <code>virtualenv</code> package to be installed. Python content will now use the <code>venv</code> module included with Python 3.</p>
+<p><em>Note: RStudio Workbench does not document minimum version requirements for Python, but you may want to schedule time to check or update the versions available there as well to avoid publishing errors due to environment mismatches.</em></p>
+<h3 id="update-content-that-uses-an-older-version-of-python" class="anchored">Update content that uses an older version of Python</h3>
+<p>Content owners need to update their code to use Python version 3.5 or higher. Content can be re-published to the same location, preserving existing settings like custom URLs, environment variables, access permissions, or runtime settings.</p>
+<p>If published apps or APIs using an older version of Python are not updated, they will fail to run. Static R Markdown reports and Jupyter Notebooks using an older version of Python can still be viewed, but they will fail to re-render. Scheduled reports will send error message emails.</p>
+<h2 id="how-can-you-identify-content-that-will-break" class="anchored">How can you identify content that will break?</h2>
+<p>Conduct a Python runtime audit of your server and the deployed content. This <a href="https://youtu.be/GLJucEndOgo">video overview</a> provides tips for auditing Python usage on RStudio Connect depending on the level of detail you need.</p>
+<ul>
+<li>Start by executing the script in <code>/opt/rstudio-connect/scripts/find-python-envs</code> which will list all Python virtual environments and the applications that use them.</li>
+<li>If you require a more detailed audit, use the RStudio Connect Server API to create a custom report:
+<ul>
+<li>This <a href="https://docs.rstudio.com/connect/cookbook/runtimes/">basic example</a> includes a summary report without links to content items.</li>
+<li>This <a href="https://solutions.rstudio.com/data-science-admin/connect-apis/python-audit-report/">advanced example</a> includes links to each piece of content with owner contact information.</li>
+</ul></li>
+</ul>
+<h1 id="upgrade-rstudio-connect">Upgrade RStudio Connect</h1>
+<p>Before upgrading, please review the <a href="http://docs.rstudio.com/connect/news">full release notes</a>.</p>
+<p>Upgrading RStudio Connect typically requires less than five minutes. This release contains a breaking change which may require an update to the Connect configuration file.</p>
+<p>The <code>rstudio-connect</code> service will fail to start if the configuration file includes Python 2 or Python 3 versions prior to 3.5. <a href="https://docs.rstudio.com/connect/admin/getting-started/#editing-config">Edit the configuration</a> to remove any <code>Python.Executable</code> properties that do not meet the new minimum version requirements.</p>
+<p>If you are upgrading from a version earlier than the February 2022 edition, be sure to consult the release notes for the intermediate releases, as well:</p>
+<ul>
+<li>February 2022 contained a breaking change for certain LDAP configurations, and <a href="https://www.rstudio.com/about/platform-support/">Platform Support</a> updates.</li>
+<li>November 2021 contained a breaking change for stricter permissions on the creation of several <code>Server.DataDir</code> sub-directories.</li>
+<li>Review breaking changes from earlier versions in the <a href="http://docs.rstudio.com/connect/news">release notes</a>.</li>
+</ul>
+<p>To perform an RStudio Connect upgrade, download and run the installation script. The script installs a new version of Connect on top of the earlier one. Existing configuration settings are respected.</p>
+<pre><code># Download the installation script
+curl -Lo rsc-installer.sh https://cdn.rstudio.com/connect/installer/installer-v1.10.0.sh
+
+# Run the installation script
+sudo -E bash ./rsc-installer.sh 2022.03.2</code></pre>
+<p><a href="https://docs.rstudio.com/rsc/upgrade/">Standard upgrade documentation can be found here</a>.</p>
+<h3 align="center" class="anchored">
+<a href="https://rstudio.com/about/subscription-management/">Sign up for RStudio Professional Product Updates</a>
+</h3>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

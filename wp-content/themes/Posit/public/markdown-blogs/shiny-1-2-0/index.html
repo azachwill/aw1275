@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2018-11-13">
+
+<title>Shiny 1.2.0: Plot caching</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Shiny 1.2.0: Plot caching</h1>
+
+<p class="date">2018-11-13</p>
+</header>
+
+<p>We’re pleased to announce the CRAN release of Shiny v1.2.0! This release features Plot Caching, an important new tool for improving performance and scalability in Shiny apps.</p>
+<p>If you’re not familiar with the term “caching”, it just means that when we perform a time-consuming operation, we save (cache) the results so that the next time that operation is requested, we can skip the actual operation and instantly fetch the previously cached results. Shiny’s reactive expressions do some amount of caching for you already, and you can use more explicit techniques to cache the various operations you might do to your data (using the <a href="https://github.com/r-lib/memoise">memoise</a> package, or manually saving intermediate data frames to disk as CSV or RDS, for two examples).</p>
+<p>Plots, being very common and (potentially) expensive-to-compute outputs, are great candidates for caching, and in theory you can use <code>renderImage</code> to accomplish this. But because Shiny’s <code>renderPlot</code> function contains a lot of complex infrastructure code, it’s actually quite a difficult task. Despite some valiant <a href="https://stackoverflow.com/questions/24192570/caching-plots-in-r-shiny">attempts</a>, all of the examples we’ve seen in the wild have had serious limitations we wanted to overcome.</p>
+<p>Shiny v1.2.0 introduces a new function, <code>renderCachedPlot</code>, that makes it much easier to add plot caching to your app.</p>
+<h3 id="using-rendercachedplot" class="anchored">Using <code>renderCachedPlot</code></h3>
+<p>Let’s take a simple, but expensive, plot output:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>output<span class="sc">$</span>plot <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(diamonds, <span class="fu">aes</span>(carat, price, <span class="at">color =</span> <span class="sc">!!</span>input<span class="sc">$</span>color_by)) <span class="sc">+</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>()</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>diamonds</code> dataset has 53,940 rows. On my laptop, this takes about 1580 milliseconds (1.58 seconds). Perhaps that’s fast enough for doing exploratory data analysis, but it’s slower than we’d like for a high traffic Shiny app.</p>
+<p>We can tell Shiny to cache this plot in two steps.</p>
+<ol type="1">
+<li>Change <code>renderPlot</code> to <code>renderCachedPlot</code>.</li>
+<li>Provide a suitable <code>cacheKeyExpr</code>. This is an expression that Shiny will use to determine which invocations of <code>renderCachedPlot</code> should be considered equivalent to each other. (In this case, two plots with different <code>input$color_by</code> values can’t be considered the “same” plot, so the <code>cacheKeyExpr</code> needs to have <code>input$color_by</code>.)</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>output<span class="sc">$</span>plot <span class="ot">&lt;-</span> <span class="fu">renderCachedPlot</span>({</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(diamonds, <span class="fu">aes</span>(carat, price, <span class="at">color =</span> <span class="sc">!!</span>input<span class="sc">$</span>color_by)) <span class="sc">+</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>()</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>}, <span class="at">cacheKeyExpr =</span> { input<span class="sc">$</span>color_by })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>With these code changes, the first time a plot with a particular <code>input$color_by</code> is requested, it will take the normal amount of time. But the next time it is requested, it will be almost instant, as the previously rendered plot will be reused.</p>
+<h3 id="benchmarking-the-results" class="anchored">Benchmarking the results</h3>
+<p>To quantify the performance difference between the cached and uncached versions, I turned each into a minimal Shiny app (<a href="https://gist.github.com/jcheng5/1f09a0939ae45fd36f286a158bcb0dfb">source</a>). This app simply provides the <code>color_by</code> input using the new <code>varSelectInput</code> control, and then renders the output using either of the two code examples above. Then I used our (still-in-development) <a href="https://resources.rstudio.com/rstudio-conf-2018/scaling-shiny-sean-lopp">Shiny load testing tools</a> to record a test script, and “replay” it against both versions of the app, each running in a single R process.</p>
+<p>I tested the <code>renderPlot</code> version of the app with 5 concurrent users, and the <code>renderCachedPlot</code> version with 25, 50, and 100 concurrent users. The difference in performance is as dramatic as we’d expect:</p>
+<p><img src="2018-11-05-shiny-1-2-0.png" width="500" alt="A chart showing that renderCachedPlot with 100 users is faster than renderPlot with 5 users"></p>
+<p>With only five concurrent users, the latency is already pretty bad with the <code>renderPlot</code> version. (Note that this isn’t intended to represent typical performance with Shiny apps in general! We chose a particularly torturous ggplot on purpose.)</p>
+<p>On the other hand, the <code>renderCachedPlot</code> version doesn’t break a sweat with 50 concurrent users; and even at 100 concurrent users, the latency is still acceptable.</p>
+<h3 id="when-to-use-plot-caching" class="anchored">When to use plot caching</h3>
+<p>A Shiny app is a good candidate for plot caching if:</p>
+<ol type="1">
+<li>The app has plot outputs that are time-consuming to generate,</li>
+<li>These plots are a significant fraction of the total amount of time the app spends thinking, and</li>
+<li>Most users are likely to request the same few plots.</li>
+</ol>
+<p>Since our test has a pretty expensive plot as its only output, and our load testing tools simulate <em>n</em> users all doing the same exact thing, this these numbers reflect a best-case scenario for plot caching.</p>
+<p>Shiny can store your cached plots in memory, on disk, or with another backend like <a href="https://redis.io/">Redis</a>. You also have a number of options for limiting the size of the cache. Be sure to read <a href="http://shiny.rstudio.com/articles/plot-caching.html">this article</a> to get the most out of this feature!</p>
+<p>In future releases of Shiny, we hope to build on this foundation we’ve laid to dramatically speed up other areas of Shiny apps, like reactive expressions and non-plot outputs. In the meantime, we hope you find plot caching to be a useful addition to your performance toolkit!</p>
+<h2 id="other-changes-in-shiny-v1.2.0" class="anchored">Other changes in Shiny v1.2.0</h2>
+<ul>
+<li><p>Upgrade FontAwesome from 4.7.0 to 5.3.1 and made <code>icon</code> tags browsable, which means they will display in a web browser or RStudio viewer by default (<a href="https://github.com/rstudio/shiny/issues/2186">#2186</a>). Note that if your application or library depends on FontAwesome directly using custom CSS, you may need to make some or all of the changes recommended in <a href="https://fontawesome.com/how-to-use/on-the-web/setup/upgrading-from-version-4">Upgrade from Version 4</a>. Font Awesome icons can also now be used in static R Markdown documents.</p></li>
+<li><p>Address <a href="https://github.com/rstudio/shiny/issues/174">#174</a>: Added <code>datesdisabled</code> and <code>daysofweekdisabled</code> as new parameters to <code>dateInput()</code>. This resolves <a href="https://github.com/rstudio/shiny/issues/174">#174</a> and exposes the underlying arguments of <a href="http://bootstrap-datepicker.readthedocs.io/en/latest/options.html#datesdisabled">Bootstrap Datepicker</a>. <code>datesdisabled</code> expects a character vector with values in <code>yyyy/mm/dd</code> format and <code>daysofweekdisabled</code> expects an integer vector with day interger ids (Sunday=0, Saturday=6). The default value for both is <code>NULL</code>, which leaves all days selectable. Thanks, <span class="citation" data-cites="nathancday">@nathancday</span>! <a href="https://github.com/rstudio/shiny/pull/2147">#2147</a></p></li>
+</ul>
+<p>See the <a href="http://shiny.rstudio.com/reference/shiny/1.2.0/upgrade.html">full changelog for Shiny v1.2.0</a> for other minor improvements and bug fixes we’ve made in this release.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

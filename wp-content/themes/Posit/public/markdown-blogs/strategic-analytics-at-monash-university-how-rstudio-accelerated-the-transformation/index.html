@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-06-24">
+<meta name="description" content="Similar to any other large and complex organisation, Monash University employs a wide range of data to inform decision making and monitor different aspects of their operations.">
+
+<title>Strategic Analytics at Monash University: How RStudio Accelerated the Transformation</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Strategic Analytics at Monash University: How RStudio Accelerated the Transformation</h1>
+
+<p class="date">2021-06-24</p>
+</header>
+
+<p><sup>Photo credit: <a href="https://www.monash.edu/" target="_blank">Monash University</a></sup></p>
+<div class="lt-gray-box">
+<p><em>This is a guest post from Dr.&nbsp;Behrooz Hassani-Mahmooei, Director of Strategic Intelligence and Insights Unit, and his team at <a href="https://www.monash.edu/" target="_blank">Monash University</a>, Australia</em></p>
+</div>
+<p>Similar to any other large and complex organisation, at Monash University we employ a wide range of data to inform decision making and monitor different aspects of our operations; such as student outcomes, academic performance, research outputs, human resources and financial records.</p>
+<p>Following significant focus on people and system resources, as well as progress in data management and reporting, the university shifted its focus to build capacity to use these rich data sources to inform and support strategic decision making.</p>
+<p>Specifically, we aimed to integrate the collection, routine reporting and analysis of the existing large internal datasets to the development of data-driven insights which inform strategic thinking and decision making at the senior executive level.</p>
+<p><strong>Monash University’s Approach:</strong></p>
+<ul>
+<li><a href="#Journey"><strong>The Journey to Strategic Analytics</strong></a>
+<ul>
+<li><a href="#Link">Linking internal and external data</a></li>
+<li><a href="#Flexible">Creating flexible analytics relevant to strategic decisions</a></li>
+<li><a href="#Accessible">Making the results accessible and understandable</a></li>
+<li><a href="#Relevant">Making our analysis findings relevant to the world around us</a></li>
+</ul></li>
+<li><a href="#Workstreams"><strong>Three Key Workstreams</strong></a>
+<ul>
+<li><a href="#Establish">Establish a Platform for Data Linkage</a></li>
+<li><a href="#Deliver">Deliver Analytics that are Flexible, Proactive and Integrated</a>
+<ul>
+<li><a href="#handling">Flexible data handling</a></li>
+<li><a href="#proactive">Making analytics proactive, not reactive</a></li>
+<li><a href="#collaborative">Fully integrated and collaborative analytic teams</a></li>
+</ul></li>
+<li><a href="#Translate">Translate Analytic Research through Visualisations</a></li>
+</ul></li>
+<li><a href="#Strategic"><strong>Integrating analytics into the broader strategic conversation</strong></a></li>
+</ul>
+<h2 id="the-journey-to-strategic-analytics" class="anchored"><a name="Journey"></a>The Journey to Strategic Analytics</h2>
+<p>In 2017, Monash University established the Strategic Intelligence and Insights Unit (InSight), composed of members with multidisciplinary and diverse backgrounds and a broad set of research expertise, analytic skills and solid experience in higher education. InSight was tasked to employ advanced and multidisciplinary approaches to deliver innovative data solutions, intelligence, and insights to support the University’s strategy and help the University secure its positioning globally.</p>
+<p>We identified four main opportunities in our path to transition from day to day operational reporting toward strategic analytics:</p>
+<ul>
+<li><a name="Link"></a><strong>Linking internal and external data:</strong> We needed to bring together sources of internal data and establish reproducible processes to link internal and external data in a consistent, timely and reliable manner. We recognised early that there was no perfect single source of truth that combined all of the data sources across the university. Instead, we needed to create a flexible platform to run major data linkages with low cost and high accuracy.</li>
+<li><a name="Flexible"></a><strong>Creating flexible analytics relevant to strategic decisions:</strong> It was key to use advanced techniques and innovative solutions to establish the most relevant measures and indicators that could be linked to the high-level strategic questions and decisions across the institution. Ideally, this approach should minimise any manual interventions and instead deliver reproducible and reliable analyses.</li>
+<li><a name="Accessible"></a><strong>Making the results accessible and understandable:</strong> Another opportunity was presenting the data and insights in a concise, informative and accessible way that could be easily adopted and utilised to inform high-level strategic conversations. We needed to establish our role as analytics translators to link data to domain knowledge without delivering unnecessary business context or complicated analysis.</li>
+<li><a name="Relevant"></a><strong>Making our analysis findings relevant to the world around us:</strong> Our internal data is limited to what we collect and the scope of our functions and services. To deliver outputs that can inform the senior management to make decisions, we need to reach beyond our own organisation and interrogate our local data within the broader evidence.</li>
+</ul>
+<h2 id="three-key-workstreams" class="anchored"><a name="Workstreams"></a>Three Key Workstreams</h2>
+<ol type="1">
+<li><strong>Establish a Platform for Data Linkage</strong></li>
+<li><strong>Deliver Analytics that are Flexible, Proactive and Integrated</strong></li>
+<li><strong>Translate Analytic Research through Visualisations</strong></li>
+</ol>
+<h3 id="establish-a-platform-for-data-linkage" class="anchored"><a name="Establish"></a>Establish a Platform for Data Linkage</h3>
+<p>One of the key steps in delivering strategic analytics is harnessing the richness of multiple complementary datasets through data linkage and making it accessible across the university. We established two programs of work in this area.</p>
+<p>Firstly, we designed and delivered a framework for linking our internal data scattered across different environments and organisational systems using the best practice methods using R.</p>
+<p>For example, in 2019, we linked a significant number of our internal data sources focused on student outcomes and experience. This involved linking separate datasets from the time a student commences at Monash University (admissions), all their activities during their studies (grades, extracurricular activities, student experience surveys, unit evaluations) through to life after graduation (graduate outcomes).</p>
+<p>This platform enabled us to run a wide range of analysis to understand how different programs and interventions impact the academic and non-academic outcomes of students as well as their career post-graduation. Secondly, it enabled us to link some of our internal data to available datasets outside our environment.</p>
+<p>For example, one of our projects involved cleaning, structuring and recalculating a large number of performance indicators (learning and teaching, research, finance, human resources) from the top 200 universities. We used this data to analyse the key drivers of research expenditure as well as emerging patterns in research outputs and partnerships across the world.</p>
+<p>Different key features of R, such as rich capability in text analysis and reshaping data helped us link these sources of information, despite the lack of proper linkage keys and inconsistency across datasets.</p>
+<h3 id="deliver-analytics-that-are-flexible-proactive-and-integrated" class="anchored">Deliver Analytics that are Flexible, Proactive and Integrated</h3>
+<p>One of the key challenges that many organisations face today is how to link the outcomes of their data science and analytics teams to decisions and interventions that lead to tangible results for their business.</p>
+<p>In the past few years, many Australian public and private organisations have established and then disbanded data science teams due to a range of barriers and failures such as lack of rich structured data to inform advanced analysis, unclear connection between the analysis and the business targets and outcomes, and lack of role clarity between business intelligence (BI), data analytics and data science teams. Another challenge that many public organisations such as universities face is the transition from data reporting frameworks that are mostly driven by compliance (such as reporting student numbers to the government) toward designing data-driven strategies.</p>
+<p>Strategic analytics, in our experience, is driven by three key changes to how things are done traditionally:</p>
+<ol type="1">
+<li><p><a name="handling"></a><strong>Flexible data handling:</strong> Administrative data frequently arrives in different formats and structures, disrupting the data preparation process. The traditional response requires manual interventions to address these issues.</p>
+<p>Our approach is designed to deal with the uncertainty in the data automatically. If there are changes in the data format, the scripts can fix them with minimum input from the analysts, minimizing the time needed for manual preparation and analysis of the data.</p>
+<p>For example, if we are analysing a time series dataset that has a structural break that can occur unexpectedly and needs to be identified and corrected for, we embed processes in the code that automatically identify where the break happens and correct for it. This means that in most cases we only need to deal with a data wrangling, transformation or quality issue once.</p></li>
+<li><p><a name="proactive"></a><strong>Making analytics proactive, not reactive:</strong> Historically, data analysis has been a responsive activity. For example, a strategic conversation at an executive meeting or a brainstorming session concludes with a data analysis request based on the direction of the meeting. The results from the analysis are then used to inform future conversations to validate or clarify an issue.</p>
+<p>However, using the platforms that we established, we successfully prepared the data to be part of that first conversation. This allowed the analysis to contribute to the direction of these conversations as early as possible rather than being done in response to them. Data analytics experts were made available, or even invited to participate, in the strategic discussions, highlighting the reliance on data-informed strategic thinking. The data could be interrogated throughout the strategic discussion to inform strategic thinking and progress the conversation beyond the initial context queries to explore the deeper underlying strategic issues.</p></li>
+<li><p><a name="collaborative"></a><strong>Fully integrated and collaborative analytic teams:</strong> Traditionally, different stages of analytics (for example descriptive, diagnostic, predictive and prescriptive) are done by different people using different tools and as separate steps.</p>
+<p>We built capacity within the university by upskilling people across the organisation in using core methodologies and systems to consider analytics from an integrated perspective whereby each step informed the next. Critically, the prescriptive step which aims to inform an intervention was not conducted by a separate data science team in isolation, but instead by analysts with business knowledge who had conducted the descriptive, diagnostic and predictive phases. This added an important contextual element to the analysis which enhanced the strategic relevance of the analysis.</p></li>
+</ol>
+<h3 id="translate-analytic-research-through-visualisations" class="anchored"><a name="Translate"></a>Translate Analytic Research through Visualisations</h3>
+<p>Members of the InSight Unit have a strong background in research and about half of the team have completed a PhD in areas such as econometrics, applied economics, business information systems, and computational modelling. As a result of this expertise, the team was able to apply many core concepts of designing, planning, and undertaking a research project into the process of delivering analytics services. This helped the team deliver uniquely valuable insights and outputs.</p>
+<p>This is most evident in the way that the team utilises data visualisation to communicate the findings of its analysis. Using the rich features of R and relying on the Connect Server, we were able to share a wide range of outputs from the team. These ranged from a simple descriptive statistic on student outcomes to the results of a complex regression analysis on co-authorship patterns. These results were visualised, communicated and translated so that they could be used by the senior management team to design intervention, policies and strategies across a wide range of areas.</p>
+<p>As part of this communication, we considered using existing reporting tools. We found that BI tools are very useful when you want to start from data and generate information. However, when you have a specific decision that you are expected to inform on, especially a strategic decision, you need tools that enable you to start from that decision and reverse engineer back to the data. That is where R helped give us a competitive advantage, providing maximum flexibility and reproducibility as well as clarity for communication and translation.</p>
+<h2 id="integrating-analytics-into-the-broader-strategic-conversation" class="anchored"><a name="Strategic"></a>Integrating Analytics into the Broader Strategic Conversation</h2>
+<p>The InSight team set a goal to deliver informed recommendations of effective business models to improve the University’s overall positioning and competitiveness. To achieve this, the unit was equipped with strong capabilities in areas such as evidence reviews, environmental and horizon scanning, and state analysis. This helped to deliver outputs that extended beyond the scope of internal collected data to incorporate current best practice approaches and build upon the evidence from other institutions and sectors. In our experience, the addition of contextual intelligence informed and extended our analytics beyond the operational reporting, facilitated the delivery of actionable recommendations and supported rapid implementation and translation by the senior management. Moreover, in our experience, the process of strategic analytics is not a linear process where a question is asked and an answer is provided. Rather, it starts from a high-level conversation between executives and data scientists about a strategy and a set of potential scenarios.</p>
+<p>The first step is primarily focused on analysing data through an iterative engagement process which allows the senior executive team to clarify their thinking and the strategic issue they are addressing, refine those scenarios and arrive at some early structured questions.</p>
+<p>Therefore, it is extremely important that the analytical techniques and team are agile, efficient and adaptable to the constantly evolving questions. A code-first approach delivered on RStudio’s professional products is a critical part of this sort of adaptable and agile approach.</p>
+<p>Strategic analytics teams need to be collaborative with decision-makers to arrive at an evidence-based strategic question that can be translated into a targeted in-depth data analysis project. Throughout this process, flexibility and reproducibility are critical components in the delivering of a methodologically robust, transparent and ultimately trusted strategic function. The technically advanced yet intuitive platform supported widespread uptake and adoption across the University was instrumental to achieving our transition from operational to strategic analytics.</p>
+<hr>
+<h2 id="about-monash-university" class="anchored">About Monash University</h2>
+<p>From a single campus at Clayton with fewer than 400 students, Monash has grown into a network of campuses, education centres and partnerships spanning the globe. With approximately 60,000 students (and 350,000 alumni) from over 170 countries, we are today Australia’s largest university.</p>
+<p>The University now offers a broad selection of courses within 10 faculties: Art, Design and Architecture; Arts; Business and Economic; Education; Engineering; Information Technology; Law; Medicine, Nursing and Health Sciences; Pharmacy and Pharmaceutical Sciences; and Science.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

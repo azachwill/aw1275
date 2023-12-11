@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-09-22">
+<meta name="description" content="This release adds new management, service, and configuration options to RStudio Package Manager. Highlights include a more versatile repository calendar, more flexibility in serving multiple binary package versions, and more options for configuring git sources.">
+
+<title>RStudio Package Manager 2021.09.0 - Capturing and Maintaining Working Repositories</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Package Manager 2021.09.0 - Capturing and Maintaining Working Repositories</h1>
+
+<p class="date">2021-09-22</p>
+</header>
+
+
+Photo by <a href="https://unsplash.com/@timmossholder?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank" rel="noopener noreferrer">Tim Mossholder</a> on <a href="https://unsplash.com/?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank" rel="noopener noreferrer">Unsplash</a>
+
+<p>This release adds new management, service, and configuration options to RStudio Package Manager. Highlights include a more versatile repository calendar, more flexibility in serving multiple binary package versions, and more options for configuring git sources.</p>
+<p>Packages are critical to data science, but keeping them in sync and working together at scale is often a challenging, frustrating task. <a href="https://www.rstudio.com/products/package-manager" target="_blank" rel="noopener noreferrer">RStudio Package Manager</a> is our pro offering that simplifies package management across your team, department, or entire organization for reproducible, maintainable, and secure code repositories. This release includes improvements on our management, service, and configuration options, such as:</p>
+<ul>
+<li>A new, more flexible repository calendar. Users can now freeze to any date in the repository’s history, and frozen repository URLs now include the snapshot date in YYYY-MM-DD format.</li>
+<li>More flexibility in serving multiple binary package versions. RStudio Package Manager can now serve binary packages for new R versions and operating systems without upgrading to a new version.</li>
+<li>More configuration options when using git sources. You can now edit the SSH key, git URL, branch, and subdirectories of existing sources. You can also now use a file to watch for changes.</li>
+<li>Improvements in logging standardization and usability. Logs now work more like other RStudio team products, including being available through journalclt.</li>
+<li>Support for the Bioconductor books repository.</li>
+<li>Many important bug fixes.</li>
+</ul>
+<p>Check out more in our <a href="https://docs.rstudio.com/rspm/news/#rstudio-package-manager-2021090" target="_blank" rel="noopener noreferrer">release notes</a> to learn more details and click <a href="https://www.rstudio.com/products/package-manager/download-commercial/" target="_blank" rel="noopener noreferrer">here</a> to upgrade today.</p>
+<blockquote>
+<p>NOTE on versioning: As part of this release, we’ve moved to calendar-based versioning. <a href="https://blog.rstudio.com/2021/08/30/calendar-versioning-for-commercial-rstudio-products/" target="_blank" rel="noopener noreferrer">See this blog post</a> for details.</p>
+</blockquote>
+<p><strong>For more information</strong></p>
+<ul>
+<li>For an overview of best practices for open source package management, check out this free webinar, <a href="https://www.rstudio.com/resources/webinars/managing-packages-for-open-source-data-science/" target="_blank" rel="noopener noreferrer">Managing Packages for Open Source Data Science</a>, and <a href="https://blog.rstudio.com/2021/05/06/pkg-mgmt-admins/" target="_blank" rel="noopener noreferrer">this series of blog posts</a>.</li>
+<li>For more information on RStudio Package Manager, see the <a href="https://www.rstudio.com/products/package-manager/" target="_blank" rel="noopener noreferrer">RStudio Package Manager product page</a>.</li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

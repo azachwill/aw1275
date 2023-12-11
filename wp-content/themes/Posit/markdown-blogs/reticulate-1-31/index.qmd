@@ -1,0 +1,63 @@
+---
+title: "Reticulate 1.31"
+date: '2023-08-17'
+slug: reticulate-1-31
+tags:
+  - reticulate
+  - python
+authors:
+  - Tomasz Kalinowski
+description: Description here.
+alttext: Add alt text for header image.
+blogcategories:
+  - Open Source
+  - Products and Technology
+events: blog
+---
+
+We are pleased to announce the release of [reticulate](https://rstudio.github.io/reticulate/) version 1.31 to CRAN. This release brings updates to Python installation management, enhanced language integration, bug fixes, and general polishing.
+
+## Installation Management
+
+Reticulate now makes it easier to create, manage, and use Python virtual environments.
+
+The updated ["Order of Discovery"](https://rstudio.github.io/reticulate/articles/versions.html#order-of-discovery) used by reticulate to load the right Python installation is now more user-friendly for handling projects with virtual environments. Reticulate will automatically discover existing virtual environments in more circumstances now, for example, a "./venv" in the current working directory. 
+
+On a fresh installation, reticulate will prompt you to create a virtual environment named "r-reticulate", which will be the default Python installation reticulate discovers. This should make managing Python installations with reticulate more predictable, with fewer surprises, and require fewer explicit intervention in the form of `use_python()` calls.
+
+In addition to the "Order of Discovery" changes is an overall polishing of the virtual environment management functions like `virtualenv_create()` and `py_install()`. Given a call like:
+
+``` r
+py_install(packages = "scipy", 
+           envname = "r-scipy", 
+           python_version = ">=3.9)
+```
+
+Reticulate will automatically bootstrap the creation of an "r-scipy" virtual environment if it does not exist. In addition, it will automatically discover a suitable virtual environment starter Python installation or assist you with installing one via `reticulate::install_python()`.
+
+### Language
+
+Some thoughts are easier to express in one language over another, but being able to mix two languages together is like a mini-superpower. It's less about knowing two languages and more about knowing one super-language. The key to making this possible is finding the common ground between languages---in meaning, syntax, and parser rules.
+
+Reticulate continues to make it easier to mix languages with this release and builds on this common ground with new R methods `[` and `[<-` for Python objects. You can now pass multiple arguments, missing arguments, or sequence calls to `[`, and reticulate takes care of translating the R idioms to Python for you: an R missing value is automatically translated to a Python slice (`:`), as is an R sequence call (`:`). Whether you're working with NumPy ndarrays, Polars DataFrames, JAX or PyTorch Tensors, or any other Python object with a `__getitem__()` method, here are some R expression you can now write and the equivalent Python snippets:
+
+| R            | Python       |
+|--------------|--------------|
+| `x[, 0]`     | `x[:, 0]`    |
+| `x[-1, 1:2]` | `x[-1, 1:2]` |
+| `x[NA:-1]`   | `x[:-1]`     |
+| `x[1:NA]`    | `x[1:]`      |
+| `x[4:10:2]`  | `x[4:10:2]`  |
+| `x[NA:NA:2]` | `x[::2]`     |
+
+### Knitr engine
+
+The reticulate knitr engine `eng_python()` gains a new `jupyter_compat` option, allowing you to seamlessly switch between Jupyter and knitr as the Quarto rendering engine. This release also includes improved handling for matplotlib plots and low-level fixes that better capture output streams from Python chunks.
+
+### Polishing
+
+Numerous low-level fixes and optimization made it into the release, including new handling for the `stdout` and `stderr` buffers (output from Python will now appear on the R console in a more timely fashion), faster and more robust Python attribute access, fixed segfaults when mixing rpy2 and reticulate, improvements to threading support, and more!
+
+## Conclusion
+
+Reticulate 1.31 further enhances integration between R and Python, allowing users to easily combine the strengths of both languages and always use the most effective tools available. We are deeply grateful for the community's feedback and support and eagerly anticipate seeing the innovations that will emerge from harnessing the combined power of R and Python.

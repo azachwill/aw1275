@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-07-28">
+<meta name="description" content="Today we’re excited to announce Quarto, the next generation of R Markdown.">
+
+<title>Announcing Quarto, a new scientific and technical publishing system</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Announcing Quarto, a new scientific and technical publishing system</h1>
+
+<p class="date">2022-07-28</p>
+</header>
+
+<p>Today we’re excited to announce <a href="https://quarto.org" target="_blank">Quarto</a>, a new open-source scientific and technical publishing system. Quarto is the next generation of <a href="https://rmarkdown.rstudio.com" target="_blank">R Markdown</a>, and has been re-built from the ground up to support more languages and environments, as well as to take what we’ve learned from 10 years of R Markdown and weave it into a more complete, cohesive whole. While Quarto is a “new” system, it’s important to note that it’s highly compatible with what’s come before. Like R Markdown, Quarto is also based on <a href="https://yihui.name/knitr" target="_blank">Knitr</a> and <a href="https://pandoc.org" target="_blank">Pandoc</a>, and despite the fact that Quarto does some things differently, most existing R Markdown documents can be rendered unmodified with Quarto. Quarto also supports <a href="https://jupyter.org" target="_blank">Jupyter</a> as an alternate computational engine to Knitr, and can also render existing Jupyter notebooks unmodified.</p>
+<p>Some highlights and features of note:</p>
+<ul>
+<li>Choose from multiple computational engines (Knitr, Jupyter, and Observable) which makes it easy to use Quarto with <a href="https://quarto.org/docs/computations/r.html" target="_blank">R</a>, <a href="https://quarto.org/docs/computations/python.html" target="_blank">Python</a>, <a href="https://quarto.org/docs/computations/julia.html" target="_blank">Julia</a>, <a href="https://quarto.org/docs/computations/ojs.html" target="_blank">Javascript</a>, and many other languages.</li>
+<li>Author documents as plain text markdown or Jupyter notebooks, using a variety of tools including RStudio, VS Code, Jupyter Lab, or any notebook or text editor you like. Publish high-quality reports, presentations, websites, blogs, books, and journal articles in HTML, PDF, MS Word, ePub, and more. Write with scientific markdown extensions, including equations, citations, crossrefs, diagrams, figure panels, callouts, advanced layout, and more.</li>
+</ul>
+<p>Now is a great time to start learning Quarto as we recently released version 1.0, our first stable release after nearly two years of development. Get started by heading to <a href="https://quarto.org" target="_blank">https://quarto.org</a>.</p>
+<p>If you are a dedicated R Markdown user, fear not, R Markdown is by no means going away! See our <a href="https://quarto.org/docs/faq/rmarkdown.html" target="_blank">FAQ for R Markdown Users</a> or <a href="https://yihui.org/en/2022/04/quarto-r-markdown/" target="_blank">Yihui Xie’s blog post</a> on Quarto for additional details on the future of R Markdown.</p>
+<p>Below we’ll go into more depth on why we decided to create a new system as well as talk more about Quarto’s support for the Jupyter ecosystem.</p>
+<h2 id="why-a-new-system" class="anchored">Why a new system?</h2>
+<p>The goal of Quarto is to make the process of creating and collaborating on scientific and technical documents dramatically better. Quarto combines the functionality of R Markdown, bookdown, distill, xaringan, etc. into a single consistent system with “batteries included” that reflects everything we’ve learned from R Markdown over the past 10 years.</p>
+<p>The number of languages and runtimes used for scientific discourse is very large and the Jupyter ecosystem in particular is extraordinarily popular. Quarto is, at its core, multi-language and multi-engine, supporting Knitr, Jupyter, and Observable today and potentially other engines tomorrow.</p>
+<p>While R Markdown is fundamentally tied to R, which severely limits the number of practitioners it can benefit, Quarto is RStudio’s attempt to bring R Markdown to everyone! Unlike R Markdown, Quarto doesn’t require or depend on R. Quarto was designed to be multilingual, beginning with R, Python, Javascript, and Julia, with the idea that it will work even for languages that don’t yet exist.</p>
+<p>While creating a new system has given us the opportunity for a fresh look at things, we have also tried to be as compatible as possible with existing investments in learning, content, and code. If you know R Markdown well, you already know Quarto well, and many of your documents are already compatible with Quarto.</p>
+<h2 id="quarto-and-jupyter" class="anchored">Quarto and Jupyter</h2>
+<p>While the R community has mostly focused on plain text R Markdown for literate programming, the Python community has a very strong tradition of using Jupyter notebooks for interactive computing and the interweaving of narrative, code, and output. With Quarto we are hoping to bring what we’ve learned about publishing dynamic documents with R to the Jupyter ecosystem.</p>
+<p>One compelling benefit of Quarto supporting both Knitr and Jupyter is that you can create websites and books that include content from both systems in a single project. Whether users prefer to author in plain markdown, computational markdown, or Jupyter notebooks, they can all contribute to the same project. Similarly, code written in R, Python, Julia, and other languages can co-exist in the same project. We believe that providing a common set of tools will facilitate collaboration and make it much easier to weave together contributions from diverse participants into a cohesive whole.</p>
+<p>We also want to enable the many tools built around Jupyter to have access to state of the art scientific publishing capabilities. A great example of this is some recent work we’ve done with <a href="https://fast.ai" target="_blank">https://fast.ai</a> to help integrate Quarto with the <a href="https://nbdev.fast.ai/" target="_blank">nbdev</a> literate programming system. nbdev enables the development of Python libraries within Jupyter Notebooks, putting all code, tests and documentation in one place. In nbdev 2, library documentation written in notebooks can be used to automatically create a Quarto website for the library with a single function call.</p>
+<p>Getting more involved with Jupyter as part of working on Quarto has been a great experience. We’re excited to do more with the Jupyter community and to continue supporting the ecosystem as a sponsor of <a href="https://numfocus.org/" target="_blank">NumFOCUS</a>.</p>
+<h2 id="learning-more" class="anchored">Learning more</h2>
+<p>Here are some resources that will help you learn more about Quarto:</p>
+<ul>
+<li><a href="https://quarto.org/docs/get-started/">Get started</a> with Quarto by downloading it and following the tutorial for your tool of choice (including<a href="https://quarto.org/docs/get-started/hello/rstudio.html">RStudio</a>, <a href="https://quarto.org/docs/get-started/hello/vscode.html">VS Code</a>, and<a href="https://quarto.org/docs/get-started/hello/jupyter.html">Jupyter Lab</a>).</li>
+<li>See the <a href="https://quarto.org/docs/guide/">User Guide</a> for articles on everything you can do with Quarto, including adding <a href="https://quarto.org/docs/interactive/">interactivity</a>, using <a href="https://quarto.org/docs/extensions/">extensions</a> and <a href="https://quarto.org/docs/extensions/formats.html">custom formats</a>, and<a href="https://quarto.org/docs/publishing/">publishing</a> to a wide variety of destinations.</li>
+<li>Check out the <a href="https://quarto.org/docs/gallery/">Gallery</a> for examples of the things you can do with Quarto.</li>
+<li>Watch all of the Quarto talks from this year’s <a href="https://quarto.org/docs/blog/posts/2022-06-21-rstudio-conf-2022-quarto/">rstudio::conf</a><br>
+</li>
+<li>Report any <a href="https://github.com/quarto-dev/quarto-cli/issues">issues</a> you encounter or <a href="https://github.com/quarto-dev/quarto-cli/discussions">start a discussion</a> about using Quarto.</li>
+<li>Follow us on Twitter at <a href="https://twitter.com/quarto_pub"><span class="citation" data-cites="quarto_pub">@quarto_pub</span></a> and<a href="https://quarto.org/docs/blog/">subscribe</a> to our blog.</li>
+</ul>
+<p>We’re excited to begin the journey of making Quarto the very best scientific publishing system we can, and look forward to sharing many more developments in the months and years ahead.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

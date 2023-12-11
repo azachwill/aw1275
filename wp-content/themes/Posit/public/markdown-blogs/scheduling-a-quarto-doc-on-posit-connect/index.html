@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2023-06-27">
+<meta name="description" content="The new version of pins allows you to read and write pins with parquet, read from Connect vanity URLs, and provides support for avoiding duplicate pins.">
+
+<title>posit-blogs - Scheduling a Quarto Doc on Posit Connect</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Scheduling a Quarto Doc on Posit Connect</h1>
+
+<p class="date">2023-06-27</p>
+</header>
+
+<blockquote>
+<p class="body-md-regular body-sm-regular">
+<em>This is part 6 in our series of blog posts, “What can you do with Posit Connect?” </em>
+</p>
+<p class="body-md-regular body-sm-regular">
+<em><a href="https://posit.co/products/enterprise/connect/"><span style="color: #a2b8cb;">Posit Connect</span></a> is a publishing platform for the authenticated sharing of R and Python data products in one convenient place that brings the power of data science to your entire organization. On the last Wednesday of every month, we host a Posit Team demo and Q&amp;A session that is open to all. You can use <a href="https://pos.it/team-demo"><span style="color: #a2b8cb;">this link</span></a> to add the event to your calendar.<br> </em>
+</p>
+</blockquote>
+<p>To deliver valuable insights, you need a seamless way to get work off of your laptop and into the hands of business stakeholders. For some teams, these insights are delivered through redundant, manual reports. There’s a more efficient way to do this. We’ll show you how to deploy company branded reports and schedule updates to be emailed out to your business stakeholders every day so you can get time back in your day.</p>
+<p>With Posit Connect, it’s easy to share reports with Quarto, R Markdown, Jupyter Notebooks, and more. You can also use Connect to deploy Shiny, Dash, Bokeh, Voilà, Streamlit applications, Quarto projects, dashboards, plots, Plumber and Flask APIs, and more in one convenient place to bring the power of data science to your entire organization.</p>
+<p>This example will walk through publishing a Quarto doc with custom branding written on Posit Workbench to Posit Connect. Quarto is an open-source tool for technical publishing designed to help data scientists (using Python, R, Observable, Julia, etc.) share their analytic insights. It speeds up and simplifies the process of creating professional-quality presentations, reports, websites, and blogs in a variety of formats such as PDF, MS Word, HTML, and much more, all within the same environment used to create one’s analysis.</p>
+<p>For more information on Quarto specifically, check out <a href="https://posit.co/blog/quarto-at-work/">this recent blog post</a> which highlights ways Quarto can help automate repetitive tasks and enable teams to spend less time tweaking the appearance of their output so they can focus more time on delivering outstanding work.</p>
+<h2 id="follow-along" class="anchored">Follow-Along</h2>
+<p>Goal for our end-to-end workflow: Share insights on constantly updated data in a beautiful and automated report for stakeholders to access daily.</p>
+<p>To review our end-to-end workflow:</p>
+<ol type="1">
+<li>Gather data you will use (package download data from Posit Package Manager’s experimental API)</li>
+<li>Create Quarto Doc #1 (used to gather, process, and save your data)</li>
+<li>Publish Quarto Doc #1 to Posit Connect</li>
+<li>Schedule your Quarto Doc #1 on Posit Connect to refresh daily with latest data</li>
+<li>Pin the refreshed data to Posit Connect</li>
+<li>Create Quarto Doc #2 (your report for stakeholders)</li>
+<li>Apply a custom theme to this Quarto document to improve its appearance</li>
+<li>Publish and schedule this Quarto Doc #2 on Posit Connect</li>
+</ol>
+<p>All of the source code for this example end-to-end workflow can be found <a href="https://github.com/ryjohnson09/quarto-job-scheduling/tree/main">on GitHub</a>.</p>
+<center>
+<script src="https://fast.wistia.com/embed/medias/gmwnzbg99u.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_gmwnzbg99u videoFoam=true" style="height:100%;position:relative;width:100%">
+<div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;">
+<img src="https://fast.wistia.com/embed/medias/gmwnzbg99u/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;">
+</div>
+</div>
+</div>
+</div>
+</center>
+<h2 id="step-1-gather-the-data-you-will-use-for-your-report" class="anchored">Step 1: Gather the data you will use for your report</h2>
+<p>For this example, we extracted R package download data from within Posit Package Manager using an experimental API from within Package Manager. This API can be used to gather useful information like package download metrics.</p>
+<p>This is great for auditing purposes or for those curious about the popularity of certain packages from within your own instance of Posit Package Manager. Perhaps many of your colleagues are delivering valuable insights with a package you haven’t yet heard of.</p>
+<p>For our data, we are using <a href="https://packagemanager.posit.co/client/#/">Posit’s Public Package Manager</a>. This is a free, hosted service. In addition to providing standard mirrors of CRAN, Bioconductor, and PyPI, you can track changes over time or freeze packages to specific versions, to help ensure reproducibility and ease collaboration.</p>
+<p>This instance of Package Manager is used by hundreds of data science teams throughout the world and will serve as a good proxy for understanding R package download trends.</p>
+<p>Here’s some example data of what can be gleaned from the Package Manager API:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img1.png" class="img-fluid" alt="Posit Package Manager. How popular is 'insert package name' on our instance of Package Manager? PPM API - great for internal auditing. A table of package names, downloads, and date of downloads."></p>
+</figure>
+</div>
+<p>On the left hand, we can see the R Package Name — in this case <a href="https://ggplot2.tidyverse.org/">ggplot2</a> (based on the grammar of graphics, the idea that you can build every graph from the same components: a data set, a coordinate system, and geoms) — then the number of downloads of this package on a specific day.</p>
+<p>This data is constantly updating as people continue to download packages from Posit Package Manager. One of the goals for this workflow is to automate the data extraction and visualization steps so that our final reports will reflect the latest and greatest data - which brings us to Quarto.</p>
+<p>For this workflow, we will create two Quarto documents: 1. One for gathering, processing, and saving our data. This is often referred to as an ETL (Extract, Transform, Load) process. 2. One for generating a report with tables and plots to visualize our results.</p>
+<h2 id="step-2-create-the-first-quarto-document-etl-process" class="anchored">Step 2: Create the first Quarto document (ETL Process)</h2>
+<p>You can create Quarto documents (articles, reports, presentations, websites, blogs, books, etc.) in a variety of formats and in whatever environment is most comfortable for you - including VS Code, RStudio, JupyterLab, or any text editor. For this example, we will create our Quarto documents in the RStudio IDE on Posit Workbench.</p>
+<p><a href="https://posit.co/products/enterprise/workbench/">Posit Workbench</a> is the place for teams to collaboratively build open-source data science projects at scale. It supports R and Python, giving data scientists access to all the development environments they love, including RStudio, Jupyter Notebook, JupyterLab, and VS Code. Workbench provides enterprise-friendly features, such as centralized management, security, and commercial support. VS Code is a great all-purpose editor, and it is the IDE you will use today.</p>
+<p>In Posit Workbench, open up a new RStudio session and create an RStudio project for the workflow.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img2.png" class="img-fluid" alt="An open RStudio session."></p>
+</figure>
+</div>
+<p>In the top right corner, you can see Project: (None). Click that to select “New Project” - and you’ll have some options of where you want to place this Project. It can be in a new directory, an existing directory, or pulling a project from version control.</p>
+<p>For this example, we’ll select “New Directory,” then “New Project,” give this directory a name, and finally select “Create Project.” Anytime you open up a new project, it will open up a new RStudio session.</p>
+<p>Within your new RStudio project, the first step will be to create a blank Quarto file. Do this by clicking the “New Blank File” dropdown and selecting Quarto doc (shown in the video below).</p>
+<center>
+<script src="https://fast.wistia.com/embed/medias/yce3lkibul.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_yce3lkibul videoFoam=true" style="height:100%;position:relative;width:100%">
+<div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;">
+<img src="https://fast.wistia.com/embed/medias/yce3lkibul/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;">
+</div>
+</div>
+</div>
+</div>
+</center>
+<p>With the help of the visual markdown editor, add your first component - a YAML - to the Quarto document. YAMLs are usually found at the very top of the Quarto documents and are used to provide metadata to our documents.</p>
+<p>Add a YAML to your blank Quarto doc, by going to the “Insert” dropdown and selecting “YAML block.”</p>
+<p>Give your document a title and author. It should look like this:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"Your Report Title"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">author</span><span class="kw">:</span><span class="at"> </span><span class="st">"Your Name"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To check what this looks like initially, select the “Render” button, and by default, it’ll use HTML.</p>
+<p>Next add some R code to your Quarto document. You do this by adding an R code chunk or a cell to your document. This can be found in the “Insert” dropdown menu.</p>
+<p>Click “Insert code cell” and add an R code chunk. For this example the code we have copied and pasted will load a few packages for our workflow and is found below:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># Data science packages</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr)      <span class="co"># For API queries</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)  <span class="co"># Parsing JSON files</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pins)      <span class="co"># Save data to Posit Connect as Pin</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Next, add some text to your document that will provide the reader with background information regarding the ETL process within this Quarto doc.</p>
+<p>This is the text from the demo report:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Introduction</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>For this workflow, we'll query the API from within Posit's Public Package Manager using two custom R functions:</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`get_package_count()`</span>: Will extract the total number of downloads over the past N days (30 days by default), for a certain R package on <span class="co">[</span><span class="ot">Posit's Public Package Manager</span><span class="co">](https://packagemanager.posit.co/client/#/)</span>.</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`get_package_count_history()`</span>: Will extract the total number of package downloads per day from a defined start date. You can provide more than one package name (as a vector).</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2 id="step-3-publish-the-quarto-doc-to-posit-connect" class="anchored">Step 3: Publish the Quarto doc to Posit Connect</h2>
+<p>To publish the Quarto document, you’ll see a blue button at the top of your screen. This is the publishing button. Click on this and choose Posit Connect to publish this document with the source code, which is really important for job scheduling.</p>
+<p>Publish the single <code>ETL.qmd</code> file, which is what you see on the left-hand side below:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img4.png" class="img-fluid" alt="Publishing ETL.qmd from the Publish window in RStudio, publishing the document to a Posit Connect account."></p>
+</figure>
+</div>
+<p>[If this is your first time connecting your RStudio IDE to your Posit Connect instance and need help, you can view <a href="https://docs.posit.co/how-to-guides/pre-tasks/connect-account/">instructions for that here</a>.]</p>
+<p>During the publishing process, your environment is captured, including what R packages you use, what versions of those packages, what R version, what Quarto version, etc., and is sent to Posit Connect to replicate that environment and then deploys this Quarto document.</p>
+<h2 id="step-4-pin-your-results-to-posit-connect" class="anchored">Step 4: Pin your results to Posit Connect</h2>
+<p>When data needs to be reused across multiple projects or pieces of content, it is best if that data is stored somewhere centrally accessible by multiple people where the latest version is always available. With the pins package, it’s easier than ever to have repeatable data.</p>
+<p>Pins is an open-source package that allows you to publish and share R or Python objects (data, models, etc.) across projects and with your colleagues.</p>
+<ul>
+<li><a href="https://pins.rstudio.com/">pins for R</a></li>
+<li><a href="https://rstudio.github.io/pins-python/intro.html">pins for Python</a></li>
+</ul>
+<p>To use pins for this project, first register your pin board - which in this case is Posit Connect.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Connect to Posit Connect</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>board <span class="ot">&lt;-</span> <span class="fu">board_connect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The below code will take the two data frames <code>package_counts_30</code> and <code>package_daily_counts_30</code> and pin them to Posit Connect, making them accessible to other content.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Write package_counts_30 to Posit Connect</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pin_write</span>(board, package_counts_30)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Write package_daily_counts_30 to Posit Connect</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">pin_write</span>(board, package_daily_counts_30)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This is an example below of the pinned datasets on Posit Connect. There is an R code snippet included in the pin that gives users instructions for how to read this pin into their own workflows.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img5.png" class="img-fluid" alt="A pin containing the download data for ggplot2 in Posit Connect. The access controls are open to allow Specific groups to view."></p>
+</figure>
+</div>
+<h2 id="step-5-schedule-your-etl-report-to-refresh-daily" class="anchored">Step 5: Schedule your ETL report to refresh daily</h2>
+<p>As a publisher, you have the ability to schedule code to run on a recurring schedule. The package download data for this example updates daily, so you could set this document to run every single morning at 7 AM (or whenever you wish) to keep it updated with the latest data.</p>
+<p>To do this, click on the schedule tab in the right side options. Select the box to schedule output for default and choose the time that you want this to run. This way the pinned data sets will remain updated without any manual intervention.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img6.png" class="img-fluid" alt="A pin containing the download data for ggplot2 in Posit Connect. The access controls are open to allow Specific groups to view." width="200"></p>
+</figure>
+</div>
+<p>You’ll also see two boxes at the bottom. The first one means that the report you see on your left will be updated and republished every time the document runs. The second box is to send an email to users letting them know the document was rerun.</p>
+<h2 id="step-6-create-your-second-quarto-document-report-for-stakeholders" class="anchored">Step 6: Create your second Quarto document (Report for Stakeholders)</h2>
+<p>Go back into Posit Workbench and create another Quarto report. Select “New Blank File” and create a YAML just like we did before in Step 2.</p>
+<p>Add a title and an author. Then, in a separate code cell, copy in some code to load the R packages.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Add text to introduce your readers to the report and then include code to read in that pinned data from above. This example looks at the download data over the last 30 days to visualize trends.</p>
+<p>When you viewed the pin above, it included an R code snippet to draw that data into your workflows.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Connect to Posit Connect </span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>board <span class="ot">&lt;-</span> <span class="fu">board_connect</span>(<span class="at">auth =</span> <span class="st">"envvar"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Read pin (total downloads)</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>package_counts_30 <span class="ot">&lt;-</span> <span class="fu">pin_read</span>(board, <span class="st">"ryan/package_counts_30"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Read pin (download per day)</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>package_daily_counts_30 <span class="ot">&lt;-</span> <span class="fu">pin_read</span>(board, <span class="st">"ryan/package_daily_counts_30"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Add two additional code chunks: 1. To print the raw data, which will be a data frame 2. Create a plot using the ggplot2 package</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create gt table</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>package_counts_30 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create plot</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(package_daily_counts_30, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as_date</span>(date), <span class="at">y =</span> downloads, <span class="at">color =</span> package)) <span class="sc">+</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">linewidth =</span> <span class="fl">1.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Render this report and you’ll see that our final HTML is very boring, but provides the information we need and you can see some of the trends of the package downloads over time.</p>
+<h2 id="step-7-add-a-custom-theme-to-your-quarto-doc" class="anchored">Step 7: Add a custom theme to your Quarto doc</h2>
+<p>When sharing a report or any visualization with your colleagues or leadership, you can improve the appearance of your deliverable with custom branding.</p>
+<p>For this example, go back into Posit Workbench and download the custom Posit format that Ryan Johnson created and made available on GitHub.</p>
+<p>If you’re curious about how to create your own theme or template, the Quarto website has great <a href="https://quarto.org/docs/output-formats/html-themes.html#custom-themes">documentation for this</a>.</p>
+<p>To use this Posit Quarto Theme, copy the below into your Terminal and hit Enter:</p>
+<pre><code>quarto use template rstudio/posit_theme</code></pre>
+<p>Follow along with the instructions. IT will ask if you trust the author and to give the directory a name (in this case “posit-theme”). If you look in your files directory in the right-hand corner of the RStudio IDE, you will see the posit-theme folder.</p>
+<p>This new directory includes a template quarto document, <code>posit-theme.qmd</code> and an example HTML output file, called <code>template.html</code>.</p>
+<p>This is what the template document will look like:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img7.png" class="img-fluid" alt="Quarto - Posit Theme document with an Introduction and Example Content."></p>
+</figure>
+</div>
+<p>To use this template for your report, open up the “posit-theme.qmd” and delete the placeholder text. Come back to your initial “boring report” and copy the contents into your “posit-theme.qmd” report.</p>
+<p>When you render this document, you will see that it’s starting to look a lot better. However, it includes a lot of code that your business stakeholders may not need to see.</p>
+<p>There are some further opportunities to improve the look of this report as well. For example, the plot still uses the generic ggplot2 colors.</p>
+<p>To improve the look of this Quarto document, you can add a custom color palette using a package called <a href="https://r-graph-gallery.com/38-rcolorbrewers-palettes.html">rcolorbrewer</a>.</p>
+<p>You’ll need to load that package into your environment and add your own color palette directly underneath.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install Packages</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pins)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Define Posit Color/Theme</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>posit_blue <span class="ot">&lt;-</span> <span class="st">"#447099"</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>posit_orange <span class="ot">&lt;-</span> <span class="st">"#EE6331"</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>posit_gray <span class="ot">&lt;-</span> <span class="st">"#404041"</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>posit_teal <span class="ot">&lt;-</span> <span class="st">"#419599"</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>posit_green <span class="ot">&lt;-</span> <span class="st">"#72994E"</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>posit_burgundy <span class="ot">&lt;-</span> <span class="st">"#9A4665"</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>posit_colors <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="at">colors =</span> <span class="fu">c</span>(posit_gray, posit_blue, posit_teal, posit_green, </span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>                                            posit_burgundy, posit_orange))(<span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To improve the printed raw data frame, convert the printed text output to a table and add some custom themed coloring. To do this, you will load and use a package called <a href="https://gt.rstudio.com/">gt</a> (for making wonderful-looking tables).</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create gt table</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>package_counts_30 <span class="sc">|&gt;</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(<span class="fu">desc</span>(Downloads)) <span class="sc">|&gt;</span> </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(Package, Downloads) <span class="sc">|&gt;</span> </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_integer</span>(Downloads) <span class="sc">|&gt;</span> </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Package =</span> <span class="fu">md</span>(<span class="st">"**Package**"</span>),</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Downloads =</span> <span class="fu">md</span>(<span class="st">"**Downloads**"</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Package Downloads"</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Total downloads over past 30 days"</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data_color</span>(</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> Downloads,</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">palette =</span> posit_colors</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img8.png" class="img-fluid" alt="Package Downloads - Total downloads over past 30 days. Each package has their associated downloads number with a different color."></p>
+</figure>
+</div>
+<p>To change the look of your ggplot, you will include a custom theme as well. You can also tweak the look by adding a minimal theme and customize the title and labels.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create plot</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(package_daily_counts_30, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as_date</span>(date), <span class="at">y =</span> downloads, <span class="at">color =</span> package)) <span class="sc">+</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">linewidth =</span> <span class="fl">1.3</span>) <span class="sc">+</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Package Download Trends"</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Past 30 days"</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">""</span>,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Daily Downloads"</span>,</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Package"</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>(<span class="at">date_labels =</span> <span class="st">"%b %Y"</span>) <span class="sc">+</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_number</span>(<span class="at">big.mark =</span> <span class="st">","</span>)) <span class="sc">+</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> posit_colors)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img9.png" class="img-fluid" alt="Line plot over time from May 2023 to June 2023 of daily downloads for dplyr, ggplot2, and Shiny."></p>
+</figure>
+</div>
+<p>Since many of the viewers of this document won’t be interested in the code, you can also hide all of the code and any kind of messages for the final HTML output.</p>
+<p>To do this, go back to very top of the document in your YAML and update to match the following:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"Quarto - Posit Theme"</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">posit-html</span><span class="kw">:</span><span class="at"> default</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">author</span><span class="kw">:</span><span class="at"> Ryan Johnson</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> last-modified</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="fu">execute</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">echo</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">warning</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The code chunk options under execute will apply to all the code chunks in the document. “echo: false” will hide all the code from the output and “warning: false” will hide any warning messages.</p>
+<h2 id="step-8-publish-your-custom-branded-report-to-posit-connect" class="anchored">Step 8: Publish your custom branded report to Posit Connect</h2>
+<p>Now that you have this final report, publish to Posit Connect as done in Step 3 by clicking the blue publish button within Posit Workbench. Publish this document with the source code to allow it to run on a schedule.</p>
+<p>Ensure this Quarto document is scheduled to rerun so that it reads in that new pinned dataset (which is being updated every single day at 7 AM) and that it updates this report so that these numbers reflect the new package data every single day.</p>
+<p>Set it to rerun daily at noon every single day (or whenever you choose) and go through the same workflow as shared in Step 5.</p>
+<p>Since this Quarto document is the finalized report, you will also check the box to send an email notification to your colleagues to let them know the report was run. You have the option to send this email to all collaborators, all viewers, or specific recipients as shown below.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="images/img10.png" class="img-fluid" alt="A checkbox saying send email after update."></p>
+</figure>
+</div>
+<p>With that, you have successfully scheduled a Quarto document to Posit Connect - allowing you to share insights on constantly updated data in a beautiful report for stakeholders to access daily with the latest data.</p>
+<h2 id="learn-more-about-deploying-data-products-to-connect" class="anchored">Learn more about deploying data products to Connect</h2>
+<p>This example covered publishing and scheduling a Quarto document on Posit Connect, but you have many options when it comes to data products that you can deploy to Connect.</p>
+<p>We’d love to have you join us at one of our monthly Posit Team Demos, where we walk through a different end-to-end data science workflow each month. They are on the last Wednesday of every month at 11 am ET on YouTube. You can add the event to your calendar here: <a href="https://pos.it/team-demo">pos.it/team-demo</a></p>
+<p>If you have any questions and would like to talk with our team, you can <a href="https://posit.co/schedule-a-call/?booking_calendar__c=RSC_Demo">schedule a time to chat here</a>.</p>
+<p>Interested in learning more about data workflows in Python or R? Join us at <a href="https://posit.co/conference/">posit::conf(2023)</a>! We have an amazing array of <a href="https://pos.it/conf-talks">workshops</a> and talks lined up. If you found this post interesting, check out these two options:</p>
+<ul>
+<li><a href="https://youtu.be/hiZQmnx8RXo">Data Science Workflows with Posit Tools — R Focus</a> led by Ryan Johnson and Katie Masiello: Ryan and Katie will discuss ways to improve your data science workflows! During the course, we will review packages for data validation, alerting, modeling, and more.</li>
+<li><a href="https://youtu.be/kq0b8cPttTc">Data Science Workflows with Posit Tools — Python Focus</a> led by Gagandeep Singh and Sam Edwardes: During the course, Gagandeep and Sam will review packages for data validation, alerting, modeling, and more.</li>
+</ul>
+<p><a href="https://reg.conf.posit.co/flow/posit/positconf23/reg/login">Register today</a>!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+
+
+
+</body></html>

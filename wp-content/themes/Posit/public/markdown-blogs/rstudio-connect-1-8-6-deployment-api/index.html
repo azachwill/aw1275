@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2020-12-16">
+
+<title>RStudio Connect 1.8.6 - Deployment API</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio Connect 1.8.6 - Deployment API</h1>
+
+<p class="date">2020-12-16</p>
+</header>
+
+<h2 id="automate-deployment-with-the-rstudio-connect-server-api" class="anchored">Automate deployment with the RStudio Connect Server API</h2>
+<p>With RStudio Connect, your team can publish straight from the desktop or server IDE with the push of a button or orchestrate a fully customized deployment pipeline. While push-button publishing is powerful and convenient, it’s not the ideal solution for all organizations. Data science teams need tools that can help traditional IT administrators understand how to provide sophisticated oversight for the deployment and management of data science artifacts. RStudio Connect aims to be the solution for those challenges.</p>
+<p>This API update makes programmatic deployment workflows more useful by introducing new content management options like the ability to set environment variables, custom URL paths, and detailed access permissions on first publish. We’ve made many of the internal RStudio Connect Server API capabilities public with this release, so there should be something new and exciting for all the analytic administrators, deployment engineers, and DevOps-minded folks to enjoy.</p>
+<h3 id="public-apis-for-content-deployment" class="anchored">Public APIs for Content Deployment</h3>
+<p>Programmatic deployment workflows are now fully supported with the release of <code>/v1</code> API endpoints (previously <code>/v1/experimental</code>). The pattern for basic deployment is unchanged and can be used for any type of content supported by RStudio Connect.</p>
+<p>Content deployment can be customized, but follows a general framework:</p>
+<ol type="1">
+<li>Create a new content item (<code>POST /v1/content</code>) or identify an existing content item to update.</li>
+<li>Create a bundle capturing your code and its dependencies.</li>
+<li>Upload the bundle archive to RStudio Connect (<code>POST /v1/content/{guid}/bundles</code>).</li>
+<li><strong>New!</strong> Optionally, set environment variables that the content needs at runtime (<code>PATCH /v1/content/{guid}/environment</code>).</li>
+<li>Deploy (activate) that bundle (<code>POST /v1/content/{guid}/deploy</code>) and monitor its progress.</li>
+<li>Poll for updates to a task; obtain the latest information about a dispatched operation (<code>GET /v1/tasks/{id}</code>).</li>
+<li><strong>New!</strong> Optionally, add viewer groups or collaborators (<code>POST /v1/content/{guid}/permissions</code>), set a custom vanity URL path (<code>PUT /v1/content/{guid}/vanity</code>), and add tags for organization and discoverability (<code>POST /v1/content/{guid}/tags</code>).</li>
+</ol>
+<p>To learn more, follow along with basic deployment scenarios and example code in the RStudio Connect API Cookbook:</p>
+<ul>
+<li><a href="https://docs.rstudio.com/connect/1.8.6/cookbook/deploying/">Deploying Content</a></li>
+<li><a href="https://docs.rstudio.com/connect/1.8.6/cookbook/content/">Managing Content</a></li>
+<li><a href="https://docs.rstudio.com/connect/1.8.6/cookbook/organizing/">Organizing Content</a></li>
+<li><a href="https://docs.rstudio.com/connect/1.8.6/cookbook/sharing/">Sharing Content</a></li>
+</ul>
+<h3 id="new-environment-variable-management-api" class="anchored">New Environment Variable Management API</h3>
+<p>When developing content for RStudio Connect, publishers should never place secrets (keys, tokens, passwords, etc.) in the code itself. Sensitive information should be protected through the use of environment variables. These variables have traditionally required configuration through the RStudio Connect dashboard, a method which can result in a failed initial deployment.</p>
+<p>The new API can be used to configure environment variables for a specified content item programmatically:</p>
+<ul>
+<li>Set environment variables with <code>PUT /v1/content/{guid}/environment</code> (removes any existing environment variables)</li>
+<li>Add, update, or delete environment variables with <code>PATCH /v1/content/{guid}/environment</code></li>
+</ul>
+<p>Read more about setting environment variables programmatically in the <a href="https://docs.rstudio.com/connect/1.8.6/cookbook/deploying/#setting-environment-variables">RStudio Connect API Cookbook</a>.</p>
+<h3 id="redeployments" class="anchored">Redeployments</h3>
+<p>Based on feedback we received from users of the experimental deployment APIs, improvements have been made to the workflow for updating existing content items. Redeployment requires that an API client provide the correct unique content identifier for the item you want to update. For convenience, the RStudio Connect API now provides a method for retrieving that content identifier using the combination of content name and owner.</p>
+<p>Read more about deploying new versions of content in the <a href="https://docs.rstudio.com/connect/1.8.6/cookbook/deploying/#deploying-versions/">RStudio Connect API Cookbook</a>.</p>
+<h3 id="advanced-deployments" class="anchored">Advanced Deployments</h3>
+<p>The experimental bundle management APIs for moving content items from one Connect server to another are now fully supported <code>v1</code> workflows as well. In situations where your organization has more than one RStudio Connect server for different stages of development, this pattern can be used to automate the promotion content (e.g., from staging to production). Once content exists on the production server, you may want to reduce the risk of pushing updates to it by adopting a blue-green deployment strategy. Blue-green is a system for creating separation between deployment and release by maintaining two copies of a content item in production (a blue and a green). The new <code>/vanity</code> endpoint can be used to assign a custom URL path to one version while making changes to the other, swapping the URL assignment whenever you want to redirect user traffic.</p>
+<p>Read more about advanced deployment patterns in the <a href="https://docs.rstudio.com/connect/1.8.6/cookbook/promoting/">RStudio Connect API Cookbook</a>.</p>
+<h3 id="a-note-about-experimental-endpoints" class="anchored">A note about <code>/experimental</code> endpoints</h3>
+<p>Those who are familiar with the existing content deployment API patterns may have questions about what these new API changes mean. Questions like,</p>
+<p><em>“I already built deployment pipelines using the experimental APIs – will everything break?”</em></p>
+<p><strong>Your scripts will not break upon upgrading to 1.8.6.</strong> The <code>/v1/experimental</code> endpoints for content deployment are now labeled as <strong>“Deprecated”</strong>, but they have not been removed. In most cases the update from experimental to <code>/v1</code> should not require extensive changes. Please refer to the API documentation site to learn more about our <a href="https://docs.rstudio.com/connect/1.8.6/api/#overview--versioning-of-the-api">API versioning and deprecation policies</a> .</p>
+<h3 align="center" class="anchored">
+<a href="https://rstudio.chilipiper.com/book/rsc-demo">See RStudio Connect in Action</a>
+</h3>
+<blockquote>
+<h4 id="rstudio-connect-1.8.6" class="anchored">RStudio Connect 1.8.6</h4>
+<ul>
+<li>Return to the general announcement post to learn about more features and <a href="https://blog.rstudio.com/2020/12/16/rstudio-connect-1-8-6/">updates here</a>.</li>
+<li>For upgrade planning notes, continue reading <a href="https://blog.rstudio.com/2020/12/16/rstudio-connect-1-8-6-admin-digest/">more here</a>.</li>
+</ul>
+</blockquote>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

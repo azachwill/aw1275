@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2018-10-16">
+
+<title>RStudio 1.2 Preview: Stan</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">RStudio 1.2 Preview: Stan</h1>
+
+<p class="date">2018-10-16</p>
+</header>
+
+<p><img src="stan_logo.png" width="100px" align="right" style="margin-left: 16px;" alt="Stan Logo"></p>
+<p>We previously discussed improved support in RStudio v1.2 for <a href="https://blog.rstudio.com/2018/10/02/rstudio-1-2-preview-sql/">SQL</a>, <a href="https://blog.rstudio.com/2018/10/05/r2d3-r-interface-to-d3-visualizations/">D3</a>, <a href="https://blog.rstudio.com/2018/10/09/rstudio-1-2-preview-reticulated-python/">Python</a>, and <a href="https://blog.rstudio.com/2018/10/11/rstudio-1-2-preview-cpp/">C/C++</a>. Today, we’re excited to announce improved support for the <a href="http://mc-stan.org/">Stan programming language</a>. The Stan programming language makes it possible for researchers and analysts to write high-performance and scalable statistical models.</p>
+<blockquote>
+<p>Stan® is a state-of-the-art platform for statistical modeling and high-performance statistical computation. Thousands of users rely on Stan for statistical modeling, data analysis, and prediction in the social, biological, and physical sciences, engineering, and business.</p>
+</blockquote>
+<p>With RStudio v1.2, we now provide:</p>
+<ul>
+<li><p>Improved, context-aware autocompletion for Stan files and chunks</p></li>
+<li><p>A document outline, which allows for easy navigation between Stan code blocks</p></li>
+<li><p>Inline diagnostics, which help to find issues while you develop your Stan model</p></li>
+<li><p>The ability to interrupt Stan parallel workers launched within the IDE</p></li>
+</ul>
+<p>Together, these features bring the editing experience in Stan programs in-line with what you’re familiar with in R.</p>
+<h2 id="autocompletion" class="anchored">Autocompletion</h2>
+<p>RStudio provides autocompletion results for Stan functions, drawing from the set of pre-defined Stan keywords and functions. The same autocompletion features you might be familiar with in R, like fuzzy matching, are now also available in Stan programs.</p>
+<p><img src="autocomplete.png" width="720"></p>
+<p>As with R, RStudio will also provide a small tooltip describing the arguments accepted by a particular function.</p>
+<p><img src="autocomplete-2.png" width="722"></p>
+<h2 id="document-outline" class="anchored">Document Outline</h2>
+<p>The document outline allows for easy navigation between Stan blocks. This can be especially useful as your model definition grows in size, and you need to quickly reference the different blocks used in your program.</p>
+<p><img src="document-outline.png" width="720"></p>
+<h2 id="diagnostics" class="anchored">Diagnostics</h2>
+<p>RStudio now uses the Stan parser to provide inline diagnostics, and will report any problems discovered as you prepare your model.</p>
+<p><img src="diagnostics.png" width="717"></p>
+<p>If the Stan compiler discovers any issues in your model, RStudio’s diagnostics will show you exactly where those issues live so you can fix them quickly and easily.</p>
+<h2 id="worker-interruption" class="anchored">Worker Interruption</h2>
+<p>One aspect that had previously made working with Stan in RStudio frustrating was the inability to interrupt parallel Stan workers. This implied that attempts to fit a computationally expensive model could not be interrupted, and the only remedy previously was to restart the IDE or forcefully shut down the workers through another mechanism.</p>
+<p>We’re very happy to share that this limitation has been lifted with RStudio v1.2. Now, when fitting a Stan model with parallel workers, you can interrupt the workers as you would any regular R code – either use the Escape key, or press the Stop button in the Console pane.</p>
+<h2 id="try-it-out" class="anchored">Try it Out</h2>
+<p>With the improvements to Stan integration coming in RStudio v1.2, getting started with Stan has never been easier. If you’d like to get more familiar with Stan, we think these resources will be helpful:</p>
+<ul>
+<li>Stan website: http://mc-stan.org/</li>
+<li>RStan “Getting Started” guide: https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started</li>
+<li>Tutorials and Examples using Stan: http://mc-stan.org/users/documentation/tutorials</li>
+</ul>
+<p>You can download the RStudio v1.2 Preview Release at <a href="https://www.rstudio.com/products/rstudio/download/preview/" class="uri">https://www.rstudio.com/products/rstudio/download/preview/</a>. If you have any questions or comments, please get in touch with us on the <a href="https://community.rstudio.com/c/rstudio-ide">community forums</a>.</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

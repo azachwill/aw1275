@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-02-03">
+<meta name="description" content="With RStudio Team, data scientists can build and share their work within an integrated architecture.">
+
+<title>Build and Share Jupyter Notebooks on RStudio Team</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Build and Share Jupyter Notebooks on RStudio Team</h1>
+
+<p class="date">2022-02-03</p>
+</header>
+
+<p>Photo by <a href="https://unsplash.com/@jayphoto?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Justin W</a> on <a href="https://unsplash.com/?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></p>
+<p>Jupyter Notebooks are interactive documents for code, outputs, and text. However, they’re often stuck in data scientists’ local computing environments. Collaborating can be difficult and sharing can be tedious. To live up to their fullest potential, data science teams need a way to scale their development securely and efficiently — while providing stakeholders easy access to their output and visualizations.</p>
+<p><a href="https://www.rstudio.com/products/team/" target="_blank">RStudio Team</a>, made up of RStudio Workbench, RStudio Connect, and RStudio Package Manager, brings everything together to help data scientists create, reproduce, and share insights from their Jupyter Notebooks.</p>
+<p>Let’s dive into a real-life example by exploring data from <a href="https://cneos.jpl.nasa.gov/about/" target="_blank">NASA’s Center for Near Earth Objects (NEOs)</a>. Daniel Petzold walks us through his data analysis and reporting. Want to explore the report yourself? Check out the published version on <a href="https://colorado.rstudio.com/rsc/space-tracker/" target="_blank">RStudio Connect</a> and the code on <a href="https://github.com/danielpetzold/space-tracker" target="_blank">Github</a>.</p>
+<h2 id="analyze-and-visualize-data-within-a-maintained-environment" class="anchored">Analyze and Visualize Data Within a Maintained Environment</h2>
+<p>On <a href="https://www.rstudio.com/products/workbench/" target="_blank">RStudio Workbench</a>, you have a choice of editors: the RStudio IDE, JupyterLab, Jupyter Notebook, or VS Code. Choose your preference. From here, you can explore your dataset, embed HTML directly in your document, create visualizations, and more. Watch Daniel walk through his exploratory analysis on JupyterLab:</p>
+<script src="https://fast.wistia.com/embed/medias/90ce73qe52.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:62.5% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_90ce73qe52 videoFoam=true" style="height:100%;position:relative;width:100%">
+<div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;">
+<img src="https://fast.wistia.com/embed/medias/90ce73qe52/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;">
+</div>
+</div>
+</div>
+</div>
+<h2 id="publish-directly-to-your-content-hub" class="anchored">Publish Directly to Your Content Hub</h2>
+<p>Now that you’ve run your analyses and created insightful visualizations, you want to be able to share them with your team. RStudio Workbench allows you to publish to <a href="https://www.rstudio.com/products/connect/" target="_blank">RStudio Connect</a>, the content platform from RStudio.</p>
+<p>You have multiple options: push-button deployment from Jupyter Notebook or <a href="https://docs.rstudio.com/how-to-guides/users/basic/publish-jupyter-notebook/" target="_blank">using terminal commands</a> from JupyterLab. Daniel shows us the push-button approach through Jupyter Notebook:</p>
+<script src="https://fast.wistia.com/embed/medias/5il9gez25g.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:62.5% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_5il9gez25g videoFoam=true" style="height:100%;position:relative;width:100%">
+<div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;">
+<img src="https://fast.wistia.com/embed/medias/5il9gez25g/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;">
+</div>
+</div>
+</div>
+</div>
+<h2 id="share-with-your-stakeholders" class="anchored">Share With Your Stakeholders</h2>
+<p>It’s not enough to publish your work. Once on RStudio Connect, you can share with end-users. Make your analysis accessible to specific users or more generally with different authentication measures. In addition, you can schedule the document to run at a certain time and send out an email with refreshed data.</p>
+<p>See these functionalities from Daniel’s standpoint:</p>
+<script src="https://fast.wistia.com/embed/medias/nd7yubhla5.jsonp" async=""></script>
+<script src="https://fast.wistia.com/assets/external/E-v1.js" async=""></script>
+<div class="wistia_responsive_padding" style="padding:62.5% 0 0 0;position:relative;">
+<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+<div class="wistia_embed wistia_async_nd7yubhla5 videoFoam=true" style="height:100%;position:relative;width:100%">
+<div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;">
+<img src="https://fast.wistia.com/embed/medias/nd7yubhla5/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;">
+</div>
+</div>
+</div>
+</div>
+<h2 id="learn-more" class="anchored">Learn More</h2>
+<p>With RStudio Team, you can develop, collaborate, and share within an integrated architecture. Learn more about <a href="https://www.rstudio.com/products/team/" target="_blank">RStudio Team</a>.</p>
+<ul>
+<li>Watch Daniel’s full walkthrough on <a href="https://youtu.be/x8Wf8qXAGDI" target="_blank">YouTube</a>.</li>
+<li>Learn more about using Python with RStudio on our <a href="https://solutions.rstudio.com/python/" target="_blank">Solutions page</a>.</li>
+<li>Want another example of RStudio Team? Watch <a href="https://www.youtube.com/watch?v=VrF9EdgiSy8" target="_blank">RStudio Team Demo | Build &amp; Share Data Products Like The World’s Leading Companies</a>on YouTube.</li>
+</ul>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>

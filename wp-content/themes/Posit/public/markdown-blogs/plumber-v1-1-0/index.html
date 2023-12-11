@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-03-29">
+<meta name="description" content="{plumber} v1.1.0 is now on CRAN! In this post, we’ll highlight some of the most exciting new features in both the v1.1.0 and v1.0.0 releases, including: parallel endpoint execution, a tidy interface, and request body parsing">
+
+<title>plumber 1.1.0</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">plumber 1.1.0</h1>
+
+<p class="date">2021-03-29</p>
+</header>
+
+<p>I am happy to announce that <code>{plumber}</code> v1.1.0 is now on CRAN! Install it with:</p>
+<pre><code>install.packages("plumber")</code></pre>
+<p>By the way, <code>{plumber}</code> v1.0.0 was released about 6 months ago, but we didn’t make a full announcement, so here we’ll highlight features and improvements in both v1.0.0 and v1.1.0. At a high level, this includes:</p>
+<ul>
+<li><a href="#parallel-exec">parallel endpoint execution</a>,</li>
+<li>a <a href="#tidy-interface"><em>tidy</em> interface</a> for programmatic development,</li>
+<li><a href="#body-parsing">request body parsing</a>,</li>
+<li>redirect requests to <a href="#trailing-slash">include trailing slash</a>, and</li>
+<li>the ability to <a href="#custom">extend plumber</a> by adding additional request body parsers, response serializers, and visual documentation representations.</li>
+</ul>
+<p>In addition to the new features, <code>{plumber}</code> now has an official <a href="https://rstudio.com/resources/cheatsheets">RStudio cheat sheet</a>, a new <a href="https://swag.rstudio.com/product/plumber-sticker/15">hex logo</a>, and uses <a href="https://pkgdown.r-lib.org/"><code>{pkgdown}</code></a> to construct its website <a href="https://www.rplumber.io/">https://www.rplumber.io/</a>.</p>
+<p><a href="https://github.com/rstudio/cheatsheets/blob/master/plumber.pdf"><img src="https://raw.githubusercontent.com/rstudio/cheatsheets/master/pngs/thumbnails/plumber-cheatsheet-thumbs.png" width="100%"></a></p>
+<h1 id="new-features">New features and improvements</h1>
+<h2 id="parallel-exec" class="anchored">Parallel execution</h2>
+<p><code>{plumber}</code> now has the ability to execute endpoints asynchronously via the <code>{promises}</code> and <code>{future}</code> packages. By wrapping slow endpoint code in <code>promises::future_promise()</code>, the main R session is able to execute multiple concurrent requests much more efficiently (compared to regular execution). For example, suppose we have the plumber API with endpoints:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /slow/&lt;k&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>() {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  promises<span class="sc">::</span><span class="fu">future_promise</span>({</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slow_calc</span>()</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /fast/&lt;k&gt;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>() {</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fast_calc</span>()</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now let’s imagine a scenario where 6 <code>/slow/&lt;k&gt;</code> requests are received before a <code>/fast/&lt;k&gt;</code> request. Since the <code>slow_calc()</code> has been wrapped in <code>promises::future_promise()</code>, the <code>fast_calc()</code> is able to execute immediately, even when limited <code>{future}</code> workers are available. The figure below depicts a timeline of what happens in this scenario when 2 <code>{future}</code> workers are available. Note that without async execution, the <code>/fast/&lt;k&gt;</code> would take 60 seconds to complete, but with <code>promises::future_promise()</code> it completes almost immediately! 🎉</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://rstudio.github.io/promises/articles/future_promise.html"><img src="future_promise.png" class="img-fluid"></a></p>
+<p></p><figcaption>Using <code>future_promise()</code> allows the main R session to be free while waiting for a future worker to become available</figcaption><p></p>
+</figure>
+</div>
+<p>See the article on <a href="https://rstudio.github.io/promises/articles/future_promise.html"><code>promises::future_promise()</code></a> to learn more.</p>
+<h2 id="tidy-interface" class="anchored">Tidy interface</h2>
+<p>A brand new <a href="https://www.rplumber.io/reference/index.html?q=pr_">tidy interface</a> to create plumber API’s with a more natural, pipe-able, functional programming approach:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pr</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add a route</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pr_get</span>(<span class="st">"/echo"</span>, <span class="cf">function</span>(<span class="at">msg =</span> <span class="st">"(not provided)"</span>) {</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">msg =</span> msg)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  }) <span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Run the API</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pr_run</span>(<span class="at">port =</span> <span class="dv">8000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2 id="plumber-tag" class="anchored"><code>#* @plumber</code> tag</h2>
+<p>When <code>plumb()</code>ing a file, there are only a limited set of tags that <code>{plumber}</code> knows how to handle. To avoid having to create an <code>./endpoint.R</code> file, you can access your <code>{plumber}</code> API when <code>plumb()</code>ing your file by using the <code>@plumber</code> tag.</p>
+<p>The <code>@plumber</code> tag will immediately execute the function definition right after the tag.</p>
+<p>In the example below, we show how you can mount another API using the <code>@plumber</code> tag in addition to defining a regular <code>GET</code> route to <code>/echo</code>. Mounting a router (and many other API alterations) is not possible when <code>plumb()</code>ing a file unless you use the <code>#* @plumber</code> tag.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /echo</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(<span class="at">msg =</span> <span class="st">"(not provided)"</span>) {</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">msg =</span> msg)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#* @plumber</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(pr) {</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  mnt <span class="ot">&lt;-</span> <span class="fu">plumb</span>(<span class="st">"plumber_mount.R"</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  pr <span class="sc">%&gt;%</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pr_mount</span>(<span class="st">"/mount_path/"</span>, mnt)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>
+Tidy API
+</summary>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pr</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pr_get</span>(<span class="st">"/echo"</span>, <span class="cf">function</span>(<span class="at">msg =</span> <span class="st">"(not provided)"</span>) {</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">msg =</span> msg)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  }) <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pr_mount</span>(<span class="st">"/mount_path/"</span>, <span class="fu">plumb</span>(<span class="st">"plumber_mount.R"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<h2 id="body-parsing" class="anchored">Request body parsing</h2>
+<p>Prior to <code>{plumber}</code> v1.0.0, <code>{plumber}</code> had a very limited set of body parsers (JSON and form), but we’ve added numerous parsers including: text, octet-stream, multipart forms, CSV, TSV, RDS, YAML, Feather, and <a href="https://www.rplumber.io/reference/parsers.html">more</a>.</p>
+<p>No additional effort is required to use the JSON, form, text, octet-stream, and multipart form body parsers; however, if you’d like to use any of the other parsers, you’ll want to know about the new <code>#* @parser</code> tag. Be aware that when adding this tag to an endpoint, it’ll overwrite the default set of body parsers. So, for example, if you <em>only</em> want support for parsing TSV information, then do:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* @parser tsv</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#* @post /tsv_to_json</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(req, res) {</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  req<span class="sc">$</span>body</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>
+Tidy API
+</summary>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pr</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pr_post</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"/tsv_to_json"</span>, </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">function</span>(req, res) { req<span class="sc">$</span>body },</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">parsers =</span> <span class="st">"tsv"</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<h2 id="new-response-serializers" class="anchored">New response serializers</h2>
+<p>Like the request body parsers, a whole new set of <a href="https://www.rplumber.io/reference/serializers.html">response serializers</a> have been added. These include CSV, TSV, RDS, Feather, YAML, <code>format()</code> output, <code>print()</code> output, <code>cat()</code> output. To change the default serializer from JSON, add a <em>single</em> <code>#* @serializer</code> tag to your route definition since unlike body parsers, an endpoint can only have one serializer.</p>
+<p>In the example below, the CSV serialize is used and the extra arguments are passed along using the <code>list(na = "")</code></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#* @get /mtcars.csv</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#* @serializer csv list(na = "")</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>() {</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  mtcars</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>
+Tidy API
+</summary>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pr</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pr_get</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"/data"</span>, </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>() {</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_attachment</span>(mtcars, <span class="st">"custom.csv"</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  },</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">serializer =</span> plumber<span class="sc">::</span><span class="fu">serializer_csv</span>(<span class="at">na =</span> <span class="st">""</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<h2 id="respond-with-an-attachment" class="anchored">Respond with an attachment</h2>
+<p>If a user visited the endpoint in the previous section (<code>/mtcars.csv</code>) using their web browser, their browser would download <code>mtcars.csv</code>. In order to customize the downloaded filename, use the new <code>as_attachment()</code>. This allows you to decouple the named of the endpoint (e.g., <code>/data</code>) with the downloaded filename (<code>custom.csv</code>).</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Download the response as a file named `custom.csv`</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#' @get /data</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @serializer csv</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>() {</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_attachment</span>(mtcars, <span class="st">"custom.csv"</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>
+Tidy API
+</summary>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pr</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pr_get</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"/data"</span>, </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>() {</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_attachment</span>(mtcars, <span class="st">"custom.csv"</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  },</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">serializer =</span> plumber<span class="sc">::</span><span class="fu">serializer_csv</span>()</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<h2 id="openapi-v3" class="anchored">OpenAPI v3</h2>
+<p>With <code>{plumber}</code> v1.0.0, we upgraded the API specification to follow OpenAPI v3. Upgraded the visual documentation to be based on OpenAPI v3. Before v1.0.0, <code>{plumber}</code> used Swagger 2.0 specification. Since then, <a href="https://www.openapis.org/faq">Swagger 2.0 spec was rebranded to OpenAPI Specification v2 and has upgraded to v3</a>.</p>
+<p>When running a <code>{plumber}</code> API interactively, you will see visual documentation similar to the screenshot below:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plumb_api</span>(<span class="st">"plumber"</span>, <span class="st">"04-mean-sum"</span>) <span class="sc">%&gt;%</span> <span class="fu">pr_run</span>(<span class="at">port =</span> <span class="dv">8000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="swagger_ui.png" class="img-fluid"></p>
+<p></p><figcaption>Swagger UI</figcaption><p></p>
+</figure>
+</div>
+<h3 id="trailing-slash" class="anchored">Redirect requests to include trailing slash</h3>
+<p>We’ve implemented a highly requested behavior where requests that do not end in a slash will redirect to the route with a final slash.</p>
+<p>For example, let’s pretend that the route <code>GET</code> <code>/example</code> does not exist on our API, but <code>GET</code> <code>/example/</code> does exist. If the API receives any request for <code>GET</code> <code>/example?a=1</code>, <code>{plumber}</code> will respond with a redirect to <code>GET</code> <code>/example/?a=1</code>.</p>
+<p>The implementation details may change in a later release (such as internally redirecting to avoid a second request), but the intent of eventually executing the <em>slashed</em> route will remain.</p>
+<p>To opt into this behavior, set the option <code>options_plumber(trailingSlash = TRUE)</code>. The current default behavior is <code>options_plumber(trailingSlash = FALSE)</code>. This default behavior will most likely change to <code>TRUE</code> with the next major release of <code>{plumber}</code>.</p>
+<h2 id="custom" class="anchored">Advanced customization</h2>
+<p>For advanced <code>{plumber}</code> developers, <code>{plumber}</code> provides tools to register your own request body parser (<a href="https://www.rplumber.io/reference/register_parser.html"><code>register_parser()</code></a>), response serializer (<a href="https://www.rplumber.io/reference/register_serializer.html"><code>register_serializer()</code></a>), and custom visual documentation of the <code>{plumber}</code> API. Visual documentation can be customized in two ways: <a href="https://www.rplumber.io/reference/register_docs.html"><code>register_docs()</code></a> which allows you to easily get different UI styling (via packages such as <a href="https://cran.r-project.org/package=rapidoc">{rapidoc}</a>) and <a href="https://www.rplumber.io/reference/pr_set_api_spec.html"><code>pr_set_api_spec()</code></a> which allow customization of the OpenAPI specification. To do the latter, provide either YAML or JSON (that conforms to the <a href="http://spec.openapis.org/oas/v3.0.3">OAS</a>) to <code>pr_set_api_spec()</code>.</p>
+<h1 id="community-questions">Community Questions</h1>
+<p>If you ever want to pose a general question or have a question about your <code>{plumber}</code> setup, post a question on <a href="https://community.rstudio.com/tag/plumber"><img alt="RStudio Community `{plumber}` tag" src="https://img.shields.io/badge/community-plumber-blue?style=social&amp;logo=rstudio&amp;logoColor=75AADB" style="margin-bottom:-5px"></a> using the <code>{plumber}</code> tag.</p>
+<p>Many new features of <code>{plumber}</code> have come from community questions. Please keep them coming!</p>
+<h1 id="learn-more">Learn more</h1>
+<p>For more details on <code>{plumber}</code>’s recent releases (including bug fixes and other enhancements), please see the full <a href="https://www.rplumber.io/news/index.html">Changelog</a>.</p>
+<p>Happy <code>plumb()</code>ing!</p>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+
+</body></html>
