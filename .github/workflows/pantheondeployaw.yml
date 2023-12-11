@@ -65,22 +65,18 @@ jobs:
           chmod 644 "$SSH_KEY_PUBLIC_PATH"
           cd ~/work/
           ls -la
-          git clone 
-ssh://codeserver.dev.a63ca213-cb1c-4c09-a68a-0ca1f9daf173@codeserver.dev.a63ca213-cb1c-4c09-a68a-0ca1f9daf173.drush.in:2222/~/repository.git 
-rstudiobuild          
+          git clone ssh://codeserver.dev.a63ca213-cb1c-4c09-a68a-0ca1f9daf173@codeserver.dev.a63ca213-cb1c-4c09-a68a-0ca1f9daf173.drush.in:2222/~/repository.git awbuild
      
       - name: Push to Pantheon
         run: |
 
-          rsync -avz --delete ~/work/twentytwentythree/twentytwentythree/wp-content/ ~/work/rstudiobuild/wp-content 
---exclude="/uploads/" --include="/themes/" --include="/themes/twentytwentythree/dist/"  --include="/plugins/" 
---exclude="/mu-plugins/" --exclude="/themes/twentytwentythree/node_modules/"
-          cd  ~/work/rstudiobuild/wp-content/themes/twentytwentythree
+          rsync -avz --delete ~/work/twentytwentythree/twentytwentythree/wp-content/ ~/work/awbuild/wp-content --exclude="/uploads/" --include="/themes/" --include="/themes/twentytwentythree/dist/"  --include="/plugins/" --exclude="/mu-plugins/" --exclude="/themes/twentytwentythree/node_modules/"
+          cd  ~/work/awbuild/wp-content/themes/twentytwentythree
           echo '!dist'  >> .gitignore
           echo '!vendor' >> .gitignore
           echo '!dist/lottie' >> .gitignore
           cat .gitignore
-          cd ~/work/rstudiobuild/wp-content/themes/twentytwentythree
+          cd ~/work/awbuild/wp-content/themes/twentytwentythree
           git status
           git config --global user.name "Github deployment"
           git config --global user.email "andrewwilliams1275@gmail.com"
