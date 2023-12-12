@@ -42,7 +42,7 @@ jobs:
           SSH_KEY_PUBLIC: ${{ secrets.PUBLICKEYAW }}
           LOCAL_BRANCH: develop
           SSH_PATH: /home/runner/.ssh
-          HOST: HOST: ${{ secrets.PANTHEONHOST }}
+          HOST: ${{ secrets.PANTHEONHOST }}
           KNOWN_HOSTS_PATH: /home/runner/.ssh/known_hosts
           KNOWN_HOST_URL: ${{ secrets.KNOWN_HOST_URL }}
           SSH_CONFIG: /home/runner/.ssh/config
