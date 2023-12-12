@@ -3,6 +3,8 @@ name: Posit Deploy
 on:
   push:
     branches: [ develop ]
+  permissions:
+    contents: write
 
 jobs:
 
