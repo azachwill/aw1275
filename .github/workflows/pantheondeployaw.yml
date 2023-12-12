@@ -42,7 +42,7 @@ jobs:
           SSH_KEY_PUBLIC: ${{ secrets.PUBLICKEYAW }}
           LOCAL_BRANCH: develop
           SSH_PATH: /home/runner/.ssh
-          HOST: codeserver.dev.a63ca213-cb1c-4c09-a68a-0ca1f9daf173@codeserver.dev.a63ca213-cb1c-4c09-a68a-0ca1f9daf173.drush.in
+          HOST: HOST: ${{ secrets.PANTHEONHOST }}
           KNOWN_HOSTS_PATH: /home/runner/.ssh/known_hosts
           KNOWN_HOST_URL: ${{ secrets.KNOWN_HOST_URL }}
           SSH_CONFIG: /home/runner/.ssh/config
