@@ -65,6 +65,7 @@ jobs:
           chmod 644 "$KNOWN_HOSTS_PATH"
           chmod 600 "$SSH_KEY_PRIVATE_PATH"
           chmod 644 "$SSH_KEY_PUBLIC_PATH"
+          echo /home/runner/.ssh/config
           cd ~/work/
           ls -la
           git clone ssh://codeserver.dev.a63ca213-cb1c-4c09-a68a-0ca1f9daf173@codeserver.dev.a63ca213-cb1c-4c09-a68a-0ca1f9daf173.drush.in:2222/~/repository.git awbuild
