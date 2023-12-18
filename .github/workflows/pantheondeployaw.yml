@@ -65,7 +65,8 @@ jobs:
           chmod 644 "$KNOWN_HOSTS_PATH"
           chmod 600 "$SSH_KEY_PRIVATE_PATH"
           chmod 644 "$SSH_KEY_PUBLIC_PATH"
-          echo "/home/runner/.ssh/config" > "~/work/what.txt"
+          touch /home/runner/work/what.txt
+          echo "/home/runner/.ssh/config" > "/home/runner/work/what.txt"
           cd ~/work/
           cat what.txt
           ls -la
