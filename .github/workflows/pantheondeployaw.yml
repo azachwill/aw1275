@@ -56,7 +56,7 @@ jobs:
           mkdir -p $SSH_PATH
           echo starting environment configuration        
           echo "$KNOWN_HOST_URL" >> $SSH_CONFIG
-          ssh-keyscan -t rsa codeserver.dev.a63ca213-cb1c-4c09-a68a-0ca1f9daf173.drush.in >> $KNOWN_HOSTS_PATH
+          ssh-keyscan -t rsa -H -p 2222 codeserver.dev.a63ca213-cb1c-4c09-a68a-0ca1f9daf173.drush.in >> $KNOWN_HOSTS_PATH
           echo known_host file should be complete now:
           cat $KNOWN_HOSTS_PATH
           echo "$SSH_KEY_PRIVATE" > "$SSH_KEY_PRIVATE_PATH"
