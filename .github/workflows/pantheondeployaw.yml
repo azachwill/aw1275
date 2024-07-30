@@ -73,7 +73,7 @@ jobs:
      
       - name: Push to Pantheon
         run: |
-
+          set -x
           rsync -avz --delete ~/work/aw1275/aw1275/wp-content/ ~/work/awbuild/wp-content --exclude="/uploads/" --include="/themes/" --include="/themes/Posit/dist/"  --include="/plugins/" --exclude="/mu-plugins/" --exclude="/themes/posit-web/node_modules/"
           cd  ~/work/awbuild/wp-content/themes/Posit
           echo '!dist'  >> .gitignore
