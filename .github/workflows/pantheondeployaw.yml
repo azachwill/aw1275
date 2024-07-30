@@ -9,8 +9,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
-    permissions: write-all
    
     steps:
       - uses: actions/checkout@v2
@@ -53,6 +51,7 @@ jobs:
           BRANCH: develop
 
         run: |
+          set -x
           mkdir -p $SSH_PATH
           echo starting environment configuration        
           echo "$KNOWN_HOST_URL" >> $SSH_CONFIG
